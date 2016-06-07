@@ -1,0 +1,3 @@
+[submodule "components"]
+	path = components
+	url = git://github.com/toulibre/ponyconf-components

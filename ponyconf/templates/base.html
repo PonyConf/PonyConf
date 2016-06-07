@@ -1,0 +1,93 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+    {% comment %}<link rel="icon" href="{% static 'favicon.ico' %}">{% endcomment %}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+
+    {% bootstrap_css %}
+    <link href="{% static 'css/ponyconf.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+
+    {% block js %}{% endblock %}
+  </head>
+
+  <body>
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">{{ site.name }}</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">Home</a></li>
+            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">Talks</a></li>
+            <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">Topics</a></li>
+            {% block navbar-left %}{% endblock %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration</a></li>
+            {% endif %}
+            <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+            <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+            {% endif %}
+          </ul>
+          {% block navbar-right %}{% endblock %}
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+          {% bootstrap_messages %}
+
+          {% block content %}{% endblock %}
+
+        </div> <!-- /col -->
+
+      </div> <!-- /row -->
+
+      <hr>
+
+      <footer>
+        <p class="text-muted">Powered by <a href="https://github.com/toulibre/ponyconf">PonyConf</a></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <script src="{% bootstrap_jquery_url %}"></script>
+    {% bootstrap_javascript %}
+    <script src="{% static 'js/ponyconf.js' %}"></script>
+    {% block js_end %}{% endblock %}
+  </body>
+</html>

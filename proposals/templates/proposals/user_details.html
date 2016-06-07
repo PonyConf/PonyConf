@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% firstof user.get_full_name user.username %}</h1>
+
+<b>Biography:</b>
+<p>{{ user.biography }}</p>
+
+<a href="{% url 'list-talks-by-speaker' user.username %}">See the list of talks with this speaker</a>
+
+{% endblock %}

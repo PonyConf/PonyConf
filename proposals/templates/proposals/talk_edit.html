@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block talktab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>Propose a talk</h1>
+
+<form method="POST" role="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+</form>
+
+{% endblock %}

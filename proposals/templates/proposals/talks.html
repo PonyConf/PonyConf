@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block talktab %} class="active"{% endblock %}
+
+{% block content %}
+
+<a class="btn btn-success" href="{% url 'add-talk' %}">Propose a talk</a>
+
+<div class="h3">My participing talks:</div>
+
+<ul>
+{% for talk in my_talks %}
+    <li>
+        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
+        <i>by</i>
+        {% for speach in talk.speach_set.all %}
+            <a href="{% url 'show-user' speach.user.username %}">{% firstof speach.user.get_full_name speach.user.username %}</a>
+            {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
+        {% endfor %}
+        <a class="btn btn-primary" href="{% url 'edit-talk' talk.slug %}">edit</a>
+    </li>
+{% empty %}
+    <li>No proposed talk.</li>
+{% endfor %}
+</ul>
+
+<div class="h3">Others talks:</div>
+
+<ul>
+{% for talk in other_talks %}
+    <li>
+        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
+        <i>by</i>
+        {% for speach in talk.speach_set.all %}
+            <a href="{% url 'show-user' speach.user.username %}">{% firstof speach.user.get_full_name speach.user.username %}</a>
+            {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
+        {% endfor %}
+    </li>
+{% empty %}
+    <li>No other talk.</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

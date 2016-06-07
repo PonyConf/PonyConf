@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block profiletab %} class="active"{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Profile</h1>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Update profile</h3>
+  </div>
+  <div class="panel-body">
+    <form method="post" class="col-md-4" role="form">
+      {% csrf_token %}
+      {% bootstrap_form profileform %}
+      <div class="form-group">
+        <button type="submit" name='update-profile' class="btn btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Update password</h3>
+  </div>
+  <div class="panel-body">
+    <form method="post" class="col-md-4" role="form">
+      {% csrf_token %}
+      {% bootstrap_form passwordform %}
+      <div class="form-group">
+        <button type="submit" name='update-password' class="btn btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
