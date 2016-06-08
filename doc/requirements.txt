@@ -32,5 +32,10 @@ exemple) et sur une proposition de conférence
 - Profil des intervenenants: nom, prénom, mail, date et heure d'arrivée,
 date et heure de départ, moyen de transport, type de connectique,
 hébergement,
+- Possibilité aux intervenants de récupérer leur billet d’avion
+électronique
+- Aide au planning : affichage des contraintes des intervenants, qui est
+disponible pour un time slot donnée, …
+- Stand ?
 
 Le code de l'annéed ernière est là : https://github.com/toulibre/cdl-site

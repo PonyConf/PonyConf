@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block speakertab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>Speakers:</h1>
+
+<ul>
+{% for speaker in speakers %}
+    <li>
+        <a href="{% url 'list-speakers' %}">{% firstof speaker.get_full_name speaker.username %}</a>
+    </li>
+{% empty %}
+    <li><i>No speakers.</i></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 
 from autoslug import AutoSlugField
 
@@ -12,6 +13,9 @@ __all__ = [ 'Topic', 'Talk', 'Speach' ]
 class Topic(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
     
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
@@ -23,6 +27,9 @@ class Topic(models.Model):
 class Talk(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     speakers = models.ManyToManyField(User, through='Speach')
     title = models.CharField(max_length=128, verbose_name='Title')

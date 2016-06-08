@@ -43,8 +43,11 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">Home</a></li>
+            {% if request.user.is_authenticated %}
             <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">Talks</a></li>
             <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">Topics</a></li>
+            <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">Speakers</a></li>
+            {% endif %}
             {% block navbar-left %}{% endblock %}
           </ul>
           <ul class="nav navbar-nav navbar-right">

@@ -14,7 +14,7 @@ def home(request):
 
 @login_required
 def talk_list(request):
-    talks = Talk.objects.filter(site=get_current_site(request))
+    talks = Talk.on_site.all()
     mine = talks.filter(speakers=request.user)
     others = talks.exclude(speakers=request.user)
     return render(request, 'proposals/talks.html', {
@@ -34,7 +34,7 @@ def talk_list_by_topic(request, topic):
 @login_required
 def talk_list_by_speaker(request, speaker):
     speaker = get_object_or_404(User, username=speaker)
-    talks = Talk.objects.filter(site=get_current_site(request), speakers=speaker)
+    talks = Talk.on_site.filter(speakers=speaker)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks with %s:' % (speaker.get_full_name() or speaker.username),
         'talks': talks,
@@ -74,9 +74,17 @@ def talk_details(request, talk):
 
 @login_required
 def topic_list(request):
-    topics = Topic.objects.filter(site=get_current_site(request))
+    topics = Topic.on_site.all()
     return render(request, 'proposals/topic_list.html', {
         'topics': topics,
+    })
+
+@login_required
+def speaker_list(request):
+    talks = Talk.on_site.all()
+    speakers = User.objects.filter(talks__in=talks) # FIXME
+    return render(request, 'proposals/speaker_list.html', {
+        'speaker': speakers,
     })
 
 @login_required
