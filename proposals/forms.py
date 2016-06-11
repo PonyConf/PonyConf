@@ -1,7 +1,6 @@
 from django.forms.models import modelform_factory
 
-from proposals.models import *
-
+from proposals.models import Talk
 
 __all__ = ['TalkForm']
 

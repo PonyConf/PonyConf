@@ -1,13 +1,11 @@
-from django.db import models
-from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
-
-from autoslug import AutoSlugField
+from django.contrib.sites.models import Site
+from django.db import models
 
 from accounts.models import PonyConfSpeaker
+from autoslug import AutoSlugField
 
-
-__all__ = [ 'Topic', 'Talk', 'Speach' ]
+__all__ = ['Topic', 'Talk', 'Speach']
 
 
 class Topic(models.Model):

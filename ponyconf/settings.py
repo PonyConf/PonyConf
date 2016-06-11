@@ -151,12 +151,12 @@ BOOTSTRAP3 = {
 
     # The URL to the jQuery JavaScript file
     # If not set, "build-in" CDN is used (maxcdn)
-    #'jquery_url': '//code.jquery.com/jquery.min.js',
+    # 'jquery_url': '//code.jquery.com/jquery.min.js',
     'jquery_url': STATIC_URL + 'jquery/dist/jquery.js',
 
     # The Bootstrap base URL
     # If not set, "build-in" CDN is used (maxcdn)
-    #'base_url': '//netdna.bootstrapcdn.com/bootstrap/3.2.0/',
+    # 'base_url': '//netdna.bootstrapcdn.com/bootstrap/3.2.0/',
     'base_url': STATIC_URL + 'bootstrap/dist/',
 
     # The complete URL to the Bootstrap CSS file

@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import password_change
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import password_change
+from django.shortcuts import render
 
-from .forms import ProfileForm, PonyConfUserForm
+from .forms import PonyConfUserForm, ProfileForm
 
 
 @login_required

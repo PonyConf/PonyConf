@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from proposals.models import *
-
+from proposals.models import Speach, Talk, Topic
 
 admin.site.register(Topic)
 admin.site.register(Talk)

@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 import django.contrib.sites.managers
-from django.db import migrations
 import django.db.models.manager
+from django.db import migrations
 
 
 class Migration(migrations.Migration):

@@ -1,17 +1,16 @@
 from enum import IntEnum
 
-from django.db import models
-from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
-
 from django.contrib.auth.models import User
+from django.contrib.sites.managers import CurrentSiteManager
+from django.contrib.sites.models import Site
+from django.db import models
 
-
-__all__ = [ 'PonyConfUser', 'PonyConfSpeaker' ]
+__all__ = ['PonyConfUser', 'PonyConfSpeaker']
 
 
 def enum_to_choices(enum):
     return ((item.value, item.name) for item in list(enum))
+
 
 class PonyConfUser(models.Model):
 

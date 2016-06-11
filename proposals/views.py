@@ -1,16 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404, redirect, render
 
-from accounts.models import *
-from proposals.models import *
-from proposals.forms import *
+from accounts.models import PonyConfSpeaker, PonyConfUser
+from proposals.forms import TalkForm
+from proposals.models import Speach, Talk, Topic
 
 
 def home(request):
     return render(request, 'proposals/home.html')
+
 
 @login_required
 def talk_list(request):
@@ -27,6 +28,7 @@ def talk_list(request):
         'other_talks': others,
     })
 
+
 @login_required
 def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, site=get_current_site(request), slug=topic)
@@ -35,6 +37,7 @@ def talk_list_by_topic(request, topic):
         'title': 'Talks related to %s:' % topic.name,
         'talks': talks,
     })
+
 
 @login_required
 def talk_list_by_speaker(request, speaker):
@@ -45,13 +48,15 @@ def talk_list_by_speaker(request, speaker):
         'talks': talks,
     })
 
+
 @login_required
 def talk_edit(request, talk=None):
     if talk:
         talk = get_object_or_404(Talk, slug=talk)
         if talk.site != get_current_site(request):
             raise PermissionDenied()
-        if not request.user.is_superuser and not talk.speakers.filter(username=request.user.username).exists(): # FIXME fine permissions
+        if not request.user.is_superuser and not talk.speakers.filter(username=request.user.username).exists():
+            # FIXME fine permissions
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
     if request.method == 'POST' and form.is_valid():
@@ -72,12 +77,14 @@ def talk_edit(request, talk=None):
         'form': form,
     })
 
+
 @login_required
 def talk_details(request, talk):
     talk = get_object_or_404(Talk, slug=talk)
     return render(request, 'proposals/talk_details.html', {
         'talk': talk,
     })
+
 
 @login_required
 def topic_list(request):
@@ -86,12 +93,14 @@ def topic_list(request):
         'topics': topics,
     })
 
+
 @login_required
 def speaker_list(request):
     speakers = PonyConfSpeaker.on_site.all()
     return render(request, 'proposals/speaker_list.html', {
         'speaker': speakers,
     })
+
 
 @login_required
 def user_details(request, username):
