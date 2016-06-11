@@ -38,6 +38,10 @@ class PonyConfSpeaker(models.Model):
     class Meta:
         unique_together = ('site', 'user')
 
+    def __str__(self):
+        user = self.user.user
+        return user.get_full_name() or user.username
+
 
 def create_ponyconfuser(sender, instance, created, **kwargs):
     if created:

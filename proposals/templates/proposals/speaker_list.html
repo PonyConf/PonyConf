@@ -8,9 +8,7 @@
 
 <ul>
 {% for speaker in speakers %}
-    <li>
-        <a href="{% url 'list-speakers' %}">{% firstof speaker.get_full_name speaker.username %}</a>
-    </li>
+    <li><a href="{% url 'list-speakers' %}">{{ speaker }}</a></li>
 {% empty %}
     <li><i>No speakers.</i></li>
 {% endfor %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>{% firstof user.get_full_name user.username %}</h1>
+<h1>{{ user }}</h1>
 
 <b>Biography:</b>
 <p>{{ user.biography }}</p>

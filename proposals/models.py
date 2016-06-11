@@ -55,4 +55,7 @@ class Speach(models.Model):
         )
 
     def __str__(self):
-        return self.user.username + ' speaking at ' + self.talk.title + ' in position %d' % self.order
+        return '%s speaking at %s in position %d' % (self.user, self.talk, self.order)
+
+    def username(self):
+        return self.user.user.user.username

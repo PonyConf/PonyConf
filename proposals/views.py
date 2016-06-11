@@ -44,7 +44,7 @@ def talk_list_by_speaker(request, speaker):
     speaker = get_object_or_404(PonyConfSpeaker, user__user__username=speaker)
     talks = Talk.on_site.filter(speakers=speaker)
     return render(request, 'proposals/talk_list.html', {
-        'title': 'Talks with %s:' % (speaker.get_full_name() or speaker.username),
+        'title': 'Talks with %s:' % speaker,
         'talks': talks,
     })
 
@@ -55,7 +55,8 @@ def talk_edit(request, talk=None):
         talk = get_object_or_404(Talk, slug=talk)
         if talk.site != get_current_site(request):
             raise PermissionDenied()
-        if not request.user.is_superuser and not talk.speakers.filter(username=request.user.username).exists():
+        user = PonyConfUser.objects.get(user=request.user)
+        if not request.user.is_superuser and not talk.speakers.filter(user=user).exists():
             # FIXME fine permissions
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
