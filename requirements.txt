@@ -2,3 +2,4 @@ django<1.10
 django-bower
 django-bootstrap3
 django-autoslug
+django-registration-redux

@@ -14,9 +14,14 @@ def home(request):
 
 @login_required
 def talk_list(request):
-    talks = Talk.on_site.all()
-    mine = talks.filter(speakers=request.user)
-    others = talks.exclude(speakers=request.user)
+    speaker = PonyConfSpeaker.on_site.filter(user=request.user.ponyconfuser)
+    if speaker.exists():
+        speaker = speaker.first()
+        mine = Talk.on_site.filter(speakers=speaker)
+        others = Talk.on_site.exclude(speakers=speaker)
+    else:
+        mine = []
+        others = Talk.on_site.all()
     return render(request, 'proposals/talks.html', {
         'my_talks': mine,
         'other_talks': others,
@@ -33,7 +38,7 @@ def talk_list_by_topic(request, topic):
 
 @login_required
 def talk_list_by_speaker(request, speaker):
-    speaker = get_object_or_404(User, username=speaker)
+    speaker = get_object_or_404(PonyConfSpeaker, user__user__username=speaker)
     talks = Talk.on_site.filter(speakers=speaker)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks with %s:' % (speaker.get_full_name() or speaker.username),
@@ -50,14 +55,16 @@ def talk_edit(request, talk=None):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
     if request.method == 'POST' and form.is_valid():
-        if talk:
+        if hasattr(talk, 'id'):
             talk = form.save()
             messages.success(request, 'Talk modified successfully!')
         else:
+            site = get_current_site(request)
             talk = form.save(commit=False)
-            talk.site = get_current_site(request)
+            talk.site = site
             talk.save()
-            speach = Speach(user=request.user,talk=talk,order=1)
+            speaker = PonyConfSpeaker.on_site.get_or_create(user=request.user.ponyconfuser, site=site)[0]
+            speach = Speach(user=speaker, talk=talk, order=1)
             speach.save()
             messages.success(request, 'Talk proposed successfully!')
         return redirect('show-talk', talk.slug)
@@ -81,15 +88,14 @@ def topic_list(request):
 
 @login_required
 def speaker_list(request):
-    talks = Talk.on_site.all()
-    speakers = User.objects.filter(talks__in=talks) # FIXME
+    speakers = PonyConfSpeaker.on_site.all()
     return render(request, 'proposals/speaker_list.html', {
         'speaker': speakers,
     })
 
 @login_required
 def user_details(request, username):
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(PonyConfUser, user__username=username)
     return render(request, 'proposals/user_details.html', {
         'user': user,
     })

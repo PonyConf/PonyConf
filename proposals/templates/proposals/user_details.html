@@ -7,6 +7,6 @@
 <b>Biography:</b>
 <p>{{ user.biography }}</p>
 
-<a href="{% url 'list-talks-by-speaker' user.username %}">See the list of talks with this speaker</a>
+<a href="{% url 'list-talks-by-speaker' user.user.username %}">See the list of talks with this speaker</a>
 
 {% endblock %}

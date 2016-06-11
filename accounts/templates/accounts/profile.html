@@ -15,27 +15,14 @@
     <h3>Update profile</h3>
   </div>
   <div class="panel-body">
-    <form method="post" class="col-md-4" role="form">
+    <form method="post" class="form-horizontal" role="form">
       {% csrf_token %}
-      {% bootstrap_form profileform %}
-      <div class="form-group">
-        <button type="submit" name='update-profile' class="btn btn-primary">Update</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3>Update password</h3>
-  </div>
-  <div class="panel-body">
-    <form method="post" class="col-md-4" role="form">
-      {% csrf_token %}
-      {% bootstrap_form passwordform %}
-      <div class="form-group">
-        <button type="submit" name='update-password' class="btn btn-primary">Update</button>
-      </div>
+      {% for form in forms %}
+      {% bootstrap_form form layout="horizontal" %}
+      {% endfor %}
+      {% buttons layout="horizontal" %}
+        <button type="submit" class="btn btn-primary">Update</button>
+      {% endbuttons %}
     </form>
   </div>
 </div>

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'registration',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -145,8 +146,6 @@ BOWER_INSTALLED_APPS = (
 LOGIN_REDIRECT_URL = 'home'
 
 SITE_ID = 1
-
-AUTH_USER_MODEL = 'accounts.User'
 
 BOOTSTRAP3 = {
 

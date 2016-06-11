@@ -1,36 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import password_change
 from django.contrib import messages
 
-from accounts.forms import *
+from .forms import ProfileForm, PonyConfUserForm
+
+
+@login_required
+def password(request):
+    return password_change(request, post_change_redirect='profile')
 
 
 @login_required
 def profile(request):
-    profileform = None
-    passwordform = None
+
+    forms = [ProfileForm(request.POST or None, instance=request.user),
+             PonyConfUserForm(request.POST or None, instance=request.user.ponyconfuser)]
 
     if request.method == 'POST':
-        if 'update-profile' in request.POST:
-            profileform = ProfileForm(request.POST, instance=request.user)
-            if profileform.is_valid():
-                profileform.save()
-                messages.success(request, 'Profile updated successfully.')
-                return redirect('profile')
-        elif 'update-password' in request.POST:
-            passwordform = PasswordChangeForm(user=request.user, data=request.POST)
-            if passwordform.is_valid():
-                passwordform.save()
-                messages.success(request, 'Password updated successfully.')
-                return redirect('profile')
+        if all(form.is_valid() for form in forms):
+            for form in forms:
+                form.save()
+            messages.success(request, 'Profile updated successfully.')
+        else:
+            messages.error(request, 'Please correct those errors.')
 
-    if not profileform:
-        profileform = ProfileForm(None, instance=request.user)
-    if not passwordform:
-        passwordform = PasswordChangeForm(None)
-
-    return render(request, 'accounts/profile.html', {
-        'profileform': profileform,
-        'passwordform': passwordform,
-    })
+    return render(request, 'accounts/profile.html', {'forms': forms})
