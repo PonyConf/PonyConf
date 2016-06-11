@@ -171,3 +171,5 @@ BOOTSTRAP3 = {
     # (None means derive it from base_url)
     'javascript_url': None,
 }
+
+AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
