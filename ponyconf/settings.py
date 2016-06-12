@@ -31,8 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'accounts',
     'registration',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -44,7 +45,6 @@ INSTALLED_APPS = [
     'bootstrap3',
 
     'ponyconf',
-    'accounts',
     'proposals',
 ]
 
@@ -173,3 +173,4 @@ BOOTSTRAP3 = {
 }
 
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
+LOGOUT_REDIRECT_URL = 'home'

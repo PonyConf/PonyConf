@@ -1,9 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.test import TestCase
 
-from .models import PonyConfSpeaker, PonyConfUser
-
+from .models import PonyConfUser
 
 ROOT_URL = 'accounts'
 
@@ -20,10 +19,6 @@ class AccountTests(TestCase):
 
     # VIEWS
 
-    def test_password(self):
-        self.client.login(username='a', password='a')
-        self.assertEqual(self.client.get(reverse('password')).status_code, 200)
-
     def test_profile(self):
         # User b wants to update its username, email and biography
         user = User.objects.get(username='b')
@@ -33,10 +28,10 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
 
         # He tries with an invalid address
-        r = self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester'})
+        self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester'})
         self.assertEqual(User.objects.filter(username='z').count(), 0)
 
-        r = self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester'})
+        self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester'})
 
         user = User.objects.get(username='z')
         self.assertEqual(user.email, 'b@newdomain.com')

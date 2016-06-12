@@ -43,19 +43,19 @@ class Speach(models.Model):
 
     SPEAKER_NO = tuple((i, str(i)) for i in range(1, 8))
 
-    user = models.ForeignKey(PonyConfSpeaker, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(PonyConfSpeaker, on_delete=models.CASCADE)
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
     order = models.IntegerField(choices=SPEAKER_NO)
 
     class Meta:
         ordering = ['talk', 'order']
         unique_together = (
-            ('user', 'talk'),
+            ('speaker', 'talk'),
             ('order', 'talk'),
         )
 
     def __str__(self):
-        return '%s speaking at %s in position %d' % (self.user, self.talk, self.order)
+        return '%s speaking at %s in position %d' % (self.speaker, self.talk, self.order)
 
     def username(self):
-        return self.user.user.user.username
+        return self.speaker.user.username

@@ -1,14 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import password_change
 from django.shortcuts import render
 
 from .forms import PonyConfUserForm, ProfileForm
-
-
-@login_required
-def password(request):
-    return password_change(request, post_change_redirect='profile')
 
 
 @login_required

@@ -25,7 +25,7 @@ class PonyConfSpeaker(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    user = models.ForeignKey(PonyConfUser)
+    user = models.ForeignKey(User)
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
@@ -39,8 +39,7 @@ class PonyConfSpeaker(models.Model):
         unique_together = ('site', 'user')
 
     def __str__(self):
-        user = self.user.user
-        return user.get_full_name() or user.username
+        return self.user.get_full_name() or self.user.username
 
 
 def create_ponyconfuser(sender, instance, created, **kwargs):

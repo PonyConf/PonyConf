@@ -16,7 +16,7 @@
 
 <ul>
 {% for speaker in talk.speakers.all %}
-    <li><a href="{% url 'show-user' speaker.user.user.username %}">{{ speaker }}</a></li>
+    <li><a href="{% url 'show-user' speaker.user.username %}">{{ speaker }}</a></li>
 {% empty %}
     <li><i>No speaker.</i></li>
 {% endfor %}

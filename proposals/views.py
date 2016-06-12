@@ -15,7 +15,7 @@ def home(request):
 
 @login_required
 def talk_list(request):
-    speaker = PonyConfSpeaker.on_site.filter(user=request.user.ponyconfuser)
+    speaker = PonyConfSpeaker.on_site.filter(user=request.user)
     if speaker.exists():
         speaker = speaker.first()
         mine = Talk.on_site.filter(speakers=speaker)
@@ -41,7 +41,7 @@ def talk_list_by_topic(request, topic):
 
 @login_required
 def talk_list_by_speaker(request, speaker):
-    speaker = get_object_or_404(PonyConfSpeaker, user__user__username=speaker)
+    speaker = get_object_or_404(PonyConfSpeaker, user__username=speaker)
     talks = Talk.on_site.filter(speakers=speaker)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks with %s:' % speaker,
@@ -55,8 +55,7 @@ def talk_edit(request, talk=None):
         talk = get_object_or_404(Talk, slug=talk)
         if talk.site != get_current_site(request):
             raise PermissionDenied()
-        user = PonyConfUser.objects.get(user=request.user)
-        if not request.user.is_superuser and not talk.speakers.filter(user=user).exists():
+        if not request.user.is_superuser and not talk.speakers.filter(user=request.user).exists():
             # FIXME fine permissions
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
@@ -69,8 +68,8 @@ def talk_edit(request, talk=None):
             talk = form.save(commit=False)
             talk.site = site
             talk.save()
-            speaker = PonyConfSpeaker.on_site.get_or_create(user=request.user.ponyconfuser, site=site)[0]
-            speach = Speach(user=speaker, talk=talk, order=1)
+            speaker = PonyConfSpeaker.on_site.get_or_create(user=request.user, site=site)[0]
+            speach = Speach(speaker=speaker, talk=talk, order=1)
             speach.save()
             messages.success(request, 'Talk proposed successfully!')
         return redirect('show-talk', talk.slug)

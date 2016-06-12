@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>
+    Login
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-offset-4 col-md-4">
+    <div class="well">
+      <form action="" method="post" role="form">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <a href="{% url 'password_reset' %}" class="btn btn-warning">Reset your password</a>
+          <a href="{% if request.GET.prev %}{{ request.GET.prev }}{% else %}{% url 'home' %}{% endif %}" class="btn btn-default">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
