@@ -5,9 +5,9 @@ from django.contrib import messages
 
 @receiver(user_logged_in)
 def on_user_logged_in(sender, request, **kwargs):
-    messages.success(request, 'Welcome!')
+    messages.success(request, 'Welcome!', fail_silently=True)  # FIXME
 
 
 @receiver(user_logged_out)
 def on_user_logged_out(sender, request, **kwargs):
-    messages.success(request, 'Goodbye!')
+    messages.success(request, 'Goodbye!', fail_silently=True)  # FIXME
