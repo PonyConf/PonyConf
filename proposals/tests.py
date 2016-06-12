@@ -24,8 +24,8 @@ class ProposalsTests(TestCase):
         for view in ['home', 'list-talks', 'add-talk', 'list-topics', 'list-speakers']:
             self.assertEqual(self.client.get(reverse(view)).status_code, 200)
         talk = Talk.on_site.first()
-        for view in ['edit-talk', 'show-talk']:
-            self.assertEqual(self.client.get(reverse(view, kwargs={'talk': talk.slug})).status_code, 200)
+        self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
+        self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('list-talks-by-speaker', kwargs={'speaker': 'a'})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-user', kwargs={'username': 'a'})).status_code, 200)
 

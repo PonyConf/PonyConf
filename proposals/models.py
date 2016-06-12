@@ -1,5 +1,6 @@
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from autoslug import AutoSlugField
@@ -11,16 +12,14 @@ __all__ = ['Topic', 'Talk', 'Speach']
 
 class Topic(models.Model):
 
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
 
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
-
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('list-talks-by-topic', kwargs={'slug': self.slug})
 
 
 class Talk(models.Model):
@@ -39,6 +38,9 @@ class Talk(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('show-talk', kwargs={'slug': self.slug})
+
 
 class Speach(models.Model):
 
@@ -46,7 +48,7 @@ class Speach(models.Model):
 
     speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
-    order = models.IntegerField(choices=SPEAKER_NO)
+    order = models.IntegerField(choices=SPEAKER_NO, default=1)
 
     class Meta:
         ordering = ['talk', 'order']
@@ -57,6 +59,9 @@ class Speach(models.Model):
 
     def __str__(self):
         return '%s speaking at %s in position %d' % (self.speaker, self.talk, self.order)
+
+    def get_absolute_url(self):
+        return self.talk.get_absolute_url()
 
     def username(self):
         return self.speaker.user.username
