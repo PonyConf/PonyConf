@@ -1,11 +1,10 @@
+from django.contrib.auth.models import User
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
 
 from autoslug import AutoSlugField
-
-from accounts.models import Speaker
 
 __all__ = ['Topic', 'Talk', 'Speach']
 
@@ -26,7 +25,7 @@ class Talk(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    speakers = models.ManyToManyField(Speaker, through='Speach')
+    speakers = models.ManyToManyField(User, through='Speach')
     title = models.CharField(max_length=128, verbose_name='Title')
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
@@ -46,7 +45,7 @@ class Speach(models.Model):
 
     SPEAKER_NO = tuple((i, str(i)) for i in range(1, 8))
 
-    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(User, on_delete=models.CASCADE)
     talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
     order = models.IntegerField(choices=SPEAKER_NO, default=1)
 
@@ -64,4 +63,4 @@ class Speach(models.Model):
         return self.talk.get_absolute_url()
 
     def username(self):
-        return self.speaker.user.username
+        return self.speaker.username
