@@ -7,6 +7,7 @@ from django.contrib import messages
 def on_user_logged_in(sender, request, **kwargs):
     messages.success(request, 'Welcome!')
 
+
 @receiver(user_logged_out)
 def on_user_logged_out(sender, request, **kwargs):
     messages.success(request, 'Goodbye!')
