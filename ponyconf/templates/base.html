@@ -59,6 +59,7 @@
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
             <li><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+            <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;Register</a></li>
             {% endif %}
           </ul>
           {% block navbar-right %}{% endblock %}
