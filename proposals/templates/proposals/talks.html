@@ -13,8 +13,8 @@
     <li>
         <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
         <i>by</i>
-        {% for speach in talk.speach_set.all %}
-            <a href="{% url 'show-user' speach.username %}">{{ speach.user }}</a>
+        {% for speaker in talk.speakers.all %}
+            <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
             {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
         <a class="btn btn-primary" href="{% url 'edit-talk' talk.slug %}">edit</a>
@@ -32,7 +32,7 @@
         <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
         <i>by</i>
         {% for speach in talk.speach_set.all %}
-            <a href="{% url 'show-user' speach.username %}">{{ speach.user }}</a>
+            <a href="{% url 'show-speaker' speach.username %}">{{ speach.user }}</a>
             {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
     </li>

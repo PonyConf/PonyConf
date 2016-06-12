@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^talk/by-speaker/(?P<speaker>[\w.@+-]+)$', views.talk_list_by_speaker, name='list-talks-by-speaker'),
     url(r'^topic/$', views.TopicList.as_view(), name='list-topics'),
     url(r'^speakers/$', views.SpeakerList.as_view(), name='list-speakers'),
-    url(r'^user/(?P<username>[\w.@+-]+)$', views.user_details, name='show-user'),
+    url(r'^speaker/(?P<username>[\w.@+-]+)$', views.user_details, name='show-speaker'),
 ]

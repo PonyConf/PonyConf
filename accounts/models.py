@@ -3,6 +3,7 @@ from enum import IntEnum
 from django.contrib.auth.models import User
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.db import models
 
 __all__ = ['Profile', 'Speaker']
@@ -16,6 +17,12 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User)
     biography = models.TextField(blank=True, verbose_name='Biography')
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.username
+
+    def get_absolute_url(self):
+        return reverse('profile')
 
 
 class Speaker(models.Model):
@@ -39,7 +46,10 @@ class Speaker(models.Model):
         unique_together = ('site', 'user')
 
     def __str__(self):
-        return self.user.get_full_name() or self.user.username
+        return str(self.user.profile)
+
+    def get_absolute_url(self):
+        return reverse('show-speaker', kwargs={'username': self.user.username})
 
 
 def create_profile(sender, instance, created, **kwargs):

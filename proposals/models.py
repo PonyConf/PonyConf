@@ -18,7 +18,7 @@ class Topic(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('list-talks-by-topic', kwargs={'slug': self.slug})
+        return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
 
 
 class Talk(models.Model):

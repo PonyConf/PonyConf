@@ -7,12 +7,12 @@
 <h1>{{ title }}</h1>
 
 <ul>
-{% for talk in talks %}
+{% for talk in talk_list %}
     <li>
         <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
         <i>by</i>
-        {% for speach in talk.speach_set.all %}
-            <a href="{% url 'show-user' speach.username %}">{{ speach.user }}</a>
+        {% for speaker in talk.speakers.all %}
+            <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
             {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
     </li>

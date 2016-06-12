@@ -29,7 +29,7 @@ def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, slug=topic)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks related to %s:' % topic,
-        'talks': Talk.on_site.filter(topics=topic),
+        'talk_list': Talk.on_site.filter(topics=topic),
     })
 
 
@@ -38,7 +38,7 @@ def talk_list_by_speaker(request, speaker):
     speaker = get_object_or_404(User, username=speaker)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks with %s:' % speaker,
-        'talks': Talk.on_site.filter(speakers=speaker),
+        'talk_list': Talk.on_site.filter(speakers=speaker),
     })
 
 
@@ -61,6 +61,7 @@ def talk_edit(request, talk=None):
             talk = form.save(commit=False)
             talk.site = site
             talk.save()
+            form.save_m2m()
             Speaker.on_site.get_or_create(user=request.user, site=site)
             Speach.objects.create(speaker=request.user, talk=talk)
             messages.success(request, 'Talk proposed successfully!')
@@ -80,6 +81,7 @@ class TopicList(LoginRequiredMixin, ListView):
 
 class SpeakerList(LoginRequiredMixin, ListView):
     queryset = User.objects.filter(speach__talk=Talk.on_site.all())
+    template_name = 'proposals/speaker_list.html'
 
 
 @login_required

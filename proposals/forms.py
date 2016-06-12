@@ -5,4 +5,4 @@ from proposals.models import Talk
 __all__ = ['TalkForm']
 
 
-TalkForm = modelform_factory(Talk, fields=['title', 'description'])
+TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics'])
