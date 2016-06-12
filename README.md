@@ -1,0 +1,4 @@
+PonyConf
+========
+
+Organise your conferences
