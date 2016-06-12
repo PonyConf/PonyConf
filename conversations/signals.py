@@ -9,7 +9,6 @@ from django.core.mail import EmailMultiAlternatives
 
 from .models import Message
 from .utils import get_reply_addr
-from proposals.models import Talk, Topic
 
 
 @receiver(post_save, sender=Message, dispatch_uid="Notify new message")
@@ -49,9 +48,9 @@ def notify_by_email(data, template, subject, sender, dests, message_id, ref=None
             email=settings.DEFAULT_FROM_EMAIL)
 
     # Generating headers
-    headers = { 
+    headers = {
         'Message-ID': "<%s.%s>" % (message_id, settings.DEFAULT_FROM_EMAIL),
-    }   
+    }
     if ref:
         # This email reference a previous one
         headers.update({
