@@ -1,0 +1,8 @@
+{{ content|safe }}
+
+<hr>
+{% if answering %}
+Reply to this email directly or <a href="{{ uri }}">view it online</a>.
+{% else %}
+<a href="{{ uri }}">Reply online</a>.
+{% endif %}

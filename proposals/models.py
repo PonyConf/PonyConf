@@ -10,7 +10,7 @@ from autoslug import AutoSlugField
 
 from accounts.models import enum_to_choices
 
-__all__ = ['Topic', 'Talk', 'Speach']
+__all__ = ['Topic', 'Talk', 'Speech']
 
 
 class Topic(models.Model):
@@ -31,7 +31,7 @@ class Talk(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    speakers = models.ManyToManyField(User, through='Speach')
+    speakers = models.ManyToManyField(User, through='Speech')
     title = models.CharField(max_length=128, verbose_name='Title')
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
@@ -48,7 +48,7 @@ class Talk(models.Model):
         return reverse('show-talk', kwargs={'slug': self.slug})
 
 
-class Speach(models.Model):
+class Speech(models.Model):
 
     SPEAKER_NO = tuple((i, str(i)) for i in range(1, 8))
 

@@ -31,8 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts',
-    'registration',
+    # build-in apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,11 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    # external apps
     'djangobower',
     'bootstrap3',
+    'registration',
 
+    # our apps
+    'accounts',
     'ponyconf',
     'proposals',
+    'conversations',
 ]
 
 MIDDLEWARE_CLASSES = [

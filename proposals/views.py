@@ -9,7 +9,7 @@ from django.views.generic import DetailView, ListView
 
 from accounts.models import Speaker
 from proposals.forms import TalkForm
-from proposals.models import Speach, Talk, Topic
+from proposals.models import Speech, Talk, Topic
 
 
 def home(request):
@@ -63,7 +63,7 @@ def talk_edit(request, talk=None):
             talk.save()
             form.save_m2m()
             Speaker.on_site.get_or_create(user=request.user, site=site)
-            Speach.objects.create(speaker=request.user, talk=talk)
+            Speech.objects.create(speaker=request.user, talk=talk)
             messages.success(request, 'Talk proposed successfully!')
         return redirect(talk.get_absolute_url())
     return render(request, 'proposals/talk_edit.html', {
@@ -80,7 +80,7 @@ class TopicList(LoginRequiredMixin, ListView):
 
 
 class SpeakerList(LoginRequiredMixin, ListView):
-    queryset = User.objects.filter(speach__talk=Talk.on_site.all())
+    queryset = User.objects.filter(speech__talk=Talk.on_site.all())
     template_name = 'proposals/speaker_list.html'
 
 

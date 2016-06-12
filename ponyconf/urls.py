@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^registration/', include('registration.backends.default.urls')),
     url(r'^', include('proposals.urls')),
+    url(r'^conversations/', include('conversations.urls')),
 ]

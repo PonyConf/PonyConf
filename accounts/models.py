@@ -37,7 +37,7 @@ class Speaker(models.Model):
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
-    constraints = models.TextField()
+    constraints = models.TextField(blank=True)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()

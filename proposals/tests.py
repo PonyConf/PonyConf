@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from .models import Talk, Topic, Speach
+from .models import Talk, Topic, Speech
 
 
 class ProposalsTests(TestCase):
@@ -36,7 +36,7 @@ class ProposalsTests(TestCase):
         self.assertEqual(self.client.get(reverse('list-talks')).status_code, 200)
 
         # Models str & get_asbolute_url
-        for model in [Talk, Topic, Speach]:
+        for model in [Talk, Topic, Speech]:
             item = model.objects.first()
             self.assertEqual(self.client.get(item.get_absolute_url()).status_code, 200)
             self.assertTrue(str(item))
