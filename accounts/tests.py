@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from .models import PonyConfUser
+from .models import Profile
 
 ROOT_URL = 'accounts'
 
@@ -14,8 +14,8 @@ class AccountTests(TestCase):
 
     # MODELS
 
-    def test_create_ponyconfuser(self):
-        self.assertEqual(PonyConfUser.objects.count(), 2)
+    def test_create_profile(self):
+        self.assertEqual(Profile.objects.count(), 2)
 
     # VIEWS
 
@@ -23,7 +23,7 @@ class AccountTests(TestCase):
         # User b wants to update its username, email and biography
         user = User.objects.get(username='b')
         self.assertEqual(user.email, 'b@example.org')
-        self.assertEqual(user.ponyconfuser.biography, '')
+        self.assertEqual(user.profile.biography, '')
 
         self.client.login(username='b', password='b')
 
@@ -35,4 +35,4 @@ class AccountTests(TestCase):
 
         user = User.objects.get(username='z')
         self.assertEqual(user.email, 'b@newdomain.com')
-        self.assertEqual(user.ponyconfuser.biography, 'tester')
+        self.assertEqual(user.profile.biography, 'tester')

@@ -2,14 +2,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from .forms import PonyConfUserForm, ProfileForm
+from .forms import ProfileForm, UserForm
 
 
 @login_required
 def profile(request):
 
-    forms = [ProfileForm(request.POST or None, instance=request.user),
-             PonyConfUserForm(request.POST or None, instance=request.user.ponyconfuser)]
+    forms = [UserForm(request.POST or None, instance=request.user),
+             ProfileForm(request.POST or None, instance=request.user.profile)]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):

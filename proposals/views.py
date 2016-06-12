@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from accounts.models import PonyConfSpeaker, PonyConfUser
+from accounts.models import Speaker, Profile
 from proposals.forms import TalkForm
 from proposals.models import Speach, Talk, Topic
 
@@ -15,7 +15,7 @@ def home(request):
 
 @login_required
 def talk_list(request):
-    speaker = PonyConfSpeaker.on_site.filter(user=request.user)
+    speaker = Speaker.on_site.filter(user=request.user)
     if speaker.exists():
         speaker = speaker.first()
         mine = Talk.on_site.filter(speakers=speaker)
@@ -41,7 +41,7 @@ def talk_list_by_topic(request, topic):
 
 @login_required
 def talk_list_by_speaker(request, speaker):
-    speaker = get_object_or_404(PonyConfSpeaker, user__username=speaker)
+    speaker = get_object_or_404(Speaker, user__username=speaker)
     talks = Talk.on_site.filter(speakers=speaker)
     return render(request, 'proposals/talk_list.html', {
         'title': 'Talks with %s:' % speaker,
@@ -68,7 +68,7 @@ def talk_edit(request, talk=None):
             talk = form.save(commit=False)
             talk.site = site
             talk.save()
-            speaker = PonyConfSpeaker.on_site.get_or_create(user=request.user, site=site)[0]
+            speaker = Speaker.on_site.get_or_create(user=request.user, site=site)[0]
             speach = Speach(speaker=speaker, talk=talk, order=1)
             speach.save()
             messages.success(request, 'Talk proposed successfully!')
@@ -96,7 +96,7 @@ def topic_list(request):
 
 @login_required
 def speaker_list(request):
-    speakers = PonyConfSpeaker.on_site.all()
+    speakers = Speaker.on_site.all()
     return render(request, 'proposals/speaker_list.html', {
         'speaker': speakers,
     })
@@ -104,7 +104,7 @@ def speaker_list(request):
 
 @login_required
 def user_details(request, username):
-    user = get_object_or_404(PonyConfUser, user__username=username)
+    user = get_object_or_404(Profile, user__username=username)
     return render(request, 'proposals/user_details.html', {
         'user': user,
     })

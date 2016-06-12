@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from accounts.models import PonyConfSpeaker, PonyConfUser
+from accounts.models import Profile, Speaker
 
-admin.site.register(PonyConfUser)
-admin.site.register(PonyConfSpeaker)
+admin.site.register(Profile)  # FIXME extend user admin
+admin.site.register(Speaker)

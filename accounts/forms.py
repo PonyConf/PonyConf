@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
 from django.forms.models import modelform_factory
 
-from .models import PonyConfUser
+from .models import Profile
 
-__all__ = ['ProfileForm', 'PonyConfUserForm']
+__all__ = ['UserForm', 'ProfileForm']
 
 
-ProfileForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', 'username'])
+UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', 'username'])
 
-PonyConfUserForm = modelform_factory(PonyConfUser, fields=['biography'])
+ProfileForm = modelform_factory(Profile, fields=['biography'])

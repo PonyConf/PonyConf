@@ -5,20 +5,20 @@ from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 
-__all__ = ['PonyConfUser', 'PonyConfSpeaker']
+__all__ = ['Profile', 'Speaker']
 
 
 def enum_to_choices(enum):
     return ((item.value, item.name) for item in list(enum))
 
 
-class PonyConfUser(models.Model):
+class Profile(models.Model):
 
     user = models.OneToOneField(User)
     biography = models.TextField(blank=True, verbose_name='Biography')
 
 
-class PonyConfSpeaker(models.Model):
+class Speaker(models.Model):
 
     TRANSPORTS = IntEnum('Transport', 'train plane')
     CONNECTORS = IntEnum('Connector', 'VGA HDMI miniDP')
@@ -42,8 +42,8 @@ class PonyConfSpeaker(models.Model):
         return self.user.get_full_name() or self.user.username
 
 
-def create_ponyconfuser(sender, instance, created, **kwargs):
+def create_profile(sender, instance, created, **kwargs):
     if created:
-        PonyConfUser.objects.create(user=instance)
+        Profile.objects.create(user=instance)
 
-models.signals.post_save.connect(create_ponyconfuser, sender=User, weak=False, dispatch_uid='create_ponyconfuser')
+models.signals.post_save.connect(create_profile, sender=User, weak=False, dispatch_uid='create_profile')
