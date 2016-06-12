@@ -17,7 +17,7 @@
             <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
             {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
-        <a class="btn btn-primary" href="{% url 'edit-talk' talk.slug %}">edit</a>
+        <a class="btn btn-primary btn-xs" href="{% url 'edit-talk' talk.slug %}">edit</a>
     </li>
 {% empty %}
     <li>No proposed talk.</li>

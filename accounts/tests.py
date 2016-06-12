@@ -39,3 +39,4 @@ class AccountTests(TestCase):
         user = User.objects.get(username='z')
         self.assertEqual(user.email, 'b@newdomain.com')
         self.assertEqual(user.profile.biography, 'tester')
+        self.client.logout()
