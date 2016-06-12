@@ -7,7 +7,7 @@
 <h1>Topics:</h1>
 
 <ul>
-{% for topic in topics %}
+{% for topic in topic_list %}
     <li>
         <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic.name }}</a>
     </li>
