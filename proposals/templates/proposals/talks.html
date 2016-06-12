@@ -8,37 +8,10 @@
 
 <div class="h3">My participing talks:</div>
 
-<ul>
-{% for talk in my_talks %}
-    <li>
-        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
-        <i>by</i>
-        {% for speaker in talk.speakers.all %}
-            <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
-            {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
-        {% endfor %}
-        <a class="btn btn-primary btn-xs" href="{% url 'edit-talk' talk.slug %}">edit</a>
-    </li>
-{% empty %}
-    <li>No proposed talk.</li>
-{% endfor %}
-</ul>
+{% include "proposals/_talk_list.html" with talk_list=my_talks%}
 
 <div class="h3">Others talks:</div>
 
-<ul>
-{% for talk in other_talks %}
-    <li>
-        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
-        <i>by</i>
-        {% for speach in talk.speach_set.all %}
-            <a href="{% url 'show-speaker' speach.username %}">{{ speach.user }}</a>
-            {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
-        {% endfor %}
-    </li>
-{% empty %}
-    <li>No other talk.</li>
-{% endfor %}
-</ul>
+{% include "proposals/_talk_list.html" with talk_list=other_talks%}
 
 {% endblock %}

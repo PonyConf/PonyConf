@@ -8,6 +8,8 @@
 
 <a class="btn btn-primary" href="{% url 'edit-talk' talk.slug %}">edit</a><br />
 
+<p>{{ talk.get_event_display }}</p>
+
 <b>Description:</b>
 
 <p>{{ talk.description }}</p>

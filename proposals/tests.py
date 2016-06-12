@@ -14,10 +14,10 @@ class ProposalsTests(TestCase):
     def test_everything(self):
         # talk-edit
         self.client.login(username='a', password='a')
-        self.client.post(reverse('add-talk'), {'title': 'super talk', 'description': 'super'})
+        self.client.post(reverse('add-talk'), {'title': 'super talk', 'description': 'super', 'event': 1})
         self.assertEqual(str(Talk.on_site.first()), 'super talk')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
-                         {'title': 'mega talk', 'description': 'mega'})
+                         {'title': 'mega talk', 'description': 'mega', 'event': 1})
         self.assertEqual(str(Talk.on_site.first()), 'mega talk')
 
         # Status Code
@@ -32,7 +32,7 @@ class ProposalsTests(TestCase):
 
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
-                                          {'title': 'mega talk', 'description': 'mega'}).status_code, 403)
+                                          {'title': 'mega talk', 'description': 'mega', 'event': 1}).status_code, 403)
         self.assertEqual(self.client.get(reverse('list-talks')).status_code, 200)
 
         # Models str & get_asbolute_url

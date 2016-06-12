@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 from django.contrib.auth.models import User
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
@@ -5,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from autoslug import AutoSlugField
+
+from accounts.models import enum_to_choices
 
 __all__ = ['Topic', 'Talk', 'Speach']
 
@@ -23,6 +27,8 @@ class Topic(models.Model):
 
 class Talk(models.Model):
 
+    EVENTS = IntEnum('Event', 'conference workshop stand other')
+
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     speakers = models.ManyToManyField(User, through='Speach')
@@ -30,6 +36,7 @@ class Talk(models.Model):
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
     topics = models.ManyToManyField(Topic, blank=True)
+    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference.value)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()

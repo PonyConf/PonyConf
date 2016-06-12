@@ -1,6 +1,6 @@
 - [x] enregistrement sur le site (pas d'enregistrement fb/linkedin: on aime le libre ici)
-- [ ] permettre de proposer une participation (conférence/atelier/small talk/etc.). Un speaker rentre un abstract et
-  peur associer un ou des co-speakers.
+- [x] permettre de proposer une participation (conférence/atelier/small talk/etc.).
+- [ ] Un speaker rentre un abstract et peut associer un ou des co-speakers.
 - [ ] l'équipe organisatrice peut voter pour les conférences (avec un commentaire visible uniquement de l'équipe) et
   les accepter/refuser
 - [ ] pour chaque conférence/conférencier, on permet d'échanger avec le conférencier (lui vois ça comme un mail, mais

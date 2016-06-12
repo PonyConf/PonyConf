@@ -6,19 +6,6 @@
 
 <h1>{{ title }}</h1>
 
-<ul>
-{% for talk in talk_list %}
-    <li>
-        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
-        <i>by</i>
-        {% for speaker in talk.speakers.all %}
-            <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
-            {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
-        {% endfor %}
-    </li>
-{% empty %}
-    <li><i>No talk.</i></li>
-{% endfor %}
-</ul>
+{% include "proposals/_talk_list.html" %}
 
 {% endblock %}
