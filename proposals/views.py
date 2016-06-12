@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from accounts.models import Speaker, Profile
+from accounts.models import Profile, Speaker
 from proposals.forms import TalkForm
 from proposals.models import Speach, Talk, Topic
 

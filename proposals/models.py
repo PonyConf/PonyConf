@@ -2,8 +2,9 @@ from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.db import models
 
-from accounts.models import Speaker
 from autoslug import AutoSlugField
+
+from accounts.models import Speaker
 
 __all__ = ['Topic', 'Talk', 'Speach']
 
