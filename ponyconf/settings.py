@@ -178,3 +178,4 @@ BOOTSTRAP3 = {
 
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
+REPLY_EMAIL = 'pipo@example.org'

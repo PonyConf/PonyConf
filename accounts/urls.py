@@ -1,8 +1,8 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 
 from .views import profile
-from django.conf import settings
 
 urlpatterns = [
     url(r'^profile$', profile, name='profile'),
