@@ -7,7 +7,6 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 
-from accounts.models import Speaker
 from proposals.forms import TalkForm
 from proposals.models import Speech, Talk, Topic
 
@@ -62,7 +61,6 @@ def talk_edit(request, talk=None):
             talk.site = site
             talk.save()
             form.save_m2m()
-            Speaker.on_site.get_or_create(user=request.user, site=site)
             Speech.objects.create(speaker=request.user, talk=talk)
             messages.success(request, 'Talk proposed successfully!')
         return redirect(talk.get_absolute_url())

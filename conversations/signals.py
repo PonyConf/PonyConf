@@ -1,13 +1,23 @@
-from django.conf import settings
-from django.core import mail
-from django.core.mail import EmailMultiAlternatives
-from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
+from django.core import mail
+from django.core.mail import EmailMultiAlternatives
 
-from .models import Message
+
+from .models import Conversation, Message
 from .utils import get_reply_addr
+from proposals.models import Talk, Topic
+from accounts.models import Participation
+
+
+@receiver(post_save, sender=Participation, dispatch_uid="Create Conversation")
+def create_conversation(sender, instance, created, **kwargs):
+    if not created:
+        return
+    conversation = Conversation(participation=instance).save()
 
 
 @receiver(post_save, sender=Message, dispatch_uid="Notify new message")
@@ -17,15 +27,16 @@ def notify_new_message(sender, instance, created, **kwargs):
         return
     message = instance
     conversation = message.conversation
-    site = conversation.speaker.site
+    site = conversation.participation.site
     subject = site.name
-    sender = instance.author
+    sender = message.author
+    if sender != conversation.participation.user \
+            and sender not in conversation.subscribers:
+        conversation.subscribers.add(sender)
     dests = list(conversation.subscribers.all())
-    if conversation.speaker.user not in dests:
-        dests += [conversation.speaker.user]
     data = {
         'content': message.content,
-        'uri': site.domain + reverse('show-conversation', args=[conversation.id]),
+        'uri': site.domain + reverse('messaging'),
     }
     message_id = message.token
     ref = None
@@ -36,7 +47,7 @@ def notify_new_message(sender, instance, created, **kwargs):
 
 def notify_by_email(data, template, subject, sender, dests, message_id, ref=None):
 
-    if hasattr(settings, 'REPLY_EMAIL'):
+    if hasattr(settings, 'REPLY_EMAIL') and hasattr(settings, 'REPLY_KEY'):
         data.update({'answering': True})
 
     text_message = render_to_string('conversations/%s.txt' % template, data)
@@ -47,9 +58,9 @@ def notify_by_email(data, template, subject, sender, dests, message_id, ref=None
             email=settings.DEFAULT_FROM_EMAIL)
 
     # Generating headers
-    headers = {
+    headers = { 
         'Message-ID': "<%s.%s>" % (message_id, settings.DEFAULT_FROM_EMAIL),
-    }
+    }   
     if ref:
         # This email reference a previous one
         headers.update({

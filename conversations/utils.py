@@ -1,6 +1,7 @@
-import hashlib
-
 from django.conf import settings
+from django.utils.crypto import get_random_string
+
+import hashlib
 
 
 def hexdigest_sha256(*args):
@@ -21,6 +22,10 @@ def get_reply_addr(message_id, dest):
     pos = addr.find('@')
     name = addr[:pos]
     domain = addr[pos:]
-    key = hexdigest_sha256(settings.SECRET_KEY, message_id, dest.pk)
+    key = hexdigest_sha256(settings.SECRET_KEY, message_id, dest.pk)[0:12]
 
-    return ['%s+%10s%s%10s%s' % (name, dest.pk, message_id, key, domain)]
+    return ['%s+%s%s%s%s' % (name, dest.profile.email_token, message_id, key, domain)]
+
+
+def generate_message_token():
+    return get_random_string(length=60, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')

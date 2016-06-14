@@ -5,4 +5,4 @@ class ConversationsConfig(AppConfig):
     name = 'conversations'
 
     def ready(self):
-        import conversations.signals  # noqa
+        import conversations.signals

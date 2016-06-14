@@ -55,6 +55,7 @@
             {% if request.user.is_staff %}
             <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration</a></li>
             {% endif %}
+            <li{% block messagingtab %}{% endblock %}><a href="{% url 'messaging' %}" data-toggle="tooltip" data-placement="bottom" title="Messaging"><span class="glyphicon glyphicon-envelope"></span> Messaging</a></li>
             <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}

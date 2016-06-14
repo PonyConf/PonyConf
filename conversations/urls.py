@@ -1,7 +1,9 @@
 from django.conf.urls import url
 
-from conversations import views
+from conversations import views, emails
+
 
 urlpatterns = [
-    url(r'^(?P<conversation>[0-9]+)$', views.conversation_details, name='show-conversation'),
+    url(r'^recv/$', emails.email_recv),
+    url(r'^$', views.messaging, name='messaging'),
 ]

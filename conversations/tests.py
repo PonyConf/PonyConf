@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.test import TestCase
 
-from accounts.models import Speaker
+from accounts.models import Participation
 
 from .models import Conversation, Message
 from .utils import get_reply_addr
@@ -11,7 +11,7 @@ from .utils import get_reply_addr
 class ConversationTests(TestCase):
     def setUp(self):
         a, b = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'ab')
-        speaker = Speaker.objects.create(user=a, site=Site.objects.first())
+        participation = Participation.objects.create(user=a, site=Site.objects.first())
         conversation = Conversation.objects.create(speaker=speaker)
         Message.objects.create(token='pipo', conversation=conversation, author=a, content='allo')
 

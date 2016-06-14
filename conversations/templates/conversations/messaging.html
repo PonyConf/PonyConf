@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block messagingtab %} class="active"{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Messaging</h1>
+    <p>You can use this page to communicate with the staff.</p>
+</div>
+
+{% for message in message_list %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ message.date }} | from {{ message.author.profile }}
+    </div>
+    <div class="panel-body">
+        {{ message.content }}
+    </div>
+</div>
+{% endfor %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+    Send a message
+    </div>
+    <div class="panel-body">
+        <form action="" method="post" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea class="form-control" name="content" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-envelope"></span> Send</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

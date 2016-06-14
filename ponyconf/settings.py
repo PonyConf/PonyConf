@@ -31,6 +31,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # our apps
+    'accounts',
+    'ponyconf',
+    'proposals',
+    'conversations',
+
+    # external apps
+    'djangobower',
+    'bootstrap3',
+    'registration',
+
     # build-in apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,17 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
-    # external apps
-    'djangobower',
-    'bootstrap3',
-    'registration',
-
-    # our apps
-    'accounts',
-    'ponyconf',
-    'proposals',
-    'conversations',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -178,4 +178,3 @@ BOOTSTRAP3 = {
 
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
-REPLY_EMAIL = 'pipo@example.org'

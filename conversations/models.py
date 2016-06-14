@@ -1,26 +1,24 @@
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.contrib.auth.models import User
 
-from accounts.models import Speaker
+from accounts.models import Participation
+from .utils import generate_message_token
 
 
 class Conversation(models.Model):
 
-    speaker = models.ForeignKey(Speaker, related_name='conversation')
+    participation = models.OneToOneField(Participation, related_name='conversation')
     subscribers = models.ManyToManyField(User, related_name='+')
 
     def __str__(self):
-        return "Conversation with %s" % self.speaker
-
-    def get_absolute_url(self):
-        return reverse('show-conversation', kwargs={'conversation': self.pk})
+        return "Conversation with %s" % self.participation.user
 
 
 class Message(models.Model):
 
-    token = models.CharField(max_length=64)
     conversation = models.ForeignKey(Conversation, related_name='messages')
+
+    token = models.CharField(max_length=64, default=generate_message_token)
 
     author = models.ForeignKey(User)
     date = models.DateTimeField(auto_now_add=True)

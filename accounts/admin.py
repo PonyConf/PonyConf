@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from accounts.models import Profile, Speaker
+from accounts.models import Profile, Participation
 
 admin.site.register(Profile)  # FIXME extend user admin
-admin.site.register(Speaker)
+admin.site.register(Participation)
