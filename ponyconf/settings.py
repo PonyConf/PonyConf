@@ -178,3 +178,5 @@ BOOTSTRAP3 = {
 
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
+
+ACCOUNT_ACTIVATION_DAYS = 7 # django-registration
