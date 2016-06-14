@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 
-{% block messagingtab %} class="active"{% endblock %}
+{% block admintab %} active{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
     <h1>Messaging</h1>
-    <p>You can use this page to communicate with the staff.</p>
+    {% block heading %}
+    <a href="{% url 'correspondents' %}" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go back to correspondents list</a>
+    {% endblock %}
 </div>
 
 {% for message in message_list %}
-<div class="panel panel-default">
+<div class="panel panel-{% block panelstyleblock %}default{% endblock %}">
     <div class="panel-heading">
-        {{ message.date }} | from {{ message.author.profile }}
+        {{ message.date }} | {{ message.author.profile }}
     </div>
     <div class="panel-body">
         {{ message.content }}

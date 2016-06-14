@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block admintab %} active{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Correspondents</h1>
+  This is the list of participants that you follow.
+</div>
+
+<table class="table table-striped">
+  <tr>
+    <th>#</th>
+    <th>Username</th>
+    <th>Fullname</th>
+    <th>Administration</th>
+  </tr>
+  {% for correspondent in correspondent_list %}
+  <tr>
+    <th>{{ forloop.counter }}</th>
+    <td>{{ correspondent.user.username }}</td>
+    <td>{{ correspondent.user.get_full_name }}</td>
+    <td>
+      <a href="{% url 'conversation' correspondent.user.username %}"><span class="glyphicon glyphicon-envelope"></span></a>
+      {% if request.user in correspondent.conversation.subscribers.all %}
+      <a href="{% url 'unsubscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation"><span class="glyphicon glyphicon-star"></span></a>
+      {% else %}
+      <a href="{% url 'subscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation"><span class="glyphicon glyphicon-star-empty"></span></a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

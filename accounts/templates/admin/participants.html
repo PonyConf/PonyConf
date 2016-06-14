@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block admintab %}active{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Participants</h1>
+</div>
+
+<table class="table table-striped">
+  <tr>
+    <th>#</th>
+    <th>Username</th>
+    <th>Fullname</th>
+    <th>Administration</th>
+  </tr>
+  {% for participation in participation_list %}
+  <tr>
+    <th>{{ forloop.counter }}</th>
+    <td>{{ participation.user.username }}</td>
+    <td>{{ participation.user.get_full_name }}</td>
+    <td>
+      <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom" title="View conversation"><span class="glyphicon glyphicon-envelope"></span></a>
+      {% if request.user in participation.conversation.subscribers.all %}
+      <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'participants' %}" data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation"><span class="glyphicon glyphicon-star"></span></a>
+      {% else %}
+      <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'participants' %}" data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation"><span class="glyphicon glyphicon-star-empty"></span></a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+{% block js_end %}
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock %}

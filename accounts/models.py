@@ -5,16 +5,12 @@ from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.crypto import get_random_string
 
-__all__ = ['Profile', 'Participation']
+from .utils import enum_to_choices, generate_user_uid
+from proposals.models import Topic
 
 
-def enum_to_choices(enum):
-    return ((item.value, item.name) for item in list(enum))
-
-def generate_user_uid():
-    return get_random_string(length=12, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
+__all__ = ['Profile']
 
 
 class Profile(models.Model):
@@ -44,6 +40,9 @@ class Participation(models.Model):
     transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
     constraints = models.TextField(blank=True)
+
+    # Participe as reviewer for theses topics
+    review_topics = models.ManyToManyField(Topic, blank=True)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()

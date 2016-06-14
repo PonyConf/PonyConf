@@ -1,0 +1,11 @@
+Hi!<br />
+<br />
+A <a href="https://{{ uri }}">new talk</a> has been proposed by <a href="https://{{ proposer_uri }}">{{ proposer.profile }}</a>!<br />
+<br />
+Title: {{ talk.title }}<br />
+<br />
+Description:<br />
+<p>{{ talk.description }}</p>
+{% if answering %}
+<hr>
+Reply to this email directly to comment this talk.{% endif %}

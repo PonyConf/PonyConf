@@ -53,14 +53,23 @@
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
-            <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration</a></li>
+            <li class="dropdown{% block admintab %}{% endblock %}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django Admin</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'participants' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Participants</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Correspondence</a>
+                </li>
+              </ul>
+            </li>
             {% endif %}
-            <li{% block messagingtab %}{% endblock %}><a href="{% url 'messaging' %}" data-toggle="tooltip" data-placement="bottom" title="Messaging"><span class="glyphicon glyphicon-envelope"></span> Messaging</a></li>
-            <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+            <li{% block inboxtab %}{% endblock %}><a href="{% url 'inbox' %}" data-toggle="tooltip" data-placement="bottom" title="Inbox"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Inbox</a></li>
+            <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ request.user.username }}</a></li>
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
-            <li><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-            <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;Register</a></li>
+            <li{% block registrationtab %}{% endblock %}><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;Register</a></li>
+            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
             {% endif %}
           </ul>
           {% block navbar-right %}{% endblock %}

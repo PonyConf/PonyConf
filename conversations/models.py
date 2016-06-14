@@ -1,22 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 
+from .utils import generate_message_token, notify_by_email
 from accounts.models import Participation
-from .utils import generate_message_token
-
-
-class Conversation(models.Model):
-
-    participation = models.OneToOneField(Participation, related_name='conversation')
-    subscribers = models.ManyToManyField(User, related_name='+')
-
-    def __str__(self):
-        return "Conversation with %s" % self.participation.user
+from proposals.models import Talk
 
 
 class Message(models.Model):
 
-    conversation = models.ForeignKey(Conversation, related_name='messages')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    conversation = GenericForeignKey('content_type', 'object_id')
 
     token = models.CharField(max_length=64, default=generate_message_token)
 
@@ -29,3 +26,90 @@ class Message(models.Model):
 
     def __str__(self):
         return "Message from %s" % self.author
+
+
+class Conversation(models.Model):
+
+    subscribers = models.ManyToManyField(User, related_name='+', blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class ConversationWithParticipant(Conversation): 
+
+    participation = models.OneToOneField(Participation, related_name='conversation')
+    messages = GenericRelation(Message)
+
+    uri = 'inbox'
+    template = 'participant_message'
+
+    def get_site(self):
+        return self.participation.site
+
+    def __str__(self):
+        return "Conversation with %s" % self.participation.user
+
+    def new_message(self, message):
+        site = self.get_site()
+        subject = '[%s] Message notification' % site.name
+        recipients = list(self.subscribers.all())
+        # Auto-subscribe
+        if message.author != self.participation.user and message.author not in recipients:
+            self.subscribers.add(message.author)
+        data = {
+            'content': message.content,
+            'uri': site.domain + reverse('conversation', args=[self.participation.user.username]),
+        }
+        first = self.messages.first()
+        if first != message:
+            ref = first.token
+        else:
+            ref = None
+        notify_by_email('message', data, subject, message.author, recipients, message.token, ref)
+
+        if message.author != self.participation.user:
+            data.update({
+                'uri': site.domain + reverse('inbox')
+            })
+            notify_by_email('message', data, subject, message.author, [self.participation.user], message.token, ref)
+
+
+class ConversationAboutTalk(Conversation):
+
+    talk = models.OneToOneField(Talk, related_name='conversation')
+    messages = GenericRelation(Message)
+
+    uri = 'inbox'
+    template = 'talk_message'
+
+    def get_site(self):
+        return self.talk.site
+
+    def __str__(self):
+        return "Conversation about %s" % self.talk.title
+
+    def new_message(self, message):
+        site = self.get_site()
+        first = self.messages.first()
+        recipients = self.subscribers.all()
+        data = {
+            'uri': site.domain + reverse('show-talk', args=[self.talk.slug]),
+        }
+        if first == message:
+            subject = '[%s] Talk: %s' % (site.name, self.talk.title)
+            template = 'talk_notification'
+            ref = None
+            data.update({
+                'talk': self.talk,
+                'proposer': message.author,
+                'proposer_uri': site.domain + reverse('show-speaker', args=[message.author.username])
+            })
+        else:
+            if message.author not in self.subscribers.all():
+                self.subscribers.add(message.author)
+            subject = 'Re: [%s] Talk: %s' % (site.name, self.talk.title)
+            template = 'message'
+            ref = first.token
+            data.update({'content': message.content})
+        notify_by_email(template, data, subject, message.author, recipients, message.token, ref)

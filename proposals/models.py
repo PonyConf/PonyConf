@@ -8,7 +8,8 @@ from django.db import models
 
 from autoslug import AutoSlugField
 
-from accounts.models import enum_to_choices
+from accounts.utils import enum_to_choices
+
 
 __all__ = ['Topic', 'Talk', 'Speech']
 
@@ -31,6 +32,7 @@ class Talk(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
+    proposer = models.ForeignKey(User, related_name='+')
     speakers = models.ManyToManyField(User, through='Speech')
     title = models.CharField(max_length=128, verbose_name='Title')
     slug = AutoSlugField(populate_from='title', unique=True)
@@ -46,6 +48,19 @@ class Talk(models.Model):
 
     def get_absolute_url(self):
         return reverse('show-talk', kwargs={'slug': self.slug})
+
+    def is_editable_by(self, user):
+        if user.is_superuser:
+            return True
+        if user == self.proposer:
+            return True
+        if user in talk.speakers.all():
+            return True
+        try:
+            participation = Participation.on_site.get(user=user)
+        except Participation.DoesNotExists:
+            return False
+        return self.topics.filter(pk=participation.review_topics.pk).exists()
 
 
 class Speech(models.Model):

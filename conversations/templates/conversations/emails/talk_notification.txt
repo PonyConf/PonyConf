@@ -1,0 +1,12 @@
+Hi!
+
+A new talk has been proposed by {{ proposer.profile }}!
+See it online: https://{{ uri }}
+
+Title: {{ talk.title }}
+
+Description:
+{{ talk.description }}
+{% if answering %}
+--
+Reply to this email directly to comment this talk.{% endif %}

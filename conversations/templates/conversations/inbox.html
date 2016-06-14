@@ -1,0 +1,10 @@
+{% extends 'conversations/conversation.html' %}
+
+{% block inboxtab %} class="active"{% endblock %}
+{% block admintab %}{% endblock %}
+
+{% block heading %}
+<p>You can use this page to communicate with the staff.</p>
+{% endblock %}
+
+{% block panelstyleblock %}{% if message.author == message.conversation.participation.user %}info{% else %}success{% endif %}{% endblock %}

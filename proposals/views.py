@@ -9,6 +9,7 @@ from django.views.generic import DetailView, ListView
 
 from proposals.forms import TalkForm
 from proposals.models import Speech, Talk, Topic
+from .signals import new_talk
 
 
 def home(request):
@@ -47,8 +48,7 @@ def talk_edit(request, talk=None):
         talk = get_object_or_404(Talk, slug=talk)
         if talk.site != get_current_site(request):
             raise PermissionDenied()
-        if not request.user.is_superuser and request.user not in talk.speakers.all():
-            # FIXME fine permissions
+        if not talk.has_perm(request.user):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
     if request.method == 'POST' and form.is_valid():
@@ -56,12 +56,13 @@ def talk_edit(request, talk=None):
             talk = form.save()
             messages.success(request, 'Talk modified successfully!')
         else:
-            site = get_current_site(request)
             talk = form.save(commit=False)
-            talk.site = site
+            talk.site = get_current_site(request)
+            talk.proposer = request.user
             talk.save()
             form.save_m2m()
             Speech.objects.create(speaker=request.user, talk=talk)
+            new_talk.send(talk.__class__, instance=talk)
             messages.success(request, 'Talk proposed successfully!')
         return redirect(talk.get_absolute_url())
     return render(request, 'proposals/talk_edit.html', {
@@ -71,6 +72,10 @@ def talk_edit(request, talk=None):
 
 class TalkDetail(LoginRequiredMixin, DetailView):
     queryset = Talk.on_site.all()
+    def get_context_data(self, **kwargs):
+        context = super(TalkDetail, self).get_context_data(**kwargs)
+        context['edit_perm'] = self.object.is_editable_by(self.request.user)
+        return context
 
 
 class TopicList(LoginRequiredMixin, ListView):
