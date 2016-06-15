@@ -15,7 +15,7 @@ class Message(models.Model):
     object_id = models.PositiveIntegerField()
     conversation = GenericForeignKey('content_type', 'object_id')
 
-    token = models.CharField(max_length=64, default=generate_message_token)
+    token = models.CharField(max_length=64, default=generate_message_token, unique=True)
 
     author = models.ForeignKey(User)
     date = models.DateTimeField(auto_now_add=True)
@@ -52,7 +52,7 @@ class ConversationWithParticipant(Conversation):
 
     def new_message(self, message):
         site = self.get_site()
-        subject = '[%s] Message notification' % site.name
+        subject = '[%s] Conversation with %s' % (site.name, self.participation.user.profile)
         recipients = list(self.subscribers.all())
         # Auto-subscribe
         if message.author != self.participation.user and message.author not in recipients:
@@ -69,6 +69,7 @@ class ConversationWithParticipant(Conversation):
         notify_by_email('message', data, subject, message.author, recipients, message.token, ref)
 
         if message.author != self.participation.user:
+            subject = '[%s] Message notification' % site.name
             data.update({
                 'uri': site.domain + reverse('inbox')
             })
