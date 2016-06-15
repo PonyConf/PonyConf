@@ -1,0 +1,27 @@
+- virer l’username
+- premier login -> redirection profile
+- temps prévu (20 min / 40 min)
+- full link
+- get_absolute_url pour les messages / conversation
+- proposer des talks pour les autres
+- gestion staff
+- autre couleur change password
+- 3ième formulaire profile pour les infos de participation
+- notification si modif constraints
+- pre-remplissage constraints
+- do i need sound?
+- co-speakers
+- règle du jeu de l’édition
+- vote (pas de notif)
+- notif modification conf …
+- modif de conf : pas de modifs des topics
+- UI reviewers (pour le staff pour nommer des reviewers)
+- topic : permettre au staff d’en rajouter
+- topic : qui est reviewer
+- visibilité des talks
+- visibilité des speakers
+- note sur un speaker
+- ouverture conf
+
+
+- mail de bienvenu autre que activation si le mec est inscrit par le staff
