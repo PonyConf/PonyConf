@@ -30,10 +30,13 @@ def create_conversation_about_talk(sender, instance, created, **kwargs):
 
 @receiver(new_talk, dispatch_uid="Notify new talk")
 def notify_new_talk(sender, instance, **kwargs):
-    # Subscribe reviewer for these topics to the conversation
+    # Subscribe reviewer for these topics to conversations
     topics = instance.topics.all()
     reviewers = User.objects.filter(participation__review_topics=topics).all()
     instance.conversation.subscribers.add(*reviewers)
+    for user in instance.speakers.all():
+        participation = Participation.on_site.get(user=user)
+        participation.conversation.subscribers.add(*reviewers)
     # Notification of this new talk
     message = Message(conversation=instance.conversation, author=instance.proposer,
             content='The talk has been proposed.')
