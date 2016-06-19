@@ -1,9 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, render
 
 from .forms import ProfileForm, UserForm
 from .models import Participation
@@ -35,3 +33,8 @@ def participants(request):
     participation_list = Participation.on_site.all()
 
     return render(request, 'admin/participants.html', {'participation_list': participation_list})
+
+
+def participant(request, username):
+    return render(request, 'admin/participant.html',
+                  {'participant': get_object_or_404(Participation, user__username=username)})

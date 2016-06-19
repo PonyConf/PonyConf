@@ -8,8 +8,8 @@ from django.db import models
 
 from autoslug import AutoSlugField
 
-from accounts.utils import enum_to_choices
-
+from accounts.models import Participation
+from ponyconf.utils import enum_to_choices
 
 __all__ = ['Topic', 'Talk', 'Speech']
 
@@ -18,6 +18,8 @@ class Topic(models.Model):
 
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
+
+    reviewers = models.ManyToManyField(Participation, blank=True)
 
     def __str__(self):
         return self.name
@@ -54,13 +56,13 @@ class Talk(models.Model):
             return True
         if user == self.proposer:
             return True
-        if user in talk.speakers.all():
+        if user in self.speakers.all():
             return True
         try:
             participation = Participation.on_site.get(user=user)
         except Participation.DoesNotExists:
             return False
-        return self.topics.filter(pk=participation.review_topics.pk).exists()
+        return self.topics.filter(reviewers=participation).exists()
 
 
 class Speech(models.Model):

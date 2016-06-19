@@ -9,6 +9,7 @@ from django.views.generic import DetailView, ListView
 
 from proposals.forms import TalkForm
 from proposals.models import Speech, Talk, Topic
+
 from .signals import new_talk
 
 
@@ -48,7 +49,7 @@ def talk_edit(request, talk=None):
         talk = get_object_or_404(Talk, slug=talk)
         if talk.site != get_current_site(request):
             raise PermissionDenied()
-        if not talk.has_perm(request.user):
+        if not talk.is_editable_by(request.user):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
     if request.method == 'POST' and form.is_valid():
@@ -72,10 +73,9 @@ def talk_edit(request, talk=None):
 
 class TalkDetail(LoginRequiredMixin, DetailView):
     queryset = Talk.on_site.all()
+
     def get_context_data(self, **kwargs):
-        context = super(TalkDetail, self).get_context_data(**kwargs)
-        context['edit_perm'] = self.object.is_editable_by(self.request.user)
-        return context
+        return super().get_context_data(edit_perm=self.object.is_editable_by(self.request.user), **kwargs)
 
 
 class TopicList(LoginRequiredMixin, ListView):

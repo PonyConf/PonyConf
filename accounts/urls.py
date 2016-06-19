@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^profile$', views.profile, name='profile'),
     url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     url(r'^admin/participants/$', views.participants, name='participants'),
+    url(r'^admin/participant/(?P<username>[\w.@+-]+)$', views.participant, name='show-participation'),
     url(r'', include('django.contrib.auth.urls')),
 ]

@@ -1,12 +1,13 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.db import models
 
-from .utils import generate_message_token, notify_by_email
 from accounts.models import Participation
 from proposals.models import Talk
+
+from .utils import generate_message_token, notify_by_email
 
 
 class Message(models.Model):
@@ -27,6 +28,9 @@ class Message(models.Model):
     def __str__(self):
         return "Message from %s" % self.author
 
+    def get_absolute_url(self):
+        return self.conversation.get_absolute_url()
+
 
 class Conversation(models.Model):
 
@@ -36,7 +40,7 @@ class Conversation(models.Model):
         abstract = True
 
 
-class ConversationWithParticipant(Conversation): 
+class ConversationWithParticipant(Conversation):
 
     participation = models.OneToOneField(Participation, related_name='conversation')
     messages = GenericRelation(Message)
@@ -44,11 +48,14 @@ class ConversationWithParticipant(Conversation):
     uri = 'inbox'
     template = 'participant_message'
 
-    def get_site(self):
-        return self.participation.site
-
     def __str__(self):
         return "Conversation with %s" % self.participation.user
+
+    def get_absolute_url(self):
+        return reverse('conversation', kwargs={'username': self.participation.user.username})
+
+    def get_site(self):
+        return self.participation.site
 
     def new_message(self, message):
         site = self.get_site()
@@ -84,11 +91,14 @@ class ConversationAboutTalk(Conversation):
     uri = 'inbox'
     template = 'talk_message'
 
-    def get_site(self):
-        return self.talk.site
-
     def __str__(self):
         return "Conversation about %s" % self.talk.title
+
+    def get_absolute_url(self):
+        self.talk.get_absolute_url()
+
+    def get_site(self):
+        return self.talk.site
 
     def new_message(self, message):
         site = self.get_site()

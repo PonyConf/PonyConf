@@ -1,15 +1,13 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-
+from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Participation
-from .models import Message
+
 from .forms import MessageForm
 
 
@@ -64,8 +62,7 @@ def subscribe(request, username):
 
     # TODO check admin
 
-    participation = get_object_or_404(Participation, user__username=username,
-            site=get_current_site(request))
+    participation = get_object_or_404(Participation, user__username=username, site=get_current_site(request))
     participation.conversation.subscribers.add(request.user)
     messages.success(request, 'Subscribed.')
 
@@ -79,8 +76,7 @@ def unsubscribe(request, username):
 
     # TODO check admin
 
-    participation = get_object_or_404(Participation, user__username=username,
-            site=get_current_site(request))
+    participation = get_object_or_404(Participation, user__username=username, site=get_current_site(request))
     participation.conversation.subscribers.remove(request.user)
     messages.success(request, 'Unsubscribed.')
 

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block admintab %}active{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Participant: {{ participant }}</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>User</dt><dd>{{ participation.user.profil }}</dd>
+  <dt>Arrival</dt><dd>{{ participation.arrival }}</dd>
+</dl>
+
+<!-- TODO -->
+
+{% endblock %}

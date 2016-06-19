@@ -1,10 +1,10 @@
-from django.conf import settings
-from django.utils.crypto import get_random_string
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.core import mail
-
 import hashlib
+
+from django.conf import settings
+from django.core import mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.crypto import get_random_string
 
 
 def hexdigest_sha256(*args):
@@ -47,9 +47,7 @@ def notify_by_email(template, data, subject, sender, dests, message_id, ref=None
             email=settings.DEFAULT_FROM_EMAIL)
 
     # Generating headers
-    headers = {
-		'Message-ID': "<%s.%s>" % (message_id, settings.DEFAULT_FROM_EMAIL),
-	}
+    headers = {'Message-ID': "<%s.%s>" % (message_id, settings.DEFAULT_FROM_EMAIL)}
     if ref:
         # This email reference a previous one
         headers.update({
@@ -68,7 +66,8 @@ def notify_by_email(template, data, subject, sender, dests, message_id, ref=None
     messages = []
     for subject, message, from_email, dest_emails, reply_to, headers in mails:
         text_message, html_message = message
-        msg = EmailMultiAlternatives(subject, text_message, from_email, dest_emails, reply_to=reply_to, headers=headers)
+        msg = EmailMultiAlternatives(subject, text_message, from_email, dest_emails, reply_to=reply_to,
+                                     headers=headers)
         msg.attach_alternative(html_message, 'text/html')
         messages += [msg]
     with mail.get_connection() as connection:

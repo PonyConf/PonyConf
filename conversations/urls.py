@@ -1,7 +1,6 @@
 from django.conf.urls import url
 
-from conversations import views, emails
-
+from conversations import emails, views
 
 urlpatterns = [
     url(r'^recv/$', emails.email_recv),

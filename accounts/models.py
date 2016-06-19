@@ -6,9 +6,9 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from .utils import enum_to_choices, generate_user_uid
-from proposals.models import Topic
+from ponyconf.utils import enum_to_choices
 
+from .utils import generate_user_uid
 
 __all__ = ['Profile']
 
@@ -40,9 +40,6 @@ class Participation(models.Model):
     transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
     constraints = models.TextField(blank=True)
-
-    # Participe as reviewer for theses topics
-    review_topics = models.ManyToManyField(Topic, blank=True)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()

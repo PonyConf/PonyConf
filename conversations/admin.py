@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import ConversationWithParticipant, ConversationAboutTalk, Message
-
+from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 
 admin.site.register(ConversationWithParticipant)
 admin.site.register(ConversationAboutTalk)

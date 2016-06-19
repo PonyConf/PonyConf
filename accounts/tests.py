@@ -3,7 +3,9 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from .models import Profile, Participation
+from ponyconf.utils import full_link
+
+from .models import Participation, Profile
 
 ROOT_URL = 'accounts'
 
@@ -19,7 +21,7 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
         for model in [Profile, Participation]:
             item = model.objects.first()
-            self.assertEqual(self.client.get(item.get_absolute_url()).status_code, 200)
+            self.assertEqual(self.client.get(full_link(item)).status_code, 200)
             self.assertTrue(str(item))
 
     def test_views(self):
@@ -40,3 +42,12 @@ class AccountTests(TestCase):
         self.assertEqual(user.email, 'b@newdomain.com')
         self.assertEqual(user.profile.biography, 'tester')
         self.client.logout()
+
+    def test_participant_views(self):
+        self.assertEqual(self.client.get(reverse('participants')).status_code, 302)
+        self.client.login(username='b', password='b')
+        self.assertEqual(self.client.get(reverse('participants')).status_code, 403)
+        b = User.objects.get(username='b')
+        b.is_superuser = True
+        b.save()
+        self.assertEqual(self.client.get(reverse('participants')).status_code, 200)
