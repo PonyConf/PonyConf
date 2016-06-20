@@ -1,12 +1,11 @@
 - virer l’username
 - premier login -> redirection profile
 - temps prévu (20 min / 40 min)
-- full link
-- get_absolute_url pour les messages / conversation
 - proposer des talks pour les autres
 - gestion staff
 - autre couleur change password
 - 3ième formulaire profile pour les infos de participation
+- changer le widget des topics pour des cases à cocher
 - notification si modif constraints
 - pre-remplissage constraints
 - do i need sound?
@@ -15,6 +14,7 @@
 - vote (pas de notif)
 - notif modification conf …
 - modif de conf : pas de modifs des topics
+- rajouter les created sur un peu tous les modèles
 - UI reviewers (pour le staff pour nommer des reviewers)
 - topic : permettre au staff d’en rajouter
 - topic : qui est reviewer
