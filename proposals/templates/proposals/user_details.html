@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
+{% load accounts_tags %}
+
+{% block speakertab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{{ user }}</h1>
+<h1>{{ profile }}</h1>
 
-<b>Biography:</b>
-<p>{{ user.biography }}</p>
+<h2>Biography</h2>
+<p>{{ profile.biography }}</p>
 
-<a href="{% url 'list-talks-by-speaker' user.user.username %}">See the list of talks with this speaker</a>
+<h2>Talks</h2>
+<a href="{% url 'list-talks-by-speaker' profile.user.username %}">See the list of talks with this speaker</a>
+
+{% if request|edit_profile:profile %}
+<h2>Notes</h2>
+<p>{{ profile.notes }}</p>
+<a href="{% url 'edit-profile' profile.user.username %}" class="btn btn-success">Edit</a>
+{% endif %}
+
 
 {% endblock %}

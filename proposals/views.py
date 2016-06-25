@@ -95,12 +95,12 @@ class TopicCreate(StaffRequiredMixin, CreateView):
 
 
 class SpeakerList(StaffRequiredMixin, ListView):
-    queryset = User.objects.filter(speech__talk=Talk.on_site.all())
+    queryset = User.objects.filter(speech__talk__in=Talk.on_site.all())
     template_name = 'proposals/speaker_list.html'
 
 
 @login_required
 def user_details(request, username):
     return render(request, 'proposals/user_details.html', {
-        'user': get_object_or_404(User, username=username).profile,
+        'profile': get_object_or_404(User, username=username).profile,
     })
