@@ -49,9 +49,7 @@ def talk_list_by_speaker(request, speaker):
 @login_required
 def talk_edit(request, talk=None):
     if talk:
-        talk = get_object_or_404(Talk, slug=talk)
-        if talk.site != get_current_site(request):
-            raise PermissionDenied()
+        talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)

@@ -21,14 +21,16 @@ class ProposalsTests(TestCase):
         self.client.login(username='a', password='a')
         self.client.post(reverse('add-talk'), {'title': 'super talk', 'description': 'super', 'event': 1, 'topics': 1})
         self.assertEqual(str(Talk.on_site.first()), 'super talk')
+        self.assertEqual(Talk.on_site.first().description, 'super')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
                          {'title': 'mega talk', 'description': 'mega', 'event': 1})
-        self.assertEqual(str(Talk.on_site.first()), 'mega talk')
+        self.assertEqual(str(Talk.on_site.first()), 'super talk')  # title is read only there
+        self.assertEqual(Talk.on_site.first().description, 'mega')
 
         # Status Code
         self.client.login(username='a', password='a')
         for view in ['home', 'list-talks', 'add-talk', 'list-topics', 'list-speakers']:
-            self.assertEqual(self.client.get(reverse(view)).status_code, 200)
+            self.assertEqual(self.client.get(reverse(view)).status_code, 302 if view == 'list-speakers' else 200)
         talk = Talk.on_site.first()
         self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)

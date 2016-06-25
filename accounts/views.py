@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 
-from .forms import ProfileForm, UserForm, ParticipationForm
+from .forms import ParticipationForm, ProfileForm, UserForm
 from .models import Participation
 
 

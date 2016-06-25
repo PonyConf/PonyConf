@@ -180,3 +180,4 @@ AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth'
 LOGOUT_REDIRECT_URL = 'home'
 
 ACCOUNT_ACTIVATION_DAYS = 7  # django-registration
+REPLY_EMAIL = 'no-reply@example.org'

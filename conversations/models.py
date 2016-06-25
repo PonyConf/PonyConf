@@ -95,7 +95,7 @@ class ConversationAboutTalk(Conversation):
         return "Conversation about %s" % self.talk.title
 
     def get_absolute_url(self):
-        self.talk.get_absolute_url()
+        return self.talk.get_absolute_url()
 
     def get_site(self):
         return self.talk.site
