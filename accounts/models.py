@@ -41,6 +41,7 @@ class Participation(PonyConfModel):
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
     constraints = models.TextField(blank=True)
     sound = models.BooleanField("I need sound", default=False)
+    orga = models.BooleanField(default=False)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()
@@ -56,7 +57,7 @@ class Participation(PonyConfModel):
         return reverse('show-participation', kwargs={'username': self.user.username})
 
     def is_staff(self):
-        return self.user.is_superuser or self.topic_set.exists()
+        return self.user.is_superuser or self.orga or self.topic_set.exists()
 
 
 def create_profile(sender, instance, created, **kwargs):

@@ -22,9 +22,12 @@ def home(request):
 @login_required
 def talk_list(request):
     participation = Participation.on_site.get(user=request.user)
+    other_talks = Talk.on_site.exclude(speakers=request.user)
+    if not participation.orga:
+        other_talks = other_talks.filter(topics__reviewers=participation)
     return render(request, 'proposals/talks.html', {
         'my_talks': Talk.on_site.filter(speakers=request.user),
-        'other_talks': Talk.on_site.exclude(speakers=request.user).filter(topics__reviewers=participation),
+        'other_talks': other_talks,
     })
 
 

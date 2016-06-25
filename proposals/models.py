@@ -62,7 +62,7 @@ class Talk(PonyConfModel):
             participation = Participation.on_site.get(user=user)
         except Participation.DoesNotExists:
             return False
-        return self.topics.filter(reviewers=participation).exists()
+        return participation.orga or self.topics.filter(reviewers=participation).exists()
 
 
 class Speech(PonyConfModel):
