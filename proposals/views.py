@@ -93,7 +93,7 @@ class TopicCreate(StaffRequiredMixin, CreateView):
     fields = ['name']
 
 
-class SpeakerList(LoginRequiredMixin, ListView):
+class SpeakerList(StaffRequiredMixin, ListView):
     queryset = User.objects.filter(speech__talk=Talk.on_site.all())
     template_name = 'proposals/speaker_list.html'
 

@@ -47,7 +47,9 @@
             {% if request.user.is_authenticated %}
             <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">Talks</a></li>
             <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">Topics</a></li>
+            {% if request|staff %}
             <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">Speakers</a></li>
+            {% endif %}
             {% endif %}
             {% block navbar-left %}{% endblock %}
           </ul>
