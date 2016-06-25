@@ -2,7 +2,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 
 def enum_to_choices(enum):
-    return ((item.value, item.name) for item in list(enum))
+    return ((item.value, item.name.replace('_', ' ')) for item in list(enum))
 
 
 def full_link(obj, request=None):

@@ -30,7 +30,7 @@ class Topic(models.Model):
 
 class Talk(models.Model):
 
-    EVENTS = IntEnum('Event', 'conference workshop stand other')
+    EVENTS = IntEnum('Event', 'conference_short conference_long workshop stand other')
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
@@ -40,7 +40,7 @@ class Talk(models.Model):
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
     topics = models.ManyToManyField(Topic, blank=True)
-    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference.value)
+    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()
