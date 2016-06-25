@@ -1,9 +1,17 @@
 {% load bootstrap3 %}
 <form action="" method="post" class="form-horizontal">
   {% csrf_token %}
+  {% if form %}
   {% bootstrap_form form layout="horizontal" %}
+  {% endif %}
+  {% for form in forms %}
+  {% bootstrap_form form layout="horizontal" %}
+  {% endfor %}
   {% buttons layout="horizontal" %}
   <button type="submit" class="btn btn-primary">Submit</button>
+  {% for url, class, text in buttons %}
+  <a href="{% url url %}" class="btn btn-{{ class }}">{{ text }}</a>
+  {% endfor %}
+  <a href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'home' %}{% endif %}" class="btn btn-default">Cancel</a>
   {% endbuttons %}
 </form>
-

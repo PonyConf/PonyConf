@@ -8,12 +8,6 @@
 
 <h1>Propose a talk</h1>
 
-<form method="POST" role="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
-</form>
+{% include "_form.html" %}
 
 {% endblock %}

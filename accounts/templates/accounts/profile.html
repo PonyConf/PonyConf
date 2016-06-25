@@ -4,6 +4,7 @@
 
 {% block profiletab %} class="active"{% endblock %}
 
+
 {% block content %}
 
 <div class="page-header">
@@ -15,17 +16,10 @@
     <h3>Update profile</h3>
   </div>
   <div class="panel-body">
-    <form method="post" class="form-horizontal" role="form">
-      {% csrf_token %}
-      {% for form in forms %}
-      {% bootstrap_form form layout="horizontal" %}
-      {% endfor %}
-      {% buttons layout="horizontal" %}
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{% url 'password_change' %}" class="btn btn-warning">Change password</a>
-      {% endbuttons %}
-    </form>
+    {% include "_form.html" %}
   </div>
 </div>
 
 {% endblock %}
+
+<a href="{% url 'password_change' %}" class="btn btn-warning">Change password</a>
