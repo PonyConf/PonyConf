@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView
 
 from accounts.mixins import StaffRequiredMixin
+from accounts.models import Participation
 from proposals.forms import TalkForm
 from proposals.models import Speech, Talk, Topic
 
@@ -20,9 +21,10 @@ def home(request):
 
 @login_required
 def talk_list(request):
+    participation = Participation.on_site.get(user=request.user)
     return render(request, 'proposals/talks.html', {
         'my_talks': Talk.on_site.filter(speakers=request.user),
-        'other_talks': Talk.on_site.exclude(speakers=request.user),
+        'other_talks': Talk.on_site.exclude(speakers=request.user).filter(topics__reviewers=participation),
     })
 
 

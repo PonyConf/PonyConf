@@ -6,12 +6,14 @@
 
 <a class="btn btn-success" href="{% url 'add-talk' %}">Propose a talk</a>
 
+{% if my_talks %}
 <div class="h3">My participing talks:</div>
+{% include "proposals/_talk_list.html" with talk_list=my_talks %}
+{% endif %}
 
-{% include "proposals/_talk_list.html" with talk_list=my_talks%}
-
+{% if other_talks %}
 <div class="h3">Others talks:</div>
-
-{% include "proposals/_talk_list.html" with talk_list=other_talks%}
+{% include "proposals/_talk_list.html" with talk_list=other_talks %}
+{% endif %}
 
 {% endblock %}
