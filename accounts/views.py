@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 
-from .forms import ProfileForm, UserForm
+from .forms import ProfileForm, UserForm, ParticipationForm
 from .models import Participation
 
 
@@ -11,7 +11,9 @@ from .models import Participation
 def profile(request):
 
     forms = [UserForm(request.POST or None, instance=request.user),
-             ProfileForm(request.POST or None, instance=request.user.profile)]
+             ProfileForm(request.POST or None, instance=request.user.profile),
+             ParticipationForm(request.POST or None, instance=Participation.on_site.get(user=request.user)),
+             ]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
