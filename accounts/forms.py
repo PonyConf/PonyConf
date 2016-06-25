@@ -8,6 +8,6 @@ __all__ = ['UserForm', 'ProfileForm']
 
 UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', 'username'])
 
-ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'constraints'])
+ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'constraints'])
 
 ProfileForm = modelform_factory(Profile, fields=['biography'])

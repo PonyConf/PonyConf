@@ -40,6 +40,7 @@ class Participation(models.Model):
     transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
     constraints = models.TextField(blank=True)
+    sound = models.BooleanField("I need sound", default=False)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()
