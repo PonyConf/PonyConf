@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load accounts_tags %}
+
 {% block topictab %} class="active"{% endblock %}
 
 {% block content %}
@@ -15,5 +17,9 @@
     <li><i>No topic.</i></li>
 {% endfor %}
 </ul>
+
+{% if request|staff %}
+<a href="{% url 'add-topic' %}" class="btn btn-success">Add a topic</a>
+{% endif %}
 
 {% endblock %}

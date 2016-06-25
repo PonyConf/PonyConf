@@ -55,6 +55,9 @@ class Participation(PonyConfModel):
     def get_absolute_url(self):
         return reverse('show-participation', kwargs={'username': self.user.username})
 
+    def is_staff(self):
+        return self.user.is_superuser or self.topic_set.exists()
+
 
 def create_profile(sender, instance, created, **kwargs):
     if created:

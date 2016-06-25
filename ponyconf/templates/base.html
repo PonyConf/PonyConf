@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% load accounts_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -52,12 +53,14 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
-            {% if request.user.is_staff %}
+            {% if request|staff %}
             <li class="dropdown{% block admintab %}{% endblock %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li role="presentation">
+                  {% if request.user.is_staff %}
                   <a role="menuitem" tabindex="-1" href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django Admin</a>
+                  {% endif %}
                   <a role="menuitem" tabindex="-1" href="{% url 'participants' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Participants</a>
                   <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Correspondence</a>
                 </li>

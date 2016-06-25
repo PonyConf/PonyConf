@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 
+from accounts.mixins import StaffRequiredMixin
 from proposals.forms import TalkForm
 from proposals.models import Speech, Talk, Topic
 
@@ -83,6 +84,11 @@ class TalkDetail(LoginRequiredMixin, DetailView):
 
 class TopicList(LoginRequiredMixin, ListView):
     model = Topic
+
+
+class TopicCreate(StaffRequiredMixin, CreateView):
+    model = Topic
+    fields = ['name']
 
 
 class SpeakerList(LoginRequiredMixin, ListView):
