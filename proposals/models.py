@@ -9,12 +9,12 @@ from django.db import models
 from autoslug import AutoSlugField
 
 from accounts.models import Participation
-from ponyconf.utils import enum_to_choices
+from ponyconf.utils import PonyConfModel, enum_to_choices
 
 __all__ = ['Topic', 'Talk', 'Speech']
 
 
-class Topic(models.Model):
+class Topic(PonyConfModel):
 
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
@@ -28,7 +28,7 @@ class Topic(models.Model):
         return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
 
 
-class Talk(models.Model):
+class Talk(PonyConfModel):
 
     EVENTS = IntEnum('Event', 'conference_short conference_long workshop stand other')
 
@@ -65,7 +65,7 @@ class Talk(models.Model):
         return self.topics.filter(reviewers=participation).exists()
 
 
-class Speech(models.Model):
+class Speech(PonyConfModel):
 
     SPEAKER_NO = tuple((i, str(i)) for i in range(1, 8))
 

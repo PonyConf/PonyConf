@@ -3,8 +3,6 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from ponyconf.utils import full_link
-
 from .models import Participation, Profile
 
 ROOT_URL = 'accounts'
@@ -21,7 +19,7 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
         for model in [Profile, Participation]:
             item = model.objects.first()
-            self.assertEqual(self.client.get(full_link(item)).status_code, 200)
+            self.assertEqual(self.client.get(item.full_link()).status_code, 200)
             self.assertTrue(str(item))
 
     def test_views(self):

@@ -5,12 +5,13 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from accounts.models import Participation
+from ponyconf.utils import PonyConfModel
 from proposals.models import Talk
 
 from .utils import generate_message_token, notify_by_email
 
 
-class Message(models.Model):
+class Message(PonyConfModel):
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -19,11 +20,10 @@ class Message(models.Model):
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)
 
     author = models.ForeignKey(User)
-    date = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
 
     class Meta:
-        ordering = ['date']
+        ordering = ['created']
 
     def __str__(self):
         return "Message from %s" % self.author
@@ -32,7 +32,7 @@ class Message(models.Model):
         return self.conversation.get_absolute_url()
 
 
-class Conversation(models.Model):
+class Conversation(PonyConfModel):
 
     subscribers = models.ManyToManyField(User, related_name='+', blank=True)
 

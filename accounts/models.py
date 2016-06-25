@@ -6,14 +6,14 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from ponyconf.utils import enum_to_choices
+from ponyconf.utils import PonyConfModel, enum_to_choices
 
 from .utils import generate_user_uid
 
 __all__ = ['Profile']
 
 
-class Profile(models.Model):
+class Profile(PonyConfModel):
 
     user = models.OneToOneField(User)
     biography = models.TextField(blank=True, verbose_name='Biography')
@@ -26,7 +26,7 @@ class Profile(models.Model):
         return reverse('profile')
 
 
-class Participation(models.Model):
+class Participation(PonyConfModel):
 
     TRANSPORTS = IntEnum('Transport', 'train plane others')
     CONNECTORS = IntEnum('Connector', 'VGA HDMI miniDP')
