@@ -52,6 +52,9 @@ def talk_edit(request, talk=None):
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk)
+    if talk:
+        form.fields['title'].disabled = True
+        form.fields['topics'].disabled = True
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
