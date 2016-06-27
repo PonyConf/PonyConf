@@ -11,6 +11,5 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'extra_context': {'buttons': [views.RESET_PASSWORD_BUTTON]}}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     url(r'^admin/participants/$', views.ParticipantList.as_view(), name='participants'),
-    url(r'^admin/participant/(?P<username>[\w.@+-]+)$', views.participant, name='show-participation'),
     url(r'', include('django.contrib.auth.urls')),
 ]

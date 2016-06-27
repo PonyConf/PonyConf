@@ -42,11 +42,6 @@ class ParticipantList(StaffRequiredMixin, ListView):
     queryset = Participation.on_site.all()
 
 
-def participant(request, username):
-    return render(request, 'admin/participant.html',
-                  {'participant': get_object_or_404(Participation, user__username=username)})
-
-
 @login_required
 def edit(request, username):
 
