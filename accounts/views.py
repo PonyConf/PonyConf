@@ -2,10 +2,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView
 
 from registration.backends.default.views import RegistrationView
 
 from .forms import ParticipationForm, ProfileForm, ProfileOrgaForm, UserForm
+from .mixins import StaffRequiredMixin
 from .models import Participation, Profile
 from .utils import can_edit_profile
 
@@ -36,15 +38,8 @@ def profile(request):
     return render(request, 'accounts/profile.html', {'forms': forms, 'buttons': [CHANGE_PASSWORD_BUTTON]})
 
 
-@login_required
-def participants(request):
-
-    if not request.user.is_superuser:
-        raise PermissionDenied()
-
-    participation_list = Participation.on_site.all()
-
-    return render(request, 'admin/participants.html', {'participation_list': participation_list})
+class ParticipantList(StaffRequiredMixin, ListView):
+    queryset = Participation.on_site.all()
 
 
 def participant(request, username):
