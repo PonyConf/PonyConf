@@ -63,7 +63,7 @@
                   {% if request.user.is_staff %}
                   <a role="menuitem" tabindex="-1" href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django Admin</a>
                   {% endif %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'participants' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Participants</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-participant' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Participants</a>
                   <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Correspondence</a>
                 </li>
               </ul>

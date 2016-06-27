@@ -15,19 +15,29 @@
     <th>#</th>
     <th>Username</th>
     <th>Fullname</th>
-    <th>Administration</th>
+    <th>Orga</th>
+    <th>Reviews</th>
+    <th>Conversations</th>
   </tr>
   {% for participation in participation_list %}
   <tr>
     <th>{{ forloop.counter }}</th>
-    <td>{{ participation.user.username }}</td>
+    <td><a href="{{ participation.get_absolute_url }}">{{ participation.user.username }}</a></td>
     <td>{{ participation.user.get_full_name }}</td>
+    <td>{{ participation.orga|yesno:"✔,✘" }}</td>
+    <td>{% for topic in participation.topic_set.all %}{{ topic.get_link }}{% if not forloop.last %},
+      {% endif %}{% endfor %}</td>
     <td>
-      <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom" title="View conversation"><span class="glyphicon glyphicon-envelope"></span></a>
+      <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom"
+        title="View conversation"><span class="glyphicon glyphicon-envelope"></span></a>
       {% if request.user in participation.conversation.subscribers.all %}
-      <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'participants' %}" data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation"><span class="glyphicon glyphicon-star"></span></a>
+      <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
+        data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation">
+        <span class="glyphicon glyphicon-star"></span></a>
       {% else %}
-      <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'participants' %}" data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation"><span class="glyphicon glyphicon-star-empty"></span></a>
+      <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
+        data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation">
+        <span class="glyphicon glyphicon-star-empty"></span></a>
       {% endif %}
     </td>
   </tr>

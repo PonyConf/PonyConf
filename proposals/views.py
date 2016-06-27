@@ -95,7 +95,7 @@ class TopicCreate(StaffRequiredMixin, CreateView):
 
 
 class SpeakerList(StaffRequiredMixin, ListView):
-    queryset = User.objects.filter(speech__talk__in=Talk.on_site.all())
+    queryset = User.objects.filter(speech__talk__in=Talk.on_site.all()).distinct()
     template_name = 'proposals/speaker_list.html'
 
 

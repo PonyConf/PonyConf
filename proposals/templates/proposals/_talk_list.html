@@ -4,7 +4,7 @@
   <li>{{ event.list.0.get_event_display }}
     <ul>{% for talk in event.list %}
       <li>
-        <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a>
+        {{ talk.get_link }}
         <i>by</i>
         {% for speaker in talk.speakers.all %}
         <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
@@ -12,7 +12,7 @@
         {% endfor %}
         <i>in</i>
         {% for topic in talk.topics.all %}
-        <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>
+        {{ topic.get_link }}
         {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
       </li>

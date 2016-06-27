@@ -10,13 +10,13 @@ ROOT_URL = 'accounts'
 
 class AccountTests(TestCase):
     def setUp(self):
-        for guy in 'ab':
-            User.objects.create_user(guy, email='%s@example.org' % guy, password=guy)
-        Participation.objects.create(user=User.objects.first(), site=Site.objects.first())
+        a, b, c = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'abc')
+        Participation.objects.create(user=a, site=Site.objects.first())
+        Participation.objects.create(user=c, site=Site.objects.first(), orga=True)
 
     def test_models(self):
-        self.assertEqual(Profile.objects.count(), 2)
-        self.client.login(username='b', password='b')
+        self.assertEqual(Profile.objects.count(), 3)
+        self.client.login(username='c', password='c')
         for model in [Profile, Participation]:
             item = model.objects.first()
             self.assertEqual(self.client.get(item.full_link()).status_code, 200)
@@ -42,10 +42,9 @@ class AccountTests(TestCase):
         self.client.logout()
 
     def test_participant_views(self):
-        self.assertEqual(self.client.get(reverse('participants')).status_code, 302)
         self.client.login(username='b', password='b')
-        self.assertEqual(self.client.get(reverse('participants')).status_code, 403)
+        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 302)
         b = User.objects.get(username='b')
         b.is_superuser = True
         b.save()
-        self.assertEqual(self.client.get(reverse('participants')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)

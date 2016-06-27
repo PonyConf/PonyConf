@@ -55,7 +55,7 @@ class Participation(PonyConfModel):
         return "%s participation to %s" % (str(self.user.profile), self.site.name)
 
     def get_absolute_url(self):
-        return reverse('show-participation', kwargs={'username': self.user.username})
+        return reverse('edit-participant', kwargs={'username': self.user.username})
 
     def is_staff(self):
         return self.user.is_superuser or self.orga or self.topic_set.exists()

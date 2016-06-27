@@ -1,5 +1,6 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
+from django.utils.html import mark_safe
 
 
 def enum_to_choices(enum):
@@ -16,3 +17,6 @@ class PonyConfModel(models.Model):
     def full_link(self, request=None):
         protocol = 'https' if request is None or request.is_secure() else 'http'
         return '%s://%s%s' % (protocol, get_current_site(request), self.get_absolute_url())
+
+    def get_link(self):
+        return mark_safe('<a href="%s">%s</a>' % (self.get_absolute_url(), self))

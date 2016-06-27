@@ -16,7 +16,7 @@
 {% if request|edit_profile:profile %}
 <h2>Notes</h2>
 <p>{{ profile.notes }}</p>
-<a href="{% url 'edit-profile' profile.user.username %}" class="btn btn-success">Edit</a>
+<a href="{% url 'edit-participant' profile.user.username %}" class="btn btn-success">Edit</a>
 {% endif %}
 
 
