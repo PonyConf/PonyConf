@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from autoslug import AutoSlugField
@@ -64,3 +65,13 @@ class Talk(PonyConfModel):
         except Participation.DoesNotExists:
             return False
         return participation.orga or self.topics.filter(reviewers=participation).exists()
+
+
+class Vote(PonyConfModel):
+
+    talk = models.ForeignKey(Talk)
+    user = models.ForeignKey(Participation)
+    vote = models.IntegerField(validators=[MinValueValidator(-2), MaxValueValidator(2)], default=0)
+
+    class Meta:
+        unique_together = ('talk', 'user')
