@@ -9,9 +9,9 @@ from django.views.generic import CreateView, DetailView, ListView
 
 from accounts.mixins import StaffRequiredMixin
 from accounts.models import Participation
-from proposals.forms import TalkForm
-from proposals.models import Speech, Talk, Topic
 
+from .forms import TalkForm
+from .models import Talk, Topic
 from .signals import new_talk
 
 
@@ -59,17 +59,16 @@ def talk_edit(request, talk=None):
     if talk:
         form.fields['title'].disabled = True
         form.fields['topics'].disabled = True
+    else:
+        form.fields['speakers'].initial = [request.user]
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
             messages.success(request, 'Talk modified successfully!')
         else:
-            talk = form.save(commit=False)
-            talk.site = get_current_site(request)
-            talk.proposer = request.user
-            talk.save()
-            form.save_m2m()
-            Speech.objects.create(speaker=request.user, talk=talk)
+            form.instance.site = get_current_site(request)
+            form.instance.proposer = request.user
+            talk = form.save()
             new_talk.send(talk.__class__, instance=talk)
             messages.success(request, 'Talk proposed successfully!')
         return redirect(talk.get_absolute_url())
@@ -95,7 +94,7 @@ class TopicCreate(StaffRequiredMixin, CreateView):
 
 
 class SpeakerList(StaffRequiredMixin, ListView):
-    queryset = User.objects.filter(speech__talk__in=Talk.on_site.all()).distinct()
+    queryset = User.objects.filter(talk__in=Talk.on_site.all()).distinct()
     template_name = 'proposals/speaker_list.html'
 
 

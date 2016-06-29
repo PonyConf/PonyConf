@@ -7,11 +7,12 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from autoslug import AutoSlugField
+from sortedm2m.fields import SortedManyToManyField
 
 from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
 
-__all__ = ['Topic', 'Talk', 'Speech']
+__all__ = ['Topic', 'Talk']
 
 
 class Topic(PonyConfModel):
@@ -35,7 +36,7 @@ class Talk(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     proposer = models.ForeignKey(User, related_name='+')
-    speakers = models.ManyToManyField(User, through='Speech')
+    speakers = SortedManyToManyField(User)
     title = models.CharField(max_length=128, verbose_name='Title')
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
@@ -63,28 +64,3 @@ class Talk(PonyConfModel):
         except Participation.DoesNotExists:
             return False
         return participation.orga or self.topics.filter(reviewers=participation).exists()
-
-
-class Speech(PonyConfModel):
-
-    SPEAKER_NO = tuple((i, str(i)) for i in range(1, 8))
-
-    speaker = models.ForeignKey(User, on_delete=models.CASCADE)
-    talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
-    order = models.IntegerField(choices=SPEAKER_NO, default=1)
-
-    class Meta:
-        ordering = ['talk', 'order']
-        unique_together = (
-            ('speaker', 'talk'),
-            ('order', 'talk'),
-        )
-
-    def __str__(self):
-        return '%s speaking at %s in position %d' % (self.speaker, self.talk, self.order)
-
-    def get_absolute_url(self):
-        return self.talk.get_absolute_url()
-
-    def username(self):
-        return self.speaker.username

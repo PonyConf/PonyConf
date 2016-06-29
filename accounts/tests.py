@@ -42,9 +42,21 @@ class AccountTests(TestCase):
         self.client.logout()
 
     def test_participant_views(self):
+        self.assertEqual(self.client.get(reverse('register')).status_code, 200)
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 302)
         b = User.objects.get(username='b')
         b.is_superuser = True
         b.save()
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)
+        self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
+                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 403)
+        b = Participation.on_site.get(user=b)
+        b.orga = True
+        b.save()
+        self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
+                                          {'biography': 'foo', 'nootes': 'bar'}).status_code, 200)
+        self.assertEqual(User.objects.get(username='a').profile.biography, '')
+        self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
+                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 200)
+        self.assertEqual(User.objects.get(username='a').profile.biography, 'foo')

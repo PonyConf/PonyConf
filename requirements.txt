@@ -1,7 +1,8 @@
 django<1.10
-django-bower
-django-bootstrap3
 django-autoslug
+django-bootstrap3
+django-bower
 django-registration-redux
+django-sortedm2m
 -e git://github.com/Nim65s/django-YummyEmailOrUsernameInsensitiveAuth.git#egg=django-yeouia
 

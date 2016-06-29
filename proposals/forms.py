@@ -6,5 +6,5 @@ from proposals.models import Talk
 __all__ = ['TalkForm']
 
 
-TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics', 'event'],
+TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics', 'event', 'speakers'],
                              widgets={'topics': CheckboxSelectMultiple()})

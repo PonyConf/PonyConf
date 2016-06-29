@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'djangobower',
     'bootstrap3',
     'registration',
+    'sortedm2m',
 
     # build-in apps
     'django.contrib.admin',

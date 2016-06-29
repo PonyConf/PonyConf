@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 staticfiles %}
 
 {% block talktab %} class="active"{% endblock %}
 
@@ -11,3 +11,10 @@
 {% include "_form.html" %}
 
 {% endblock %}
+
+{% block css %}<link href="{% static 'sortedm2m/widget.css' %}" rel="stylesheet">{% endblock %}
+{% block js_end %}
+<script src="{% static 'sortedm2m/jquery-ui.js' %}"></script>
+<script src="{% static 'sortedm2m/widget.js' %}"></script>
+{% endblock js_end %}
+
