@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from accounts.models import Participation
 
-from .models import Talk, Topic
+from .models import Talk, Topic, Vote
 
 
 class ProposalsTests(TestCase):
@@ -43,17 +43,26 @@ class ProposalsTests(TestCase):
                                           {'title': 'mega talk', 'description': 'mega', 'event': 1}).status_code, 403)
         self.assertEqual(self.client.get(reverse('list-talks')).status_code, 200)
 
+        # Vote
+        self.assertEqual(talk.score(), 0)
+        self.assertEqual(self.client.get(reverse('vote', kwargs={'talk': talk.slug, 'score': 2})).status_code, 403)
+        self.client.login(username='c', password='c')
+        self.assertEqual(self.client.get(reverse('vote', kwargs={'talk': talk.slug, 'score': 2})).status_code, 302)
+        self.assertEqual(talk.score(), 2)
+
         # Models str & get_asbolute_url
-        for model in [Talk, Topic]:
+        for model in [Talk, Topic, Vote]:
             item = model.objects.first()
             self.assertEqual(self.client.get(item.get_absolute_url()).status_code, 200)
             self.assertTrue(str(item))
 
-        # Talk.is_editable_by
+        # Talk.is_{editable,moderable}_by
         a, b, c = User.objects.all()
-        self.assertTrue(talk.is_editable_by(c))
+        self.assertTrue(talk.is_moderable_by(c))
         self.assertFalse(talk.is_editable_by(b))
+        self.assertFalse(talk.is_moderable_by(b))
         self.client.login(username='a', password='a')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
                          {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': "2,1"})
         self.assertTrue(talk.is_editable_by(b))
+        self.assertFalse(talk.is_moderable_by(b))

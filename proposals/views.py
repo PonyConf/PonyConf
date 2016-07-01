@@ -12,7 +12,7 @@ from accounts.mixins import StaffRequiredMixin
 from accounts.models import Participation
 
 from .forms import TalkForm
-from .models import Talk, Topic
+from .models import Talk, Topic, Vote
 from .signals import new_talk
 
 
@@ -81,11 +81,15 @@ def talk_edit(request, talk=None):
 class TalkDetail(LoginRequiredMixin, DetailView):
     queryset = Talk.on_site.all()
 
-    def get_context_data(self, **kwargs):
-        kwargs['edit_perm'] = self.object.is_editable_by(self.request.user)
-        kwargs['moderate_perm'] = self.object.is_moderable_by(self.request.user)
-        kwargs['form_url'] = reverse('talk-conversation', kwargs={'talk': self.object.slug})
-        return super().get_context_data(**kwargs)
+    def get_context_data(self, **ctx):
+        user = self.request.user
+        if self.object.is_moderable_by(user):
+            vote = Vote.objects.filter(talk=self.object, user=Participation.on_site.get(user=user)).first()
+            ctx.update(edit_perm=True, moderate_perm=True, vote=vote,
+                       form_url=reverse('talk-conversation', kwargs={'talk': self.object.slug}))
+        else:
+            ctx['edit_perm'] = self.object.is_editable_by(user)
+        return super().get_context_data(**ctx)
 
 
 class TopicList(LoginRequiredMixin, ListView):
@@ -100,6 +104,20 @@ class TopicCreate(StaffRequiredMixin, CreateView):
 class SpeakerList(StaffRequiredMixin, ListView):
     queryset = User.objects.filter(talk__in=Talk.on_site.all()).distinct()
     template_name = 'proposals/speaker_list.html'
+
+
+@login_required
+def vote(request, talk, score):
+    site = get_current_site(request)
+    talk = get_object_or_404(Talk, site=site, slug=talk)
+    user = Participation.on_site.get(user=request.user)
+    if not talk.is_moderable_by(request.user):
+        raise PermissionDenied()
+    vote, created = Vote.objects.get_or_create(talk=talk, user=user)
+    vote.vote = int(score)
+    vote.save()
+    messages.success(request, "Vote successfully %s" % ('created' if created else 'updated'))
+    return redirect(talk.get_absolute_url())
 
 
 @login_required

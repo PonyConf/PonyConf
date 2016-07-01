@@ -13,6 +13,8 @@ from sortedm2m.fields import SortedManyToManyField
 from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
 
+from .utils import query_sum
+
 __all__ = ['Topic', 'Talk']
 
 
@@ -65,6 +67,9 @@ class Talk(PonyConfModel):
     def is_editable_by(self, user):
         return user == self.proposer or user in self.speakers.all() or self.is_moderable_by(user)
 
+    def score(self):
+        return query_sum(self.vote_set, 'vote')
+
 
 class Vote(PonyConfModel):
 
@@ -74,3 +79,9 @@ class Vote(PonyConfModel):
 
     class Meta:
         unique_together = ('talk', 'user')
+
+    def __str__(self):
+        return "%+i by %s for %s" % (self.vote, self.user, self.talk)
+
+    def get_absolute_url(self):
+        return self.talk.get_absolute_url()

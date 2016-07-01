@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^talk/$', views.talk_list, name='list-talks'),
     url(r'^talk/add/$', views.talk_edit, name='add-talk'),
     url(r'^talk/edit/(?P<talk>[-\w]+)$', views.talk_edit, name='edit-talk'),
+    url(r'^talk/vote/(?P<talk>[-\w]+)/(?P<score>[-0-2]+)$', views.vote, name='vote'),
     url(r'^talk/details/(?P<slug>[-\w]+)$', views.TalkDetail.as_view(), name='show-talk'),
     url(r'^talk/by-topic/(?P<topic>[-\w]+)$', views.talk_list_by_topic, name='list-talks-by-topic'),
     url(r'^talk/by-speaker/(?P<speaker>[\w.@+-]+)$', views.talk_list_by_speaker, name='list-talks-by-speaker'),
