@@ -1,0 +1,8 @@
+<div class="panel panel-{% block panelstyleblock %}default{% endblock %}">
+  <div class="panel-heading">
+    {{ message.created }} | {{ message.author.profile }}
+  </div>
+  <div class="panel-body">
+    {{ message.content }}
+  </div>
+</div>

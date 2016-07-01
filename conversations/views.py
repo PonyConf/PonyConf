@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Participation
+from proposals.models import Talk
 
 from .forms import MessageForm
 
@@ -30,11 +31,9 @@ def conversation(request, username=None):
     form = MessageForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
-        message = form.save(commit=False)
-        message.conversation = conversation
-        message.author = request.user
-        message.subject = "Assistance request from %s" % message.author.profile
-        message.save()
+        form.instance.conversation = conversation
+        form.instance.author = request.user
+        form.save()
         messages.success(request, 'Message sent!')
         if username:
             return redirect(reverse('conversation', args=[username]))
@@ -45,6 +44,21 @@ def conversation(request, username=None):
         'message_list': message_list,
         'form': form,
     })
+
+
+@login_required
+def talk_conversation(request, talk):
+
+    talk = get_object_or_404(Talk, slug=talk)
+    form = MessageForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        form.instance.conversation = talk.conversation
+        form.instance.author = request.user
+        form.save()
+        messages.success(request, 'Message sent!')
+
+    return redirect(talk.get_absolute_url())
 
 
 @login_required

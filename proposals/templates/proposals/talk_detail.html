@@ -34,4 +34,16 @@
 {% endfor %}
 </ul>
 
+{% if moderate_perm %}
+<h2>Moderation</h2>
+
+<b>Messages:</b>
+{% for message in talk.conversation.messages.all %}
+{% include 'conversations/_message_detail.html' %}
+{% endfor %}
+
+{% include 'conversations/_message_form.html' %}
+
+{% endif %}
+
 {% endblock %}

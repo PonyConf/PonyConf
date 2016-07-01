@@ -53,18 +53,17 @@ class Talk(PonyConfModel):
     def get_absolute_url(self):
         return reverse('show-talk', kwargs={'slug': self.slug})
 
-    def is_editable_by(self, user):
+    def is_moderable_by(self, user):
         if user.is_superuser:
-            return True
-        if user == self.proposer:
-            return True
-        if user in self.speakers.all():
             return True
         try:
             participation = Participation.on_site.get(user=user)
         except Participation.DoesNotExists:
             return False
         return participation.orga or self.topics.filter(reviewers=participation).exists()
+
+    def is_editable_by(self, user):
+        return user == self.proposer or user in self.speakers.all() or self.is_moderable_by(user)
 
 
 class Vote(PonyConfModel):

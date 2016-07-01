@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView
 
@@ -81,7 +82,10 @@ class TalkDetail(LoginRequiredMixin, DetailView):
     queryset = Talk.on_site.all()
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(edit_perm=self.object.is_editable_by(self.request.user), **kwargs)
+        kwargs['edit_perm'] = self.object.is_editable_by(self.request.user)
+        kwargs['moderate_perm'] = self.object.is_moderable_by(self.request.user)
+        kwargs['form_url'] = reverse('talk-conversation', kwargs={'talk': self.object.slug})
+        return super().get_context_data(**kwargs)
 
 
 class TopicList(LoginRequiredMixin, ListView):
