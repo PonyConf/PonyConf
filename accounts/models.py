@@ -52,10 +52,10 @@ class Participation(PonyConfModel):
         unique_together = ('site', 'user')
 
     def __str__(self):
-        return "%s participation to %s" % (str(self.user.profile), self.site.name)
+        return str(self.user.profile)
 
     def get_absolute_url(self):
-        return reverse('edit-participant', kwargs={'username': self.user.username})
+        return reverse('show-speaker', kwargs={'username': self.user.username})
 
     def is_staff(self):
         return self.user.is_superuser or self.orga or self.topic_set.exists()
