@@ -48,6 +48,9 @@
 
 Sum: {{ talk.score }}
 
+<h3>Status:</h3>
+{{ talk.accepted|yesno:"✔,✘,?" }}
+
 <h3>Messages:</h3>
 {% for message in talk.conversation.messages.all %}
 {% include 'conversations/_message_detail.html' %}

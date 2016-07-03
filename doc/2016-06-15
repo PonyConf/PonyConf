@@ -1,27 +1,25 @@
-- virer l’username
-- premier login -> redirection profile
-- temps prévu (20 min / 40 min)
-- proposer des talks pour les autres
-- gestion staff
-- autre couleur change password
-- 3ième formulaire profile pour les infos de participation
-- changer le widget des topics pour des cases à cocher
-- notification si modif constraints
-- pre-remplissage constraints
-- do i need sound?
-- co-speakers
-- règle du jeu de l’édition
-- vote (pas de notif)
-- notif modification conf …
-- modif de conf : pas de modifs des topics
-- rajouter les created sur un peu tous les modèles
-- UI reviewers (pour le staff pour nommer des reviewers)
-- topic : permettre au staff d’en rajouter
-- topic : qui est reviewer
-- visibilité des talks
-- visibilité des speakers
-- note sur un speaker
-- ouverture conf
-
-
-- mail de bienvenu autre que activation si le mec est inscrit par le staff
+- [ ] virer l’username
+- [ ] premier login -> redirection profile
+- [x] temps prévu (20 min / 40 min)
+- [x] proposer des talks pour les autres
+- [ ] gestion staff
+- [x] autre couleur change password
+- [x] 3ième formulaire profile pour les infos de participation
+- [x] changer le widget des topics pour des cases à cocher
+- [ ] notification si modif constraints
+- [ ] pre-remplissage constraints
+- [x] do i need sound?
+- [x] co-speakers
+- [ ] règle du jeu de l’édition
+- [x] vote (pas de notif)
+- [ ] notif modification conf …
+- [x] modif de conf : pas de modifs des topics
+- [x] rajouter les created sur un peu tous les modèles
+- [ ] UI reviewers (pour le staff pour nommer des reviewers)
+- [x] topic : permettre au staff d’en rajouter
+- [ ] topic : qui est reviewer
+- [x] visibilité des talks
+- [x] visibilité des speakers
+- [x] note sur un speaker
+- [ ] ouverture conf
+- [ ] mail de bienvenu autre que activation si le mec est inscrit par le staff

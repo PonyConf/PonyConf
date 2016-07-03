@@ -45,6 +45,7 @@ class Talk(PonyConfModel):
     description = models.TextField(blank=True, verbose_name='Description')
     topics = models.ManyToManyField(Topic, blank=True)
     event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value)
+    accepted = models.NullBooleanField(default=None)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()

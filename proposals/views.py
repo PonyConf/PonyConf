@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView
 
@@ -14,6 +15,7 @@ from accounts.models import Participation
 from .forms import TalkForm
 from .models import Talk, Topic, Vote
 from .signals import new_talk
+from .utils import allowed_talks
 
 
 def home(request):
@@ -22,32 +24,24 @@ def home(request):
 
 @login_required
 def talk_list(request):
-    participation = Participation.on_site.get(user=request.user)
-    other_talks = Talk.on_site.exclude(speakers=request.user)
-    if not participation.orga:
-        other_talks = other_talks.filter(topics__reviewers=participation)
     return render(request, 'proposals/talks.html', {
-        'my_talks': Talk.on_site.filter(speakers=request.user),
-        'other_talks': other_talks,
+        'my_talks': Talk.on_site.filter(Q(speakers=request.user) | Q(proposer=request.user)),
+        'other_talks': allowed_talks(Talk.on_site.exclude(speakers=request.user, proposer=request.user), request)
     })
 
 
 @login_required
 def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, slug=topic)
-    return render(request, 'proposals/talk_list.html', {
-        'title': 'Talks related to %s:' % topic,
-        'talk_list': Talk.on_site.filter(topics=topic),
-    })
+    talks = allowed_talks(Talk.on_site.filter(topics=topic), request)
+    return render(request, 'proposals/talk_list.html', {'title': 'Talks related to %s:' % topic, 'talk_list': talks})
 
 
 @login_required
 def talk_list_by_speaker(request, speaker):
     speaker = get_object_or_404(User, username=speaker)
-    return render(request, 'proposals/talk_list.html', {
-        'title': 'Talks with %s:' % speaker,
-        'talk_list': Talk.on_site.filter(speakers=speaker),
-    })
+    talks = allowed_talks(Talk.on_site.filter(speakers=speaker), request)
+    return render(request, 'proposals/talk_list.html', {'title': 'Talks with %s:' % speaker, 'talk_list': talks})
 
 
 @login_required
