@@ -1,8 +1,13 @@
 from django import template
 
-from accounts.utils import can_edit_profile, is_staff
+from accounts.utils import can_edit_profile, is_orga, is_staff
 
 register = template.Library()
+
+
+@register.filter
+def orga(request):
+    return is_orga(request, request.user)
 
 
 @register.filter

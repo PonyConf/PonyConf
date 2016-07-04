@@ -10,8 +10,13 @@
 
 <ul>
   {% for topic in topic_list %}
-  <li>{{ topic.get_link }}{% if request|staff %} ({% for reviewer in topic.reviewers.all %}
-    {{ reviewer.get_link }}{% if not forloop.last %}, {% endif %}{% endfor %} ){% endif %}</li>
+  <li>
+    {{ topic.get_link }}
+    {% if request|staff %} ({% for reviewer in topic.reviewers.all %} {{ reviewer.get_link }}
+    {% if not forloop.last %}, {% endif %}{% endfor %} )
+    {% if request|orga %} - <a href="{% url 'edit-topic' topic.slug %}">edit</a>{% endif %}
+    {% endif %}
+  </li>
   {% empty %}
   <li><i>No topic.</i></li>
   {% endfor %}

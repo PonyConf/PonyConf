@@ -7,12 +7,13 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
-from accounts.mixins import StaffRequiredMixin
+from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from accounts.models import Participation
+from accounts.utils import is_orga
 
-from .forms import TalkForm
+from .forms import TalkForm, TopicForm, TopicOrgaForm
 from .models import Talk, Topic, Vote
 from .signals import new_talk
 from .utils import allowed_talks
@@ -25,7 +26,7 @@ def home(request):
 @login_required
 def talk_list(request):
     return render(request, 'proposals/talks.html', {
-        'my_talks': Talk.on_site.filter(Q(speakers=request.user) | Q(proposer=request.user)),
+        'my_talks': Talk.on_site.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
         'other_talks': allowed_talks(Talk.on_site.exclude(speakers=request.user, proposer=request.user), request)
     })
 
@@ -35,13 +36,6 @@ def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, slug=topic)
     talks = allowed_talks(Talk.on_site.filter(topics=topic), request)
     return render(request, 'proposals/talk_list.html', {'title': 'Talks related to %s:' % topic, 'talk_list': talks})
-
-
-@login_required
-def talk_list_by_speaker(request, speaker):
-    speaker = get_object_or_404(User, username=speaker)
-    talks = allowed_talks(Talk.on_site.filter(speakers=speaker), request)
-    return render(request, 'proposals/talk_list.html', {'title': 'Talks with %s:' % speaker, 'talk_list': talks})
 
 
 @login_required
@@ -86,17 +80,27 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         return super().get_context_data(**ctx)
 
 
-class TopicList(LoginRequiredMixin, ListView):
+class TopicList(ListView):
     model = Topic
 
 
-class TopicCreate(StaffRequiredMixin, CreateView):
+class TopicMixin(object):
     model = Topic
-    fields = ['name']
+
+    def get_form_class(self):
+        return TopicOrgaForm if is_orga(self.request, self.request.user) else TopicForm
+
+
+class TopicCreate(StaffRequiredMixin, TopicMixin, CreateView):
+    pass
+
+
+class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
+    pass
 
 
 class SpeakerList(StaffRequiredMixin, ListView):
-    queryset = User.objects.filter(talk__in=Talk.on_site.all()).distinct()
+    queryset = Participation.on_site.filter(user__talk__in=Talk.on_site.all()).distinct()
     template_name = 'proposals/speaker_list.html'
 
 
@@ -116,6 +120,8 @@ def vote(request, talk, score):
 
 @login_required
 def user_details(request, username):
+    speaker = get_object_or_404(User, username=username)
     return render(request, 'proposals/user_details.html', {
-        'profile': get_object_or_404(User, username=username).profile,
+        'profile': speaker.profile,
+        'talk_list': allowed_talks(Talk.on_site.filter(speakers=speaker), request),
     })

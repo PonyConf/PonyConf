@@ -12,4 +12,4 @@ def allowed_talks(talks, request):
     participation = Participation.on_site.get(user=request.user)
     if not participation.orga:
         talks = talks.filter(Q(topics__reviewers=participation) | Q(speakers=request.user) | Q(proposer=request.user))
-    return talks
+    return talks.distinct()

@@ -11,7 +11,7 @@
 <p>{{ profile.biography }}</p>
 
 <h2>Talks</h2>
-<a href="{% url 'list-talks-by-speaker' profile.user.username %}">See the list of talks with this speaker</a>
+{% include "proposals/_talk_list.html" %}
 
 {% if request|edit_profile:profile %}
 <h2>Notes</h2>

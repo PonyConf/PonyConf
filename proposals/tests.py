@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -11,7 +10,6 @@ from .models import Talk, Topic, Vote
 class ProposalsTests(TestCase):
     def setUp(self):
         a, b, c = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'abc')
-        Participation.objects.create(user=a, site=Site.objects.first())
         Topic.objects.create(name='topipo')
         c.is_superuser = True
         c.save()
@@ -35,7 +33,6 @@ class ProposalsTests(TestCase):
             self.assertEqual(self.client.get(reverse(view)).status_code, 302 if view == 'list-speakers' else 200)
         self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)
-        self.assertEqual(self.client.get(reverse('list-talks-by-speaker', kwargs={'speaker': 'a'})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-speaker', kwargs={'username': 'a'})).status_code, 200)
 
         self.client.login(username='b', password='b')
@@ -66,3 +63,10 @@ class ProposalsTests(TestCase):
                          {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': "2,1"})
         self.assertTrue(talk.is_editable_by(b))
         self.assertFalse(talk.is_moderable_by(b))
+
+        # Only orga can edit topics
+        self.client.login(username='c', password='c')
+        self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
+        Participation.on_site.filter(user=c).update(orga=True)
+        self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
+        self.assertEqual(self.client.get(reverse('list-topics')).status_code, 200)

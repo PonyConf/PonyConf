@@ -58,5 +58,8 @@ class AccountTests(TestCase):
                                           {'biography': 'foo', 'nootes': 'bar'}).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, '')
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
-                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 200)
+                                          {'biography': 'foo', 'notes': 'bar', 'first_name': 'Jules', 'username': 'a',
+                                           'last_name': 'César', 'email': 'a@example.org', 'transport': 1,
+                                           'connector': 1, 'constraints': 'nope', 'orga': 0,
+                                           }).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, 'foo')

@@ -59,10 +59,3 @@ class Participation(PonyConfModel):
 
     def is_staff(self):
         return self.user.is_superuser or self.orga or self.topic_set.exists()
-
-
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-models.signals.post_save.connect(create_profile, sender=User, weak=False, dispatch_uid='create_profile')
