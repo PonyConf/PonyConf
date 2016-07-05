@@ -65,8 +65,9 @@ class ProposalsTests(TestCase):
         self.assertFalse(talk.is_moderable_by(b))
 
         # Only orga can edit topics
-        self.client.login(username='c', password='c')
+        self.client.login(username='b', password='b')
+        self.assertFalse(Participation.on_site.get(user=b).orga)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
-        Participation.on_site.filter(user=c).update(orga=True)
+        Participation.on_site.filter(user=b).update(orga=True)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
         self.assertEqual(self.client.get(reverse('list-topics')).status_code, 200)

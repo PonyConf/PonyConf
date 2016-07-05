@@ -57,5 +57,8 @@ class Participation(PonyConfModel):
     def get_absolute_url(self):
         return reverse('show-speaker', kwargs={'username': self.user.username})
 
+    def is_orga(self):
+        return self.user.is_superuser or self.orga
+
     def is_staff(self):
-        return self.user.is_superuser or self.orga or self.topic_set.exists()
+        return self.is_orga() or self.topic_set.exists()
