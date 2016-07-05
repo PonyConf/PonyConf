@@ -1,4 +1,5 @@
 /venv/
+/src/
 *.pyc
 *.swp
 *.sqlite3
