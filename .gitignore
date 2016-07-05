@@ -1,5 +1,7 @@
 /venv/
 /src/
+/.coverage
+/htmlcov/
 *.pyc
 *.swp
 *.sqlite3
