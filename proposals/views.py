@@ -80,7 +80,7 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         return super().get_context_data(**ctx)
 
 
-class TopicList(ListView):
+class TopicList(LoginRequiredMixin, ListView):
     model = Topic
 
 
