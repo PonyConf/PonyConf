@@ -11,3 +11,8 @@ class OrgaRequiredMixin(UserPassesTestMixin):
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return is_staff(self.request, self.request.user)
+
+
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser

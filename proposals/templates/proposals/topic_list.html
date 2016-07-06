@@ -11,18 +11,21 @@
 <ul>
   {% for topic in topic_list %}
   <li>
-    {{ topic.get_link }}
+    {{ topic }}:
     {% if request|staff %}
-        {% if topic.reviewers.exists %} ({% for reviewer in topic.reviewers.all %} {{ reviewer.get_link }} {% if not forloop.last %}, {% endif %}{% endfor %}) {% endif %}
-        {% if request|orga %} - <a href="{% url 'edit-topic' topic.slug %}">edit</a>{% endif %}
+        <a href="{{ topic.get_absolute_url }}">{{ topic.reviewers.count }} reviewer{{ topic.reviewers.count|pluralize }}</a>
+        and
+        {% comment %}{% if topic.reviewers.exists %} ({% for reviewer in topic.reviewers.all %} {{ reviewer.get_link }} {% if not forloop.last %}, {% endif %}{% endfor %}) {% endif %}{% endcomment %}
     {% endif %}
+    <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic.talks.count }} talk{{ topic.talks.count|pluralize }}</a>.
+    {% if request.user.is_superuser %} - <a href="{% url 'edit-topic' topic.slug %}">edit</a>{% endif %}
   </li>
   {% empty %}
-  <li><i>No topic.</i></li>
+  <li><i>No topics.</i></li>
   {% endfor %}
 </ul>
 
-{% if request|staff %}
+{% if request|orga %}
 <a href="{% url 'add-topic' %}" class="btn btn-success">Add a topic</a>
 {% endif %}
 

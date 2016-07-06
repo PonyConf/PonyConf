@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load staticfiles accounts_tags %}
+
+{% block topictab %} class="active"{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'jquery-ui/themes/base/jquery-ui.min.css' %}">
+<link rel="stylesheet" href="{% static 'jquery-ui/themes/base/autocomplete.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ topic }}</h1>
+
+{% if request|orga %}
+  <form class="form-inline" method="post" action="{% url 'add-reviewer' topic.slug %}" role="form" id="add-reviewer-form">
+    {% csrf_token %}
+    <div class="form-group">
+      <div class="input-group ui-widget">
+        <input type="text" class="form-control" name="user" placeholder="add reviewer" value="">
+        <div class="input-group-addon">
+          <a href="javascript:void(0);" onclick="$('#add-reviewer-form').submit();"><span class="glyphicon glyphicon-plus"></span></a>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endif %}
+
+<ul>
+  {% for reviewer in topic.reviewers.all %}
+  <li>
+    {{ reviewer }}
+    {% if request|orga %} - <a href="{% url 'remove-reviewer' topic.slug reviewer.user.username %}">remove</a>{% endif %}
+  </li>
+  {% empty %}
+  <li><i>No reviewers.</i></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+<script src="{% static 'jquery-ui/ui/minified/core.min.js' %}"></script>
+<script src="{% static 'jquery-ui/ui/minified/widget.min.js' %}"></script>
+<script src="{% static 'jquery-ui/ui/minified/position.min.js' %}"></script>
+<script src="{% static 'jquery-ui/ui/minified/menu.min.js' %}"></script>
+<script src="{% static 'jquery-ui/ui/minified/autocomplete.min.js' %}"></script>
+<script type="text/javascript">
+$('input[name="user"]').autocomplete({
+  source: "{% url 'add-reviewer' topic.slug %}",
+  onSelect: function (data) {
+    $('input[name="user"]').val(data.data);
+  }
+});
+</script>
+{% endblock %}

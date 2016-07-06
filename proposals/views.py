@@ -8,12 +8,14 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
 
-from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
+from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin, SuperuserRequiredMixin
 from accounts.models import Participation
 from accounts.utils import is_orga
 
-from .forms import TalkForm, TopicForm, TopicOrgaForm
+from .forms import TalkForm, TopicForm
 from .models import Talk, Topic, Vote
 from .utils import allowed_talks
 from .signals import *
@@ -81,23 +83,79 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         return super().get_context_data(**ctx)
 
 
-class TopicList(LoginRequiredMixin, ListView):
-    model = Topic
-
-
 class TopicMixin(object):
     model = Topic
+    queryset = Topic.on_site.all()
+    form_class = TopicForm
 
-    def get_form_class(self):
-        return TopicOrgaForm if is_orga(self.request, self.request.user) else TopicForm
 
-
-class TopicCreate(StaffRequiredMixin, TopicMixin, CreateView):
+class TopicList(LoginRequiredMixin, TopicMixin, ListView):
     pass
 
 
-class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
+class TopicCreate(OrgaRequiredMixin, TopicMixin, CreateView):
+    def form_valid(self, form):
+        form.instance.site = get_current_site(self.request)
+        return super(TopicCreate, self).form_valid(form)
+
+
+class TopicUpdate(SuperuserRequiredMixin, TopicMixin, UpdateView):
     pass
+
+
+class TopicDetail(StaffRequiredMixin, TopicMixin, DetailView):
+    pass
+
+
+@login_required
+def topic_add_reviewer(request, slug):
+    if not Participation.objects.get(user=request.user).is_orga():
+        raise PermissionDenied()
+
+    topic = get_object_or_404(Topic, slug=slug)
+
+    if request.method == 'POST':
+        user = request.POST.get('user')
+        try:
+            user = User.objects.get(username=user)
+        except ObjectDoesNotExist:
+            messages.error(request, 'User not found.')
+        else:
+            participation, created = Participation.on_site.get_or_create(user=user, site=get_current_site(request))
+            if participation in topic.reviewers.all():
+                messages.info(request, 'User is already a reviewer of this topic.')
+            else:
+                topic.reviewers.add(participation)
+                topic.save()
+                messages.success(request, 'User add to reviewer of this topic successfully.')
+        return redirect(topic.get_absolute_url())
+    else:
+        term = request.GET.get('term')
+        if not term:
+            raise Http404()
+        query = Q(username__icontains=term) \
+            | Q(first_name__icontains=term) \
+            | Q(last_name__icontains=term)
+        users = User.objects \
+            .exclude(id__in=topic.reviewers.values('user__id')) \
+            .filter(query)[:10]
+        response = []
+        for user in users:
+            response += [{
+                'label': str(user.profile),
+                'value': user.username,
+            }]
+        return JsonResponse(response, safe=False)
+
+
+@login_required
+def topic_remove_reviewer(request, slug, username):
+    if not Participation.objects.get(user=request.user).is_orga():
+        raise PermissionDenied()
+    topic = get_object_or_404(Topic, slug=slug)
+    participation = get_object_or_404(Participation, user__username=username)
+    topic.reviewers.remove(participation)
+    return redirect(topic.get_absolute_url())
 
 
 class SpeakerList(StaffRequiredMixin, ListView):

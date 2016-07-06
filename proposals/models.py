@@ -20,16 +20,25 @@ __all__ = ['Topic', 'Talk']
 
 class Topic(PonyConfModel):
 
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
 
     reviewers = models.ManyToManyField(Participation, blank=True)
 
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
+
+    @property
+    def talks(self):
+        return Talk.objects.filter(topics=self).all()
+
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
+        return reverse('show-topic', kwargs={'slug': self.slug})
 
 
 class Talk(PonyConfModel):
