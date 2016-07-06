@@ -15,8 +15,8 @@ from accounts.utils import is_orga
 
 from .forms import TalkForm, TopicForm, TopicOrgaForm
 from .models import Talk, Topic, Vote
-from .signals import new_talk
 from .utils import allowed_talks
+from .signals import *
 
 
 def home(request):
@@ -53,12 +53,13 @@ def talk_edit(request, talk=None):
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
+            talk_edited.send(talk.__class__, instance=talk, author=request.user)
             messages.success(request, 'Talk modified successfully!')
         else:
             form.instance.site = get_current_site(request)
             form.instance.proposer = request.user
             talk = form.save()
-            new_talk.send(talk.__class__, instance=talk)
+            talk_added.send(talk.__class__, instance=talk, author=request.user)
             messages.success(request, 'Talk proposed successfully!')
         return redirect(talk.get_absolute_url())
     return render(request, 'proposals/talk_edit.html', {

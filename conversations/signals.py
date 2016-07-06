@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 from accounts.models import Participation
 from proposals.models import Talk
-from proposals.signals import new_talk
+from proposals.signals import *
 
 from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 
@@ -25,17 +25,28 @@ def create_conversation_about_talk(sender, instance, created, **kwargs):
     conversation.save()
 
 
-@receiver(new_talk, dispatch_uid="Notify new talk")
-def notify_new_talk(sender, instance, **kwargs):
+def check_talk(talk):
     # Subscribe reviewer for these topics to conversations
-    reviewers = User.objects.filter(participation__topic__talk=instance)
-    instance.conversation.subscribers.add(*reviewers)
-    for user in instance.speakers.all():
-        participation = Participation.on_site.get(user=user)
+    reviewers = User.objects.filter(participation__topic__talk=talk)
+    talk.conversation.subscribers.add(*reviewers)
+    for user in talk.speakers.all():
+        participation, created = Participation.on_site.get_or_create(user=user, site=talk.site)
         participation.conversation.subscribers.add(*reviewers)
-    # Notification of this new talk
-    message = Message(conversation=instance.conversation, author=instance.proposer,
+
+
+@receiver(talk_added, dispatch_uid="Notify talk added")
+def notify_talk_added(sender, instance, author, **kwargs):
+    check_talk(instance)
+    message = Message(conversation=instance.conversation, author=author,
                       content='The talk has been proposed.')
+    message.save()
+
+
+@receiver(talk_edited, dispatch_uid="Notify talk edited")
+def notify_talk_edited(sender, instance, author, **kwargs):
+    check_talk(instance)
+    message = Message(conversation=instance.conversation, author=author,
+                      content='The talk has been modified.')
     message.save()
 
 
