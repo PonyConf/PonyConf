@@ -22,7 +22,7 @@ def email_recv(request):
             or not hasattr(settings, 'REPLY_KEY'):
         return HttpResponse(status=501)  # Not Implemented
 
-    key = request.POST.get('key')
+    key = request.POST.get('key').strip()
     if key != settings.REPLY_KEY:
         raise PermissionDenied
 
