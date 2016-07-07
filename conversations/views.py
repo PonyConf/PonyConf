@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Participation
+from accounts.decorators import orga_required, staff_required
 from proposals.models import Talk
 
 from .forms import MessageForm
@@ -72,10 +73,8 @@ def correspondents(request):
     })
 
 
-@login_required
+@staff_required
 def subscribe(request, username):
-
-    # TODO check admin
 
     participation = get_object_or_404(Participation, user__username=username, site=get_current_site(request))
     participation.conversation.subscribers.add(request.user)
@@ -86,10 +85,8 @@ def subscribe(request, username):
     return redirect(next_url)
 
 
-@login_required
+@staff_required
 def unsubscribe(request, username):
-
-    # TODO check admin
 
     participation = get_object_or_404(Participation, user__username=username, site=get_current_site(request))
     participation.conversation.subscribers.remove(request.user)
