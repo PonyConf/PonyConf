@@ -10,6 +10,6 @@ def query_sum(queryset, field):
 
 def allowed_talks(talks, request):
     participation = Participation.on_site.get(user=request.user)
-    if not participation.orga:
+    if not participation.is_orga():
         talks = talks.filter(Q(topics__reviewers=participation) | Q(speakers=request.user) | Q(proposer=request.user))
     return talks.distinct()
