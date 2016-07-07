@@ -27,7 +27,7 @@ def email_recv(request):
         raise PermissionDenied
 
     if 'email' not in request.FILES:
-        raise HttpResponse(status=400)  # Bad Request
+        return HttpResponse(status=400)  # Bad Request
 
     msg = request.FILES['email']
     if python_version < (3,):
