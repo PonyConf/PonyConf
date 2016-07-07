@@ -38,7 +38,7 @@ def check_talk(talk):
 def notify_talk_added(sender, instance, author, **kwargs):
     check_talk(instance)
     message = Message(conversation=instance.conversation, author=author,
-                      content='The talk has been proposed.')
+                      content='The talk has been proposed.', system=True)
     message.save()
 
 
@@ -46,7 +46,7 @@ def notify_talk_added(sender, instance, author, **kwargs):
 def notify_talk_edited(sender, instance, author, **kwargs):
     check_talk(instance)
     message = Message(conversation=instance.conversation, author=author,
-                      content='The talk has been modified.')
+                      content='The talk has been modified.', system=True)
     message.save()
 
 

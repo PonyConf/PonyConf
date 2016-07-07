@@ -21,6 +21,7 @@ class Message(PonyConfModel):
 
     author = models.ForeignKey(User)
     content = models.TextField()
+    system = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['created']
@@ -103,6 +104,8 @@ class ConversationAboutTalk(Conversation):
     def new_message(self, message):
         site = self.get_site()
         first = self.messages.first()
+        if not message.system and message.author not in self.subscribers.all():
+            self.subscribers.add(message.author)
         recipients = self.subscribers.all()
         data = {
             'uri': site.domain + reverse('show-talk', args=[self.talk.slug]),
@@ -117,8 +120,6 @@ class ConversationAboutTalk(Conversation):
                 'proposer_uri': site.domain + reverse('show-speaker', args=[message.author.username])
             })
         else:
-            if message.author not in self.subscribers.all():
-                self.subscribers.add(message.author)
             subject = 'Re: [%s] Talk: %s' % (site.name, self.talk.title)
             template = 'message'
             ref = first.token
