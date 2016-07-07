@@ -12,7 +12,7 @@
         {% endfor %}
         <i>in</i>
         {% for topic in talk.topics.all %}
-        {{ topic.get_link }}
+        <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a>
         {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
         {% endfor %}
       </li>

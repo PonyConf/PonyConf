@@ -30,7 +30,7 @@
 
 <ul>
 {% for topic in talk.topics.all %}
-<li>{{ topic.get_link }}</li>
+<li><a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a></li>
 {% endfor %}
 </ul>
 
