@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.contrib.sites.models import Site
 
 from accounts.models import Participation
 
@@ -10,7 +11,7 @@ from .models import Talk, Topic, Vote
 class ProposalsTests(TestCase):
     def setUp(self):
         a, b, c = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'abc')
-        Topic.objects.create(name='topipo')
+        Topic.objects.create(name='topipo', site=Site.objects.first())
         c.is_superuser = True
         c.save()
 
@@ -69,5 +70,7 @@ class ProposalsTests(TestCase):
         self.assertFalse(Participation.on_site.get(user=b).orga)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
         Participation.on_site.filter(user=b).update(orga=True)
+        self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
+        self.client.login(username='c', password='c') # superuser
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
         self.assertEqual(self.client.get(reverse('list-topics')).status_code, 200)
