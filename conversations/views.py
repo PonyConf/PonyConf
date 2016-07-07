@@ -13,10 +13,11 @@ from .forms import MessageForm
 
 
 @login_required
-def conversation(request, username=None):
+def user_conversation(request, username=None):
 
     if username:
-        if not request.user.is_superuser:
+        p = Participation.objects.get(user=request.user)
+        if not p.is_staff() and not p.is_orga():
             raise PermissionDenied()
         user = get_object_or_404(User, username=username)
         template = 'conversations/conversation.html'
