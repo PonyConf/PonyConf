@@ -123,11 +123,11 @@ def topic_add_reviewer(request, slug):
         else:
             participation, created = Participation.on_site.get_or_create(user=user, site=get_current_site(request))
             if participation in topic.reviewers.all():
-                messages.info(request, 'User is already a reviewer of this topic.')
+                messages.info(request, '%s is already a reviewer of this topic.' % participation)
             else:
                 topic.reviewers.add(participation)
                 topic.save()
-                messages.success(request, 'User add to reviewer of this topic successfully.')
+                messages.success(request, '%s added to reviewers!' % participation)
         return redirect(topic.get_absolute_url())
     else:
         term = request.GET.get('term')
@@ -155,6 +155,7 @@ def topic_remove_reviewer(request, slug, username):
     topic = get_object_or_404(Topic, slug=slug)
     participation = get_object_or_404(Participation, user__username=username)
     topic.reviewers.remove(participation)
+    messages.success(request, '%s removed from reviewers!' % participation)
     return redirect(topic.get_absolute_url())
 
 
