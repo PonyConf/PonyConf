@@ -6,4 +6,4 @@
 url="$1"
 key="$2"
 
-curl ${url} -F 'key=<${key}' -F 'file=@-;filename="email"'
+curl "${url}" -F "key=<${key}" -F 'email=@-'
