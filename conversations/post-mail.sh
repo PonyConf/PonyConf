@@ -1,9 +1,10 @@
 #! /bin/bash
 
-# Usage: cat email.txt | post-mail.sh https://example.org/conversations/recv/ /etc/ponyconf/key.txt
-# The file /etc/ponyconf/key.txt should contain the value of the django setting REPLY_KEY.
+# Usage: cat email.txt | post-mail.sh REPLY_KEY@https://example.org/conversations/recv/
+# Get the value of REPLY_KEY from the django setting.
 
-url="$1"
-key="$2"
+# Postfix users can set up an alias file with this content:
+# reply: "|/path/to/post-mail.sh mykey@https://example.org/conversations/recv/ 
+# don't forget to run postalias and to add the alias file to main.cf under alias_map. 
 
-curl "${url}" -F "key=<${key}" -F 'email=@-'
+curl ${@#*\@} -F key=${@%\@*} -F "email=@-"
