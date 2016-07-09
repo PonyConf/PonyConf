@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.urlresolvers import reverse
+from django.core.exceptions import PermissionDenied
 
 from registration.backends.default.views import RegistrationView
 
@@ -48,6 +49,8 @@ def participation_list(request):
     form = NewParticipationForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
+        if not Participation.objects.get(user=request.user, site=get_current_site(request)).is_orga():
+            raise PermissionDenied()
         user = User.objects.get(username=form.cleaned_data['participant'])
         participation, created = Participation.objects.get_or_create(user=user, site=get_current_site(request))
         if created:
