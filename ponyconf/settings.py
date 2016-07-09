@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'sortedm2m',
+    'django_select2',
 
     # build-in apps
     'django.contrib.admin',
@@ -145,8 +146,9 @@ STATICFILES_FINDERS = [
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
 BOWER_INSTALLED_APPS = (
     'bootstrap',
-    'jquery',
+    'jquery#2',
     'jquery-ui',
+    'select2',
 )
 
 LOGIN_REDIRECT_URL = 'home'
@@ -177,6 +179,9 @@ BOOTSTRAP3 = {
     # (None means derive it from base_url)
     'javascript_url': None,
 }
+
+SELECT2_JS = 'select2/dist/js/select2.min.js'
+SELECT2_CSS = 'select2/dist/css/select2.min.css'
 
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'

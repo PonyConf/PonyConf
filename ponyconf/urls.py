@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^registration/', include('registration.backends.default.urls')),
     url(r'^', include('proposals.urls')),
     url(r'^conversations/', include('conversations.urls')),
+    url(r'^select2/', include('django_select2.urls')),
 ]
