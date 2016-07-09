@@ -24,7 +24,7 @@
     <th>{{ forloop.counter }}</th>
     <td><a href="{{ participation.get_absolute_url }}">{{ participation.user.username }}</a></td>
     <td>{{ participation.user.get_full_name }}</td>
-    <td>{{ participation.orga|yesno:"✔,✘" }}</td>
+    <td>{{ participation.is_orga|yesno:"✔,✘" }}</td>
     <td>{% for topic in participation.topic_set.all %}{{ topic.get_link }}{% if not forloop.last %},
       {% endif %}{% endfor %}</td>
     <td>
