@@ -58,3 +58,8 @@ class Participation(PonyConfModel):
 
     def is_staff(self):
         return self.is_orga() or self.user.topic_set.exists()
+
+    @property
+    def reviewed_topics(self):
+        from proposals.models import Topic
+        return Topic.objects.filter(reviewers=self.user).all()
