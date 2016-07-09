@@ -111,7 +111,7 @@ class SpeakerList(StaffRequiredMixin, ListView):
     template_name = 'proposals/speaker_list.html'
 
     def get_queryset(self):
-        current_site = get_current_site(request)
+        current_site = get_current_site(self.request)
         return User.objects.filter(talk__in=Talk.objects.filter(site=current_site)).all().distinct()
 
 
