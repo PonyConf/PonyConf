@@ -7,7 +7,7 @@
 <h1>Speakers:</h1>
 
 <ul>
-{% for speaker in participation_list %}
+{% for speaker in user_list %}
     <li><a href="{% url 'show-speaker' username=speaker.username %}">{{ speaker.profile }}</a></li>
 {% empty %}
     <li><i>No speakers.</i></li>
