@@ -56,21 +56,25 @@ class ProposalsTests(TestCase):
 
         # Talk.is_{editable,moderable}_by
         a, b, c = User.objects.all()
-        self.assertTrue(talk.is_moderable_by(c))
-        self.assertFalse(talk.is_editable_by(b))
-        self.assertFalse(talk.is_moderable_by(b))
+        self.assertTrue(talk.is_editable_by(c)) # c is superuser
+        self.assertTrue(talk.is_moderable_by(c)) # c is superuser
+        self.assertFalse(talk.is_editable_by(b)) # b is not speaker
+        self.assertFalse(talk.is_moderable_by(b)) # b is not orga
         self.client.login(username='a', password='a')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
-                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': "2,1"})
-        self.assertTrue(talk.is_editable_by(b))
-        self.assertFalse(talk.is_moderable_by(b))
+                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': (a.pk, b.pk)})
+        talk = Talk.objects.get(slug='super-talk')
+        self.assertTrue(b in talk.speakers.all())
+        self.assertTrue(talk.is_editable_by(b)) # b is speaker now
+        self.assertFalse(talk.is_moderable_by(b)) # b is not orga
 
-        # Only orga can edit topics
+    def test_topic_edition_permissions(self):
+        # Only orga and superuser can edit topics
         self.client.login(username='b', password='b')
-        self.assertFalse(Participation.on_site.get(user=b).orga)
+        self.assertFalse(Participation.on_site.get(user__username='b').orga)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
-        Participation.on_site.filter(user=b).update(orga=True)
-        self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
+        Participation.on_site.filter(user__username='b').update(orga=True)
+        self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
         self.client.login(username='c', password='c') # superuser
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
         self.assertEqual(self.client.get(reverse('list-topics')).status_code, 200)

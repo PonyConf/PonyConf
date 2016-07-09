@@ -61,4 +61,4 @@ class Participation(PonyConfModel):
         return self.user.is_superuser or self.orga
 
     def is_staff(self):
-        return self.is_orga() or self.topic_set.exists()
+        return self.is_orga() or self.user.topic_set.exists()
