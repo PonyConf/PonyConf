@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import Q
 
 from accounts.models import Participation
 from proposals.models import Talk
@@ -26,9 +27,10 @@ def create_conversation_about_talk(sender, instance, created, **kwargs):
 
 
 def check_talk(talk):
-    # Subscribe reviewer for these topics to conversations
-    reviewers = User.objects.filter(topic__talk=talk)
+    reviewers = User.objects.filter(Q(topic__talk=talk) | Q(participation__site=talk.site, participation__orga=True))
+    # Subscribe the reviewers to the conversation about the talk
     talk.conversation.subscribers.add(*reviewers)
+    # Subscribe the reviewers to the conversations with each speaker
     for user in talk.speakers.all():
         participation, created = Participation.objects.get_or_create(user=user, site=talk.site)
         participation.conversation.subscribers.add(*reviewers)
