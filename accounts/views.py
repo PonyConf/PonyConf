@@ -1,16 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.urlresolvers import reverse
 
 from registration.backends.default.views import RegistrationView
 
-from .forms import ParticipationForm, ParticipationOrgaForm, ProfileForm, ProfileOrgaForm, UserForm
+from .forms import ParticipationForm, ParticipationOrgaForm, ProfileForm, ProfileOrgaForm, UserForm, NewParticipationForm
 from .mixins import StaffRequiredMixin
+from .decorators import staff_required
 from .models import Participation, Profile
 from .utils import can_edit_profile, is_orga
+from .models import User
 
 RESET_PASSWORD_BUTTON = ('password_reset', 'warning', 'Reset your password')
 CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', 'Change password')
@@ -39,9 +42,24 @@ def profile(request):
     return render(request, 'accounts/profile.html', {'forms': forms, 'buttons': [CHANGE_PASSWORD_BUTTON]})
 
 
-class ParticipantList(StaffRequiredMixin, ListView):
-    def get_queryset(self):
-        return Participation.objects.filter(site=get_current_site(self.request)).all()
+@staff_required
+def participation_list(request):
+    participation_list = Participation.objects.filter(site=get_current_site(request)).all()
+    form = NewParticipationForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        user = User.objects.get(username=form.cleaned_data['participant'])
+        participation, created = Participation.objects.get_or_create(user=user, site=get_current_site(request))
+        if created:
+            messages.success(request, "%s added to participant" % user.profile)
+        else:
+            messages.info(request, "%s is already a participant" % user.profile)
+        return redirect(reverse('list-participant'))
+
+    return render(request, 'accounts/participation_list.html', {
+        'participation_list': participation_list,
+        'form': form,
+    })
 
 
 @login_required

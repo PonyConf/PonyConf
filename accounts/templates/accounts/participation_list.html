@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load bootstrap3 %}
+{% load accounts_tags %}
 
 {% block admintab %} active{% endblock %}
 
@@ -44,9 +45,20 @@
   {% endfor %}
 </table>
 
+{% if request|orga %}
+{% include "_form.html" %}
+{% endif %}
+
+{% endblock %}
+
+{% block css %}
+{{ block.css }}
+{{ form.media.css }}
 {% endblock %}
 
 {% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
 <script type="text/javascript">
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
