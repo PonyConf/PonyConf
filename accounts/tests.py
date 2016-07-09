@@ -12,6 +12,7 @@ class AccountTests(TestCase):
     def setUp(self):
         a, b, c = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'abc')
         Participation.objects.create(user=a, site=Site.objects.first())
+        Participation.objects.create(user=b, site=Site.objects.first())
         Participation.objects.create(user=c, site=Site.objects.first(), orga=True)
 
     def test_models(self):
@@ -44,14 +45,15 @@ class AccountTests(TestCase):
     def test_participant_views(self):
         self.assertEqual(self.client.get(reverse('register')).status_code, 200)
         self.client.login(username='b', password='b')
-        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 302)
+        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 403)
+        self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
+                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 403)
         b = User.objects.get(username='b')
         b.is_superuser = True
         b.save()
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)
-        self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
-                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 403)
         b = Participation.objects.get(user=b)
+        b.is_superuser = False
         b.orga = True
         b.save()
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
