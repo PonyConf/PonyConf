@@ -30,6 +30,7 @@ class Participation(PonyConfModel):
 
     TRANSPORTS = IntEnum('Transport', 'train plane others')
     CONNECTORS = IntEnum('Connector', 'VGA HDMI miniDP')
+    LICENCES = IntEnum('Video licence', 'CC-Zero CC-BY CC-BY-SA CC-BY-ND CC-BY-NC CC-BY-NC-SA CC-BY-NC-ND')
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     user = models.ForeignKey(User)
@@ -41,6 +42,8 @@ class Participation(PonyConfModel):
     connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
     constraints = models.TextField(blank=True)
     sound = models.BooleanField("I need sound", default=False)
+    videotaped = models.BooleanField("I'm ok to be recorded on video", default=True)
+    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1)
     orga = models.BooleanField(default=False)
 
     class Meta:

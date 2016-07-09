@@ -32,10 +32,10 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
 
         # He tries with an invalid address
-        self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester'})
+        self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester', 'video_licence': 1})
         self.assertEqual(User.objects.filter(username='z').count(), 0)
 
-        self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester'})
+        self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester', 'video_licence': 1})
 
         user = User.objects.get(username='z')
         self.assertEqual(user.email, 'b@newdomain.com')
@@ -62,6 +62,7 @@ class AccountTests(TestCase):
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
                                           {'biography': 'foo', 'notes': 'bar', 'first_name': 'Jules', 'username': 'a',
                                            'last_name': 'César', 'email': 'a@example.org', 'transport': 1,
-                                           'connector': 1, 'constraints': 'nope', 'orga': 0,
+                                           'connector': 1, 'video_licence': 2, 'constraints': 'nope', 'orga': 0,
                                            }).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, 'foo')
+        self.assertEqual(Participation.objects.get(user=User.objects.get(username='a')).video_licence, 2)

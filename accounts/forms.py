@@ -13,12 +13,12 @@ UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', '
 
 ProfileForm = modelform_factory(Profile, fields=['biography'])
 
-ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'constraints'])
+ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints'])
 
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography', 'notes'])
 
 ParticipationOrgaForm = modelform_factory(Participation,
-                                          fields=['transport', 'connector', 'sound', 'constraints', 'orga'])
+                                          fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints', 'orga'])
 
 class ParticipationField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
