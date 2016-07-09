@@ -12,9 +12,12 @@
 
 {% endblock %}
 
-{% block css %}<link href="{% static 'sortedm2m/widget.css' %}" rel="stylesheet">{% endblock %}
-{% block js_end %}
-<script src="{% static 'sortedm2m/jquery-ui.js' %}"></script>
-<script src="{% static 'sortedm2m/widget.js' %}"></script>
-{% endblock js_end %}
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock css %}
 
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock js_end %}

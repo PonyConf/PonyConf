@@ -9,7 +9,7 @@ __all__ = ['TalkForm', 'TopicCreateForm', 'TopicUpdateForm']
 
 
 TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics', 'event', 'speakers'],
-                             widgets={'topics': CheckboxSelectMultiple()})
+                             widgets={'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()})
 
 TopicCreateForm = modelform_factory(Topic, fields=['name', 'reviewers'],
                                     widgets={'reviewers': Select2TagWidget()})

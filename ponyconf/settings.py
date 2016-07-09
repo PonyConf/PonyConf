@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'djangobower',
     'bootstrap3',
     'registration',
-    'sortedm2m',
     'django_select2',
 
     # build-in apps

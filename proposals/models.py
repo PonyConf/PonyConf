@@ -8,7 +8,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from autoslug import AutoSlugField
-from sortedm2m.fields import SortedManyToManyField
 
 from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
@@ -48,7 +47,7 @@ class Talk(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     proposer = models.ForeignKey(User, related_name='+')
-    speakers = SortedManyToManyField(User)
+    speakers = models.ManyToManyField(User)
     title = models.CharField(max_length=128, verbose_name='Title')
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(blank=True, verbose_name='Description')
