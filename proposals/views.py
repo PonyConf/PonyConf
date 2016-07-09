@@ -15,7 +15,7 @@ from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin, SuperuserRequ
 from accounts.models import Participation
 from accounts.utils import is_orga
 
-from .forms import TalkForm, TopicForm
+from .forms import TalkForm, TopicCreateForm, TopicUpdateForm
 from .models import Talk, Topic, Vote
 from .utils import allowed_talks
 from .signals import *
@@ -86,7 +86,6 @@ class TalkDetail(LoginRequiredMixin, DetailView):
 class TopicMixin(object):
     model = Topic
     queryset = Topic.on_site.all()
-    form_class = TopicForm
 
 
 class TopicList(LoginRequiredMixin, TopicMixin, ListView):
@@ -94,69 +93,15 @@ class TopicList(LoginRequiredMixin, TopicMixin, ListView):
 
 
 class TopicCreate(OrgaRequiredMixin, TopicMixin, CreateView):
+    form_class = TopicCreateForm
     def form_valid(self, form):
         form.instance.site = get_current_site(self.request)
         return super(TopicCreate, self).form_valid(form)
 
 
-class TopicUpdate(SuperuserRequiredMixin, TopicMixin, UpdateView):
-    pass
-
-
-class TopicDetail(StaffRequiredMixin, TopicMixin, DetailView):
-    pass
-
-
-@login_required
-def topic_add_reviewer(request, slug):
-    if not Participation.objects.get(user=request.user).is_orga():
-        raise PermissionDenied()
-
-    topic = get_object_or_404(Topic, slug=slug)
-
-    if request.method == 'POST':
-        user = request.POST.get('user')
-        try:
-            user = User.objects.get(username=user)
-        except ObjectDoesNotExist:
-            messages.error(request, 'User not found.')
-        else:
-            participation, created = Participation.on_site.get_or_create(user=user, site=get_current_site(request))
-            if participation in topic.reviewers.all():
-                messages.info(request, '%s is already a reviewer of this topic.' % participation)
-            else:
-                topic.reviewers.add(participation)
-                topic.save()
-                messages.success(request, '%s added to reviewers!' % participation)
-        return redirect(topic.get_absolute_url())
-    else:
-        term = request.GET.get('term')
-        if not term:
-            raise Http404()
-        query = Q(username__icontains=term) \
-            | Q(first_name__icontains=term) \
-            | Q(last_name__icontains=term)
-        users = User.objects \
-            .exclude(id__in=topic.reviewers.values('user__id')) \
-            .filter(query)[:10]
-        response = []
-        for user in users:
-            response += [{
-                'label': str(user.profile),
-                'value': user.username,
-            }]
-        return JsonResponse(response, safe=False)
-
-
-@login_required
-def topic_remove_reviewer(request, slug, username):
-    if not Participation.objects.get(user=request.user).is_orga():
-        raise PermissionDenied()
-    topic = get_object_or_404(Topic, slug=slug)
-    participation = get_object_or_404(Participation, user__username=username)
-    topic.reviewers.remove(participation)
-    messages.success(request, '%s removed from reviewers!' % participation)
-    return redirect(topic.get_absolute_url())
+class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
+    def get_form_class(self):
+        return TopicCreateForm if self.request.user.is_superuser else TopicUpdateForm
 
 
 class SpeakerList(StaffRequiredMixin, ListView):

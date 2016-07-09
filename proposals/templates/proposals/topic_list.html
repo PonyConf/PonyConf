@@ -13,13 +13,12 @@
   <li>
     {% if request|staff %}
         {{ topic }}:
-        <a href="{{ topic.get_absolute_url }}">{{ topic.reviewers.count }} reviewer{{ topic.reviewers.count|pluralize }}</a>
+        <a href="{% url 'edit-topic' topic.slug %}">{{ topic.reviewers.count }} reviewer{{ topic.reviewers.count|pluralize }}</a>
         and
-        <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic.talks.count }} talk{{ topic.talks.count|pluralize }}</a>
+        <a href="{{ topic.get_absolute_url }}">{{ topic.talks.count }} talk{{ topic.talks.count|pluralize }}</a>
     {% else %}
-        <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a>
+        <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>
     {% endif %}
-    {% if request.user.is_superuser %} - <a href="{% url 'edit-topic' topic.slug %}">edit</a>{% endif %}
   </li>
   {% empty %}
   <li><i>No topics.</i></li>

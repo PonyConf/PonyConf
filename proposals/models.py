@@ -25,7 +25,7 @@ class Topic(PonyConfModel):
     name = models.CharField(max_length=128, verbose_name='Name', unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
 
-    reviewers = models.ManyToManyField(Participation, blank=True)
+    reviewers = models.ManyToManyField(User, blank=True)
 
     objects = models.Manager()
     on_site = CurrentSiteManager()
@@ -38,7 +38,7 @@ class Topic(PonyConfModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('show-topic', kwargs={'slug': self.slug})
+        return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
 
 
 class Talk(PonyConfModel):
@@ -72,7 +72,7 @@ class Talk(PonyConfModel):
             participation = Participation.on_site.get(user=user)
         except Participation.DoesNotExists:
             return False
-        return participation.orga or self.topics.filter(reviewers=participation).exists()
+        return participation.orga or self.topics.filter(reviewers=participation.user).exists()
 
     def is_editable_by(self, user):
         return user == self.proposer or user in self.speakers.all() or self.is_moderable_by(user)
