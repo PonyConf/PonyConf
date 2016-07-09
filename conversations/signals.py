@@ -27,7 +27,7 @@ def create_conversation_about_talk(sender, instance, created, **kwargs):
 
 def check_talk(talk):
     # Subscribe reviewer for these topics to conversations
-    reviewers = User.objects.filter(participation__topic__talk=talk)
+    reviewers = User.objects.filter(topic__talk=talk)
     talk.conversation.subscribers.add(*reviewers)
     for user in talk.speakers.all():
         participation, created = Participation.on_site.get_or_create(user=user, site=talk.site)
