@@ -6,3 +6,17 @@ PonyConf
 Organise your conferences
 
 Jabber : [ponyconf@chat.cannelle.eu.org](https://jappix.cannelle.eu.org/?r=ponyconf@chat.cannelle.eu.org)
+
+
+HowTo Test
+----------
+
+(you should work on a virtualenv)
+
+```bash
+git clone --recursive git@github.com:toulibre/PonyConf.git
+cd PonyConf
+pip install -U -r requirements.txt
+./manage.py migrate
+./manage.py runserver
+```
