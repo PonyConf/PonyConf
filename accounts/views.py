@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
+from django.contrib.sites.shortcuts import get_current_site
 
 from registration.backends.default.views import RegistrationView
 
@@ -25,7 +26,7 @@ def profile(request):
 
     forms = [UserForm(request.POST or None, instance=request.user),
              ProfileForm(request.POST or None, instance=request.user.profile),
-             ParticipationForm(request.POST or None, instance=Participation.on_site.get(user=request.user))]
+             ParticipationForm(request.POST or None, instance=Participation.objects.get(site=get_current_site(request), user=request.user))]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
@@ -39,7 +40,8 @@ def profile(request):
 
 
 class ParticipantList(StaffRequiredMixin, ListView):
-    queryset = Participation.on_site.all()
+    def get_queryset(self):
+        return Participation.objects.filter(site=get_current_site(self.request)).all()
 
 
 @login_required
@@ -52,7 +54,7 @@ def edit(request, username):
     participation_form_class = ParticipationOrgaForm if is_orga(request, request.user) else ParticipationForm
     forms = [UserForm(request.POST or None, instance=profile.user),
              ProfileOrgaForm(request.POST or None, instance=profile),
-             participation_form_class(request.POST or None, instance=Participation.on_site.get(user=profile.user))]
+             participation_form_class(request.POST or None, instance=Participation.objects.get(site=get_current_site(request), user=profile.user))]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):

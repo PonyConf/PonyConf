@@ -28,15 +28,15 @@ def home(request):
 @login_required
 def talk_list(request):
     return render(request, 'proposals/talks.html', {
-        'my_talks': Talk.on_site.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
-        'other_talks': allowed_talks(Talk.on_site.exclude(speakers=request.user, proposer=request.user), request)
+        'my_talks': Talk.objects.filter(site=get_current_site(request)).filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
+        'other_talks': allowed_talks(Talk.objects.filter(site=get_current_site(request)).exclude(speakers=request.user, proposer=request.user), request)
     })
 
 
 @login_required
 def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, slug=topic)
-    talks = allowed_talks(Talk.on_site.filter(topics=topic), request)
+    talks = allowed_talks(Talk.objects.filter(site=topic.site, topics=topic), request)
     return render(request, 'proposals/talk_list.html', {'title': 'Talks related to %s:' % topic, 'talk_list': talks})
 
 
@@ -70,12 +70,13 @@ def talk_edit(request, talk=None):
 
 
 class TalkDetail(LoginRequiredMixin, DetailView):
-    queryset = Talk.on_site.all()
+    def get_queryset(self):
+        return Talk.objects.filter(site=get_current_site(self.request)).all()
 
     def get_context_data(self, **ctx):
         user = self.request.user
         if self.object.is_moderable_by(user):
-            vote = Vote.objects.filter(talk=self.object, user=Participation.on_site.get(user=user)).first()
+            vote = Vote.objects.filter(talk=self.object, user=Participation.objects.get(site=get_current_site(self.request), user=user)).first()
             ctx.update(edit_perm=True, moderate_perm=True, vote=vote,
                        form_url=reverse('talk-conversation', kwargs={'talk': self.object.slug}))
         else:
@@ -85,7 +86,9 @@ class TalkDetail(LoginRequiredMixin, DetailView):
 
 class TopicMixin(object):
     model = Topic
-    queryset = Topic.on_site.all()
+
+    def get_queryset(self):
+        return Topic.objects.filter(site=get_current_site(self.request)).all()
 
 
 class TopicList(LoginRequiredMixin, TopicMixin, ListView):
@@ -105,15 +108,18 @@ class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
 
 
 class SpeakerList(StaffRequiredMixin, ListView):
-    queryset = Participation.on_site.filter(user__talk__in=Talk.on_site.all()).distinct()
     template_name = 'proposals/speaker_list.html'
+
+    def get_queryset(self):
+        current_site = get_current_site(request)
+        return User.objects.filter(talk__in=Talk.objects.filter(site=current_site)).all().distinct()
 
 
 @login_required
 def vote(request, talk, score):
-    site = get_current_site(request)
-    talk = get_object_or_404(Talk, site=site, slug=talk)
-    user = Participation.on_site.get(user=request.user)
+    current_site = get_current_site(request)
+    talk = get_object_or_404(Talk, site=current_site, slug=talk)
+    user = Participation.objects.get(site=current_site, user=request.user)
     if not talk.is_moderable_by(request.user):
         raise PermissionDenied()
     vote, created = Vote.objects.get_or_create(talk=talk, user=user)
@@ -128,5 +134,5 @@ def user_details(request, username):
     speaker = get_object_or_404(User, username=username)
     return render(request, 'proposals/user_details.html', {
         'profile': speaker.profile,
-        'talk_list': allowed_talks(Talk.on_site.filter(speakers=speaker), request),
+        'talk_list': allowed_talks(Talk.objects.filter(site=get_current_site(request), speakers=speaker), request),
     })

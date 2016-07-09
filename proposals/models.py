@@ -1,7 +1,6 @@
 from enum import IntEnum
 
 from django.contrib.auth.models import User
-from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -25,9 +24,6 @@ class Topic(PonyConfModel):
     slug = AutoSlugField(populate_from='name', unique=True)
 
     reviewers = models.ManyToManyField(User, blank=True)
-
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
 
     @property
     def talks(self):
@@ -55,9 +51,6 @@ class Talk(PonyConfModel):
     event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value)
     accepted = models.NullBooleanField(default=None)
 
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
-
     def __str__(self):
         return self.title
 
@@ -68,7 +61,7 @@ class Talk(PonyConfModel):
         if user.is_superuser:
             return True
         try:
-            participation = Participation.on_site.get(user=user)
+            participation = Participation.objects.get(site=self.site, user=user)
         except Participation.DoesNotExists:
             return False
         return participation.orga or self.topics.filter(reviewers=participation.user).exists()

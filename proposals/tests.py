@@ -20,13 +20,13 @@ class ProposalsTests(TestCase):
         self.client.login(username='a', password='a')
         self.client.post(reverse('add-talk'), {'title': 'super talk', 'description': 'super', 'event': 1, 'topics': 1,
                                                'speakers': 1})
-        talk = Talk.on_site.first()
+        talk = Talk.objects.first()
         self.assertEqual(str(talk), 'super talk')
         self.assertEqual(talk.description, 'super')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
                          {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': 1})
         self.assertEqual(str(talk), 'super talk')  # title is read only there
-        talk = Talk.on_site.first()
+        talk = Talk.objects.first()
         self.assertEqual(talk.description, 'mega')
 
         # Status Code
@@ -71,9 +71,9 @@ class ProposalsTests(TestCase):
     def test_topic_edition_permissions(self):
         # Only orga and superuser can edit topics
         self.client.login(username='b', password='b')
-        self.assertFalse(Participation.on_site.get(user__username='b').orga)
+        self.assertFalse(Participation.objects.get(user__username='b').orga)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 302)
-        Participation.on_site.filter(user__username='b').update(orga=True)
+        Participation.objects.filter(user__username='b').update(orga=True)
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)
         self.client.login(username='c', password='c') # superuser
         self.assertEqual(self.client.get(reverse('edit-topic', kwargs={'slug': 'topipo'})).status_code, 200)

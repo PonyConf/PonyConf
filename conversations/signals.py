@@ -30,7 +30,7 @@ def check_talk(talk):
     reviewers = User.objects.filter(topic__talk=talk)
     talk.conversation.subscribers.add(*reviewers)
     for user in talk.speakers.all():
-        participation, created = Participation.on_site.get_or_create(user=user, site=talk.site)
+        participation, created = Participation.objects.get_or_create(user=user, site=talk.site)
         participation.conversation.subscribers.add(*reviewers)
 
 

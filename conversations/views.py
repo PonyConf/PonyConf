@@ -66,7 +66,7 @@ def talk_conversation(request, talk):
 @login_required
 def correspondents(request):
 
-    correspondent_list = Participation.on_site.filter(conversation__subscribers=request.user)
+    correspondent_list = Participation.objects.filter(site=get_current_site(request), conversation__subscribers=request.user)
 
     return render(request, 'conversations/correspondents.html', {
             'correspondent_list': correspondent_list,

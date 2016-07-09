@@ -51,7 +51,7 @@ class AccountTests(TestCase):
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
                                           {'biography': 'foo', 'notes': 'bar'}).status_code, 403)
-        b = Participation.on_site.get(user=b)
+        b = Participation.objects.get(user=b)
         b.orga = True
         b.save()
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),

@@ -10,7 +10,7 @@ from .models import Participation, Profile
 
 @receiver(user_logged_in)
 def on_user_logged_in(sender, request, user, **kwargs):
-    proposition, created = Participation.on_site.get_or_create(user=user, site=get_current_site(request))
+    proposition, created = Participation.objects.get_or_create(user=user, site=get_current_site(request))
     if created:
         messages.info(request, "Please check your profile!\n", fail_silently=True)  # FIXME
     messages.success(request, 'Welcome!', fail_silently=True)  # FIXME

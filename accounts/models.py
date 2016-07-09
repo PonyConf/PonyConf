@@ -1,7 +1,6 @@
 from enum import IntEnum
 
 from django.contrib.auth.models import User
-from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -43,9 +42,6 @@ class Participation(PonyConfModel):
     constraints = models.TextField(blank=True)
     sound = models.BooleanField("I need sound", default=False)
     orga = models.BooleanField(default=False)
-
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
 
     class Meta:
         # A User can participe only once to a Conference (= Site)
