@@ -5,7 +5,17 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import Participation, Profile
+from .models import Participation, Profile, Transport, Connector
+
+
+def create_default_options(sender, **kwargs):
+    Transport.objects.get_or_create(name='Train')
+    Transport.objects.get_or_create(name='Plain')
+    Transport.objects.get_or_create(name='Carpooling')
+    Connector.objects.get_or_create(name='VGA')
+    Connector.objects.get_or_create(name='HDMI')
+    Connector.objects.get_or_create(name='miniDP')
+    Connector.objects.get_or_create(name='I need a computer')
 
 
 @receiver(user_logged_in)

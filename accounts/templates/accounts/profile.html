@@ -23,3 +23,13 @@
 {% endblock %}
 
 <a href="{% url 'password_change' %}" class="btn btn-warning">Change password</a>
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock %}

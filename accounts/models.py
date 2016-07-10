@@ -26,6 +26,24 @@ class Profile(PonyConfModel):
         return reverse('profile')
 
 
+class Option(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class Transport(Option):
+    pass
+
+
+class Connector(Option):
+    pass
+
+
 class Participation(PonyConfModel):
 
     TRANSPORTS = IntEnum('Transport', 'train plane others')
@@ -37,9 +55,8 @@ class Participation(PonyConfModel):
 
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
-    # TODO: These should multi-choice fields
-    transport = models.IntegerField(choices=enum_to_choices(TRANSPORTS), blank=True, null=True)
-    connector = models.IntegerField(choices=enum_to_choices(CONNECTORS), blank=True, null=True)
+    transport = models.ManyToManyField(Transport, verbose_name="I'm ok to travel by", blank=True)
+    connector = models.ManyToManyField(Connector, verbose_name="I can output", blank=True)
     constraints = models.TextField(blank=True)
     sound = models.BooleanField("I need sound", default=False)
     videotaped = models.BooleanField("I'm ok to be recorded on video", default=True)

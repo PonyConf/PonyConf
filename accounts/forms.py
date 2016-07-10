@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.forms.models import modelform_factory
 from django import forms
 
-from django_select2.forms import Select2Widget
+from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 from .models import Participation, Profile
 
@@ -13,12 +13,14 @@ UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', '
 
 ProfileForm = modelform_factory(Profile, fields=['biography'])
 
-ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints'])
+ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints'],
+                                                     widgets={'transport': forms.CheckboxSelectMultiple(), 'connector': forms.CheckboxSelectMultiple()})
 
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography', 'notes'])
 
 ParticipationOrgaForm = modelform_factory(Participation,
-                                          fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints', 'orga'])
+                                          fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence', 'constraints', 'orga'],
+                                          widgets={'transport': forms.CheckboxSelectMultiple(), 'connector': forms.CheckboxSelectMultiple()})
 
 class ParticipationField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
