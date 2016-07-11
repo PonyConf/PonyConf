@@ -16,4 +16,4 @@ def is_staff(request, user):
 
 def can_edit_profile(request, profile):
     editor = request.user.participation_set.get(site=get_current_site(request))
-    return editor.is_orga() or editor.user.topic_set.filter(talk__speakers=profile.user).exists()
+    return editor.is_orga() or editor.topic_set.filter(talk__speakers=profile.user).exists()
