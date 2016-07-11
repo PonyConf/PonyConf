@@ -93,6 +93,11 @@ class TopicCreate(OrgaRequiredMixin, TopicMixin, CreateView):
     model = Topic
     form_class = TopicCreateForm
 
+    def get_form_kwargs(self):
+        kwargs = super(TopicCreate, self).get_form_kwargs()
+        kwargs.update({'site_id': get_current_site(self.request).id})
+        return kwargs
+
     def form_valid(self, form):
         form.instance.site = get_current_site(self.request)
         return super().form_valid(form)
