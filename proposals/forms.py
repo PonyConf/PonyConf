@@ -23,7 +23,7 @@ class TopicCreateForm(ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data['name']
-        if Topic.objects.filter(site__id=self.site_id, name=name).exists():
+        if name != self.instance.name and Topic.objects.filter(site__id=self.site_id, name=name).exists():
             raise self.instance.unique_error_message(self._meta.model, ['name'])
         return name
 
