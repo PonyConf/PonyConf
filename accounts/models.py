@@ -9,8 +9,6 @@ from ponyconf.utils import PonyConfModel, enum_to_choices
 
 from .utils import generate_user_uid
 
-__all__ = ['Profile']
-
 
 class Profile(PonyConfModel):
 
@@ -46,8 +44,6 @@ class Connector(Option):
 
 class Participation(PonyConfModel):
 
-    TRANSPORTS = IntEnum('Transport', 'train plane others')
-    CONNECTORS = IntEnum('Connector', 'VGA HDMI miniDP')
     LICENCES = IntEnum('Video licence', 'CC-Zero CC-BY CC-BY-SA CC-BY-ND CC-BY-NC CC-BY-NC-SA CC-BY-NC-ND')
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -78,8 +74,3 @@ class Participation(PonyConfModel):
 
     def is_staff(self):
         return self.is_orga() or self.user.topic_set.exists()
-
-    @property
-    def reviewed_topics(self):
-        from proposals.models import Topic
-        return Topic.objects.filter(reviewers=self.user).all()

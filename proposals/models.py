@@ -13,8 +13,6 @@ from ponyconf.utils import PonyConfModel, enum_to_choices
 
 from .utils import query_sum
 
-__all__ = ['Topic', 'Talk']
-
 
 class Topic(PonyConfModel):
 
@@ -72,7 +70,7 @@ class Talk(PonyConfModel):
 class Vote(PonyConfModel):
 
     talk = models.ForeignKey(Talk)
-    user = models.ForeignKey(Participation)
+    user = models.ForeignKey(User)
     vote = models.IntegerField(validators=[MinValueValidator(-2), MaxValueValidator(2)], default=0)
 
     class Meta:

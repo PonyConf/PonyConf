@@ -1,13 +1,9 @@
-from django.dispatch import Signal, receiver
 from django.db.models.signals import m2m_changed
+from django.dispatch import Signal, receiver
 
-
-from .models import Talk, Topic
 from accounts.models import Participation
 
-
-__all__ = [ 'talk_added', 'talk_edited' ]
-
+from .models import Talk, Topic
 
 talk_added = Signal(providing_args=["sender", "instance", "author"])
 talk_edited = Signal(providing_args=["sender", "instance", "author"])

@@ -8,17 +8,13 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.http import JsonResponse
-from django.core.exceptions import ObjectDoesNotExist
 
-from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin, SuperuserRequiredMixin
-from accounts.models import Participation
-from accounts.utils import is_orga
+from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 
 from .forms import TalkForm, TopicCreateForm, TopicUpdateForm
 from .models import Talk, Topic, Vote
+from .signals import talk_added, talk_edited
 from .utils import allowed_talks
-from .signals import *
 
 
 def home(request):
@@ -27,9 +23,10 @@ def home(request):
 
 @login_required
 def talk_list(request):
+    talks = Talk.objects.filter(site=get_current_site(request))
     return render(request, 'proposals/talks.html', {
-        'my_talks': Talk.objects.filter(site=get_current_site(request)).filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
-        'other_talks': allowed_talks(Talk.objects.filter(site=get_current_site(request)).exclude(speakers=request.user, proposer=request.user), request)
+        'my_talks': talks.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
+        'other_talks': allowed_talks(talks.exclude(Q(speakers=request.user) | Q(proposer=request.user)), request)
     })
 
 
@@ -74,19 +71,16 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         return Talk.objects.filter(site=get_current_site(self.request)).all()
 
     def get_context_data(self, **ctx):
-        user = self.request.user
-        if self.object.is_moderable_by(user):
-            vote = Vote.objects.filter(talk=self.object, user=Participation.objects.get(site=get_current_site(self.request), user=user)).first()
+        if self.object.is_moderable_by(self.request.user):
+            vote = Vote.objects.filter(talk=self.object, user=self.request.user).first()
             ctx.update(edit_perm=True, moderate_perm=True, vote=vote,
                        form_url=reverse('talk-conversation', kwargs={'talk': self.object.slug}))
         else:
-            ctx['edit_perm'] = self.object.is_editable_by(user)
+            ctx['edit_perm'] = self.object.is_editable_by(self.request.user)
         return super().get_context_data(**ctx)
 
 
 class TopicMixin(object):
-    model = Topic
-
     def get_queryset(self):
         return Topic.objects.filter(site=get_current_site(self.request)).all()
 
@@ -96,10 +90,12 @@ class TopicList(LoginRequiredMixin, TopicMixin, ListView):
 
 
 class TopicCreate(OrgaRequiredMixin, TopicMixin, CreateView):
+    model = Topic
     form_class = TopicCreateForm
+
     def form_valid(self, form):
         form.instance.site = get_current_site(self.request)
-        return super(TopicCreate, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
@@ -111,18 +107,16 @@ class SpeakerList(StaffRequiredMixin, ListView):
     template_name = 'proposals/speaker_list.html'
 
     def get_queryset(self):
-        current_site = get_current_site(self.request)
-        return User.objects.filter(talk__in=Talk.objects.filter(site=current_site)).all().distinct()
+        site = get_current_site(self.request)
+        return User.objects.filter(talk__in=Talk.objects.filter(site=site)).all().distinct()
 
 
 @login_required
 def vote(request, talk, score):
-    current_site = get_current_site(request)
-    talk = get_object_or_404(Talk, site=current_site, slug=talk)
-    user = Participation.objects.get(site=current_site, user=request.user)
+    talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
     if not talk.is_moderable_by(request.user):
         raise PermissionDenied()
-    vote, created = Vote.objects.get_or_create(talk=talk, user=user)
+    vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
     messages.success(request, "Vote successfully %s" % ('created' if created else 'updated'))

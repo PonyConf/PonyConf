@@ -5,9 +5,6 @@ from django_select2.forms import Select2TagWidget
 
 from proposals.models import Talk, Topic
 
-__all__ = ['TalkForm', 'TopicCreateForm', 'TopicUpdateForm']
-
-
 TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics', 'event', 'speakers'],
                              widgets={'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()})
 

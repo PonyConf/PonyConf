@@ -32,10 +32,12 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
 
         # He tries with an invalid address
-        self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester', 'video_licence': 1})
+        self.client.post(reverse('profile'), {'email': 'bnewdomain.com', 'username': 'z', 'biography': 'tester',
+                                              'video_licence': 1})
         self.assertEqual(User.objects.filter(username='z').count(), 0)
 
-        self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester', 'video_licence': 1})
+        self.client.post(reverse('profile'), {'email': 'b@newdomain.com', 'username': 'z', 'biography': 'tester',
+                                              'video_licence': 1})
 
         user = User.objects.get(username='z')
         self.assertEqual(user.email, 'b@newdomain.com')

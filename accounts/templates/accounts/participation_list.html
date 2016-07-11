@@ -26,7 +26,7 @@
     <td><a href="{{ participation.get_absolute_url }}">{{ participation.user.username }}</a></td>
     <td>{{ participation.user.get_full_name }}</td>
     <td>{{ participation.is_orga|yesno:"✔,✘" }}</td>
-    <td>{% for topic in participation.reviewed_topics %}{{ topic.get_link }}{% if not forloop.last %},
+    <td>{% for topic in participation.user.topic_set.all %}{{ topic.get_link }}{% if not forloop.last %},
       {% endif %}{% endfor %}</td>
     <td>
       <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom"

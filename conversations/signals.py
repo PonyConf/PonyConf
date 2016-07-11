@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models import Q
 
 from accounts.models import Participation
 from proposals.models import Talk
-from proposals.signals import *
+from proposals.signals import talk_added, talk_edited
 
 from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 

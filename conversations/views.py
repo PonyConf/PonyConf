@@ -6,8 +6,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from accounts.decorators import staff_required
 from accounts.models import Participation
-from accounts.decorators import orga_required, staff_required
 from proposals.models import Talk
 
 from .forms import MessageForm
@@ -66,7 +66,8 @@ def talk_conversation(request, talk):
 @login_required
 def correspondents(request):
 
-    correspondent_list = Participation.objects.filter(site=get_current_site(request), conversation__subscribers=request.user)
+    correspondent_list = Participation.objects.filter(site=get_current_site(request),
+                                                      conversation__subscribers=request.user)
 
     return render(request, 'conversations/correspondents.html', {
             'correspondent_list': correspondent_list,

@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import Participation, Profile, Transport, Connector
+from .models import Connector, Participation, Profile, Transport
 
 
 def create_default_options(sender, **kwargs):

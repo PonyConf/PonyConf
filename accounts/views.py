@@ -1,20 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic import ListView
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, redirect, render
 
 from registration.backends.default.views import RegistrationView
 
-from .forms import ParticipationForm, ParticipationOrgaForm, ProfileForm, ProfileOrgaForm, UserForm, NewParticipationForm
-from .mixins import StaffRequiredMixin
 from .decorators import staff_required
-from .models import Participation, Profile
+from .forms import (NewParticipationForm, ParticipationForm,
+                    ParticipationOrgaForm, ProfileForm, ProfileOrgaForm, UserForm)
+from .models import Participation, Profile, User
 from .utils import can_edit_profile, is_orga
-from .models import User
 
 RESET_PASSWORD_BUTTON = ('password_reset', 'warning', 'Reset your password')
 CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', 'Change password')
@@ -30,7 +27,8 @@ def profile(request):
 
     forms = [UserForm(request.POST or None, instance=request.user),
              ProfileForm(request.POST or None, instance=request.user.profile),
-             ParticipationForm(request.POST or None, instance=Participation.objects.get(site=get_current_site(request), user=request.user))]
+             ParticipationForm(request.POST or None, instance=Participation.objects.get(site=get_current_site(request),
+                                                                                        user=request.user))]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
@@ -72,10 +70,11 @@ def edit(request, username):
     if not can_edit_profile(request, profile):
         raise PermissionDenied()
 
-    participation_form_class = ParticipationOrgaForm if is_orga(request, request.user) else ParticipationForm
+    participation_form = ParticipationOrgaForm if is_orga(request, request.user) else ParticipationForm
     forms = [UserForm(request.POST or None, instance=profile.user),
              ProfileOrgaForm(request.POST or None, instance=profile),
-             participation_form_class(request.POST or None, instance=Participation.objects.get(site=get_current_site(request), user=profile.user))]
+             participation_form(request.POST or None,
+                                instance=Participation.objects.get(site=get_current_site(request), user=profile.user))]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
