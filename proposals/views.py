@@ -85,25 +85,27 @@ class TopicMixin(object):
         return Topic.objects.filter(site=get_current_site(self.request)).all()
 
 
+class TopicFormMixin(object):
+    def get_form_kwargs(self):
+        kwargs = super(TopicFormMixin, self).get_form_kwargs()
+        kwargs.update({'site_id': get_current_site(self.request).id})
+        return kwargs
+
+
 class TopicList(LoginRequiredMixin, TopicMixin, ListView):
     pass
 
 
-class TopicCreate(OrgaRequiredMixin, TopicMixin, CreateView):
+class TopicCreate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, CreateView):
     model = Topic
     form_class = TopicCreateForm
-
-    def get_form_kwargs(self):
-        kwargs = super(TopicCreate, self).get_form_kwargs()
-        kwargs.update({'site_id': get_current_site(self.request).id})
-        return kwargs
 
     def form_valid(self, form):
         form.instance.site = get_current_site(self.request)
         return super().form_valid(form)
 
 
-class TopicUpdate(OrgaRequiredMixin, TopicMixin, UpdateView):
+class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
     def get_form_class(self):
         return TopicCreateForm if self.request.user.is_superuser else TopicUpdateForm
 
