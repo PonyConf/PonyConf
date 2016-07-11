@@ -15,7 +15,7 @@
         {{ topic }}:
         <a href="{% url 'edit-topic' topic.slug %}">{{ topic.reviewers.count }} reviewer{{ topic.reviewers.count|pluralize }}</a>
         and
-        <a href="{{ topic.get_absolute_url }}">{{ topic.talks.count }} talk{{ topic.talks.count|pluralize }}</a>
+        <a href="{{ topic.get_absolute_url }}">{{ topic.talk_set.count }} talk{{ topic.talk_set.count|pluralize }}</a>
     {% else %}
         <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>
     {% endif %}

@@ -25,10 +25,6 @@ class Topic(PonyConfModel):
 
     reviewers = models.ManyToManyField(User, blank=True)
 
-    @property
-    def talks(self):
-        return Talk.objects.filter(topics=self).all()
-
     def __str__(self):
         return self.name
 
