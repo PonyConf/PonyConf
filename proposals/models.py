@@ -18,10 +18,13 @@ class Topic(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=128, verbose_name='Name', unique=True)
+    name = models.CharField(max_length=128, verbose_name='Name')
     slug = AutoSlugField(populate_from='name', unique=True)
 
     reviewers = models.ManyToManyField(User, blank=True)
+
+    class Meta:
+        unique_together = ('site', 'name')
 
     def __str__(self):
         return self.name
