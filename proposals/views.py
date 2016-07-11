@@ -88,7 +88,8 @@ class TopicMixin(object):
 class TopicFormMixin(object):
     def get_form_kwargs(self):
         kwargs = super(TopicFormMixin, self).get_form_kwargs()
-        kwargs.update({'site_id': get_current_site(self.request).id})
+        if self.get_form_class() == TopicCreateForm:
+            kwargs.update({'site_id': get_current_site(self.request).id})
         return kwargs
 
 
