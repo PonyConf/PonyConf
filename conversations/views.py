@@ -17,7 +17,7 @@ from .forms import MessageForm
 def user_conversation(request, username=None):
 
     if username:
-        p = Participation.objects.get(user=request.user)
+        p = Participation.objects.get(user=request.user, site=get_current_site(request))
         if not p.is_staff() and not p.is_orga():
             raise PermissionDenied()
         user = get_object_or_404(User, username=username)
