@@ -77,5 +77,4 @@ class Participation(PonyConfModel):
 
     @property
     def topic_set(self):
-        from proposals.models import Topic
-        return Topic.objects.filter(site=self.site, reviewers=self.user)
+        return self.user.topic_set.filter(site=self.site)
