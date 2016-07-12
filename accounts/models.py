@@ -15,7 +15,6 @@ class Profile(PonyConfModel):
     user = models.OneToOneField(User)
     biography = models.TextField(blank=True, verbose_name='Biography')
     email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
-    notes = models.TextField(default='')
 
     def __str__(self):
         return self.user.get_full_name() or self.user.username
@@ -57,6 +56,7 @@ class Participation(PonyConfModel):
     sound = models.BooleanField("I need sound", default=False)
     videotaped = models.BooleanField("I'm ok to be recorded on video", default=True)
     video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1)
+    notes = models.TextField(default='', blank=True)
     orga = models.BooleanField(default=False)
 
     class Meta:

@@ -49,7 +49,7 @@ class AccountTests(TestCase):
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 403)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
-                                          {'biography': 'foo', 'notes': 'bar'}).status_code, 403)
+                                          {'biography': 'foo'}).status_code, 403)
         b = User.objects.get(username='b')
         b.is_superuser = True
         b.save()
