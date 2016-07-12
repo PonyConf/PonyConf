@@ -8,7 +8,10 @@
 
 <ul>
 {% for speaker in user_list %}
-    <li><a href="{% url 'show-speaker' username=speaker.username %}">{{ speaker.profile }}</a></li>
+    <li>
+        <a href="{% url 'show-speaker' username=speaker.username %}">{{ speaker.profile }}</a>
+        ({{ speaker.talk_set.count }} talk{{ speaker.talk_set.count|pluralize }})
+    </li>
 {% empty %}
     <li><i>No speakers.</i></li>
 {% endfor %}

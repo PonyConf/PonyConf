@@ -78,3 +78,7 @@ class Participation(PonyConfModel):
     @property
     def topic_set(self):
         return self.user.topic_set.filter(site=self.site)
+
+    @property
+    def talk_set(self):
+        return self.user.talk_set.filter(site=self.site)
