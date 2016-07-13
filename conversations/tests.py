@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from django.core import mail
+from django.conf import settings
 
 from accounts.models import Participation
-from proposals.models import Talk
+from proposals.models import Topic, Talk
 
 from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 
@@ -40,3 +42,52 @@ class ConversationTests(TestCase):
         self.client.login(username='d', password='d')
         self.client.post(url, {'content': 'im superuser'})
         self.assertEqual(Message.objects.last().content, 'im superuser')
+
+
+@override_settings(DEFAULT_FROM_EMAIL='noreply@example.org',
+                   REPLY_EMAIL='reply@example.org',
+                   REPLY_KEY='secret')
+class EmailTests(TestCase):
+    def setUp(self):
+        for guy in 'abcd':
+            setattr(self, guy, User.objects.create_user(guy, email='%s@example.org' % guy, password=guy))
+        a_p = Participation(user=self.a, site=Site.objects.first())
+        a_p.orga = True
+        a_p.save()
+        t = Topic(name='Topic 1', site=Site.objects.first())
+        t.save()
+        t.reviewers.add(self.b)
+
+
+    def test_talk_notification(self):
+        self.client.login(username='c', password='c')
+        # Check that login create participation
+        self.assertTrue(Participation.objects.filter(user=self.c, site=Site.objects.first()).exists())
+        # Propose new talk
+        topic = Topic.objects.get(name='Topic 1')
+        response = self.client.post(reverse('add-talk'), {
+            'title': 'Talk 1',
+            'description': 'This is the first talk',
+            'topics': (topic.pk,),
+            'event': 1,
+            'speakers': (self.c.pk, self.d.pk),
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Talk proposed') # check messages notification
+        talk = Talk.objects.get(site=Site.objects.first(), title='Talk 1')
+        conv = ConversationAboutTalk.objects.get(talk=talk)
+        # Orga and reviewer should have been subscribed to the conversation about the talk
+        self.assertEqual(set([self.a, self.b]), set(conv.subscribers.all()))
+        # Both should have received an email notification
+        self.assertEqual(len(mail.outbox), 2)
+        for m in mail.outbox:
+            self.assertEqual(m.from_email, '%s <%s>' % (self.c.profile, settings.DEFAULT_FROM_EMAIL))
+            self.assertTrue('Talk: %s' % talk.title)
+            self.assertTrue(len(m.to), 1)
+            self.assertTrue(m.to[0] in [ self.a.email, self.b.email ])
+        # Both should have been subscribed to conversations with each speakers
+        for user in [self.c, self.d]:
+            # Participation should have been created as the user is a speaker
+            p = Participation.objects.get(user=user, site=Site.objects.first())
+            conv = ConversationWithParticipant.objects.get(participation=p)
+            self.assertEqual(set([self.a, self.b]), set(conv.subscribers.all()))
