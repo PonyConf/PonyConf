@@ -43,7 +43,7 @@ def talk_edit(request, talk=None):
         talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
-    form = TalkForm(request.POST or None, instance=talk)
+    form = TalkForm(request.POST or None, instance=talk, site=get_current_site(request))
     if talk:
         form.fields['title'].disabled = True
         form.fields['topics'].disabled = True

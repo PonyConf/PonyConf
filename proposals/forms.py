@@ -7,8 +7,16 @@ from django_select2.forms import Select2TagWidget
 from proposals.models import Talk, Topic
 
 
-TalkForm = modelform_factory(Talk, fields=['title', 'description', 'topics', 'event', 'speakers'],
-                             widgets={'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()})
+class TalkForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super(TalkForm, self).__init__(*args, **kwargs)
+        self.fields['topics'].queryset = Topic.objects.filter(site=site)
+
+    class Meta:
+        model = Talk
+        fields = ['title', 'description', 'topics', 'event', 'speakers']
+        widgets = {'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
 
 
 class TopicCreateForm(ModelForm):
