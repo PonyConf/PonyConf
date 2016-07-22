@@ -5,8 +5,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from registration.backends.default.views import RegistrationView
-
 from .decorators import staff_required
 from .forms import (NewParticipationForm, ParticipationForm,
                     ParticipationOrgaForm, ProfileForm, ProfileOrgaForm, UserForm)
@@ -15,11 +13,6 @@ from .utils import can_edit_profile, is_orga
 
 RESET_PASSWORD_BUTTON = ('password_reset', 'warning', 'Reset your password')
 CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', 'Change password')
-
-
-class Registration(RegistrationView):
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(buttons=[RESET_PASSWORD_BUTTON], **kwargs)
 
 
 @login_required
