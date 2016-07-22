@@ -70,7 +70,7 @@ class Participation(PonyConfModel):
         return reverse('show-speaker', kwargs={'username': self.user.username})
 
     def is_orga(self):
-        return self.user.is_superuser or self.orga
+        return self.orga
 
     def is_staff(self):
         return self.is_orga() or self.topic_set.exists()
