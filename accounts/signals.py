@@ -10,7 +10,7 @@ from .models import Connector, Participation, Profile, Transport
 
 def create_default_options(sender, **kwargs):
     Transport.objects.get_or_create(name='Train')
-    Transport.objects.get_or_create(name='Plain')
+    Transport.objects.get_or_create(name='Plane')
     Transport.objects.get_or_create(name='Carpooling')
     Connector.objects.get_or_create(name='VGA')
     Connector.objects.get_or_create(name='HDMI')
