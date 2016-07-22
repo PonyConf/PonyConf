@@ -20,7 +20,10 @@ def create_default_options(sender, **kwargs):
 
 @receiver(user_logged_in)
 def on_user_logged_in(sender, request, user, **kwargs):
-    proposition, created = Participation.objects.get_or_create(user=user, site=get_current_site(request))
+    participation, created = Participation.objects.get_or_create(user=user, site=get_current_site(request))
+    if user.is_superuser:
+        participation.orga = True
+        participation.save()
     if created:
         messages.info(request, "Please check your profile!\n", fail_silently=True)  # FIXME
     messages.success(request, 'Welcome!', fail_silently=True)  # FIXME

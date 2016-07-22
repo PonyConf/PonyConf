@@ -53,11 +53,13 @@ class AccountTests(TestCase):
         b = User.objects.get(username='b')
         b.is_superuser = True
         b.save()
+        p = Participation.objects.get(user=b)
+        self.assertFalse(p.orga)
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)
-        b = Participation.objects.get(user=b)
-        b.is_superuser = False
-        b.orga = True
-        b.save()
+        # login signal should set orga to True due to superuser status
+        self.client.login(username='b', password='b')
+        p = Participation.objects.get(user=b)
+        self.assertTrue(p.orga)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
                                           {'biography': 'foo', 'nootes': 'bar'}).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, '')
