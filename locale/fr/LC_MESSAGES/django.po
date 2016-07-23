@@ -57,7 +57,7 @@ msgstr "Au revoir !"
 #: accounts/templates/accounts/edit_profile.html:11
 #, python-format
 msgid "%(profile)s's profile"
-msgstr "Profile de %(profile)s"
+msgstr "Profil de %(profile)s"
 
 #: accounts/templates/accounts/participation_list.html:32
 msgid "View conversation"
