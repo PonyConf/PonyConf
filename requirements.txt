@@ -4,5 +4,6 @@ django-bootstrap3
 django-bower
 django-registration-redux
 django-select2
+django-avatar
 -e git://github.com/Nim65s/django-YummyEmailOrUsernameInsensitiveAuth.git#egg=django-yeouia
 
