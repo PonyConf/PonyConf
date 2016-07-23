@@ -1,0 +1,14 @@
+from ponyconf.settings import *
+
+SECRET_KEY = 'CHANGE ME'
+
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
+REPLY_EMAIL = 'reply@example.com'
+REPLY_KEY = 'CHANGE ME'
+
+SERVER_EMAIL = 'ponyconf@example.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp'
+
+TIME_ZONE = 'Europe/Paris'
+LANGUAGE_CODE = 'fr-FR'
