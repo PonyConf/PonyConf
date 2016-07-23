@@ -72,7 +72,7 @@
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
             <li{% block registrationtab %}{% endblock %}><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Register" %}</a></li>
-            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
+            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
             {% endif %}
           </ul>
           {% block navbar-right %}{% endblock %}
