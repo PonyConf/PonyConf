@@ -197,4 +197,6 @@ SELECT2_CSS = 'select2/dist/css/select2.min.css'
 AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
 
-ACCOUNT_ACTIVATION_DAYS = 7  # django-registration
+# django-registration
+ACCOUNT_ACTIVATION_DAYS = 7
+INCLUDE_REGISTER_URL = True

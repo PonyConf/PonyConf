@@ -19,8 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
-    url(r'^registration/', include('registration.backends.default.urls')),
-    url(r'^', include('proposals.urls')),
+    url(r'', include('proposals.urls')),
     url(r'^conversations/', include('conversations.urls')),
     url(r'^select2/', include('django_select2.urls')),
 ]

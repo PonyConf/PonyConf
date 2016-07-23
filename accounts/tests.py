@@ -45,7 +45,7 @@ class AccountTests(TestCase):
         self.client.logout()
 
     def test_participant_views(self):
-        self.assertEqual(self.client.get(reverse('register')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('registration_register')).status_code, 200)
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.get(reverse('list-participant')).status_code, 403)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
