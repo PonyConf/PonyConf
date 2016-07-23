@@ -212,7 +212,7 @@ msgstr "Orateurs :"
 #: proposals/templates/proposals/speaker_list.html:15
 #: proposals/templates/proposals/topic_list.html:18
 msgid "talk"
-msgstr "thème"
+msgstr "exposé"
 
 #: proposals/templates/proposals/speaker_list.html:18
 #: proposals/templates/proposals/talk_detail.html:27
