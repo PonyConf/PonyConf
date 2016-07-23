@@ -4,6 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import ugettext_lazy as _
 
 from .decorators import staff_required
 from .forms import (NewParticipationForm, ParticipationForm,
@@ -11,8 +12,8 @@ from .forms import (NewParticipationForm, ParticipationForm,
 from .models import Participation, Profile, User
 from .utils import can_edit_profile, is_orga
 
-RESET_PASSWORD_BUTTON = ('password_reset', 'warning', 'Reset your password')
-CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', 'Change password')
+RESET_PASSWORD_BUTTON = ('password_reset', 'warning', _('Reset your password'))
+CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', _('Change password'))
 
 
 @login_required

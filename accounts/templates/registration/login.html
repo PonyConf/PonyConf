@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 i18n %}
 
 {% block logintab %} class="active"{% endblock %}
 
@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <h1>
-    Login
+    {% trans "Login" %}
   </h1>
 </div>
 
@@ -22,7 +22,8 @@
 
 <div class="row">
   <div class="col-md-offset-4 col-md-4">
-    You do not have an account yet? Please <a href="{% url 'registration_register' %}">register</a>.
+    {% url 'registration_register' as reg_url %}
+    {% blocktrans %}"You do not have an account yet? Please <a href="{{ reg_url }}">register</a>.{% endblocktrans %}
   </div>
 </div>
 

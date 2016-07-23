@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-23 01:11+0000\n"
+"POT-Creation-Date: 2016-07-23 12:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/models.py:17 proposals/templates/proposals/user_details.html:10
+msgid "Biography"
+msgstr "Biographie"
+
+#: accounts/models.py:54
+msgid "I'm ok to travel by"
+msgstr "J’accepte de voyager en"
+
+#: accounts/models.py:55
+msgid "I can output"
+msgstr "Sortie vidéo"
+
+#: accounts/models.py:57
+msgid "I need sound"
+msgstr "J’ai besoin de son"
+
+#: accounts/models.py:58
+msgid "I'm ok to be recorded on video"
+msgstr "J’accepte d’être enregistré en vidéo"
+
+#: accounts/models.py:59
+msgid "Video licence"
+msgstr "Licence vidéo"
+
+#: accounts/models.py:60 proposals/templates/proposals/user_details.html:17
+msgid "Notes"
+msgstr "Notes"
+
+#: accounts/signals.py:30
+msgid "Welcome!"
+msgstr "Bienvenue !"
+
+#: accounts/signals.py:35
+msgid "Goodbye!"
+msgstr "Au revoir !"
 
 #: accounts/templates/accounts/participation_list.html:32
 msgid "View conversation"
@@ -31,6 +67,48 @@ msgstr "Se désabonner de la discussion"
 #: conversations/templates/conversations/correspondents.html:31
 msgid "Subscribe to conversation"
 msgstr "S’abonner à la discussion"
+
+#: accounts/templates/accounts/profile.html:12
+msgid "Profile"
+msgstr "Profile"
+
+#: accounts/templates/registration/login.html:11
+#: ponyconf/templates/base.html:76
+msgid "Login"
+msgstr "Se connecter"
+
+#: accounts/templates/registration/login.html:26
+#, python-format
+msgid ""
+"\"You do not have an account yet? Please <a href=\"%(reg_url)s\">register</"
+"a>."
+msgstr "Pas encore de compte ? <a href=\"%(reg_url)s\">Enregistrez-vous</a>."
+
+#: accounts/templates/registration/password_change_form.html:9
+msgid "Password Change"
+msgstr "Changement de mot de passe"
+
+#: accounts/templates/registration/password_reset_form.html:9
+msgid "Password Reset"
+msgstr "Réinitialisation du mot de passe"
+
+#: accounts/templates/registration/registration_form.html:11
+msgid "Registration"
+msgstr "Inscription"
+
+#: accounts/templates/registration/registration_form.html:26
+#, python-format
+msgid ""
+"You already have an account? Please <a href=\"%(login_url)s\">login</a>."
+msgstr "Déjà inscrit ? <a href=\"%(login_url)s\">Connectez-vous</a>."
+
+#: accounts/views.py:15
+msgid "Reset your password"
+msgstr "Réinitialiser son mot de passe"
+
+#: accounts/views.py:16
+msgid "Change password"
+msgstr "Changer son mot de passe"
 
 #: conversations/templates/conversations/_message_form.html:4
 msgid "Send a message"
@@ -69,6 +147,14 @@ msgstr "Anglais"
 msgid "French"
 msgstr "Français"
 
+#: ponyconf/templates/_form.html:11
+msgid "Submit"
+msgstr "Envoyer"
+
+#: ponyconf/templates/_form.html:15
+msgid "Cancel"
+msgstr "Annuler"
+
 #: ponyconf/templates/base.html:45
 msgid "Home"
 msgstr "Accueil"
@@ -88,11 +174,7 @@ msgstr "Orateurs"
 
 #: ponyconf/templates/base.html:75
 msgid "Register"
-msgstr "S’enregistrer"
-
-#: ponyconf/templates/base.html:76
-msgid "Login"
-msgstr "Se connecter"
+msgstr "S’inscrire"
 
 #: ponyconf/templates/base.html:101
 msgid "Powered by"
@@ -198,14 +280,6 @@ msgstr "Aucun thèmes."
 #: proposals/templates/proposals/topic_list.html:29
 msgid "Add a topic"
 msgstr "Ajouter un thème"
-
-#: proposals/templates/proposals/user_details.html:10
-msgid "Biography"
-msgstr "Biographie"
-
-#: proposals/templates/proposals/user_details.html:17
-msgid "Notes"
-msgstr "Notes"
 
 #: proposals/templates/proposals/user_details.html:19
 msgid "Edit"

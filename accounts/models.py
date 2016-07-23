@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from ponyconf.utils import PonyConfModel, enum_to_choices
 
@@ -13,7 +14,7 @@ from .utils import generate_user_uid
 class Profile(PonyConfModel):
 
     user = models.OneToOneField(User)
-    biography = models.TextField(blank=True, verbose_name='Biography')
+    biography = models.TextField(blank=True, verbose_name=_('Biography'))
     email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
 
     def __str__(self):
@@ -50,13 +51,13 @@ class Participation(PonyConfModel):
 
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
-    transport = models.ManyToManyField(Transport, verbose_name="I'm ok to travel by", blank=True)
-    connector = models.ManyToManyField(Connector, verbose_name="I can output", blank=True)
+    transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
+    connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)
     constraints = models.TextField(blank=True)
-    sound = models.BooleanField("I need sound", default=False)
-    videotaped = models.BooleanField("I'm ok to be recorded on video", default=True)
-    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1)
-    notes = models.TextField(default='', blank=True)
+    sound = models.BooleanField(_("I need sound"), default=False)
+    videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
+    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1, verbose_name=_("Video licence"))
+    notes = models.TextField(default='', blank=True, verbose_name=_("Notes"))
     orga = models.BooleanField(default=False)
 
     class Meta:

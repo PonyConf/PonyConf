@@ -2,8 +2,6 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 
-#from registration.backends.default import views as registration_views
-
 from . import views
 
 urlpatterns = [
