@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.utils.translation import ugettext as _
 
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 
@@ -34,7 +35,7 @@ def talk_list(request):
 def talk_list_by_topic(request, topic):
     topic = get_object_or_404(Topic, slug=topic)
     talks = allowed_talks(Talk.objects.filter(site=topic.site, topics=topic), request)
-    return render(request, 'proposals/talk_list.html', {'title': 'Talks related to %s:' % topic, 'talk_list': talks})
+    return render(request, 'proposals/talk_list.html', {'title': _('Talks related to %s:') % topic, 'talk_list': talks})
 
 
 @login_required
@@ -53,13 +54,13 @@ def talk_edit(request, talk=None):
         if hasattr(talk, 'id'):
             talk = form.save()
             talk_edited.send(talk.__class__, instance=talk, author=request.user)
-            messages.success(request, 'Talk modified successfully!')
+            messages.success(request, _('Talk modified successfully!'))
         else:
             form.instance.site = get_current_site(request)
             form.instance.proposer = request.user
             talk = form.save()
             talk_added.send(talk.__class__, instance=talk, author=request.user)
-            messages.success(request, 'Talk proposed successfully!')
+            messages.success(request, _('Talk proposed successfully!'))
         return redirect(talk.get_absolute_url())
     return render(request, 'proposals/talk_edit.html', {
         'form': form,
@@ -127,7 +128,7 @@ def vote(request, talk, score):
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
-    messages.success(request, "Vote successfully %s" % ('created' if created else 'updated'))
+    messages.success(request, _('Vote successfully created') if created else _('Vote successfully updated'))
     return redirect(talk.get_absolute_url())
 
 

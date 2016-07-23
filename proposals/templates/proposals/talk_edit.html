@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 staticfiles %}
+{% load bootstrap3 staticfiles i18n %}
 
 {% block talktab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>Propose a talk</h1>
+<h1>{% trans "Propose a talk" %}</h1>
 
 {% include "_form.html" %}
 

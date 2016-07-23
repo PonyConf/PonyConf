@@ -1,6 +1,7 @@
+{% load i18n %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    Send a message
+    {% trans "Send a message" %}
   </div>
   <div class="panel-body">
     <form action="{{ form_url }}" method="post" role="form">
@@ -8,7 +9,7 @@
       <div class="form-group">
         <textarea class="form-control" name="content" required></textarea>
       </div>
-      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-envelope"></span> Send</button>
+      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-envelope"></span> {% trans "Send" %}</button>
     </form>
   </div>
 </div>

@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from autoslug import AutoSlugField
 
@@ -18,10 +19,10 @@ class Topic(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=128, verbose_name='Name')
+    name = models.CharField(max_length=128, verbose_name=_('Name'))
     slug = AutoSlugField(populate_from='name', unique=True)
 
-    reviewers = models.ManyToManyField(User, blank=True)
+    reviewers = models.ManyToManyField(User, blank=True, verbose_name=_('Reviewers'))
 
     class Meta:
         unique_together = ('site', 'name')
@@ -40,12 +41,12 @@ class Talk(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     proposer = models.ForeignKey(User, related_name='+')
-    speakers = models.ManyToManyField(User)
-    title = models.CharField(max_length=128, verbose_name='Title')
+    speakers = models.ManyToManyField(User, verbose_name=_('Speakers'))
+    title = models.CharField(max_length=128, verbose_name=_('Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
-    description = models.TextField(blank=True, verbose_name='Description')
-    topics = models.ManyToManyField(Topic, blank=True)
-    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value)
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
+    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value, verbose_name=_('Format'))
     accepted = models.NullBooleanField(default=None)
 
     def __str__(self):

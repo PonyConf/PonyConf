@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 i18n %}
 
 {% block topictab %} class="active"{% endblock %}
 
@@ -11,7 +11,7 @@
 
 {% block content %}
 
-<h1>Topic</h1>
+<h1>{% trans "Topic" %}</h1>
 
 {% include "_form.html" %}
 

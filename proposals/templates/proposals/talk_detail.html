@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block talktab %} class="active"{% endblock %}
 
 {% block content %}
@@ -12,21 +14,21 @@
 
 <p>{{ talk.get_event_display }}</p>
 
-<h3>Description:</h3>
+<h3>{% trans "Description:" %}</h3>
 
 <p>{{ talk.description }}</p>
 
-<h3>Speakers:</h3>
+<h3>{% trans "Speakers:" %}</h3>
 
 <ul>
 {% for speaker in talk.speakers.all %}
     <li><a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a></li>
 {% empty %}
-    <li><i>No speaker.</i></li>
+    <li><i>{% trans "No speakers." %}</i></li>
 {% endfor %}
 </ul>
 
-<h3>Topics:</h3>
+<h3>{% trans "Topics:" %}</h3>
 
 <ul>
 {% for topic in talk.topics.all %}
@@ -35,9 +37,9 @@
 </ul>
 
 {% if moderate_perm %}
-<h2>Moderation</h2>
+<h2>{% trans "Moderation" %}</h2>
 
-<h3>Vote:</h3>
+<h3>{% trans "Vote:" %}</h3>
 <div class="btn-group" role="group" aria-label="vote">
   <a class="btn {% if vote.vote == -2 %} active {% endif %}btn-danger"  href="{% url 'vote' talk=talk.slug score='-2' %}">-2</a>
   <a class="btn {% if vote.vote == -1 %} active {% endif %}btn-warning" href="{% url 'vote' talk=talk.slug score='-1' %}">-1</a>
@@ -46,12 +48,12 @@
   <a class="btn {% if vote.vote == 2 %}  active {% endif %}btn-success" href="{% url 'vote' talk=talk.slug score='2'  %}">+2</a>
 </div>
 
-Sum: {{ talk.score }}
+{% trans "Sum:" %} {{ talk.score }}
 
-<h3>Status:</h3>
+<h3>{% trans "Status:" %}</h3>
 {{ talk.accepted|yesno:"✔,✘,?" }}
 
-<h3>Messages:</h3>
+<h3>{% trans "Messages:" %}</h3>
 {% for message in talk.conversation.messages.all %}
 {% include 'conversations/_message_detail.html' %}
 {% endfor %}

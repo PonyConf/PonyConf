@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block speakertab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>Speakers:</h1>
+<h1>{% trans "Speakers:" %}</h1>
 
 <ul>
 {% for speaker in user_list %}
     <li>
         <a href="{% url 'show-speaker' username=speaker.username %}">{{ speaker.profile }}</a>
-        ({{ speaker.talk_set.count }} talk{{ speaker.talk_set.count|pluralize }})
+        ({{ speaker.talk_set.count }} {% trans "talk" %}{{ speaker.talk_set.count|pluralize }})
     </li>
 {% empty %}
-    <li><i>No speakers.</i></li>
+    <li><i>{% trans "No speakers." %}</i></li>
 {% endfor %}
 </ul>
 

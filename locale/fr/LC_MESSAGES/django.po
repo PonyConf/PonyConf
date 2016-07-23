@@ -1,0 +1,233 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2016
+# This file is distributed under the same license as the PonyConf package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-07-23 01:11+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/templates/accounts/participation_list.html:32
+msgid "View conversation"
+msgstr "Afficher la discussion"
+
+#: accounts/templates/accounts/participation_list.html:35
+#: conversations/templates/conversations/correspondents.html:29
+msgid "Unsubscribe to conversation"
+msgstr "Se désabonner de la discussion"
+
+#: accounts/templates/accounts/participation_list.html:39
+#: conversations/templates/conversations/correspondents.html:31
+msgid "Subscribe to conversation"
+msgstr "S’abonner à la discussion"
+
+#: conversations/templates/conversations/_message_form.html:4
+msgid "Send a message"
+msgstr "Envoyer un message"
+
+#: conversations/templates/conversations/_message_form.html:12
+msgid "Send"
+msgstr "Envoyer"
+
+#: conversations/templates/conversations/conversation.html:10
+msgid "Messaging"
+msgstr "Messagerie"
+
+#: conversations/templates/conversations/conversation.html:12
+msgid "Go back to correspondents list"
+msgstr "Retourner à la liste des correspondants"
+
+#: conversations/templates/conversations/correspondents.html:10
+msgid "Correspondents"
+msgstr "Correspondants"
+
+#: conversations/templates/conversations/correspondents.html:11
+msgid "This is the list of participants that you follow."
+msgstr "Ceci est la liste des participants que vous suivez"
+
+#: conversations/templates/conversations/inbox.html:9
+msgid "You can use this page to communicate with the staff."
+msgstr ""
+"Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
+
+#: ponyconf/settings.py:135
+msgid "English"
+msgstr "Anglais"
+
+#: ponyconf/settings.py:136
+msgid "French"
+msgstr "Français"
+
+#: ponyconf/templates/base.html:45
+msgid "Home"
+msgstr "Accueil"
+
+#: ponyconf/templates/base.html:47
+#: proposals/templates/proposals/user_details.html:13
+msgid "Talks"
+msgstr "Exposés"
+
+#: ponyconf/templates/base.html:48 proposals/models.py:48
+msgid "Topics"
+msgstr "Thèmes"
+
+#: ponyconf/templates/base.html:50 proposals/models.py:44
+msgid "Speakers"
+msgstr "Orateurs"
+
+#: ponyconf/templates/base.html:75
+msgid "Register"
+msgstr "S’enregistrer"
+
+#: ponyconf/templates/base.html:76
+msgid "Login"
+msgstr "Se connecter"
+
+#: ponyconf/templates/base.html:101
+msgid "Powered by"
+msgstr "Propulsé par"
+
+#: proposals/models.py:22
+msgid "Name"
+msgstr "Nom"
+
+#: proposals/models.py:25
+msgid "Reviewers"
+msgstr "Responsables"
+
+#: proposals/models.py:45
+msgid "Title"
+msgstr "Titre"
+
+#: proposals/models.py:47
+msgid "Description"
+msgstr "Description"
+
+#: proposals/models.py:49
+msgid "Format"
+msgstr "Format"
+
+#: proposals/templates/proposals/_talk_list.html:24
+msgid "No talks"
+msgstr "Aucun thème"
+
+#: proposals/templates/proposals/speaker_list.html:9
+#: proposals/templates/proposals/talk_detail.html:21
+msgid "Speakers:"
+msgstr "Orateurs :"
+
+#: proposals/templates/proposals/speaker_list.html:15
+#: proposals/templates/proposals/topic_list.html:18
+msgid "talk"
+msgstr "thème"
+
+#: proposals/templates/proposals/speaker_list.html:18
+#: proposals/templates/proposals/talk_detail.html:27
+msgid "No speakers."
+msgstr "Aucun orateur."
+
+#: proposals/templates/proposals/talk_detail.html:17
+msgid "Description:"
+msgstr "Description :"
+
+#: proposals/templates/proposals/talk_detail.html:31
+#: proposals/templates/proposals/topic_list.html:9
+msgid "Topics:"
+msgstr "Thèmes :"
+
+#: proposals/templates/proposals/talk_detail.html:40
+msgid "Moderation"
+msgstr "Modération"
+
+#: proposals/templates/proposals/talk_detail.html:42
+msgid "Vote:"
+msgstr "Vote :"
+
+#: proposals/templates/proposals/talk_detail.html:51
+msgid "Sum:"
+msgstr "Somme :"
+
+#: proposals/templates/proposals/talk_detail.html:53
+msgid "Status:"
+msgstr "Status :"
+
+#: proposals/templates/proposals/talk_detail.html:56
+msgid "Messages:"
+msgstr "Messages :"
+
+#: proposals/templates/proposals/talk_edit.html:9
+#: proposals/templates/proposals/talks.html:9
+msgid "Propose a talk"
+msgstr "Proposer un exposé"
+
+#: proposals/templates/proposals/talks.html:12
+msgid "My participing talks:"
+msgstr "Exposés auquels je participe :"
+
+#: proposals/templates/proposals/talks.html:17
+msgid "Others talks:"
+msgstr "Autres exposés :"
+
+#: proposals/templates/proposals/topic_form.html:14
+msgid "Topic"
+msgstr "Thème"
+
+#: proposals/templates/proposals/topic_list.html:16
+msgid "reviewer"
+msgstr "Responsable"
+
+#: proposals/templates/proposals/topic_list.html:17
+msgid "and"
+msgstr "et"
+
+#: proposals/templates/proposals/topic_list.html:24
+msgid "No topics."
+msgstr "Aucun thèmes."
+
+#: proposals/templates/proposals/topic_list.html:29
+msgid "Add a topic"
+msgstr "Ajouter un thème"
+
+#: proposals/templates/proposals/user_details.html:10
+msgid "Biography"
+msgstr "Biographie"
+
+#: proposals/templates/proposals/user_details.html:17
+msgid "Notes"
+msgstr "Notes"
+
+#: proposals/templates/proposals/user_details.html:19
+msgid "Edit"
+msgstr "Éditer"
+
+#: proposals/views.py:38
+#, python-format
+msgid "Talks related to %s:"
+msgstr "Exposés portant sur la thèmatique %s :"
+
+#: proposals/views.py:57
+msgid "Talk modified successfully!"
+msgstr "Exposé modifié avec succès !"
+
+#: proposals/views.py:63
+msgid "Talk proposed successfully!"
+msgstr "Exposé proposé avec succès !"
+
+#: proposals/views.py:131
+msgid "Vote successfully created"
+msgstr "A voté !"
+
+#: proposals/views.py:131
+msgid "Vote successfully updated"
+msgstr "Vote mis à jour"

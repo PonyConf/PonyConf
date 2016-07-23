@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 %}
-{% load accounts_tags %}
+{% load bootstrap3 accounts_tags i18n %}
 
 {% block admintab %} active{% endblock %}
 
@@ -30,14 +29,14 @@
       {% endif %}{% endfor %}</td>
     <td>
       <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom"
-        title="View conversation"><span class="glyphicon glyphicon-envelope"></span></a>
+        title="{% trans "View conversation" %}"><span class="glyphicon glyphicon-envelope"></span></a>
       {% if request.user in participation.conversation.subscribers.all %}
       <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
-        data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation">
+        data-toggle="tooltip" data-placement="bottom" title="{% trans "Unsubscribe to conversation" %}">
         <span class="glyphicon glyphicon-star"></span></a>
       {% else %}
       <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
-        data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation">
+        data-toggle="tooltip" data-placement="bottom" title="{% trans "Subscribe to conversation" %}">
         <span class="glyphicon glyphicon-star-empty"></span></a>
       {% endif %}
     </td>

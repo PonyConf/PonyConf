@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 i18n %}
 
 {% block admintab %} active{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
-  <h1>Correspondents</h1>
-  This is the list of participants that you follow.
+  <h1>{% trans "Correspondents" %}</h1>
+  {% trans "This is the list of participants that you follow." %}
 </div>
 
 <table class="table table-striped">
@@ -26,9 +26,9 @@
     <td>
       <a href="{% url 'conversation' correspondent.user.username %}"><span class="glyphicon glyphicon-envelope"></span></a>
       {% if request.user in correspondent.conversation.subscribers.all %}
-      <a href="{% url 'unsubscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="Unsubscribe to conversation"><span class="glyphicon glyphicon-star"></span></a>
+      <a href="{% url 'unsubscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="{% trans "Unsubscribe to conversation" %}"><span class="glyphicon glyphicon-star"></span></a>
       {% else %}
-      <a href="{% url 'subscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="Subscribe to conversation"><span class="glyphicon glyphicon-star-empty"></span></a>
+      <a href="{% url 'subscribe-conversation' correspondent.user.username %}?next={% url 'correspondents' %}" data-toggle="tooltip" data-placement="bottom" title="{% trans "Subscribe to conversation" %}"><span class="glyphicon glyphicon-star-empty"></span></a>
       {% endif %}
     </td>
   </tr>

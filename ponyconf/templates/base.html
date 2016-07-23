@@ -1,6 +1,4 @@
-{% load staticfiles %}
-{% load bootstrap3 %}
-{% load accounts_tags %}
+{% load staticfiles bootstrap3 accounts_tags i18n %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -43,12 +41,12 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">Home</a></li>
+            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
             {% if request.user.is_authenticated %}
-            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">Talks</a></li>
-            <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">Topics</a></li>
+            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">{% trans "Talks" %}</a></li>
+            <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">{% trans "Topics" %}</a></li>
             {% if request|staff %}
-            <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">Speakers</a></li>
+            <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">{% trans "Speakers" %}</a></li>
             {% endif %}
             {% endif %}
             {% block navbar-left %}{% endblock %}
@@ -73,8 +71,8 @@
             <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ request.user.username }}</a></li>
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
-            <li{% block registrationtab %}{% endblock %}><a href="{% url 'register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;Register</a></li>
-            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+            <li{% block registrationtab %}{% endblock %}><a href="{% url 'register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Register" %}</a></li>
+            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
             {% endif %}
           </ul>
           {% block navbar-right %}{% endblock %}
@@ -99,7 +97,7 @@
       <hr>
 
       <footer>
-        <p class="text-muted">Powered by <a href="https://github.com/toulibre/ponyconf">PonyConf</a></p>
+        <p class="text-muted">{% trans "Powered by" %} <a href="https://github.com/toulibre/ponyconf">PonyConf</a></p>
       </footer>
 
     </div> <!-- /container -->
