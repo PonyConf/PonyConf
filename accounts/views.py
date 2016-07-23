@@ -39,7 +39,7 @@ def profile(request):
 @staff_required
 def participation_list(request):
     participation_list = Participation.objects.filter(site=get_current_site(request)).all()
-    form = NewParticipationForm(request.POST or None)
+    form = NewParticipationForm(request.POST or None, site=get_current_site(request))
 
     if request.method == 'POST' and form.is_valid():
         if not Participation.objects.get(user=request.user, site=get_current_site(request)).is_orga():

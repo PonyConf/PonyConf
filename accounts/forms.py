@@ -30,6 +30,9 @@ class ParticipationField(forms.ModelChoiceField):
 
 
 class NewParticipationForm(forms.Form):
-
-    participant = ParticipationField(User.objects.all(), widget=Select2Widget(),
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        queryset = User.objects.exclude(participation__site=site).all()
+        self.fields['participant'] = ParticipationField(queryset, widget=Select2Widget(),
                                      label='Add participant from existing account')
