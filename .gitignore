@@ -5,4 +5,5 @@
 *.pyc
 *.swp
 *.sqlite3
+/media/avatars/
 ponyconf/*_settings.py

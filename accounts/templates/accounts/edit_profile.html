@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block speakertab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{{ profile }}</h1>
-
-{% include "_form.html" %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>{% blocktrans %}{{ profile }}'s profile{% endblocktrans %}</h3>
+  </div>
+  <div class="panel-body">
+    {% include "_form.html" %}
+  </div>
+</div>
 
 {% endblock %}

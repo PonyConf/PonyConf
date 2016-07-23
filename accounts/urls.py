@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     url(r'^admin/participants/$', views.participation_list, name='list-participant'),
     url(r'^admin/participant/(?P<username>[\w.@+-]+)$', views.edit, name='edit-participant'),
+    url(r'^avatar/', include('avatar.urls')),
     url(r'', include('django.contrib.auth.urls')),
     url(r'', include('registration.backends.default.urls')),
 ]

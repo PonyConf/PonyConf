@@ -1,6 +1,7 @@
 {% load bootstrap3 i18n %}
 <form action="" method="post" class="form-horizontal">
   {% csrf_token %}
+  {% block beforeform %}{% endblock %}
   {% if form %}
   {% bootstrap_form form layout="horizontal" %}
   {% endif %}

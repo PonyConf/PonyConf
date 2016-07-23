@@ -14,6 +14,7 @@ from .utils import can_edit_profile, is_orga
 
 RESET_PASSWORD_BUTTON = ('password_reset', 'warning', _('Reset your password'))
 CHANGE_PASSWORD_BUTTON = ('password_change', 'warning', _('Change password'))
+CHANGE_AVATAR_BUTTON = ('avatar_change', 'default', _('Change avatar'))
 
 
 @login_required
