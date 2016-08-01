@@ -7,11 +7,11 @@ def generate_user_uid():
 
 
 def is_orga(request, user):
-    return user.is_authenticated() and user.participation_set.get(site=get_current_site(request)).is_orga()
+    return user.is_authenticated and user.participation_set.get(site=get_current_site(request)).is_orga()
 
 
 def is_staff(request, user):
-    return user.is_authenticated() and user.participation_set.get(site=get_current_site(request)).is_staff()
+    return user.is_authenticated and user.participation_set.get(site=get_current_site(request)).is_staff()
 
 
 def can_edit_profile(request, profile):
