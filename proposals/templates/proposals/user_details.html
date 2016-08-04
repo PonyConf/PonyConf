@@ -7,7 +7,7 @@
 
 <h1>{{ profile }}</h1>
 
-<img class="pull-right" src="{% avatar_url request.user 160 %}" />
+<img class="pull-right" src="{% avatar_url profile.user 160 %}" />
 
 <h2>{% trans "Biography" %}</h2>
 <p>{{ profile.biography }}</p>

@@ -19,4 +19,5 @@ cd PonyConf
 pip install -U -r requirements.txt
 ./manage.py migrate
 ./manage.py runserver
+./manage.py createsuperuser
 ```
