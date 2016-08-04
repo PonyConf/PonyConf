@@ -250,7 +250,7 @@ msgstr "Format"
 
 #: proposals/templates/proposals/_talk_list.html:24
 msgid "No talks"
-msgstr "Aucun thème"
+msgstr "Aucun exposé"
 
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:21
