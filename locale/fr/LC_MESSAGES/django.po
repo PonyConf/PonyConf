@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-05 19:52+0000\n"
+"POT-Creation-Date: 2016-08-05 21:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,6 +253,11 @@ msgstr "Format"
 #: proposals/templates/proposals/_talk_list.html:24
 msgid "No talks"
 msgstr "Aucun exposé"
+
+#: proposals/templates/proposals/home.html:7
+#, python-format
+msgid "Welcome to %(site.name)s!"
+msgstr "Bienvenue à la conférence %(site.name)s!"
 
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:21
