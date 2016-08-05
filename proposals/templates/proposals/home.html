@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block hometab %} class="active"{% endblock %}
 
 {% block content %}
 
-<div class="h1">Welcome to {{ site.name }}!</div>
+<div class="h1">{% blocktrans %}Welcome to {{ site.name }}!{% endblocktrans %}</div>
 
 Some general informations about the conference {{ site.name }}.
 
