@@ -1,8 +1,7 @@
 {% load i18n %}
-<ul>
   {% regroup talk_list by event as event_list %}
   {% for event in event_list %}
-  <li>{{ event.list.0.get_event_display }}
+  <h3>{{ event.list.0.get_event_display }}</h3>
     <ul>{% for talk in event.list %}
       <li>
         {{ talk.get_link }}
@@ -22,5 +21,4 @@
       {% endfor %}
     </ul>
     {% empty %}{% trans "No talks" %}
-  </li>{% endfor %}
-</ul>
+  {% endfor %}

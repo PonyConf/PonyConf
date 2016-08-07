@@ -6,16 +6,18 @@
 
 {% block content %}
 
+<h1>{% trans "Talks" %}</h1>
+
 <a class="btn btn-success" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
 
 {% if my_talks %}
-<div class="h3">{% trans "My participing talks:" %}</div>
-{% include "proposals/_talk_list.html" with talk_list=my_talks %}
+  <h2>{% trans "My participing talks" %}</h2>
+  {% include "proposals/_talk_list.html" with talk_list=my_talks %}
 {% endif %}
 
 {% if other_talks %}
-<div class="h3">{% trans "Others talks:" %}</div>
-{% include "proposals/_talk_list.html" with talk_list=other_talks %}
+  <h2>{% trans "Others talks" %}</h2>
+  {% include "proposals/_talk_list.html" with talk_list=other_talks %}
 {% endif %}
 
 {% endblock %}
