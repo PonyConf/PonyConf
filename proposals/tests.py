@@ -11,7 +11,7 @@ from .models import Talk, Topic, Vote
 class ProposalsTests(TestCase):
     def setUp(self):
         a, b, c = (User.objects.create_user(guy, email='%s@example.org' % guy, password=guy) for guy in 'abc')
-        Topic.objects.create(name='topipo', site=Site.objects.first())
+        Topic.objects.create(name='topipo', description='super topic', site=Site.objects.first())
         c.is_superuser = True
         c.save()
 

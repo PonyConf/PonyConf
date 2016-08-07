@@ -21,6 +21,7 @@ class Topic(PonyConfModel):
 
     name = models.CharField(max_length=128, verbose_name=_('Name'))
     slug = AutoSlugField(populate_from='name', unique=True)
+    description = models.TextField(blank=True, verbose_name=_('Description'))
 
     reviewers = models.ManyToManyField(User, blank=True, verbose_name=_('Reviewers'))
 
