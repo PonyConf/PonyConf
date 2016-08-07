@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-05 21:53+0000\n"
+"POT-Creation-Date: 2016-08-07 07:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "J’accepte de voyager en"
 #: accounts/models.py:55
 msgid "I can output"
 msgstr "Sortie vidéo"
+
+#: accounts/models.py:56
+msgid "Constraints"
+msgstr "Contraintes"
 
 #: accounts/models.py:57
 msgid "I need sound"
@@ -254,7 +258,7 @@ msgstr "Format"
 msgid "No talks"
 msgstr "Aucun exposé"
 
-#: proposals/templates/proposals/home.html:7
+#: proposals/templates/proposals/home.html:9
 #, python-format
 msgid "Welcome to %(site.name)s!"
 msgstr "Bienvenue à la conférence %(site.name)s!"
