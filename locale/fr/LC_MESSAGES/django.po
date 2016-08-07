@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 07:11+0000\n"
+"POT-Creation-Date: 2016-08-07 21:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,9 @@ msgstr ""
 #: accounts/forms.py:19
 msgid ""
 "For example, you need to be back on saturday evening, you cannot eat meat."
-msgstr "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de viande, etc."
+msgstr ""
+"Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
+"viande, etc."
 
 #: accounts/models.py:17 proposals/templates/proposals/user_details.html:12
 msgid "Biography"
@@ -55,11 +57,11 @@ msgstr "Licence vidéo"
 msgid "Notes"
 msgstr "Notes"
 
-#: accounts/signals.py:30
+#: accounts/signals.py:31
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: accounts/signals.py:35
+#: accounts/signals.py:36
 msgid "Goodbye!"
 msgstr "Au revoir !"
 
@@ -223,11 +225,12 @@ msgstr "Accueil"
 msgid "Talks"
 msgstr "Exposés"
 
-#: ponyconf/templates/base.html:48 proposals/models.py:48
+#: ponyconf/templates/base.html:48 proposals/models.py:58
+#: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
 
-#: ponyconf/templates/base.html:50 proposals/models.py:44
+#: ponyconf/templates/base.html:50 proposals/models.py:54
 msgid "Speakers"
 msgstr "Orateurs"
 
@@ -239,23 +242,23 @@ msgstr "S’inscrire"
 msgid "Powered by"
 msgstr "Propulsé par"
 
-#: proposals/models.py:22
+#: proposals/models.py:31
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:25
-msgid "Reviewers"
-msgstr "Responsables"
-
-#: proposals/models.py:45
-msgid "Title"
-msgstr "Titre"
-
-#: proposals/models.py:47
+#: proposals/models.py:33 proposals/models.py:57
 msgid "Description"
 msgstr "Description"
 
-#: proposals/models.py:49
+#: proposals/models.py:35
+msgid "Reviewers"
+msgstr "Responsables"
+
+#: proposals/models.py:55
+msgid "Title"
+msgstr "Titre"
+
+#: proposals/models.py:59
 msgid "Format"
 msgstr "Format"
 
@@ -274,7 +277,8 @@ msgid "Speakers:"
 msgstr "Orateurs :"
 
 #: proposals/templates/proposals/speaker_list.html:15
-#: proposals/templates/proposals/topic_list.html:18
+#: proposals/templates/proposals/topic_list.html:23
+#: proposals/templates/proposals/topic_list.html:25
 msgid "talk"
 msgstr "exposé"
 
@@ -288,7 +292,6 @@ msgid "Description:"
 msgstr "Description :"
 
 #: proposals/templates/proposals/talk_detail.html:31
-#: proposals/templates/proposals/topic_list.html:9
 msgid "Topics:"
 msgstr "Thèmes :"
 
@@ -329,21 +332,17 @@ msgstr "Autres exposés :"
 msgid "Topic"
 msgstr "Thème"
 
-#: proposals/templates/proposals/topic_list.html:16
+#: proposals/templates/proposals/topic_list.html:12
+msgid "Add a topic"
+msgstr "Ajouter un thème"
+
+#: proposals/templates/proposals/topic_list.html:21
 msgid "reviewer"
 msgstr "Responsable"
 
-#: proposals/templates/proposals/topic_list.html:17
-msgid "and"
-msgstr "et"
-
-#: proposals/templates/proposals/topic_list.html:24
+#: proposals/templates/proposals/topic_list.html:29
 msgid "No topics."
 msgstr "Aucun thèmes."
-
-#: proposals/templates/proposals/topic_list.html:29
-msgid "Add a topic"
-msgstr "Ajouter un thème"
 
 #: proposals/templates/proposals/user_details.html:21
 msgid "Edit"
@@ -352,7 +351,7 @@ msgstr "Éditer"
 #: proposals/views.py:38
 #, python-format
 msgid "Talks related to %s:"
-msgstr "Exposés portant sur la thèmatique %s :"
+msgstr "Exposés portant sur la thématique %s :"
 
 #: proposals/views.py:57
 msgid "Talk modified successfully!"
@@ -369,3 +368,9 @@ msgstr "A voté !"
 #: proposals/views.py:131
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
+
+#~ msgid "see details"
+#~ msgstr "voir en détail"
+
+#~ msgid "and"
+#~ msgstr "et"

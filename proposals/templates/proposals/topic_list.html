@@ -1,32 +1,35 @@
 {% extends 'base.html' %}
 
-{% load accounts_tags i18n %}
+{% load bootstrap3 accounts_tags i18n %}
 
 {% block topictab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Topics:" %}</h1>
-
-<ul>
-  {% for topic in topic_list %}
-  <li>
-    {% if request|staff %}
-        {{ topic }}:
-        <a href="{% url 'edit-topic' topic.slug %}">{{ topic.reviewers.count }} {% trans "reviewer" %}{{ topic.reviewers.count|pluralize }}</a>
-        {% trans "and" %}
-        <a href="{{ topic.get_absolute_url }}">{{ topic.talk_set.count }} {% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
-    {% else %}
-        <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>
-    {% endif %}
-  </li>
-  {% empty %}
-  <li><i>{% trans "No topics." %}</i></li>
-  {% endfor %}
-</ul>
+<h1>{% trans "Topics" %}</h1>
 
 {% if request|orga %}
-<a href="{% url 'add-topic' %}" class="btn btn-success">{% trans "Add a topic" %}</a>
+<p><a href="{% url 'add-topic' %}" class="btn btn-success">{% trans "Add a topic" %}</a><p>
 {% endif %}
+
+<div class="row">
+  {% for topic in topic_list %}
+  <div class="col-xs-6 col-sm-4">
+    <h2>{{ topic }}</h2>
+    <p>{{ topic.description }}</p>
+    {% if request|staff %}
+        {{ topic.reviewers.count }} {% trans "reviewer" %}{{ topic.reviewers.count|pluralize }}
+        |
+        <a href="{{ topic.get_absolute_url }}">{{ topic.talk_set.count }} {% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
+        |
+        <a href="{% url 'edit-topic' topic.slug %}">{% bootstrap_icon "pencil" %}</a>
+    {% else %}
+        <a href="{{ topic.get_absolute_url }}">{% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
+    {% endif %}
+  </div><div class="{% cycle '' 'clearfix visible-xs' 'clearfix hidden-xs' %}"></div>
+  {% empty %}
+  <div><em>{% trans "No topics." %}</em></div>
+  {% endfor %}
+</div>
 
 {% endblock %}
