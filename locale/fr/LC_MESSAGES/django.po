@@ -265,8 +265,8 @@ msgstr "Aucun exposé"
 
 #: proposals/templates/proposals/home.html:9
 #, python-format
-msgid "Welcome to %(site.name)s!"
-msgstr "Bienvenue à la conférence %(site.name)s!"
+msgid "Welcome to %(confname)s!"
+msgstr "Bienvenue à la conférence %(confname)s !"
 
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:21

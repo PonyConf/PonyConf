@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="h1">{% blocktrans %}Welcome to {{ site.name }}!{% endblocktrans %}</div>
+<div class="h1">{% blocktrans with confname=site.name %}Welcome to {{ confname }}!{% endblocktrans %}</div>
 
 Some general informations about the conference {{ site.name }}.
 
