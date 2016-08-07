@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.models import modelform_factory
+from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2Widget
 
@@ -13,7 +14,10 @@ ProfileForm = modelform_factory(Profile, fields=['biography'])
 ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'videotaped',
                                                              'video_licence', 'constraints'],
                                       widgets={'transport': forms.CheckboxSelectMultiple(),
-                                               'connector': forms.CheckboxSelectMultiple()})
+                                               'connector': forms.CheckboxSelectMultiple()},
+                                      help_texts = {
+                                      'constraints': _('For example, you need to be back on saturday evening, you cannot eat meat.'),
+                                      })
 
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography'])
 

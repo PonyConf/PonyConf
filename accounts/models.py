@@ -53,7 +53,7 @@ class Participation(PonyConfModel):
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
     connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)
-    constraints = models.TextField(blank=True)
+    constraints = models.TextField(blank=True, verbose_name=_("Constraints"))
     sound = models.BooleanField(_("I need sound"), default=False)
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1, verbose_name=_("Video licence"))
