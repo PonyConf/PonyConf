@@ -7,4 +7,7 @@ django-registration-redux
 django-select2
 django-avatar
 
+markdown
+bleach
+
 -e git://github.com/Nim65s/django-YummyEmailOrUsernameInsensitiveAuth.git#egg=django-yeouia

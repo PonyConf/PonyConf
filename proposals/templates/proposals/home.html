@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load proposals_tags i18n %}
 
 {% block hometab %} class="active"{% endblock %}
 
@@ -8,6 +8,6 @@
 
 <div class="h1">{% blocktrans with confname=site.name %}Welcome to {{ confname }}!{% endblocktrans %}</div>
 
-Some general informations about the conference {{ site.name }}.
+{% markdown site.conference.home %}
 
 {% endblock %}

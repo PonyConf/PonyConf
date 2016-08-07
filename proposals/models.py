@@ -15,6 +15,15 @@ from ponyconf.utils import PonyConfModel, enum_to_choices
 from .utils import query_sum
 
 
+class Conference(models.Model):
+
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
+    home = models.TextField(blank=True, default="")
+
+    def __str__(self):
+        return str(self.site)
+
+
 class Topic(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)

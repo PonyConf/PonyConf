@@ -1,12 +1,19 @@
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_migrate
 from django.dispatch import Signal, receiver
+from django.contrib.sites.models import Site
 
 from accounts.models import Participation
 
-from .models import Talk, Topic
+from .models import Conference, Talk, Topic
 
 talk_added = Signal(providing_args=["sender", "instance", "author"])
 talk_edited = Signal(providing_args=["sender", "instance", "author"])
+
+
+@receiver(post_migrate)
+def create_conference(sender, **kwargs):
+    for site in Site.objects.all():
+        Conference.objects.get_or_create(site=site)
 
 
 @receiver(m2m_changed, sender=Talk.speakers.through, dispatch_uid="Create Participation for speakers")
