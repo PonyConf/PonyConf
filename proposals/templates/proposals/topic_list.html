@@ -26,9 +26,11 @@
     {% else %}
         <a href="{{ topic.get_absolute_url }}">{% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
     {% endif %}
-  </div><div class="{% cycle '' 'clearfix visible-xs' 'clearfix hidden-xs' %}"></div>
+  </div>
+    {% cycle '' '<div class="clearfix visible-xs"></div>' %}
+    {% cycle '' '' '<div class="clearfix hidden-xs"></div>' %}
   {% empty %}
-  <div><em>{% trans "No topics." %}</em></div>
+  <div class="col-xs-12"><em>{% trans "No topics." %}</em></div>
   {% endfor %}
 </div>
 
