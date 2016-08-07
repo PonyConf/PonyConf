@@ -26,7 +26,7 @@ class TopicCreateForm(ModelForm):
 
     class Meta:
         model = Topic
-        fields = ['name', 'reviewers']
+        fields = ['name', 'description', 'reviewers']
         widgets = {'reviewers': Select2TagWidget()}
 
     def clean_name(self):
