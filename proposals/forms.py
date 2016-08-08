@@ -15,7 +15,7 @@ class TalkForm(ModelForm):
 
     class Meta:
         model = Talk
-        fields = ['title', 'description', 'topics', 'event', 'speakers']
+        fields = ['title', 'abstract', 'description', 'topics', 'notes', 'event', 'speakers']
         widgets = {'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
 
 

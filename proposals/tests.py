@@ -18,11 +18,19 @@ class ProposalsTests(TestCase):
     def test_everything(self):
         # talk-edit
         self.client.login(username='a', password='a')
-        self.client.post(reverse('add-talk'), {'title': 'super talk', 'description': 'super', 'event': 1, 'topics': 1,
-                                               'speakers': 1})
+        self.client.post(reverse('add-talk'),
+                         {'title': 'super talk',
+                          'abstract': 'super',
+                          'description': 'this is my super talk',
+                          'notes': 'you can watch my previous talk videos',
+                          'event': 1,
+                          'topics': 1,
+                          'speakers': 1})
         talk = Talk.objects.first()
         self.assertEqual(str(talk), 'super talk')
-        self.assertEqual(talk.description, 'super')
+        self.assertEqual(talk.abstract, 'super')
+        self.assertEqual(talk.description, 'this is my super talk')
+        self.assertEqual(talk.notes, 'you can watch my previous talk videos')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
                          {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': 1})
         self.assertEqual(str(talk), 'super talk')  # title is read only there
