@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 21:51+0000\n"
+"POT-Creation-Date: 2016-08-08 21:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,8 @@ msgstr "J’accepte d’être enregistré en vidéo"
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:60 proposals/templates/proposals/user_details.html:19
+#: accounts/models.py:60 proposals/models.py:60
+#: proposals/templates/proposals/user_details.html:19
 msgid "Notes"
 msgstr "Notes"
 
@@ -225,7 +226,7 @@ msgstr "Accueil"
 msgid "Talks"
 msgstr "Exposés"
 
-#: ponyconf/templates/base.html:48 proposals/models.py:58
+#: ponyconf/templates/base.html:48 proposals/models.py:59
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
@@ -246,7 +247,7 @@ msgstr "Propulsé par"
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:33 proposals/models.py:57
+#: proposals/models.py:33 proposals/models.py:58
 msgid "Description"
 msgstr "Description"
 
@@ -258,7 +259,11 @@ msgstr "Responsables"
 msgid "Title"
 msgstr "Titre"
 
-#: proposals/models.py:59
+#: proposals/models.py:57
+msgid "Abstract"
+msgstr "Résumé"
+
+#: proposals/models.py:61
 msgid "Format"
 msgstr "Format"
 
@@ -278,7 +283,7 @@ msgstr "Orateurs :"
 
 #: proposals/templates/proposals/speaker_list.html:15
 #: proposals/templates/proposals/topic_list.html:23
-#: proposals/templates/proposals/topic_list.html:25
+#: proposals/templates/proposals/topic_list.html:27
 msgid "talk"
 msgstr "exposé"
 
@@ -340,7 +345,7 @@ msgstr "Ajouter un thème"
 msgid "reviewer"
 msgstr "Responsable"
 
-#: proposals/templates/proposals/topic_list.html:29
+#: proposals/templates/proposals/topic_list.html:33
 msgid "No topics."
 msgstr "Aucun thèmes."
 
