@@ -25,7 +25,10 @@ ParticipationForm = modelform_factory(Participation,
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography'])
 
 ParticipationOrgaForm = modelform_factory(Participation,
-                                          fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence',
+                                          fields=['need_transport', 'transport',
+                                                  'need_hosting', 'homestay',
+                                                  'connector', 'sound', 'videotaped',
+                                                  'video_licence',
                                                   'constraints', 'notes', 'orga'],
                                           widgets={'transport': forms.CheckboxSelectMultiple(),
                                                    'connector': forms.CheckboxSelectMultiple()})
