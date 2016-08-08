@@ -9,7 +9,7 @@
 <h1>{{ talk.title }}</h1>
 
 {% if edit_perm %}
-<a class="btn btn-primary" href="{% url 'edit-talk' talk.slug %}">edit</a><br />
+<a class="btn btn-success" href="{% url 'edit-talk' talk.slug %}">{% trans "Edit" %}</a><br />
 {% endif %}
 
 <p>{{ talk.get_event_display }}</p>
