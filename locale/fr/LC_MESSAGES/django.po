@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-08 21:54+0000\n"
+"POT-Creation-Date: 2016-08-08 22:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,6 +242,14 @@ msgstr "S’inscrire"
 #: ponyconf/templates/base.html:101
 msgid "Powered by"
 msgstr "Propulsé par"
+
+#: proposals/forms.py:22
+msgid "Should be less than 255 characters"
+msgstr "Text court, moins de 255 caractères"
+
+#: proposals/forms.py:23
+msgid "If you want to say some precisions to organizers."
+msgstr "Si vous souhaitez apporter des précisions à l'équipe d'organisation."
 
 #: proposals/models.py:31
 msgid "Name"
