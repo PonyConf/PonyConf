@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-08 22:21+0000\n"
+"POT-Creation-Date: 2016-08-08 22:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: accounts/forms.py:19
+#: accounts/forms.py:22
 msgid ""
 "For example, you need to be back on saturday evening, you cannot eat meat."
 msgstr ""
@@ -29,31 +29,43 @@ msgstr ""
 msgid "Biography"
 msgstr "Biographie"
 
-#: accounts/models.py:54
+#: accounts/models.py:53
+msgid "Need transport?"
+msgstr "Besoin de défraiment pour le transport ?"
+
+#: accounts/models.py:56
 msgid "I'm ok to travel by"
 msgstr "J’accepte de voyager en"
 
-#: accounts/models.py:55
-msgid "I can output"
-msgstr "Sortie vidéo"
+#: accounts/models.py:58
+msgid "Need hosting?"
+msgstr "Besoin d'un hébergement ?"
 
-#: accounts/models.py:56
+#: accounts/models.py:59
+msgid "Ok for homestay?"
+msgstr "Ok pour un logement chez l'habitant ?"
+
+#: accounts/models.py:61
 msgid "Constraints"
 msgstr "Contraintes"
 
-#: accounts/models.py:57
+#: accounts/models.py:62
+msgid "I can output"
+msgstr "Sortie vidéo"
+
+#: accounts/models.py:63
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: accounts/models.py:58
+#: accounts/models.py:65
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: accounts/models.py:59
+#: accounts/models.py:66
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:60 proposals/models.py:60
+#: accounts/models.py:68 proposals/models.py:60
 #: proposals/templates/proposals/user_details.html:19
 msgid "Notes"
 msgstr "Notes"
