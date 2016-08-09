@@ -7,6 +7,10 @@
 
 <h1>{{ profile }}</h1>
 
+{% if request|edit_profile:profile %}
+<a href="{% url 'edit-participant' profile.user.username %}" class="btn btn-success">{% trans "Edit" %}</a>
+{% endif %}
+
 <img class="pull-right" src="{% avatar_url profile.user 160 %}" />
 
 <h2>{% trans "Biography" %}</h2>
@@ -18,7 +22,6 @@
 {% if request|edit_profile:profile %}
 <h2>{% trans "Notes" %}</h2>
 <p>{{ profile.notes }}</p>
-<a href="{% url 'edit-participant' profile.user.username %}" class="btn btn-success">{% trans "Edit" %}</a>
 {% endif %}
 
 
