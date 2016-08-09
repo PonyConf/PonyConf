@@ -11,18 +11,24 @@ UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', '
 
 ProfileForm = modelform_factory(Profile, fields=['biography'])
 
-ParticipationForm = modelform_factory(Participation, fields=['transport', 'connector', 'sound', 'videotaped',
-                                                             'video_licence', 'constraints'],
+ParticipationForm = modelform_factory(Participation,
+                                      fields=['need_transport', 'transport',
+                                              'need_hosting', 'homestay',
+                                              'connector', 'sound', 'videotaped',
+                                              'video_licence', 'constraints'],
                                       widgets={'transport': forms.CheckboxSelectMultiple(),
                                                'connector': forms.CheckboxSelectMultiple()},
                                       help_texts = {
-                                      'constraints': _('For example, you need to be back on saturday evening, you cannot eat meat.'),
+                                            'constraints': _('For example, you need to be back on saturday evening, you cannot eat meat.'),
                                       })
 
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography'])
 
 ParticipationOrgaForm = modelform_factory(Participation,
-                                          fields=['transport', 'connector', 'sound', 'videotaped', 'video_licence',
+                                          fields=['need_transport', 'transport',
+                                                  'need_hosting', 'homestay',
+                                                  'connector', 'sound', 'videotaped',
+                                                  'video_licence',
                                                   'constraints', 'notes', 'orga'],
                                           widgets={'transport': forms.CheckboxSelectMultiple(),
                                                    'connector': forms.CheckboxSelectMultiple()})

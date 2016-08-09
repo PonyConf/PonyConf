@@ -54,8 +54,10 @@ class Talk(PonyConfModel):
     speakers = models.ManyToManyField(User, verbose_name=_('Speakers'))
     title = models.CharField(max_length=128, verbose_name=_('Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
+    abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
     description = models.TextField(blank=True, verbose_name=_('Description'))
     topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
+    notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value, verbose_name=_('Format'))
     accepted = models.NullBooleanField(default=None)
 

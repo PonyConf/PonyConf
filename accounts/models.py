@@ -49,14 +49,22 @@ class Participation(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     user = models.ForeignKey(User)
 
+
+    need_transport = models.BooleanField(verbose_name=_('Need transport?'), default=False)
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
-    connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)
+
+    need_hosting = models.BooleanField(verbose_name=_('Need hosting?'), default=False)
+    homestay = models.BooleanField(verbose_name=_('Ok for homestay?'), default=False)
+
     constraints = models.TextField(blank=True, verbose_name=_("Constraints"))
+    connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)
     sound = models.BooleanField(_("I need sound"), default=False)
+
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1, verbose_name=_("Video licence"))
+
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"))
     orga = models.BooleanField(default=False)
 

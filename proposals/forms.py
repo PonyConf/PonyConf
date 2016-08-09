@@ -1,6 +1,7 @@
 from django.forms import CheckboxSelectMultiple, ModelForm
 from django.forms.models import modelform_factory
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
@@ -15,8 +16,12 @@ class TalkForm(ModelForm):
 
     class Meta:
         model = Talk
-        fields = ['title', 'description', 'topics', 'event', 'speakers']
+        fields = ['title', 'abstract', 'description', 'topics', 'notes', 'event', 'speakers']
         widgets = {'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
+        help_texts = {
+            'abstract': _('Should be less than 255 characters'),
+            'notes': _('If you want to say some precisions to organizers.'),
+        }
 
 
 class TopicCreateForm(ModelForm):
