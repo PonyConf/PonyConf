@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-08 22:52+0000\n"
+"POT-Creation-Date: 2016-08-09 22:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -297,7 +297,7 @@ msgid "Welcome to %(confname)s!"
 msgstr "Bienvenue à la conférence %(confname)s !"
 
 #: proposals/templates/proposals/speaker_list.html:9
-#: proposals/templates/proposals/talk_detail.html:21
+#: proposals/templates/proposals/talk_detail.html:25
 msgid "Speakers:"
 msgstr "Orateurs :"
 
@@ -308,35 +308,60 @@ msgid "talk"
 msgstr "exposé"
 
 #: proposals/templates/proposals/speaker_list.html:18
-#: proposals/templates/proposals/talk_detail.html:27
+#: proposals/templates/proposals/talk_detail.html:32
 msgid "No speakers."
 msgstr "Aucun orateur."
 
 #: proposals/templates/proposals/talk_detail.html:17
+msgid "Abstract:"
+msgstr "Résumé :"
+
+#: proposals/templates/proposals/talk_detail.html:19
+msgid "No abstract provided."
+msgstr "Aucun résumé fourni."
+
+#: proposals/templates/proposals/talk_detail.html:21
 msgid "Description:"
 msgstr "Description :"
 
-#: proposals/templates/proposals/talk_detail.html:31
+#: proposals/templates/proposals/talk_detail.html:23
+msgid "No description provided."
+msgstr "Aucune description fournie."
+
+#: proposals/templates/proposals/talk_detail.html:35
 msgid "Topics:"
 msgstr "Thèmes :"
 
-#: proposals/templates/proposals/talk_detail.html:40
+#: proposals/templates/proposals/talk_detail.html:42
+#: proposals/templates/proposals/topic_list.html:33
+msgid "No topics."
+msgstr "Aucun thèmes."
+
+#: proposals/templates/proposals/talk_detail.html:47
+msgid "Notes:"
+msgstr "Notes :"
+
+#: proposals/templates/proposals/talk_detail.html:49
+msgid "No notes."
+msgstr "Aucune note."
+
+#: proposals/templates/proposals/talk_detail.html:51
 msgid "Moderation"
 msgstr "Modération"
 
-#: proposals/templates/proposals/talk_detail.html:42
+#: proposals/templates/proposals/talk_detail.html:53
 msgid "Vote:"
 msgstr "Vote :"
 
-#: proposals/templates/proposals/talk_detail.html:51
+#: proposals/templates/proposals/talk_detail.html:62
 msgid "Sum:"
 msgstr "Somme :"
 
-#: proposals/templates/proposals/talk_detail.html:53
+#: proposals/templates/proposals/talk_detail.html:64
 msgid "Status:"
 msgstr "Status :"
 
-#: proposals/templates/proposals/talk_detail.html:56
+#: proposals/templates/proposals/talk_detail.html:67
 msgid "Messages:"
 msgstr "Messages :"
 
@@ -364,10 +389,6 @@ msgstr "Ajouter un thème"
 #: proposals/templates/proposals/topic_list.html:21
 msgid "reviewer"
 msgstr "Responsable"
-
-#: proposals/templates/proposals/topic_list.html:33
-msgid "No topics."
-msgstr "Aucun thèmes."
 
 #: proposals/templates/proposals/user_details.html:21
 msgid "Edit"

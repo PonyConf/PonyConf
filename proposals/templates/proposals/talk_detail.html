@@ -14,29 +14,40 @@
 
 <p>{{ talk.get_event_display }}</p>
 
+<h3>{% trans "Abstract:" %}</h3>
+
+<p>{% if talk.abstract %}{{ talk.abstract }}{% else %}<i>{% trans "No abstract provided." %}</i>{% endif %}</p>
+
 <h3>{% trans "Description:" %}</h3>
 
-<p>{{ talk.description }}</p>
+<p>{% if talk.description %}{{ talk.description }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</p>
 
 <h3>{% trans "Speakers:" %}</h3>
 
-<ul>
 {% for speaker in talk.speakers.all %}
+{% if forloop.first %}<ul>{% endif %}
     <li><a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a></li>
+{% if forloop.last %}</ul>{% endif %}
 {% empty %}
-    <li><i>{% trans "No speakers." %}</i></li>
+<i>{% trans "No speakers." %}</i>
 {% endfor %}
-</ul>
 
 <h3>{% trans "Topics:" %}</h3>
 
-<ul>
 {% for topic in talk.topics.all %}
-<li><a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a></li>
+{% if forloop.first %}<ul>{% endif %}
+    <li><a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a></li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<i>{% trans "No topics." %}</i>
 {% endfor %}
-</ul>
 
 {% if moderate_perm %}
+
+<h3>{% trans "Notes:" %}</h3>
+
+<p>{% if talk.notes %}{{ talk.notes }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
+
 <h2>{% trans "Moderation" %}</h2>
 
 <h3>{% trans "Vote:" %}</h3>
