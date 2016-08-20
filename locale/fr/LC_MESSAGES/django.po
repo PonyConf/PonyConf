@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 22:21+0000\n"
+"POT-Creation-Date: 2016-08-20 17:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
 "viande, etc."
 
-#: accounts/models.py:17 proposals/templates/proposals/user_details.html:12
+#: accounts/models.py:17 proposals/templates/proposals/user_details.html:16
 msgid "Biography"
 msgstr "Biographie"
 
@@ -66,7 +66,7 @@ msgid "Video licence"
 msgstr "Licence vidéo"
 
 #: accounts/models.py:68 proposals/models.py:60
-#: proposals/templates/proposals/user_details.html:19
+#: proposals/templates/proposals/user_details.html:23
 msgid "Notes"
 msgstr "Notes"
 
@@ -234,7 +234,7 @@ msgid "Home"
 msgstr "Accueil"
 
 #: ponyconf/templates/base.html:47 proposals/templates/proposals/talks.html:9
-#: proposals/templates/proposals/user_details.html:15
+#: proposals/templates/proposals/user_details.html:19
 msgid "Talks"
 msgstr "Exposés"
 
@@ -304,64 +304,73 @@ msgid "talk"
 msgstr "exposé"
 
 #: proposals/templates/proposals/speaker_list.html:18
-#: proposals/templates/proposals/talk_detail.html:32
+#: proposals/templates/proposals/talk_detail.html:34
 msgid "No speakers."
 msgstr "Aucun orateur."
 
-#: proposals/templates/proposals/talk_detail.html:17
+#: proposals/templates/proposals/talk_detail.html:12
+#: proposals/templates/proposals/user_details.html:11
+msgid "Edit"
+msgstr "Éditer"
+
+#: proposals/templates/proposals/talk_detail.html:15
+msgid "Format:"
+msgstr "Format :"
+
+#: proposals/templates/proposals/talk_detail.html:19
 msgid "Abstract:"
 msgstr "Résumé :"
 
-#: proposals/templates/proposals/talk_detail.html:19
+#: proposals/templates/proposals/talk_detail.html:21
 msgid "No abstract provided."
 msgstr "Aucun résumé fourni."
 
-#: proposals/templates/proposals/talk_detail.html:21
+#: proposals/templates/proposals/talk_detail.html:23
 msgid "Description:"
 msgstr "Description :"
 
-#: proposals/templates/proposals/talk_detail.html:23
+#: proposals/templates/proposals/talk_detail.html:25
 msgid "No description provided."
 msgstr "Aucune description fournie."
 
-#: proposals/templates/proposals/talk_detail.html:25
+#: proposals/templates/proposals/talk_detail.html:27
 msgid "Speakers:"
 msgstr "Orateurs :"
 
-#: proposals/templates/proposals/talk_detail.html:35
+#: proposals/templates/proposals/talk_detail.html:37
 msgid "Topics:"
 msgstr "Thèmes :"
 
-#: proposals/templates/proposals/talk_detail.html:42
+#: proposals/templates/proposals/talk_detail.html:44
 #: proposals/templates/proposals/topic_list.html:33
 msgid "No topics."
 msgstr "Aucun thèmes."
 
-#: proposals/templates/proposals/talk_detail.html:47
+#: proposals/templates/proposals/talk_detail.html:49
 msgid "Notes:"
 msgstr "Notes :"
 
-#: proposals/templates/proposals/talk_detail.html:49
+#: proposals/templates/proposals/talk_detail.html:51
 msgid "No notes."
 msgstr "Aucune note."
 
-#: proposals/templates/proposals/talk_detail.html:51
+#: proposals/templates/proposals/talk_detail.html:53
 msgid "Moderation"
 msgstr "Modération"
 
-#: proposals/templates/proposals/talk_detail.html:53
+#: proposals/templates/proposals/talk_detail.html:55
 msgid "Vote:"
 msgstr "Vote :"
 
-#: proposals/templates/proposals/talk_detail.html:62
+#: proposals/templates/proposals/talk_detail.html:64
 msgid "Sum:"
 msgstr "Somme :"
 
-#: proposals/templates/proposals/talk_detail.html:64
+#: proposals/templates/proposals/talk_detail.html:66
 msgid "Status:"
 msgstr "Status :"
 
-#: proposals/templates/proposals/talk_detail.html:67
+#: proposals/templates/proposals/talk_detail.html:69
 msgid "Messages:"
 msgstr "Messages :"
 
@@ -371,16 +380,12 @@ msgid "Propose a talk"
 msgstr "Proposer un exposé"
 
 #: proposals/templates/proposals/talks.html:14
-#, fuzzy
-#| msgid "My participing talks:"
 msgid "My participing talks"
-msgstr "Exposés auquels je participe :"
+msgstr "Exposés auquels je participe"
 
 #: proposals/templates/proposals/talks.html:19
-#, fuzzy
-#| msgid "Others talks:"
 msgid "Others talks"
-msgstr "Autres exposés :"
+msgstr "Autres exposés"
 
 #: proposals/templates/proposals/topic_form.html:14
 msgid "Topic"
@@ -393,10 +398,6 @@ msgstr "Ajouter un thème"
 #: proposals/templates/proposals/topic_list.html:21
 msgid "reviewer"
 msgstr "Responsable"
-
-#: proposals/templates/proposals/user_details.html:21
-msgid "Edit"
-msgstr "Éditer"
 
 #: proposals/views.py:38
 #, python-format
@@ -418,9 +419,3 @@ msgstr "A voté !"
 #: proposals/views.py:131
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
-
-#~ msgid "see details"
-#~ msgstr "voir en détail"
-
-#~ msgid "and"
-#~ msgstr "et"

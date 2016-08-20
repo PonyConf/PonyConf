@@ -12,6 +12,8 @@
 <a class="btn btn-success" href="{% url 'edit-talk' talk.slug %}">{% trans "Edit" %}</a><br />
 {% endif %}
 
+<h3>{% trans "Format:" %}</h3>
+
 <p>{{ talk.get_event_display }}</p>
 
 <h3>{% trans "Abstract:" %}</h3>
