@@ -5,19 +5,20 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.signals import post_migrate, post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_noop
 
 from .models import Connector, Participation, Profile, Transport
 
 
 @receiver(post_migrate)
 def create_default_options(sender, **kwargs):
-    Transport.objects.get_or_create(name='Train')
-    Transport.objects.get_or_create(name='Plane')
-    Transport.objects.get_or_create(name='Carpooling')
-    Connector.objects.get_or_create(name='VGA')
-    Connector.objects.get_or_create(name='HDMI')
-    Connector.objects.get_or_create(name='miniDP')
-    Connector.objects.get_or_create(name='I need a computer')
+    Transport.objects.get_or_create(name=ugettext_noop('Train'))
+    Transport.objects.get_or_create(name=ugettext_noop('Plane'))
+    Transport.objects.get_or_create(name=ugettext_noop('Carpooling'))
+    Connector.objects.get_or_create(name=ugettext_noop('VGA'))
+    Connector.objects.get_or_create(name=ugettext_noop('HDMI'))
+    Connector.objects.get_or_create(name=ugettext_noop('miniDP'))
+    Connector.objects.get_or_create(name=ugettext_noop('I need a computer'))
 
 
 @receiver(user_logged_in)

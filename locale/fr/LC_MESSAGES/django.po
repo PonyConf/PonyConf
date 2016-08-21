@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 17:17+0000\n"
+"POT-Creation-Date: 2016-08-21 10:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,11 +70,39 @@ msgstr "Licence vidéo"
 msgid "Notes"
 msgstr "Notes"
 
-#: accounts/signals.py:31
+#: accounts/signals.py:15
+msgid "Train"
+msgstr ""
+
+#: accounts/signals.py:16
+msgid "Plane"
+msgstr "Avion"
+
+#: accounts/signals.py:17
+msgid "Carpooling"
+msgstr "Covoiturage"
+
+#: accounts/signals.py:18
+msgid "VGA"
+msgstr ""
+
+#: accounts/signals.py:19
+msgid "HDMI"
+msgstr ""
+
+#: accounts/signals.py:20
+msgid "miniDP"
+msgstr ""
+
+#: accounts/signals.py:21
+msgid "I need a computer"
+msgstr "J’ai besoin d’un ordinateur"
+
+#: accounts/signals.py:32
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: accounts/signals.py:36
+#: accounts/signals.py:37
 msgid "Goodbye!"
 msgstr "Au revoir !"
 
@@ -291,11 +319,6 @@ msgstr "Format"
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
 msgstr "Aucun exposé"
-
-#: proposals/templates/proposals/home.html:9
-#, python-format
-msgid "Welcome to %(confname)s!"
-msgstr "Bienvenue à la conférence %(confname)s !"
 
 #: proposals/templates/proposals/speaker_list.html:15
 #: proposals/templates/proposals/topic_list.html:23

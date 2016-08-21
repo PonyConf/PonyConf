@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 
 from ponyconf.utils import PonyConfModel, enum_to_choices
 
@@ -31,7 +32,7 @@ class Option(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.name
+        return ugettext(self.name)
 
 
 class Transport(Option):
