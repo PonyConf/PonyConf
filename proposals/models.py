@@ -82,6 +82,9 @@ class Talk(PonyConfModel):
     def score(self):
         return query_sum(self.vote_set, 'vote')
 
+    class Meta:
+        ordering = ('event',)
+
 
 class Vote(PonyConfModel):
 
