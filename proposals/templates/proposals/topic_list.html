@@ -23,8 +23,6 @@
         <a href="{{ topic.get_absolute_url }}">{{ topic.talk_set.count }} {% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
         |
         <a href="{% url 'edit-topic' topic.slug %}">{% bootstrap_icon "pencil" %}</a>
-    {% else %}
-        <a href="{{ topic.get_absolute_url }}">{{ topic.talk_set.count }} {% trans "talk" %}{{ topic.talk_set.count|pluralize }}</a>
     {% endif %}
   </div>
     {% cycle '' '<div class="clearfix visible-xs"></div>' %}
