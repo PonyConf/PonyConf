@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 
 from autoslug import AutoSlugField
 
@@ -44,9 +45,19 @@ class Topic(PonyConfModel):
         return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
 
 
-class Talk(PonyConfModel):
+class Event(models.Model):
 
-    EVENTS = IntEnum('Event', 'conference_short conference_long workshop stand other')
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        unique_together = ('site', 'name')
+
+    def __str__(self):
+        return ugettext(self.name)
+
+
+class Talk(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
@@ -58,7 +69,7 @@ class Talk(PonyConfModel):
     description = models.TextField(blank=True, verbose_name=_('Description'))
     topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
-    event = models.IntegerField(choices=enum_to_choices(EVENTS), default=EVENTS.conference_short.value, verbose_name=_('Format'))
+    event = models.ForeignKey(Event)
     accepted = models.NullBooleanField(default=None)
 
     def __str__(self):
@@ -83,7 +94,7 @@ class Talk(PonyConfModel):
         return query_sum(self.vote_set, 'vote')
 
     class Meta:
-        ordering = ('event',)
+        ordering = ('event__id',)
 
 
 class Vote(PonyConfModel):

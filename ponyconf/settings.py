@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # the post_migrate creating the first site should be call at first
+    'django.contrib.sites',
+
     # our apps
     'accounts',
     'ponyconf',
@@ -53,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
 ]
 
 MIDDLEWARE_CLASSES = [

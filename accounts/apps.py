@@ -7,3 +7,4 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         import accounts.signals  # noqa
+        post_migrate.connect(accounts.signals.create_default_options, sender=self)

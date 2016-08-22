@@ -6,7 +6,7 @@ from django.core import mail
 from django.conf import settings
 
 from accounts.models import Participation
-from proposals.models import Topic, Talk
+from proposals.models import Topic, Talk, Event
 
 from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 
@@ -20,7 +20,8 @@ class ConversationTests(TestCase):
         conversation, _ = ConversationWithParticipant.objects.get_or_create(participation=pa)
         Message.objects.create(content='allo', conversation=conversation, author=b)
         Message.objects.create(content='aluil', conversation=conversation, author=a)
-        Talk.objects.get_or_create(site=Site.objects.first(), proposer=a, title='a talk', description='yay')
+        site = Site.objects.first()
+        Talk.objects.get_or_create(site=site, proposer=a, title='a talk', description='yay', event=Event.objects.get(site=site, name='other'))
 
     def test_models(self):
         talk, participant, message = (model.objects.first() for model in

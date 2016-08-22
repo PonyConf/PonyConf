@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models.signals import post_migrate, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext_noop
@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_noop
 from .models import Connector, Participation, Profile, Transport
 
 
-@receiver(post_migrate)
 def create_default_options(sender, **kwargs):
     Transport.objects.get_or_create(name=ugettext_noop('Train'))
     Transport.objects.get_or_create(name=ugettext_noop('Plane'))
