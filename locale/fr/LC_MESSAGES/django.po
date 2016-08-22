@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-28 14:09+0000\n"
+"POT-Creation-Date: 2016-08-31 21:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,44 +65,44 @@ msgstr "J’accepte d’être enregistré en vidéo"
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:69 proposals/models.py:60
+#: accounts/models.py:69 proposals/models.py:71
 #: proposals/templates/proposals/user_details.html:23
 msgid "Notes"
 msgstr "Notes"
 
-#: accounts/signals.py:15
+#: accounts/signals.py:14
 msgid "Train"
 msgstr ""
 
-#: accounts/signals.py:16
+#: accounts/signals.py:15
 msgid "Plane"
 msgstr "Avion"
 
-#: accounts/signals.py:17
+#: accounts/signals.py:16
 msgid "Carpooling"
 msgstr "Covoiturage"
 
-#: accounts/signals.py:18
+#: accounts/signals.py:17
 msgid "VGA"
 msgstr ""
 
-#: accounts/signals.py:19
+#: accounts/signals.py:18
 msgid "HDMI"
 msgstr ""
 
-#: accounts/signals.py:20
+#: accounts/signals.py:19
 msgid "miniDP"
 msgstr ""
 
-#: accounts/signals.py:21
+#: accounts/signals.py:20
 msgid "I need a computer"
 msgstr "J’ai besoin d’un ordinateur"
 
-#: accounts/signals.py:32
+#: accounts/signals.py:31
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: accounts/signals.py:37
+#: accounts/signals.py:36
 msgid "Goodbye!"
 msgstr "Au revoir !"
 
@@ -249,11 +249,11 @@ msgid "You can use this page to communicate with the staff."
 msgstr ""
 "Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
 
-#: ponyconf/settings.py:136
+#: ponyconf/settings.py:138
 msgid "English"
 msgstr "Anglais"
 
-#: ponyconf/settings.py:137
+#: ponyconf/settings.py:139
 msgid "French"
 msgstr "Français"
 
@@ -266,12 +266,12 @@ msgstr "Accueil"
 msgid "Talks"
 msgstr "Exposés"
 
-#: ponyconf/templates/base.html:48 proposals/models.py:59
+#: ponyconf/templates/base.html:48 proposals/models.py:70
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
 
-#: ponyconf/templates/base.html:50 proposals/models.py:54
+#: ponyconf/templates/base.html:50 proposals/models.py:65
 #: proposals/templates/proposals/speaker_list.html:9
 msgid "Speakers"
 msgstr "Orateurs"
@@ -292,29 +292,45 @@ msgstr "Texte court, moins de 255 caractères"
 msgid "If you want to add some precisions for the organizers."
 msgstr "Si vous souhaitez apporter des précisions à l'équipe d'organisation."
 
-#: proposals/models.py:31
+#: proposals/models.py:32
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:33 proposals/models.py:58
+#: proposals/models.py:34 proposals/models.py:69
 msgid "Description"
 msgstr "Description"
 
-#: proposals/models.py:35
+#: proposals/models.py:36
 msgid "Reviewers"
 msgstr "Responsables"
 
-#: proposals/models.py:55
+#: proposals/models.py:66
 msgid "Title"
 msgstr "Titre"
 
-#: proposals/models.py:57
+#: proposals/models.py:68
 msgid "Abstract"
 msgstr "Résumé"
 
-#: proposals/models.py:61
-msgid "Format"
-msgstr "Format"
+#: proposals/signals.py:25
+msgid "conference (short)"
+msgstr "conférence (courte)"
+
+#: proposals/signals.py:26
+msgid "conference (long)"
+msgstr "conférence (longue)"
+
+#: proposals/signals.py:27
+msgid "workshop"
+msgstr "atelier"
+
+#: proposals/signals.py:28
+msgid "stand"
+msgstr ""
+
+#: proposals/signals.py:29
+msgid "other"
+msgstr "autre"
 
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
