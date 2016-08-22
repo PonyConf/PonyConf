@@ -3,7 +3,9 @@ from django.conf.urls import url
 from proposals import views
 
 urlpatterns = [
+    url(r'^markdown/$', views.markdown_preview, name='markdown'),
     url(r'^$', views.home, name='home'),
+    url(r'^conference/$', views.conference, name='conference'),
     url(r'^talk/$', views.talk_list, name='list-talks'),
     url(r'^talk/add/$', views.talk_edit, name='add-talk'),
     url(r'^talk/edit/(?P<talk>[-\w]+)$', views.talk_edit, name='edit-talk'),

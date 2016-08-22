@@ -162,6 +162,7 @@ BOWER_INSTALLED_APPS = (
     'bootstrap',
     'jquery#2',
     'jquery-ui',
+    'jquery-cookie',
     'select2',
 )
 

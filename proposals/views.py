@@ -9,17 +9,41 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
 
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
+from accounts.decorators import orga_required
 
-from .forms import TalkForm, TopicCreateForm, TopicUpdateForm
-from .models import Talk, Topic, Vote
+from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm
+from .models import Talk, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
-from .utils import allowed_talks
+from .utils import allowed_talks, markdown_to_html
+
+
+@login_required
+@require_http_methods(["POST"])
+def markdown_preview(request):
+    content = request.POST.get('data', '')
+    return HttpResponse(markdown_to_html(content))
 
 
 def home(request):
     return render(request, 'proposals/home.html')
+
+
+@orga_required
+def conference(request):
+    conference = Conference.objects.get(site=get_current_site(request))
+    form = ConferenceForm(request.POST or None, instance=conference)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Conference updated!')
+        return redirect(reverse('conference'))
+    return render(request, 'proposals/conference.html', {
+        'conference': conference,
+        'form': form,
+    })
 
 
 @login_required

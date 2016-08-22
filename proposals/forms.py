@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from proposals.models import Talk, Topic
+from proposals.models import Talk, Topic, Conference
 
 
 class TalkForm(ModelForm):
@@ -43,3 +43,5 @@ class TopicCreateForm(ModelForm):
 
 TopicUpdateForm = modelform_factory(Topic, fields=['reviewers'],
                                     widgets={'reviewers': Select2TagWidget()})
+
+ConferenceForm = modelform_factory(Conference, fields=['home'])
