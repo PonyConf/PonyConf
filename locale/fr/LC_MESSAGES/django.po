@@ -322,7 +322,7 @@ msgstr "Aucun exposé"
 
 #: proposals/templates/proposals/conference.html:9
 msgid "Conference settings"
-msgstr ""
+msgstr "Paramètre de la conférence"
 
 #: proposals/templates/proposals/speaker_list.html:15
 #: proposals/templates/proposals/topic_list.html:23
