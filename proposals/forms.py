@@ -20,7 +20,7 @@ class TalkForm(ModelForm):
         widgets = {'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
         help_texts = {
             'abstract': _('Should be less than 255 characters'),
-            'notes': _('If you want to say some precisions to organizers.'),
+            'notes': _('If you want to add some precisions for the organizers.'),
         }
 
 
