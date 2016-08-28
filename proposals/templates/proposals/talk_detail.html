@@ -64,7 +64,13 @@
 {% trans "Sum:" %} {{ talk.score }}
 
 <h3>{% trans "Status:" %}</h3>
-{{ talk.accepted|yesno:"✔,✘,?" }}
+
+{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}<br />
+
+{% if talk.accepted == None %}
+<a href="{% url 'accept-talk' talk.slug %}" class="btn btn-success">Accept</a>
+<a href="{% url 'decline-talk' talk.slug %}" class="btn btn-danger">Decline</a>
+{% endif %}
 
 <h3>{% trans "Messages:" %}</h3>
 {% for message in talk.conversation.messages.all %}

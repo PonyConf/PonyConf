@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block talktab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>Are you sure to {% if accept %}accept{% else %}decline{% endif %} this proposals?</h1>
+
+<h3>Information about the proposals</h3>
+<b>Title:</b> {{ talk.title }}<br />
+<b>Kind:</b> {{ talk.get_event_display }}<br />
+
+<h3>Information for the proposer</h3>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="message">If you want to send a message to the proposer, please enter it below:</label>
+        <textarea name="message" class="form-control" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-{% if accept %}success{% else %}danger{% endif %}">{% if accept %}Accept{% else %}Decline{% endif %} the proposal</button>
+    <a class="btn btn-default" href="{% url 'show-talk' talk.slug %}">{% trans "Cancel" %}</a>
+</form>
+
+{% endblock %}

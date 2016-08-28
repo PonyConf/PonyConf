@@ -157,6 +157,22 @@ def vote(request, talk, score):
 
 
 @login_required
+def talk_decide(request, talk, accepted):
+    talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
+    if not talk.is_moderable_by(request.user):
+        raise PermissionDenied()
+    if request.method == 'POST':
+        talk.accepted = accepted
+        talk.save()
+        messages.success(request, _('Decision taken in account'))
+        return redirect('show-talk', slug=talk.slug)
+    return render(request, 'proposals/talk_decide.html', {
+        'talk': talk,
+        'accept': accepted,
+    })
+
+
+@login_required
 def user_details(request, username):
     speaker = get_object_or_404(User, username=username)
     return render(request, 'proposals/user_details.html', {
