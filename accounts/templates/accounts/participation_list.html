@@ -14,7 +14,7 @@
   <tr>
     <th>#</th>
     <th>Username</th>
-    <th>Fullname</th>
+    <th>Full name</th>
     <th>Orga</th>
     <th>Reviews</th>
     <th>Conversations</th>
@@ -32,11 +32,11 @@
         title="{% trans "View conversation" %}"><span class="glyphicon glyphicon-envelope"></span></a>
       {% if request.user in participation.conversation.subscribers.all %}
       <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
-        data-toggle="tooltip" data-placement="bottom" title="{% trans "Unsubscribe to conversation" %}">
+        data-toggle="tooltip" data-placement="bottom" title="{% trans "Unsubscribe from the conversation" %}">
         <span class="glyphicon glyphicon-star"></span></a>
       {% else %}
       <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
-        data-toggle="tooltip" data-placement="bottom" title="{% trans "Subscribe to conversation" %}">
+        data-toggle="tooltip" data-placement="bottom" title="{% trans "Subscribe to the conversation" %}">
         <span class="glyphicon glyphicon-star-empty"></span></a>
       {% endif %}
     </td>
