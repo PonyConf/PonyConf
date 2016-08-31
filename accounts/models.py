@@ -64,7 +64,7 @@ class Participation(PonyConfModel):
     sound = models.BooleanField(_("I need sound"), default=False)
 
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
-    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=1, verbose_name=_("Video licence"))
+    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=2, verbose_name=_("Video licence"))
 
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"))
     orga = models.BooleanField(default=False)
