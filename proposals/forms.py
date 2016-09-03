@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from proposals.models import Talk, Topic, Conference
+from proposals.models import Talk, Topic, Event, Conference
 
 
 class TalkForm(ModelForm):
@@ -13,6 +13,7 @@ class TalkForm(ModelForm):
         site = kwargs.pop('site')
         super(TalkForm, self).__init__(*args, **kwargs)
         self.fields['topics'].queryset = Topic.objects.filter(site=site)
+        self.fields['event'].queryset = Event.objects.filter(site=site)
 
     class Meta:
         model = Talk
