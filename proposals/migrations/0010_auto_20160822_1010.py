@@ -22,11 +22,11 @@ def migrate_event(apps, schema_editor):
     # Migrate event_old field to event field
     Talk = apps.get_model('proposals', 'Talk')
     mapping = {
-        0: 'conference (short)',
-        1: 'conference (long)',
-        2: 'workshop',
-        3: 'stand',
-        4: 'other',
+        1: 'conference (short)',
+        2: 'conference (long)',
+        3: 'workshop',
+        4: 'stand',
+        5: 'other',
     }
     for talk in Talk.objects.using(db_alias).all():
         talk.event = Event.objects.using(db_alias).get(site=talk.site, name=mapping[talk.event_old])
