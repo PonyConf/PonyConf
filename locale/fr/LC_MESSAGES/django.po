@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-31 21:53+0000\n"
+"POT-Creation-Date: 2016-09-03 22:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,6 +138,7 @@ msgid "Submit"
 msgstr "Envoyer"
 
 #: accounts/templates/accounts/profile.html:30 ponyconf/templates/_form.html:16
+#: proposals/templates/proposals/talk_decide.html:23
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -284,11 +285,11 @@ msgstr "S’inscrire"
 msgid "Powered by"
 msgstr "Propulsé par"
 
-#: proposals/forms.py:22
+#: proposals/forms.py:23
 msgid "Should be less than 255 characters"
 msgstr "Texte court, moins de 255 caractères"
 
-#: proposals/forms.py:23
+#: proposals/forms.py:24
 msgid "If you want to add some precisions for the organizers."
 msgstr "Si vous souhaitez apporter des précisions à l'équipe d'organisation."
 
@@ -311,6 +312,10 @@ msgstr "Titre"
 #: proposals/models.py:68
 msgid "Abstract"
 msgstr "Résumé"
+
+#: proposals/models.py:72
+msgid "Intervention kind"
+msgstr "Type d’intervention"
 
 #: proposals/signals.py:25
 msgid "conference (short)"
@@ -412,7 +417,7 @@ msgstr "Somme :"
 msgid "Status:"
 msgstr "Statut :"
 
-#: proposals/templates/proposals/talk_detail.html:69
+#: proposals/templates/proposals/talk_detail.html:75
 msgid "Messages:"
 msgstr "Messages :"
 
@@ -461,3 +466,7 @@ msgstr "A voté !"
 #: proposals/views.py:155
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
+
+#: proposals/views.py:167
+msgid "Decision taken in account"
+msgstr "Décision enregistrée"

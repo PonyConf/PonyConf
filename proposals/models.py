@@ -69,7 +69,7 @@ class Talk(PonyConfModel):
     description = models.TextField(blank=True, verbose_name=_('Description'))
     topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
 
     def __str__(self):
