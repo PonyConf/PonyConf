@@ -12,8 +12,11 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
+from accounts.models import Participation
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from accounts.decorators import orga_required
+
+from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
 from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm
 from .models import Talk, Topic, Vote, Conference
@@ -158,10 +161,24 @@ def vote(request, talk, score):
 
 @login_required
 def talk_decide(request, talk, accepted):
-    talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
+    site = get_current_site(request)
+    talk = get_object_or_404(Talk, site=site, slug=talk)
     if not talk.is_moderable_by(request.user):
         raise PermissionDenied()
     if request.method == 'POST':
+        # Does we need to send a notification to the proposer?
+        m = request.POST.get('message', '').strip()
+        if m:
+            participation = Participation.objects.get(site=site, user=talk.proposer)
+            conversation = ConversationWithParticipant.objects.get(participation=participation)
+            Message.objects.create(conversation=conversation, author=request.user, content=m)
+        # Save the decision in the talk's conversation
+        conversation = ConversationAboutTalk.objects.get(talk=talk)
+        if accepted:
+            note = "The talk has been accepted."
+        else:
+            note = "The talk has been declined."
+        Message.objects.create(conversation=conversation, author=request.user, content=note)
         talk.accepted = accepted
         talk.save()
         messages.success(request, _('Decision taken in account'))

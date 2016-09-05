@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-03 22:35+0000\n"
+"POT-Creation-Date: 2016-09-05 15:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -355,6 +355,47 @@ msgstr "exposé"
 msgid "No speakers."
 msgstr "Aucun orateur."
 
+#: proposals/templates/proposals/talk_decide.html:9
+msgid "Are you sure to accept this proposals?"
+msgstr "Êtes-vous sûr d’accepter cette propositon d’intervention ?"
+
+#: proposals/templates/proposals/talk_decide.html:9
+msgid "Are you sure to decline this proposals?"
+msgstr "Êtes-vous sûr de décliner cette propositon d’intervention ?"
+
+#: proposals/templates/proposals/talk_decide.html:11
+msgid "Information about the proposals"
+msgstr "Information sur la propositon d’intervention"
+
+#: proposals/templates/proposals/talk_decide.html:12
+msgid "Title:"
+msgstr "Titre :"
+
+#: proposals/templates/proposals/talk_decide.html:13
+msgid "Kind:"
+msgstr "Type d’intervention :"
+
+#: proposals/templates/proposals/talk_decide.html:15
+msgid "Information for the proposer"
+msgstr "Information à destination de l’auteur de la proposition"
+
+#: proposals/templates/proposals/talk_decide.html:19
+msgid ""
+"If you want to send a message to the proposer, please enter it below. "
+"Remember to indicate which talk your message is reffering."
+msgstr ""
+"Si vous souhaitez envoyer un message à l’auteur de la proposition, "
+"saisissez-le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
+"d’intervention votre message fait référence."
+
+#: proposals/templates/proposals/talk_decide.html:22
+msgid "Accept the proposal"
+msgstr "Accepter la proposition"
+
+#: proposals/templates/proposals/talk_decide.html:22
+msgid "Decline the proposal"
+msgstr "Décliner la proposition"
+
 #: proposals/templates/proposals/talk_detail.html:12
 #: proposals/templates/proposals/user_details.html:11
 msgid "Edit"
@@ -446,27 +487,27 @@ msgstr "Ajouter un thème"
 msgid "reviewer"
 msgstr "Responsable"
 
-#: proposals/views.py:62
+#: proposals/views.py:65
 #, python-format
 msgid "Talks related to %s:"
 msgstr "Exposés portant sur la thématique %s :"
 
-#: proposals/views.py:81
+#: proposals/views.py:84
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:87
+#: proposals/views.py:90
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:155
+#: proposals/views.py:158
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:155
+#: proposals/views.py:158
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:167
+#: proposals/views.py:176
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
