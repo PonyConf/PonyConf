@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-05 15:05+0000\n"
+"POT-Creation-Date: 2016-09-08 22:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,10 +189,8 @@ msgid "Login"
 msgstr "Se connecter"
 
 #: accounts/templates/registration/login.html:26
-#, python-format
 msgid ""
-"\"You do not have an account yet? Please <a href=\"%(reg_url)s\">register</"
-"a>."
+"You do not have an account yet? Please <a href=\"%(reg_url)s\">register</a>."
 msgstr "Pas encore de compte ? <a href=\"%(reg_url)s\">Enregistrez-vous</a>."
 
 #: accounts/templates/registration/password_change_form.html:9
@@ -384,8 +382,8 @@ msgid ""
 "If you want to send a message to the proposer, please enter it below. "
 "Remember to indicate which talk your message is reffering."
 msgstr ""
-"Si vous souhaitez envoyer un message à l’auteur de la proposition, "
-"saisissez-le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
+"Si vous souhaitez envoyer un message à l’auteur de la proposition, saisissez-"
+"le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
 "d’intervention votre message fait référence."
 
 #: proposals/templates/proposals/talk_decide.html:22
@@ -508,6 +506,6 @@ msgstr "A voté !"
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:176
+#: proposals/views.py:184
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
