@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-10 12:26+0000\n"
+"POT-Creation-Date: 2016-09-14 19:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,6 +335,10 @@ msgstr ""
 #: proposals/signals.py:29
 msgid "other"
 msgstr "autre"
+
+#: proposals/templates/proposals/_talk_list.html:4
+msgid "total:"
+msgstr "total :"
 
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
