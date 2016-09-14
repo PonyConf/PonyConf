@@ -22,7 +22,7 @@
 
 <h3>{% trans "Description:" %}</h3>
 
-<pre>{% if talk.description %}{{ talk.description }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</pre>
+<p>{% if talk.description %}{{ talk.description|linebreaksbr }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</p>
 
 <h3>{% trans "Speakers:" %}</h3>
 
