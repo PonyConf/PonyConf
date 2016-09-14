@@ -7,6 +7,9 @@
 
 <h1>{{ profile }}</h1>
 
+{% if request|staff %}
+<a href="{% url 'conversation' profile.user.username %}" class="btn btn-primary ">{% trans "Contact" %}</a>
+{% endif %}
 {% if request|edit_profile:profile %}
 <a href="{% url 'edit-participant' profile.user.username %}" class="btn btn-success">{% trans "Edit" %}</a>
 {% endif %}
