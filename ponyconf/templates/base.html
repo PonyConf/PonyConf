@@ -55,17 +55,17 @@
             {% if request.user.is_authenticated %}
             {% if request|staff %}
             <li class="dropdown{% block admintab %}{% endblock %}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;Administration&nbsp;<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li role="presentation">
                   {% if request.user.is_staff %}
                   <a role="menuitem" tabindex="-1" href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django Admin</a>
                   {% endif %}
                   {% if request|orga %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'conference' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;Conference</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'conference' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Conference" %}</a>
                   {% endif %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-participant' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Participants</a>
-                  <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Correspondence</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-participant' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Participants" %}</a>
+                  <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;{% trans "Correspondence" %}</a>
                 </li>
               </ul>
             </li>
