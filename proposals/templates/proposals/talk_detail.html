@@ -73,6 +73,7 @@
 {% endif %}
 
 <h3>{% trans "Messages:" %}</h3>
+{% trans "These messages are for organization team only." %}<br /><br />
 {% for message in talk.conversation.messages.all %}
 {% include 'conversations/_message_detail.html' %}
 {% endfor %}
