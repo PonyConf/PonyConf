@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 19:45+0000\n"
+"POT-Creation-Date: 2016-09-14 20:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
 "viande, etc."
 
-#: accounts/models.py:18 proposals/templates/proposals/user_details.html:16
+#: accounts/models.py:18 proposals/templates/proposals/user_details.html:19
 msgid "Biography"
 msgstr "Biographie"
 
@@ -66,7 +66,7 @@ msgid "Video licence"
 msgstr "Licence vidéo"
 
 #: accounts/models.py:69 proposals/models.py:71
-#: proposals/templates/proposals/user_details.html:23
+#: proposals/templates/proposals/user_details.html:45
 msgid "Notes"
 msgstr "Notes"
 
@@ -111,16 +111,16 @@ msgstr "Au revoir !"
 msgid "%(profile)s's profile"
 msgstr "Profil de %(profile)s"
 
-#: accounts/templates/accounts/participation_list.html:32
+#: accounts/templates/accounts/participation_list.html:30
 msgid "View conversation"
 msgstr "Afficher la discussion"
 
-#: accounts/templates/accounts/participation_list.html:35
+#: accounts/templates/accounts/participation_list.html:33
 #: conversations/templates/conversations/correspondents.html:29
 msgid "Unsubscribe from the conversation"
 msgstr "Se désabonner de la discussion"
 
-#: accounts/templates/accounts/participation_list.html:39
+#: accounts/templates/accounts/participation_list.html:37
 #: conversations/templates/conversations/correspondents.html:31
 msgid "Subscribe to the conversation"
 msgstr "S’abonner à la discussion"
@@ -262,7 +262,7 @@ msgid "Home"
 msgstr "Accueil"
 
 #: ponyconf/templates/base.html:47 proposals/templates/proposals/talks.html:9
-#: proposals/templates/proposals/user_details.html:19
+#: proposals/templates/proposals/user_details.html:22
 msgid "Talks"
 msgstr "Exposés"
 
@@ -420,7 +420,7 @@ msgid "Decline the proposal"
 msgstr "Décliner la proposition"
 
 #: proposals/templates/proposals/talk_detail.html:12
-#: proposals/templates/proposals/user_details.html:11
+#: proposals/templates/proposals/user_details.html:14
 msgid "Edit"
 msgstr "Éditer"
 
@@ -485,6 +485,10 @@ msgstr "Statut :"
 msgid "Messages:"
 msgstr "Messages :"
 
+#: proposals/templates/proposals/talk_detail.html:76
+msgid "These messages are for organization team only."
+msgstr "Ces messages sont à destination de la team d’organisation seulement."
+
 #: proposals/templates/proposals/talk_edit.html:9
 #: proposals/templates/proposals/talks.html:11
 msgid "Propose a talk"
@@ -509,6 +513,54 @@ msgstr "Ajouter un thème"
 #: proposals/templates/proposals/topic_list.html:21
 msgid "reviewer"
 msgstr "Responsable"
+
+#: proposals/templates/proposals/user_details.html:11
+msgid "Contact"
+msgstr "Contacter"
+
+#: proposals/templates/proposals/user_details.html:27
+msgid "Preferences"
+msgstr "Préférences"
+
+#: proposals/templates/proposals/user_details.html:30
+msgid "Need transport:"
+msgstr "Défrayement du transport :"
+
+#: proposals/templates/proposals/user_details.html:31
+msgid "Arrival:"
+msgstr "Arrivée :"
+
+#: proposals/templates/proposals/user_details.html:32
+msgid "Departure:"
+msgstr "Départ :"
+
+#: proposals/templates/proposals/user_details.html:33
+msgid "Ok to travel by:"
+msgstr "Moyens de transport voulu :"
+
+#: proposals/templates/proposals/user_details.html:34
+msgid "Need hosting:"
+msgstr "Besoin d'hébergement :"
+
+#: proposals/templates/proposals/user_details.html:35
+msgid "Ok for homstay:"
+msgstr "Accepte d’être logé chez habitant :"
+
+#: proposals/templates/proposals/user_details.html:36
+msgid "Video output:"
+msgstr "Sortie vidéo :"
+
+#: proposals/templates/proposals/user_details.html:37
+msgid "Need sound:"
+msgstr "Besoin de son :"
+
+#: proposals/templates/proposals/user_details.html:38
+msgid "Ok to be recorded on video:"
+msgstr "Accepte d’être enregistré en vidéo :"
+
+#: proposals/templates/proposals/user_details.html:39
+msgid "Video licence:"
+msgstr "Licence vidéo :"
 
 #: proposals/views.py:65
 #, python-format
