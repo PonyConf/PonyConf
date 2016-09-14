@@ -20,8 +20,27 @@
 {% include "proposals/_talk_list.html" %}
 
 {% if request|edit_profile:profile %}
+
+<h2>{% trans "Preferences" %}</h2>
+
+<ul>
+    <li><b>{% trans "Need transport:" %}</b> {{ participation.need_transport|yesno }}</li>
+    <li><b>{% trans "Arrival:" %}</b> {{ participation.arrival }}</li>
+    <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
+    <li><b>{% trans "Ok to travel by:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
+    <li><b>{% trans "Need hosting:" %}</b> {{ participation.need_hosting|yesno }}</li>
+    <li><b>{% trans "Ok for homstay:" %}</b> {{ participation.homestay|yesno }}</li>
+    <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>
+    <li><b>{% trans "Need sound:" %}</b> {{ participation.sound|yesno }}</li>
+    <li><b>{% trans "Ok to be recorded on video:" %}</b> {{ participation.videotaped|yesno }}</li>
+    <li><b>{% trans "Video licence:" %}</b> {{ participation.video_licence|yesno }}</li>
+</ul>
+
+<h2>{% trans "Constaints" %}</h2>
+<p>{{ profile.constraints|linebreaksbr }}</p>
+
 <h2>{% trans "Notes" %}</h2>
-<p>{{ profile.notes }}</p>
+<p>{{ profile.notes|linebreaksbr }}</p>
 {% endif %}
 
 

@@ -191,8 +191,10 @@ def talk_decide(request, talk, accepted):
 
 @login_required
 def user_details(request, username):
-    speaker = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username)
+    participation = get_object_or_404(Participation, user=user, site=get_current_site(request))
     return render(request, 'proposals/user_details.html', {
-        'profile': speaker.profile,
-        'talk_list': allowed_talks(Talk.objects.filter(site=get_current_site(request), speakers=speaker), request),
+        'profile': user.profile,
+        'participation': participation,
+        'talk_list': allowed_talks(Talk.objects.filter(site=get_current_site(request), speakers=user), request),
     })
