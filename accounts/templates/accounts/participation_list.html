@@ -12,7 +12,6 @@
 
 <table class="table table-striped">
   <tr>
-    <th>#</th>
     <th>Username</th>
     <th>Full name</th>
     <th>Orga</th>
@@ -21,7 +20,6 @@
   </tr>
   {% for participation in participation_list %}
   <tr>
-    <th>{{ forloop.counter }}</th>
     <td><a href="{{ participation.get_absolute_url }}">{{ participation.user.username }}</a></td>
     <td>{{ participation.user.get_full_name }}</td>
     <td>{{ participation.is_orga|yesno:"✔,✘" }}</td>
