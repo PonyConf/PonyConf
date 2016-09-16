@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 20:52+0000\n"
+"POT-Creation-Date: 2016-09-16 16:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr "Besoin d'un hébergement ?"
 msgid "Ok for homestay?"
 msgstr "Ok pour un logement chez l'habitant ?"
 
-#: accounts/models.py:62
+#: accounts/models.py:62 proposals/templates/proposals/user_details.html:42
 msgid "Constraints"
 msgstr "Contraintes"
 
@@ -474,8 +474,12 @@ msgid "Vote:"
 msgstr "Vote :"
 
 #: proposals/templates/proposals/talk_detail.html:64
-msgid "Sum:"
-msgstr "Somme :"
+msgid "vote"
+msgstr "vote"
+
+#: proposals/templates/proposals/talk_detail.html:64
+msgid "average:"
+msgstr "moyenne :"
 
 #: proposals/templates/proposals/talk_detail.html:66
 msgid "Status:"

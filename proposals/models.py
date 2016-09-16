@@ -91,7 +91,10 @@ class Talk(PonyConfModel):
         return user == self.proposer or user in self.speakers.all() or self.is_moderable_by(user)
 
     def score(self):
-        return query_sum(self.vote_set, 'vote')
+        if self.vote_set.exists():
+            return query_sum(self.vote_set, 'vote') / len(self.vote_set.all())
+        else:
+            return 0
 
     class Meta:
         ordering = ('event__id',)
