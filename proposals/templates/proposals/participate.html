@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block participatetab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Participate" %}</h1>
+
+{% if my_talks %}
+<h2>{% trans "My talks:" %}</h2>
+{% include "proposals/_talk_list.html" with talk_list=my_talks %}
+{% endif %}
+
+{% if proposed_talks %}
+<h2>{% trans "Proposed talks for others speakers:" %}</h2>
+{% include "proposals/_talk_list.html" with talk_list=proposed_talks %}
+{% endif %}
+
+<br />
+<a class="btn btn-success" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
+
+{% endblock %}

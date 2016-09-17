@@ -1,20 +1,20 @@
 {% load i18n %}
   {% regroup talk_list by event as event_list %}
   {% for event in event_list %}
-  <h3>{{ event.list.0.event }} ({% trans "total:" %} {{ event.list|length }})</h3>
+  <h3>{{ event.list.0.event }}</h3>
     <ul>{% for talk in event.list %}
       <li>
         {{ talk.get_link }}
-        <i>by</i>
+        <i>{% trans "by" %}</i>
         {% for speaker in talk.speakers.all %}
         <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
-        {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
+        {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
         {% endfor %}
         {% if talk.topics.exists %}
-        <i>in</i>
+        <i>{% trans "in" %}</i>
         {% for topic in talk.topics.all %}
         <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a>
-        {% if forloop.revcounter == 2 %} and {% elif not forloop.last %}, {% endif %}
+        {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
         {% endfor %}
         {% endif %}
       </li>

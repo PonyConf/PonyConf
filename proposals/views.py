@@ -14,7 +14,7 @@ from django.http import HttpResponse
 
 from accounts.models import Participation
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
-from accounts.decorators import orga_required
+from accounts.decorators import orga_required, staff_required
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
@@ -48,13 +48,22 @@ def conference(request):
         'form': form,
     })
 
-
 @login_required
+def participate(request):
+    talks = Talk.objects.filter(site=get_current_site(request))#.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct()
+    my_talks = talks.filter(speakers=request.user)
+    proposed_talks = talks.exclude(speakers=request.user).filter(proposer=request.user)
+    return render(request, 'proposals/participate.html', {
+        'my_talks': my_talks,
+        'proposed_talks': proposed_talks,
+    })
+
+@staff_required
 def talk_list(request):
-    talks = Talk.objects.filter(site=get_current_site(request))
-    return render(request, 'proposals/talks.html', {
-        'my_talks': talks.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct(),
-        'other_talks': allowed_talks(talks.exclude(Q(speakers=request.user) | Q(proposer=request.user)), request)
+    talks = allowed_talks(Talk.objects.filter(site=get_current_site(request)), request)
+    return render(request, 'proposals/talk_list.html', {
+        'title': _('Talks') + ' (%d)' % len(talks),
+        'talk_list': talks,
     })
 
 

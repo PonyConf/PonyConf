@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-16 16:10+0000\n"
+"POT-Creation-Date: 2016-09-17 14:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,7 +184,7 @@ msgid "Delete These"
 msgstr ""
 
 #: accounts/templates/registration/login.html:11
-#: ponyconf/templates/base.html:79
+#: ponyconf/templates/base.html:80
 msgid "Login"
 msgstr "Se connecter"
 
@@ -261,42 +261,47 @@ msgstr "Français"
 msgid "Home"
 msgstr "Accueil"
 
-#: ponyconf/templates/base.html:47 proposals/templates/proposals/talks.html:9
-#: proposals/templates/proposals/user_details.html:22
-msgid "Talks"
-msgstr "Exposés"
+#: ponyconf/templates/base.html:47
+#: proposals/templates/proposals/participate.html:9
+msgid "Participate"
+msgstr "Participer"
 
 #: ponyconf/templates/base.html:48 proposals/models.py:70
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
 
-#: ponyconf/templates/base.html:50 proposals/models.py:65
+#: ponyconf/templates/base.html:50 proposals/templates/proposals/talks.html:9
+#: proposals/templates/proposals/user_details.html:22
+msgid "Talks"
+msgstr "Exposés"
+
+#: ponyconf/templates/base.html:51 proposals/models.py:65
 #: proposals/templates/proposals/speaker_list.html:9
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: ponyconf/templates/base.html:59
+#: ponyconf/templates/base.html:60
 msgid "Administration"
 msgstr "Administration"
 
-#: ponyconf/templates/base.html:66
+#: ponyconf/templates/base.html:67
 msgid "Conference"
 msgstr "Conférence"
 
-#: ponyconf/templates/base.html:68
+#: ponyconf/templates/base.html:69
 msgid "Participants"
 msgstr "Participants"
 
-#: ponyconf/templates/base.html:69
+#: ponyconf/templates/base.html:70
 msgid "Correspondence"
 msgstr "Correspondance"
 
-#: ponyconf/templates/base.html:78
+#: ponyconf/templates/base.html:79
 msgid "Register"
 msgstr "S’inscrire"
 
-#: ponyconf/templates/base.html:104
+#: ponyconf/templates/base.html:105
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -352,9 +357,18 @@ msgstr ""
 msgid "other"
 msgstr "autre"
 
-#: proposals/templates/proposals/_talk_list.html:4
-msgid "total:"
-msgstr "total :"
+#: proposals/templates/proposals/_talk_list.html:8
+msgid "by"
+msgstr "par"
+
+#: proposals/templates/proposals/_talk_list.html:11
+#: proposals/templates/proposals/_talk_list.html:17
+msgid "and"
+msgstr "et"
+
+#: proposals/templates/proposals/_talk_list.html:14
+msgid "in"
+msgstr "portant sur"
 
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
@@ -367,6 +381,20 @@ msgstr "Paramètres de la conférence"
 #: proposals/templates/proposals/conference.html:13
 msgid "Home page"
 msgstr "Page d’accueil"
+
+#: proposals/templates/proposals/participate.html:12
+msgid "My talks:"
+msgstr "Mes exposés :"
+
+#: proposals/templates/proposals/participate.html:17
+msgid "Proposed talks for others speakers:"
+msgstr "Exposés proposés pour un tier :"
+
+#: proposals/templates/proposals/participate.html:22
+#: proposals/templates/proposals/talk_edit.html:9
+#: proposals/templates/proposals/talks.html:11
+msgid "Propose a talk"
+msgstr "Proposer un exposé"
 
 #: proposals/templates/proposals/speaker_list.html:15
 #: proposals/templates/proposals/topic_list.html:23
@@ -493,11 +521,6 @@ msgstr "Messages :"
 msgid "These messages are for organization team only."
 msgstr "Ces messages sont à destination de la team d’organisation seulement."
 
-#: proposals/templates/proposals/talk_edit.html:9
-#: proposals/templates/proposals/talks.html:11
-msgid "Propose a talk"
-msgstr "Proposer un exposé"
-
 #: proposals/templates/proposals/talks.html:14
 msgid "My participing talks"
 msgstr "Exposés auxquels je participe"
@@ -566,27 +589,27 @@ msgstr "Accepte d’être enregistré en vidéo :"
 msgid "Video licence:"
 msgstr "Licence vidéo :"
 
-#: proposals/views.py:65
+#: proposals/views.py:73
 #, python-format
 msgid "Talks related to %s:"
 msgstr "Exposés portant sur la thématique %s :"
 
-#: proposals/views.py:84
+#: proposals/views.py:92
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:90
+#: proposals/views.py:98
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:158
+#: proposals/views.py:166
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:158
+#: proposals/views.py:166
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:184
+#: proposals/views.py:192
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"

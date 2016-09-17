@@ -43,9 +43,10 @@
           <ul class="nav navbar-nav">
             <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
             {% if request.user.is_authenticated %}
-            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">{% trans "Talks" %}</a></li>
+            <li{% block participatetab %}{% endblock %}><a href="{% url 'participate' %}">{% trans "Participate" %}</a></li>
             <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">{% trans "Topics" %}</a></li>
             {% if request|staff %}
+            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">{% trans "Talks" %}</a></li>
             <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">{% trans "Speakers" %}</a></li>
             {% endif %}
             {% endif %}
