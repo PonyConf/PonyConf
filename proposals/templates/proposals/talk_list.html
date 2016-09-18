@@ -8,7 +8,7 @@
 
 <h1>{% trans "Talks" %}</h1>
 
-<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controls="filter">Show filtering options…</a>
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controls="filter">{% trans "Show filtering options…" %}</a>
 
 <br /><br />
 
@@ -26,7 +26,7 @@
                     {% bootstrap_field filter_form.topic layout="horizontal" %}
                 </div>
             </div>
-            <input type="submit" class="btn btn-success" value="Filter">
+            <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
         </form>
     </div>
 </div>

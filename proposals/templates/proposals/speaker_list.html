@@ -1,22 +1,111 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load bootstrap3 i18n %}
 
 {% block speakertab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Speakers" %} ({{ user_list|length }})</h1>
+<h1>{% trans "Speakers" %}</h1>
 
-<ul>
-{% for speaker in user_list %}
-    <li>
-        <a href="{% url 'show-speaker' username=speaker.username %}">{{ speaker.profile }}</a>
-        ({{ speaker.talk_set.count }} {% trans "talk" %}{{ speaker.talk_set.count|pluralize }})
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a>
+
+<br /><br />
+
+<div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
+    <div class="well">
+        <form class="form-horizontal" method="get">
+            <div class="row">
+                <div class="col-md-4 col-xs-6">
+                    {% bootstrap_field filter_form.transport layout="horizontal" %}
+                </div>
+                <div class="col-md-4 col-xs-6">
+                    {% bootstrap_field filter_form.hosting layout="horizontal" %}
+                </div>
+                <div class="col-md-4 col-xs-6">
+                    {% bootstrap_field filter_form.sound layout="horizontal" %}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">{% trans "Username" %}</th>
+            <th class="text-center">{% trans "Fullname" %}</th>
+            <th class="text-center">{% trans "Talk count" %}</th>
+            <th class="text-center">{% blocktrans context "table column title" %}Need transport?{% endblocktrans %}</th>
+            <th class="text-center">{% blocktrans context "table column title" %}Need hosting?{% endblocktrans %}</th>
+            <th class="text-center">{% trans "Need sound?" %}</th>
+            <th class="text-center"></th>
+        </tr>
+    </thead>
+    {% for speaker in speaker_list %}
+    {% if forloop.first %}
+    <tbody>
+    {% endif %}
+        <tr class="clickable-row" data-href="{% url 'show-speaker' username=speaker.user.username %}">
+            <td>{{ speaker.user.username }}</td>
+            <td>{{ speaker.user.get_full_name }}</td>
+            <td class="text-right">{{ speaker.talk_set.count }}</td>
+            {% if speaker.need_transport %}
+            <td class="warning">
+                {% for transport in speaker.transport.all %}
+                    {% if not forloop.first %}, {% endif %}
+                    {{ transport }}
+                {% endfor %}
+            </td>
+            {% else %}
+            <td>—</td>
+            {% endif %}
+            {% if speaker.need_hosting %}
+            <td class="warning">
+                {% if speaker.homestay %}
+                Logement chez habitant
+                {% else %}
+                Hotel
+                {% endif %}
+            </td>
+            {% else %}
+            <td>—</td>
+            {% endif %}
+            {% if speaker.sound %}
+            <td class="warning">Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+            <td>
+                <a class="btn btn-primary" href="{% url 'conversation' speaker.user.username %}">{% trans "Contact" %}</a>
+            </td>
+        </tr>
     </li>
-{% empty %}
-    <li><i>{% trans "No speakers." %}</i></li>
-{% endfor %}
-</ul>
+    {% if forloop.last %}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    <tfoot>
+        <tr>
+            <th colspan="5">{% trans "Total:" %} {{ speaker_list|length }} {% trans "speaker" %}{{ speaker_list|length|pluralize }}</th>
+        </tr>
+    </tfoot>
+</table>
 
+{% endblock %}
+
+{% block js_end %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+
+    var anchor = window.location.hash.replace("#", "");
+    if (anchor == "filter") {
+        $("#filter").collapse('show');
+    }
+});
+</script>
 {% endblock %}

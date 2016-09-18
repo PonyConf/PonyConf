@@ -8,7 +8,7 @@ class TalkAdmin(admin.ModelAdmin):
     # (it is easy to obtain incoherent data due to site framework)
     def has_add_permission(self, request):
         return False
-    # Filter for 'on site' tocpis and event
+    # Filter for 'on site' topics and event
     def get_form(self, request, obj=None, **kwargs):
         form = super(TalkAdmin, self).get_form(request, obj, **kwargs)
         # in fact, obj should never be none as 'add' button is disabled

@@ -20,7 +20,7 @@ from accounts.decorators import orga_required, staff_required
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
-from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm, FilterForm, STATUS_VALUES
+from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
 from .models import Talk, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
@@ -64,7 +64,7 @@ def participate(request):
 def talk_list(request):
     show_filters = False
     talks = Talk.objects.filter(site=get_current_site(request))
-    filter_form = FilterForm(request.GET or None, site=get_current_site(request))
+    filter_form = TalkFilterForm(request.GET or None, site=get_current_site(request))
     # Filtering
     if filter_form.is_valid():
         data = filter_form.cleaned_data
@@ -192,14 +192,6 @@ class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
         return TopicCreateForm if self.request.user.is_superuser else TopicUpdateForm
 
 
-class SpeakerList(StaffRequiredMixin, ListView):
-    template_name = 'proposals/speaker_list.html'
-
-    def get_queryset(self):
-        site = get_current_site(self.request)
-        return User.objects.filter(talk__in=Talk.objects.filter(site=site)).all().distinct()
-
-
 @login_required
 def vote(request, talk, score):
     talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
@@ -239,6 +231,36 @@ def talk_decide(request, talk, accepted):
     return render(request, 'proposals/talk_decide.html', {
         'talk': talk,
         'accept': accepted,
+    })
+
+
+@staff_required
+def speaker_list(request):
+    show_filters = False
+    site = get_current_site(request)
+    speakers = Participation.objects.filter(user__talk__in=Talk.objects.filter(site=site)).all().distinct()
+    filter_form = SpeakerFilterForm(request.GET or None)
+    # Filtering
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['transport']):
+            show_filters = True
+            speakers = speakers.filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
+        if len(data['hosting']):
+            show_filters = True
+            queries = []
+            if 'hotel' in data['hosting']:
+                queries += [ Q(need_hosting=True, homestay=False) ]
+            if 'homestay' in data['hosting']:
+                queries += [ Q(need_hosting=True, homestay=True) ]
+            speakers = speakers.filter(reduce(lambda x, y: x | y, queries))
+        if data['sound'] != None:
+            show_filters = True
+            speakers = speakers.filter(sound=data['sound'])
+    return render(request, 'proposals/speaker_list.html', {
+        'speaker_list': speakers,
+        'filter_form': filter_form,
+        'show_filters': show_filters,
     })
 
 

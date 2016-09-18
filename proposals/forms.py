@@ -7,6 +7,8 @@ from django_select2.forms import Select2TagWidget
 
 from proposals.models import Talk, Topic, Event, Conference
 
+from accounts.models import Transport
+
 
 STATUS_CHOICES = [
         ('pending', 'Pending decision'),
@@ -37,7 +39,7 @@ class TalkForm(forms.ModelForm):
         }
 
 
-class FilterForm(forms.Form):
+class TalkFilterForm(forms.Form):
     kind = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
@@ -60,6 +62,25 @@ class FilterForm(forms.Form):
         self.fields['kind'].choices = events.values_list('pk', 'name')
         topics = Topic.objects.filter(site=site)
         self.fields['topic'].choices = topics.values_list('slug', 'name')
+
+
+class SpeakerFilterForm(forms.Form):
+    transport = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=Transport.objects.values_list('pk', 'name'),
+    )
+    hosting = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[
+                    ('hotel', 'Hotel'),
+                    ('homestay', 'Homestay'),
+            ],
+    )
+    sound = forms.NullBooleanField()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class TopicCreateForm(forms.ModelForm):
