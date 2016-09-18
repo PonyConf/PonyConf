@@ -79,7 +79,7 @@
             <td>No</td>
             {% endif %}
             <td>
-                <a class="btn btn-primary" href="{% url 'conversation' speaker.user.username %}">{% trans "Contact" %}</a>
+                <a class="btn btn-{% if speaker.conversation.messages.last.author == speaker.user %}primary{% else %}default{% endif %}" href="{% url 'conversation' speaker.user.username %}">{% trans "Contact" %}</a>
             </td>
         </tr>
     </li>
