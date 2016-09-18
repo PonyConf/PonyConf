@@ -40,8 +40,9 @@ class ProposalsTests(TestCase):
         # Status Code
         for view in ['home', 'participate', 'add-talk', 'list-topics']:
             self.assertEqual(self.client.get(reverse(view)).status_code, 200)
-        self.assertEqual(self.client.get(reverse('list-talks')).status_code, 403)
-        self.assertEqual(self.client.get(reverse('list-speakers')).status_code, 302)
+        for view in ['list-talks', 'list-speakers']:
+            self.assertEqual(self.client.get(reverse(view)).status_code, 403)
+        self.assertEqual(self.client.get(reverse('list-speakers')).status_code, 403)
         self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-speaker', kwargs={'username': 'a'})).status_code, 200)
