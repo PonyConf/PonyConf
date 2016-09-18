@@ -17,13 +17,13 @@
         <form class="form-horizontal" method="get">
             <div class="row">
                 <div class="col-md-4 col-xs-6">
-            {% bootstrap_field filter_form.kind layout="horizontal" %}
+                    {% bootstrap_field filter_form.kind layout="horizontal" %}
                 </div>
                 <div class="col-md-4 col-xs-6">
-            {% bootstrap_field filter_form.status layout="horizontal" %}
+                    {% bootstrap_field filter_form.status layout="horizontal" %}
                 </div>
                 <div class="col-md-4 col-xs-6">
-            {% bootstrap_field filter_form.topic layout="horizontal" %}
+                    {% bootstrap_field filter_form.topic layout="horizontal" %}
                 </div>
             </div>
             <input type="submit" class="btn btn-success" value="Filter">
@@ -34,11 +34,11 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th class="text-center">{% trans "Title" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
-            <th class="text-center">{% trans "Intervention kind" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
-            <th class="text-center">{% trans "Speakers" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
-            <th class="text-center">{% trans "Topics" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
-            <th class="text-center">{% trans "Status" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+            <th class="text-center">{% trans "Title" %} <a href="?{{ sort_urls.title }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.title }} pull-right"></span></a></th>
+            <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.kind }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.kind }} pull-right"></span></a></th>
+            <th class="text-center">{% trans "Speakers" %}</th>
+            <th class="text-center">{% trans "Topics" %}</th>
+            <th class="text-center">{% trans "Status" %} <a href="?{{ sort_urls.status }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.status }} pull-right"></span></a></th>
         </tr>
     </thead>
     {% for talk in talk_list %}

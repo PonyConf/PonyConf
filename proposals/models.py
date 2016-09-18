@@ -76,6 +76,9 @@ class Talk(PonyConfModel):
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
 
+    class Meta:
+        ordering = ('title',)
+
     def __str__(self):
         return self.title
 

@@ -65,19 +65,57 @@ def talk_list(request):
     show_filters = False
     talks = Talk.objects.filter(site=get_current_site(request))
     filter_form = FilterForm(request.GET or None, site=get_current_site(request))
+    # Filtering
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['kind']):
+            show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(event__pk=pk) for pk in data['kind']]))
         if len(data['status']):
+            show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
         if len(data['topic']):
+            show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
-        show_filters = True
+    # Sorting
+    if request.GET.get('order') == 'desc':
+        reverse = True
+    else:
+        reverse = False
+    SORT_MAPPING = {
+        'title': 'title',
+        'kind': 'event',
+        'status': 'accepted',
+    }
+    sort = request.GET.get('sort')
+    if sort in SORT_MAPPING.keys():
+        if reverse:
+            talks = talks.order_by('-' + SORT_MAPPING[sort])
+        else:
+            talks = talks.order_by(SORT_MAPPING[sort])
+    # Sorting URLs
+    sort_urls = dict()
+    sort_glyphicons = dict()
+    for c in SORT_MAPPING.keys():
+        url = request.GET.copy()
+        url['sort'] = c
+        if c == sort:
+            if reverse:
+                del url['order']
+                glyphicon = 'sort-by-attributes-alt'
+            else:
+                url['order'] = 'desc'
+                glyphicon = 'sort-by-attributes'
+        else:
+            glyphicon = 'sort'
+        sort_urls[c] = url.urlencode()
+        sort_glyphicons[c] = glyphicon
     return render(request, 'proposals/talk_list.html', {
         'show_filters': show_filters,
         'talk_list': talks,
         'filter_form': filter_form,
+        'sort_urls': sort_urls,
+        'sort_glyphicons': sort_glyphicons,
     })
 
 @login_required
