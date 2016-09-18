@@ -42,7 +42,7 @@ class Topic(PonyConfModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('list-talks') + '?filter=topic:%s' % self.slug
+        return reverse('list-talks') + '?topic=%s' % self.slug
 
 
 class Event(models.Model):
