@@ -55,6 +55,7 @@ class TalkFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
+
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
@@ -65,6 +66,11 @@ class TalkFilterForm(forms.Form):
 
 
 class SpeakerFilterForm(forms.Form):
+    topic = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
     transport = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
@@ -79,8 +85,12 @@ class SpeakerFilterForm(forms.Form):
             ],
     )
     sound = forms.NullBooleanField()
+
     def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
+        topics = Topic.objects.filter(site=site)
+        self.fields['topic'].choices = topics.values_list('slug', 'name')
 
 
 class TopicCreateForm(forms.ModelForm):
