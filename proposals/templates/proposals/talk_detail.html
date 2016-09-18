@@ -14,7 +14,7 @@
 
 <h3>{% trans "Format:" %}</h3>
 
-<p>{{ talk.event }}</p>
+<p><a href="{{ talk.event.get_absolute_url }}">{{ talk.event }}</a></p>
 
 <h3>{% trans "Abstract:" %}</h3>
 

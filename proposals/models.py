@@ -57,6 +57,9 @@ class Event(models.Model):
     def __str__(self):
         return ugettext(self.name)
 
+    def get_absolute_url(self):
+        return reverse('list-talks') + '?kind=%d' % self.pk
+
 
 class Talk(PonyConfModel):
 
