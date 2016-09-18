@@ -38,8 +38,10 @@ class ProposalsTests(TestCase):
         self.assertEqual(talk.description, 'mega')
 
         # Status Code
-        for view in ['home', 'list-talks', 'add-talk', 'list-topics', 'list-speakers']:
-            self.assertEqual(self.client.get(reverse(view)).status_code, 302 if view == 'list-speakers' else 200)
+        for view in ['home', 'participate', 'add-talk', 'list-topics']:
+            self.assertEqual(self.client.get(reverse(view)).status_code, 200)
+        self.assertEqual(self.client.get(reverse('list-talks')).status_code, 403)
+        self.assertEqual(self.client.get(reverse('list-speakers')).status_code, 302)
         self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-speaker', kwargs={'username': 'a'})).status_code, 200)
@@ -47,7 +49,7 @@ class ProposalsTests(TestCase):
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
                                           {'title': 'mega talk', 'description': 'mega', 'event': 1}).status_code, 403)
-        self.assertEqual(self.client.get(reverse('list-talks')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('participate')).status_code, 200)
 
         # Vote
         self.assertEqual(talk.score(), 0)
