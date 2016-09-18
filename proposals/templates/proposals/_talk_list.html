@@ -13,7 +13,7 @@
         {% if talk.topics.exists %}
         <i>{% trans "in" %}</i>
         {% for topic in talk.topics.all %}
-        <a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a>
+        <a href="{{ topic.get_full_url }}">{{ topic }}</a>
         {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
         {% endfor %}
         {% endif %}

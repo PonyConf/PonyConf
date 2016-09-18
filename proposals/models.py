@@ -42,7 +42,7 @@ class Topic(PonyConfModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('list-talks-by-topic', kwargs={'topic': self.slug})
+        return reverse('list-talks') + '?filter=topic:%s' % self.slug
 
 
 class Event(models.Model):
@@ -52,6 +52,7 @@ class Event(models.Model):
 
     class Meta:
         unique_together = ('site', 'name')
+        ordering = ('pk',)
 
     def __str__(self):
         return ugettext(self.name)

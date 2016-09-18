@@ -38,7 +38,7 @@
 
 {% for topic in talk.topics.all %}
 {% if forloop.first %}<ul>{% endif %}
-    <li><a href="{% url 'list-talks-by-topic' topic.slug %}">{{ topic }}</a></li>
+    <li><a href="{{ topic.get_full_url }}">{{ topic }}</a></li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <i>{% trans "No topics." %}</i>

@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +20,7 @@ from accounts.decorators import orga_required, staff_required
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
-from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm
+from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm, FilterForm, STATUS_VALUES
 from .models import Talk, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
@@ -50,7 +52,7 @@ def conference(request):
 
 @login_required
 def participate(request):
-    talks = Talk.objects.filter(site=get_current_site(request))#.filter(Q(speakers=request.user) | Q(proposer=request.user)).distinct()
+    talks = Talk.objects.filter(site=get_current_site(request))
     my_talks = talks.filter(speakers=request.user)
     proposed_talks = talks.exclude(speakers=request.user).filter(proposer=request.user)
     return render(request, 'proposals/participate.html', {
@@ -60,19 +62,23 @@ def participate(request):
 
 @staff_required
 def talk_list(request):
-    talks = allowed_talks(Talk.objects.filter(site=get_current_site(request)), request)
+    show_filters = False
+    talks = Talk.objects.filter(site=get_current_site(request))
+    filter_form = FilterForm(request.GET or None, site=get_current_site(request))
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['kind']):
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(event__pk=pk) for pk in data['kind']]))
+        if len(data['status']):
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+        if len(data['topic']):
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
+        show_filters = True
     return render(request, 'proposals/talk_list.html', {
-        'title': _('Talks') + ' (%d)' % len(talks),
+        'show_filters': show_filters,
         'talk_list': talks,
+        'filter_form': filter_form,
     })
-
-
-@login_required
-def talk_list_by_topic(request, topic):
-    topic = get_object_or_404(Topic, slug=topic)
-    talks = allowed_talks(Talk.objects.filter(site=topic.site, topics=topic), request)
-    return render(request, 'proposals/talk_list.html', {'title': _('Talks related to %s:') % topic, 'talk_list': talks})
-
 
 @login_required
 def talk_edit(request, talk=None):

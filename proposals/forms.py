@@ -1,4 +1,4 @@
-from django.forms import CheckboxSelectMultiple, ModelForm
+from django import forms
 from django.forms.models import modelform_factory
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -8,7 +8,19 @@ from django_select2.forms import Select2TagWidget
 from proposals.models import Talk, Topic, Event, Conference
 
 
-class TalkForm(ModelForm):
+STATUS_CHOICES = [
+        ('pending', 'Pending decision'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+]
+STATUS_VALUES = [
+        ('pending', None),
+        ('accepted', True),
+        ('declined', False),
+]
+
+
+class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
         super(TalkForm, self).__init__(*args, **kwargs)
@@ -18,14 +30,39 @@ class TalkForm(ModelForm):
     class Meta:
         model = Talk
         fields = ['title', 'abstract', 'description', 'topics', 'notes', 'event', 'speakers']
-        widgets = {'topics': CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
+        widgets = {'topics': forms.CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
         help_texts = {
             'abstract': _('Should be less than 255 characters'),
             'notes': _('If you want to add some precisions for the organizers.'),
         }
 
 
-class TopicCreateForm(ModelForm):
+class FilterForm(forms.Form):
+    kind = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    status = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=STATUS_CHOICES,
+    )
+    topic = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        events = Event.objects.filter(site=site)
+        self.fields['kind'].choices = events.values_list('pk', 'name')
+        topics = Topic.objects.filter(site=site)
+        self.fields['topic'].choices = topics.values_list('slug', 'name')
+
+
+class TopicCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.site_id = kwargs.pop('site_id')
         super(TopicCreateForm, self).__init__(*args, **kwargs)

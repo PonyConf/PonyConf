@@ -1,11 +1,101 @@
 {% extends 'base.html' %}
 
+{% load bootstrap3 i18n %}
+
 {% block talktab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{{ title }}</h1>
+<h1>{% trans "Talks" %}</h1>
 
-{% include "proposals/_talk_list.html" %}
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controls="filter">Show filtering options…</a>
 
+<br /><br />
+
+<div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
+    <div class="well">
+        <form class="form-horizontal" method="get">
+            <div class="row">
+                <div class="col-md-4 col-xs-6">
+            {% bootstrap_field filter_form.kind layout="horizontal" %}
+                </div>
+                <div class="col-md-4 col-xs-6">
+            {% bootstrap_field filter_form.status layout="horizontal" %}
+                </div>
+                <div class="col-md-4 col-xs-6">
+            {% bootstrap_field filter_form.topic layout="horizontal" %}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-success" value="Filter">
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">{% trans "Title" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+            <th class="text-center">{% trans "Intervention kind" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+            <th class="text-center">{% trans "Speakers" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+            <th class="text-center">{% trans "Topics" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+            <th class="text-center">{% trans "Status" %} <a href="#"><span class="glyphicon glyphicon-sort pull-right"></span></a></th>
+        </tr>
+    </thead>
+    {% for talk in talk_list %}
+    {% if forloop.first %}
+    <tbody>
+    {% endif %}
+        <tr class="clickable-row" data-href="{% url 'show-talk' talk.slug %}">
+            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.title }}</td>
+            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.event }}</td>
+            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+                {% for speaker in talk.speakers.all %}
+                    {{ speaker }}
+                    {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+                    {% empty %}–
+                {% endfor %}
+            </td>
+            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+                {% for topic in talk.topics.all %}
+                    {{ topic }}
+                    {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+                    {% empty %}–
+                {% endfor %}
+            </td>
+            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+                {% if talk.accepted == True %}
+                    {% trans "Accepted" %}
+                {% elif talk.accepted == False %}
+                    {% trans "Declined" %}
+                {% else %}
+                    {% blocktrans with score=talk.score %}Pending, score: {{ score }}{% endblocktrans %}
+                {% endif %}
+            </td>
+        </tr>
+    {% if forloop.last%}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    <tfoot>
+        <tr>
+            <th colspan="5">{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</th>
+        </tr>
+    </tfoot>
+</table>
+
+{% endblock %}
+
+{% block js_end %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+
+    var anchor = window.location.hash.replace("#", "");
+	if (anchor == "filter") {
+		$("#filter").collapse('show');
+	}
+});
+</script>
 {% endblock %}
