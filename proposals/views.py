@@ -238,14 +238,15 @@ def talk_decide(request, talk, accepted):
 def speaker_list(request):
     show_filters = False
     site = get_current_site(request)
-    speakers = Participation.objects.filter(user__talk__in=Talk.objects.filter(site=site)).all().distinct()
+    talks = Talk.objects.filter(site=site)
+    speakers = Participation.objects.filter(user__talk__in=talks).all().distinct()
     filter_form = SpeakerFilterForm(request.GET or None)
     # Filtering
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['transport']):
             show_filters = True
-            speakers = speakers.filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
+            speakers = speakers.filter(need_transport=True).filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
         if len(data['hosting']):
             show_filters = True
             queries = []
