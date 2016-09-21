@@ -46,9 +46,17 @@
 
 {% if moderate_perm %}
 
+<h3>{% trans "Track:" %}</h3>
+
+<p>{% if talk.track %}{{ talk.track }}{% else %}<em>{% trans "No assigned yet." %}</em>{% endif %}</p>
+
+{% endif %}
+
 <h3>{% trans "Notes:" %}</h3>
 
 <p>{% if talk.notes %}{{ talk.notes }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
+
+{% if moderate_perm %}
 
 <h2>{% trans "Moderation" %}</h2>
 

@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from accounts.models import Participation
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from accounts.decorators import orga_required, staff_required
+from accounts.utils import is_staff
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
@@ -77,6 +78,25 @@ def talk_list(request):
         if len(data['topic']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
+        if len(data['track']):
+            show_filters = True
+            q1 = None
+            q2 = None
+            if 'none' in data['track']:
+                data['track'].remove('none')
+                q1 = Q(track__isnull=True)
+            if len(data['track']):
+                q2 = Q(track__slug__in=data['track'])
+            if q1 and q2:
+                q = q1 | q2
+            elif q1:
+                q = q1
+            elif q2:
+                q = q2
+            else:
+                q = None
+            if q:
+                talks = talks.filter(q)
         if data['vote'] != None:
             if data['vote']:
                 talks = talks.filter(vote__user=request.user)
@@ -130,6 +150,8 @@ def talk_edit(request, talk=None):
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk, site=get_current_site(request))
+    if not is_staff(request, request.user):
+        form.fields.pop('track')
     if talk:
         form.fields['title'].disabled = True
         form.fields['topics'].disabled = True

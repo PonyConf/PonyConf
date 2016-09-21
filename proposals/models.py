@@ -45,6 +45,21 @@ class Topic(PonyConfModel):
         return reverse('list-talks') + '?topic=%s' % self.slug
 
 
+class Track(PonyConfModel):
+
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=128, verbose_name=_('Name'))
+    slug = AutoSlugField(populate_from='name')
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+
+    class Meta:
+        unique_together = ('site', 'name')
+
+    def __str__(self):
+        return self.name
+
+
 class Event(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -72,6 +87,7 @@ class Talk(PonyConfModel):
     abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
     description = models.TextField(blank=True, verbose_name=_('Description'))
     topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
+    track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)

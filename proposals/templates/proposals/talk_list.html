@@ -17,14 +17,15 @@
         <form class="form-horizontal" method="get">
             <div class="row">
                 <div class="col-md-4 col-xs-6">
+                    {% bootstrap_field filter_form.status layout="horizontal" %}
+                    {% bootstrap_field filter_form.vote layout="horizontal" %}
                     {% bootstrap_field filter_form.kind layout="horizontal" %}
                 </div>
                 <div class="col-md-4 col-xs-6">
-                    {% bootstrap_field filter_form.status layout="horizontal" %}
-                    {% bootstrap_field filter_form.vote layout="horizontal" %}
+                    {% bootstrap_field filter_form.topic layout="horizontal" %}
                 </div>
                 <div class="col-md-4 col-xs-6">
-                    {% bootstrap_field filter_form.topic layout="horizontal" %}
+                    {% bootstrap_field filter_form.track layout="horizontal" %}
                 </div>
             </div>
             <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
@@ -39,6 +40,7 @@
             <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.kind }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.kind }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Speakers" %}</th>
             <th class="text-center">{% trans "Topics" %}</th>
+            <th class="text-center">{% trans "Track" %}</th>
             <th class="text-center">{% trans "Status" %} <a href="?{{ sort_urls.status }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.status }} pull-right"></span></a></th>
         </tr>
     </thead>
@@ -46,24 +48,25 @@
     {% if forloop.first %}
     <tbody>
     {% endif %}
-        <tr class="clickable-row" data-href="{% url 'show-talk' talk.slug %}">
-            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.title }}</td>
-            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.event }}</td>
-            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+        <tr class="clickable-row {{ talk.accepted|yesno:"success,danger,warning" }}" data-href="{% url 'show-talk' talk.slug %}">
+            <td>{{ talk.title }}</td>
+            <td>{{ talk.event }}</td>
+            <td>
                 {% for speaker in talk.speakers.all %}
                     {{ speaker }}
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}
             </td>
-            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+            <td>
                 {% for topic in talk.topics.all %}
                     {{ topic }}
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}
             </td>
-            <td class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+            <td>{{ talk.track|default:"–" }}</td>
+            <td>
                 {% if talk.accepted == True %}
                     {% trans "Accepted" %}
                 {% elif talk.accepted == False %}

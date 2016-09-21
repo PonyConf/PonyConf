@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from proposals.models import Conference, Talk, Topic, Event
+from proposals.models import Conference, Talk, Topic, Track, Event
 
 
 class TalkAdmin(admin.ModelAdmin):
@@ -14,10 +14,12 @@ class TalkAdmin(admin.ModelAdmin):
         # in fact, obj should never be none as 'add' button is disabled
         if obj:
             form.base_fields['topics'].queryset = Topic.objects.filter(site=obj.site)
+            form.base_fields['track'].queryset = Track.objects.filter(site=obj.site)
             form.base_fields['event'].queryset = Event.objects.filter(site=obj.site)
         return form
 
 admin.site.register(Conference)
 admin.site.register(Topic)
+admin.site.register(Track)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(Event)

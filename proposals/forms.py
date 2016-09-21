@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from proposals.models import Talk, Topic, Event, Conference
+from proposals.models import Talk, Topic, Track, Event, Conference
 
 from accounts.models import Transport
 
@@ -27,11 +27,12 @@ class TalkForm(forms.ModelForm):
         site = kwargs.pop('site')
         super(TalkForm, self).__init__(*args, **kwargs)
         self.fields['topics'].queryset = Topic.objects.filter(site=site)
+        self.fields['track'].queryset = Track.objects.filter(site=site)
         self.fields['event'].queryset = Event.objects.filter(site=site)
 
     class Meta:
         model = Talk
-        fields = ['title', 'abstract', 'description', 'topics', 'notes', 'event', 'speakers']
+        fields = ['title', 'abstract', 'description', 'topics', 'track', 'notes', 'event', 'speakers']
         widgets = {'topics': forms.CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
         help_texts = {
             'abstract': _('Should be less than 255 characters'),
@@ -55,7 +56,12 @@ class TalkFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
-    vote = forms.NullBooleanField(help_text='Filter topics you already / not yet voted for')
+    track = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    vote = forms.NullBooleanField(help_text=_('Filter topics you already / not yet voted for'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
@@ -64,6 +70,8 @@ class TalkFilterForm(forms.Form):
         self.fields['kind'].choices = events.values_list('pk', 'name')
         topics = Topic.objects.filter(site=site)
         self.fields['topic'].choices = topics.values_list('slug', 'name')
+        tracks = Track.objects.filter(site=site)
+        self.fields['track'].choices = [('none', 'Not assigned')] + list(tracks.values_list('slug', 'name'))
 
 
 class SpeakerFilterForm(forms.Form):
