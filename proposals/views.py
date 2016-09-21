@@ -77,6 +77,11 @@ def talk_list(request):
         if len(data['topic']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
+        if data['vote'] != None:
+            if data['vote']:
+                talks = talks.filter(vote__user=request.user)
+            else:
+                talks = talks.exclude(vote__user=request.user)
     # Sorting
     if request.GET.get('order') == 'desc':
         reverse = True
