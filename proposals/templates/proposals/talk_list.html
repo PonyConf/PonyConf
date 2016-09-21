@@ -69,7 +69,7 @@
                 {% elif talk.accepted == False %}
                     {% trans "Declined" %}
                 {% else %}
-                    {% blocktrans with score=talk.score %}Pending, score: {{ score }}{% endblocktrans %}
+                    {% blocktrans with score=talk.score|floatformat:1 %}Pending, score: {{ score }}{% endblocktrans %}
                 {% endif %}
             </td>
         </tr>

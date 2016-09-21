@@ -61,7 +61,7 @@
   <a class="btn {% if vote.vote == 2 %}  active {% endif %}btn-success" href="{% url 'vote' talk=talk.slug score='2'  %}">+2</a>
 </div>
 <br /><br />
-{{ talk.vote_set.all|length }} {% trans "vote" %}{{ talk.vote_set.all|length|pluralize }}, {% trans "average:" %} {{ talk.score }}
+{{ talk.vote_set.all|length }} {% trans "vote" %}{{ talk.vote_set.all|length|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}
 
 <h3>{% trans "Status:" %}</h3>
 
