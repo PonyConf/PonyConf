@@ -80,23 +80,13 @@ def talk_list(request):
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
         if len(data['track']):
             show_filters = True
-            q1 = None
-            q2 = None
+            q = Q()
             if 'none' in data['track']:
                 data['track'].remove('none')
-                q1 = Q(track__isnull=True)
+                q |= Q(track__isnull=True)
             if len(data['track']):
-                q2 = Q(track__slug__in=data['track'])
-            if q1 and q2:
-                q = q1 | q2
-            elif q1:
-                q = q1
-            elif q2:
-                q = q2
-            else:
-                q = None
-            if q:
-                talks = talks.filter(q)
+                q |= Q(track__slug__in=data['track'])
+            talks = talks.filter(q)
         if data['vote'] != None:
             if data['vote']:
                 talks = talks.filter(vote__user=request.user)
