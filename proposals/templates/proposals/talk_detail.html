@@ -48,7 +48,18 @@
 
 <h3>{% trans "Track:" %}</h3>
 
-<p>{% if talk.track %}{{ talk.track }}{% else %}<em>{% trans "No assigned yet." %}</em>{% endif %}</p>
+{% if talk.track %}
+    <p>{{ talk.track }}</p>
+{% else %}
+    <p><em>{% trans "No assigned yet." %}</em></p>
+{% for topic in talk.topics.distinct %}
+    {% if forloop.first %}<p>{% endif %}
+        {% if topic.track %}
+            <a class="btn btn-primary" href="{% url 'assign-talk-to-track' talk.slug topic.track.slug %}">{% trans "Assign to" %} {{ topic.track }}</a>
+        {% endif %}
+    {% if forloop.last %}</p>{% endif %}
+{% endfor %}
+{% endif %}
 
 {% endif %}
 

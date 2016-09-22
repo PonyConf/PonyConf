@@ -21,8 +21,8 @@ from accounts.utils import is_staff
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
-from .forms import TalkForm, TopicCreateForm, TopicUpdateForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
-from .models import Talk, Topic, Vote, Conference
+from .forms import TalkForm, TopicForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
+from .models import Talk, Track, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
 
@@ -164,6 +164,17 @@ def talk_edit(request, talk=None):
     })
 
 
+@orga_required
+def talk_assign_to_track(request, talk, track):
+    talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
+    track = get_object_or_404(Track, slug=track, site=get_current_site(request))
+    talk.track = track
+    talk.save()
+    messages.success(request, _('Talk assigned to track successfully!'))
+    next_url = request.GET.get('next') or reverse('show-talk', kwargs={'slug': talk.slug})
+    return redirect(next_url)
+
+
 class TalkDetail(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return Talk.objects.filter(site=get_current_site(self.request)).all()
@@ -184,11 +195,16 @@ class TopicMixin(object):
 
 
 class TopicFormMixin(object):
+    form_class = TopicForm
+
     def get_form_kwargs(self):
-        kwargs = super(TopicFormMixin, self).get_form_kwargs()
-        if self.get_form_class() == TopicCreateForm:
-            kwargs.update({'site_id': get_current_site(self.request).id})
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'site': get_current_site(self.request)})
         return kwargs
+
+    def form_valid(self, form):
+        form.instance.site = get_current_site(self.request)
+        return super().form_valid(form)
 
 
 class TopicList(LoginRequiredMixin, TopicMixin, ListView):
@@ -197,16 +213,10 @@ class TopicList(LoginRequiredMixin, TopicMixin, ListView):
 
 class TopicCreate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, CreateView):
     model = Topic
-    form_class = TopicCreateForm
-
-    def form_valid(self, form):
-        form.instance.site = get_current_site(self.request)
-        return super().form_valid(form)
 
 
 class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
-    def get_form_class(self):
-        return TopicCreateForm if self.request.user.is_superuser else TopicUpdateForm
+    pass
 
 
 @login_required

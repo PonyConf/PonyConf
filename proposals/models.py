@@ -25,26 +25,6 @@ class Conference(models.Model):
         return str(self.site)
 
 
-class Topic(PonyConfModel):
-
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=128, verbose_name=_('Name'))
-    slug = AutoSlugField(populate_from='name', unique=True)
-    description = models.TextField(blank=True, verbose_name=_('Description'))
-
-    reviewers = models.ManyToManyField(User, blank=True, verbose_name=_('Reviewers'))
-
-    class Meta:
-        unique_together = ('site', 'name')
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('list-talks') + '?topic=%s' % self.slug
-
-
 class Track(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -58,6 +38,27 @@ class Track(PonyConfModel):
 
     def __str__(self):
         return self.name
+
+
+class Topic(PonyConfModel):
+
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=128, verbose_name=_('Name'))
+    slug = AutoSlugField(populate_from='name', unique=True)
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Destination track'))
+
+    reviewers = models.ManyToManyField(User, blank=True, verbose_name=_('Reviewers'))
+
+    class Meta:
+        unique_together = ('site', 'name')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('list-talks') + '?topic=%s' % self.slug
 
 
 class Event(models.Model):

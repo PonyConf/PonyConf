@@ -8,7 +8,7 @@ class TalkAdmin(admin.ModelAdmin):
     # (it is easy to obtain incoherent data due to site framework)
     def has_add_permission(self, request):
         return False
-    # Filter for 'on site' topics and event
+    # Filter for 'on site' topics, tracks and events
     def get_form(self, request, obj=None, **kwargs):
         form = super(TalkAdmin, self).get_form(request, obj, **kwargs)
         # in fact, obj should never be none as 'add' button is disabled
@@ -18,8 +18,17 @@ class TalkAdmin(admin.ModelAdmin):
             form.base_fields['event'].queryset = Event.objects.filter(site=obj.site)
         return form
 
+
+class TopicAdmin(admin.ModelAdmin):
+    # Filter for 'on site' tracks
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj:
+            form.base_fields['track'].queryset = Track.objects.filter(site=obj.site)
+        return form
+
 admin.site.register(Conference)
-admin.site.register(Topic)
+admin.site.register(Topic, TopicAdmin)
 admin.site.register(Track)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(Event)

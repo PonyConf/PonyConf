@@ -102,24 +102,22 @@ class SpeakerFilterForm(forms.Form):
         self.fields['topic'].choices = topics.values_list('slug', 'name')
 
 
-class TopicCreateForm(forms.ModelForm):
+class TopicForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        self.site_id = kwargs.pop('site_id')
-        super(TopicCreateForm, self).__init__(*args, **kwargs)
+        self.site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        self.fields['track'].queryset = Track.objects.filter(site=self.site)
 
     class Meta:
         model = Topic
-        fields = ['name', 'description', 'reviewers']
+        fields = ['name', 'description', 'reviewers', 'track']
         widgets = {'reviewers': Select2TagWidget()}
 
     def clean_name(self):
         name = self.cleaned_data['name']
-        if name != self.instance.name and Topic.objects.filter(site__id=self.site_id, name=name).exists():
+        if self.instance and name != self.instance.name and Topic.objects.filter(site=self.site, name=name).exists():
             raise self.instance.unique_error_message(self._meta.model, ['name'])
         return name
 
-
-TopicUpdateForm = modelform_factory(Topic, fields=['reviewers'],
-                                    widgets={'reviewers': Select2TagWidget()})
 
 ConferenceForm = modelform_factory(Conference, fields=['home'])
