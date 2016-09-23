@@ -65,7 +65,7 @@
 
 <h3>{% trans "Notes:" %}</h3>
 
-<p>{% if talk.notes %}{{ talk.notes }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
+<p>{% if talk.notes %}{{ talk.notes|linebreaksbr }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
 
 {% if moderate_perm %}
 
