@@ -164,9 +164,11 @@ def talk_edit(request, talk=None):
     })
 
 
-@orga_required
+@login_required
 def talk_assign_to_track(request, talk, track):
     talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
+    if not talk.is_moderable_by(request.user):
+        raise PermissionDenied()
     track = get_object_or_404(Track, slug=track, site=get_current_site(request))
     talk.track = track
     talk.save()
