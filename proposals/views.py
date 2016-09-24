@@ -280,10 +280,13 @@ def speaker_list(request):
     # Filtering
     if filter_form.is_valid():
         data = filter_form.cleaned_data
+        if len(data['status']):
+            show_filters = True
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
         if len(data['topic']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
-    speakers = Participation.objects.filter(user__talk__in=talks).all().distinct()
+    speakers = Participation.objects.filter(site=site,user__talk__in=talks).order_by('pk').distinct()
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['transport']):

@@ -75,6 +75,11 @@ class TalkFilterForm(forms.Form):
 
 
 class SpeakerFilterForm(forms.Form):
+    status = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=STATUS_CHOICES,
+    )
     topic = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
