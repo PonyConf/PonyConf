@@ -17,7 +17,7 @@ from django.http import HttpResponse
 from accounts.models import Participation
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from accounts.decorators import orga_required, staff_required
-from accounts.utils import is_staff
+from accounts.utils import is_orga, is_staff
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
@@ -53,12 +53,14 @@ def conference(request):
 
 @login_required
 def participate(request):
-    talks = Talk.objects.filter(site=get_current_site(request))
+    site = get_current_site(request)
+    talks = Talk.objects.filter(site=site)
     my_talks = talks.filter(speakers=request.user)
     proposed_talks = talks.exclude(speakers=request.user).filter(proposer=request.user)
     return render(request, 'proposals/participate.html', {
         'my_talks': my_talks,
         'proposed_talks': proposed_talks,
+        'conf': site.conference,
     })
 
 @staff_required
@@ -135,18 +137,24 @@ def talk_list(request):
 
 @login_required
 def talk_edit(request, talk=None):
-    if talk:
-        talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
+    site = get_current_site(request)
+    if talk: # edit existing talk
+        talk = get_object_or_404(Talk, slug=talk, site=site)
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
-    form = TalkForm(request.POST or None, instance=talk, site=get_current_site(request))
-    if not is_staff(request, request.user):
-        form.fields.pop('track')
+    else: # add new talk
+        if site.conference.cfp != Conference.CFP_OPEN and not is_orga(request, request.user):
+            raise PermissionDenied()
+    form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
         form.fields['title'].disabled = True
         form.fields['topics'].disabled = True
+        if not talk.is_editable_by(request.user):
+            form.fields.pop('track')
     else:
         form.fields['speakers'].initial = [request.user]
+        if not is_orga(request, request.user):
+            form.fields.pop('track')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()

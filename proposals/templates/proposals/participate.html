@@ -19,6 +19,12 @@
 {% endif %}
 
 <br />
+{% if conf.cfp == conf.CFP_FORTHCOMING %}
+<em>{% trans "The Call for Participation is not yet open." %}</em>
+{% elif conf.cfp == conf.CFP_OPEN %}
 <a class="btn btn-success" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
+{% elif conf.cfp == conf.CFP_COMPLETED %}
+<em>{% trans "The Call for Participation is completed." %}</em>
+{% endif %}
 
 {% endblock %}
