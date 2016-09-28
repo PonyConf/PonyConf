@@ -21,7 +21,7 @@ from accounts.utils import is_staff, is_orga
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
-from .forms import TalkForm, TopicForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
+from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
 from .models import Talk, Track, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
@@ -231,12 +231,33 @@ class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
     pass
 
 
+class TrackFormMixin(object):
+    form_class = TrackForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'site': get_current_site(self.request)})
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.site = get_current_site(self.request)
+        return super().form_valid(form)
+
+
 class TrackMixin(object):
     def get_queryset(self):
         return Track.objects.filter(site=get_current_site(self.request)).all()
 
 
 class TrackList(LoginRequiredMixin, TrackMixin, ListView):
+    pass
+
+
+class TrackCreate(OrgaRequiredMixin, TrackMixin, TrackFormMixin, CreateView):
+    model = Track
+
+
+class TrackUpdate(OrgaRequiredMixin, TrackMixin, TrackFormMixin, UpdateView):
     pass
 
 

@@ -9,7 +9,7 @@
 <h1>{% trans "Tracks" %}</h1>
 
 {% if request|orga %}
-<p><a href="#" class="btn btn-success">{% trans "Add a track (not implemented)" %}</a><p>
+<p><a href="{% url 'add-track' %}" class="btn btn-success">{% trans "Add a track (not implemented)" %}</a><p>
 {% endif %}
 
 <div class="row">
@@ -20,7 +20,7 @@
     {% if request|staff %}
         <a href="{{ track.get_absolute_url }}">{{ track.talk_set.count }} {% trans "talk" %}{{ track.talk_set.count|pluralize }}</a>
         |
-        <a href="#">{% bootstrap_icon "pencil" %} (not implemented)</a>
+        <a href="{% url 'edit-track' track.slug %}">{% bootstrap_icon "pencil" %}</a>
     {% endif %}
   </div>
     {% cycle '' '<div class="clearfix visible-xs"></div>' %}
