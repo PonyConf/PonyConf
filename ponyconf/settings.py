@@ -166,6 +166,7 @@ BOWER_INSTALLED_APPS = (
     'jquery-ui',
     'jquery-cookie',
     'select2',
+    'eonasdan-bootstrap-datetimepicker',
 )
 
 LOGIN_REDIRECT_URL = 'home'

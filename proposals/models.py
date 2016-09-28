@@ -7,6 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
+from django.utils import timezone
 
 from autoslug import AutoSlugField
 
@@ -20,6 +21,16 @@ class Conference(models.Model):
 
     site = models.OneToOneField(Site, on_delete=models.CASCADE)
     home = models.TextField(blank=True, default="")
+    cfp_opening_date = models.DateTimeField(null=True, blank=True, default=None)
+    cfp_closing_date = models.DateTimeField(null=True, blank=True, default=None)
+
+    def cfp_is_open(self):
+        now = timezone.now()
+        if self.cfp_opening_date and now < self.cfp_opening_date:
+            return False
+        if self.cfp_closing_date and now > self.cfp_closing_date:
+            return False
+        return True
 
     def __str__(self):
         return str(self.site)

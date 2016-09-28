@@ -19,6 +19,10 @@
 {% endif %}
 
 <br />
+{% if conf.cfp_is_open %}
 <a class="btn btn-success" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
+{% else %}
+{% trans "Sorry, the Call for Participation is closed." %}
+{% endif %}
 
 {% endblock %}
