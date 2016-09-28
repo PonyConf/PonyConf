@@ -231,6 +231,15 @@ class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
     pass
 
 
+class TrackMixin(object):
+    def get_queryset(self):
+        return Track.objects.filter(site=get_current_site(self.request)).all()
+
+
+class TrackList(LoginRequiredMixin, TrackMixin, ListView):
+    pass
+
+
 @login_required
 def vote(request, talk, score):
     talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
