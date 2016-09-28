@@ -125,4 +125,4 @@ class TopicForm(forms.ModelForm):
         return name
 
 
-ConferenceForm = modelform_factory(Conference, fields=['cfp', 'home'])
+ConferenceForm = modelform_factory(Conference, fields=['home'])

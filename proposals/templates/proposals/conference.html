@@ -2,38 +2,39 @@
 
 {% load bootstrap3 staticfiles i18n %}
 
-{% block admintab %} class="active"{% endblock %}
+{% block talktab %} class="active"{% endblock %}
 
 {% block content %}
 
+<h1>{% trans "Conference settings" %}</h1>
+
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3>{% trans "Home page" %}</h3>
+<div class="panel-heading">
+<h3>{% trans "Home page" %}</h3>
+</div>
+<div class="panel-body">
+<form method="post" role="form">
+  {% csrf_token %}
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#editor" role="tab" data-toggle="tab">Editor</a></li>
+    <li><a href="#preview" role="tab" data-toggle="tab">Preview</a></li>
+    <li><a href="https://daringfireball.net/projects/markdown/syntax" target="blank" role="tab">Syntaxe</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="editor" style="max-height: 220px; margin-bottom: 20px;">
+      <div class="form-group">
+        <textarea style="width: 100%; height: 220px;" id="markdown-content" name="home">{{ conference.home }}</textarea>
+      </div>
     </div>
-    <div class="panel-body">
-        <form method="post" role="form">
-            {% csrf_token %}
-            {% bootstrap_field form.cfp %}
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#editor" role="tab" data-toggle="tab">Editor</a></li>
-                <li><a href="#preview" role="tab" data-toggle="tab">Preview</a></li>
-                <li><a href="https://daringfireball.net/projects/markdown/syntax" target="blank" role="tab">Syntaxe</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="editor" style="max-height: 220px; margin-bottom: 20px;">
-                    <div class="form-group">
-                        <textarea style="width: 100%; height: 220px;" id="markdown-content" name="home">{{ conference.home }}</textarea>
-                    </div>
-                </div>
-                <div class="tab-pane well" id="preview" style="min-height: 220px; magin-bottom: 20px;">
-                    <div id="preview-content"></div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success">Submit</button>
-                </div>
-            </div>
-        </form>
+    <div class="tab-pane well" id="preview" style="min-height: 220px; magin-bottom: 20px;">
+      <div id="preview-content"></div>
     </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Submit</button>
+    </div>
+  </div>
+</form>
+</div>
 </div>
 
 {% endblock %}

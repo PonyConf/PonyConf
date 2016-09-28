@@ -18,18 +18,8 @@ from .utils import query_sum
 
 class Conference(models.Model):
 
-    CFP_FORTHCOMING = 0
-    CFP_OPEN = 1
-    CFP_COMPLETED = 2
-    CFP_CHOICES = [
-        (CFP_FORTHCOMING, _('Forthcoming (closed)')),
-        (CFP_OPEN, _('Open')),
-        (CFP_COMPLETED, _('Completed (closed)')),
-    ]
-
-    site = models.OneToOneField(Site, on_delete=models.CASCADE, related_name='conference')
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
     home = models.TextField(blank=True, default="")
-    cfp = models.IntegerField(choices=CFP_CHOICES, default=0, verbose_name=_('Call for Participation'))
 
     def __str__(self):
         return str(self.site)
