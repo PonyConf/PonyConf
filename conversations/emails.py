@@ -47,7 +47,14 @@ def email_recv(request):
         content = msg.get_payload(decode=True)
 
     if python_version < (3,):
-        content = content.decode('utf-8')
+        try:
+            content = content.decode('utf-8')
+        except DjangoUnicodeDecodeError:
+            encoding = chardet.detect(content)['encoding']
+            content = content.decode(encoding)
+
+    if content == None:
+        content = ""
 
     addr = settings.REPLY_EMAIL
     pos = addr.find('@')

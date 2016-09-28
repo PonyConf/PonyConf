@@ -20,7 +20,7 @@ class Message(PonyConfModel):
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)
 
     author = models.ForeignKey(User)
-    content = models.TextField()
+    content = models.TextField(blank=True)
     system = models.BooleanField(default=False)
 
     class Meta:
