@@ -7,4 +7,4 @@
 # reply: "|/path/to/post-mail.sh mykey@https://example.org/conversations/recv/
 # don't forget to run postalias and to add the alias file to main.cf under alias_map.
 
-curl ${@#*\@} -F key=${@%\@*} -F "email=@-"
+curl ${@#*\@} -F key=${@%\@*} -F "email=@-;filename=email.txt"
