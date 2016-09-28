@@ -60,9 +60,7 @@
             </td>
             <td>
                 {% for topic in talk.topics.all %}
-                    {{ topic }}
-                    {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
-                    {% empty %}–
+                    <span class="badge">{{ topic }}</span>
                 {% endfor %}
             </td>
             <td>{{ talk.track|default:"–" }}</td>
