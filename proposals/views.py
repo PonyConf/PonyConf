@@ -54,13 +54,14 @@ def conference(request):
 @login_required
 def participate(request):
     site = get_current_site(request)
+    conf = Conference.objects.get(site=site)
     talks = Talk.objects.filter(site=site)
     my_talks = talks.filter(speakers=request.user)
     proposed_talks = talks.exclude(speakers=request.user).filter(proposer=request.user)
     return render(request, 'proposals/participate.html', {
         'my_talks': my_talks,
         'proposed_talks': proposed_talks,
-        'conf': site.conference,
+        'conf': conf,
     })
 
 @staff_required
@@ -143,7 +144,8 @@ def talk_edit(request, talk=None):
         if not talk.is_editable_by(request.user):
             raise PermissionDenied()
     else: # add new talk
-        if not site.conference.cfp_is_open():
+        conf = Conference.objects.get(site=site)
+        if not conf.cfp_is_open():
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
