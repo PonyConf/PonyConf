@@ -1,6 +1,9 @@
-import email
 import re
-from sys import version_info as python_version
+import chardet
+
+from email import policy
+from email.parser import BytesParser
+from email.message import EmailMessage
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -30,31 +33,16 @@ def email_recv(request):
         return HttpResponse(status=400)  # Bad Request
 
     msg = request.FILES['email']
-    if python_version < (3,):
-        msg = email.message_from_file(msg)
-    else:
-        msg = email.message_from_bytes(msg.read())
 
-    if msg.is_multipart():
-        msgs = msg.get_payload()
-        for m in msgs:
-            if m.get_content_type == 'text/plain':
-                content = m.get_payload(decode=True)
-                break
-        else:
-            content = msgs[0].get_payload(decode=True)
-    else:
-        content = msg.get_payload(decode=True)
+    msg = BytesParser(policy=policy.default).parsebytes(msg.read())
+    body = msg.get_body(preferencelist=('plain',))
+    content = body.get_payload(decode=True)
 
-    if python_version < (3,):
-        try:
-            content = content.decode('utf-8')
-        except DjangoUnicodeDecodeError:
-            encoding = chardet.detect(content)['encoding']
-            content = content.decode(encoding)
-
-    if content == None:
-        content = ""
+    try:
+        content = content.decode(body.get_content_charset())
+    except Exception:
+        encoding = chardet.detect(content)['encoding']
+        content = content.decode(encoding)
 
     addr = settings.REPLY_EMAIL
     pos = addr.find('@')
