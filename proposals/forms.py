@@ -61,7 +61,7 @@ class TalkFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
-    vote = forms.NullBooleanField(help_text=_('Filter topics you already / not yet voted for'))
+    vote = forms.NullBooleanField(help_text=_('Filter talks you already / not yet voted for'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
