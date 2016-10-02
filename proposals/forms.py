@@ -1,14 +1,13 @@
 from django import forms
-from django.forms.models import modelform_factory
 from django.core.exceptions import ValidationError
+from django.db.utils import OperationalError
+from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from proposals.models import Talk, Topic, Track, Event, Conference
-
 from accounts.models import Transport
-
+from proposals.models import Conference, Event, Talk, Topic, Track
 
 STATUS_CHOICES = [
         ('pending', 'Pending decision'),
@@ -74,6 +73,15 @@ class TalkFilterForm(forms.Form):
         self.fields['track'].choices = [('none', 'Not assigned')] + list(tracks.values_list('slug', 'name'))
 
 
+def get_transports():
+    try:
+        transports = list(Transport.objects.values_list('pk', 'name'))
+    except OperationalError:
+        # happens when db doesn't exist yet
+        transports = []
+    return transports
+
+
 class SpeakerFilterForm(forms.Form):
     status = forms.MultipleChoiceField(
             required=False,
@@ -88,7 +96,7 @@ class SpeakerFilterForm(forms.Form):
     transport = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=Transport.objects.values_list('pk', 'name'),
+            choices=get_transports(),
     )
     hosting = forms.MultipleChoiceField(
             required=False,
