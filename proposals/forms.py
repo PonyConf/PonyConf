@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.db.utils import OperationalError
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
