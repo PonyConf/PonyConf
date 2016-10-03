@@ -31,8 +31,10 @@
     <li><b>{% trans "Arrival:" %}</b> {{ participation.arrival }}</li>
     <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
     <li><b>{% trans "Ok to travel by:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
+    <li><b>{% trans "Transport booked:" %}</b> {{ participation.transport_booked|yesno }}</li>
     <li><b>{% trans "Need hosting:" %}</b> {{ participation.need_hosting|yesno }}</li>
     <li><b>{% trans "Ok for homstay:" %}</b> {{ participation.homestay|yesno }}</li>
+    <li><b>{% trans "Hosting booked:" %}</b> {{ participation.hosting_booked|yesno }}</li>
     <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>
     <li><b>{% trans "Need sound:" %}</b> {{ participation.sound|yesno }}</li>
     <li><b>{% trans "Ok to be recorded on video:" %}</b> {{ participation.videotaped|yesno }}</li>

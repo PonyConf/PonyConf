@@ -25,8 +25,8 @@ ParticipationForm = modelform_factory(Participation,
 ProfileOrgaForm = modelform_factory(Profile, fields=['biography'])
 
 ParticipationOrgaForm = modelform_factory(Participation,
-                                          fields=['need_transport', 'transport',
-                                                  'need_hosting', 'homestay',
+                                          fields=['need_transport', 'transport', 'transport_booked',
+                                                  'need_hosting', 'homestay', 'hosting_booked',
                                                   'connector', 'sound', 'videotaped',
                                                   'video_licence',
                                                   'constraints', 'notes', 'orga'],

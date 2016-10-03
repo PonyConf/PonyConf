@@ -106,6 +106,8 @@ class SpeakerFilterForm(forms.Form):
             ],
     )
     sound = forms.NullBooleanField()
+    transport_booked = forms.NullBooleanField()
+    hosting_booked = forms.NullBooleanField()
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')

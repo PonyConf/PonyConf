@@ -335,6 +335,12 @@ def speaker_list(request):
         if data['sound'] != None:
             show_filters = True
             speakers = speakers.filter(sound=data['sound'])
+        if data['transport_booked'] != None:
+            show_filters = True
+            speakers = speakers.filter(transport_booked=data['sound'])
+        if data['hosting_booked'] != None:
+            show_filters = True
+            speakers = speakers.filter(hosting_booked=data['sound'])
     return render(request, 'proposals/speaker_list.html', {
         'speaker_list': speakers,
         'filter_form': filter_form,

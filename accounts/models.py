@@ -55,9 +55,11 @@ class Participation(PonyConfModel):
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
+    transport_booked = models.BooleanField(default=False)
 
     need_hosting = models.BooleanField(verbose_name=_('Need hosting?'), default=False)
     homestay = models.BooleanField(verbose_name=_('Ok for homestay?'), default=False)
+    hosting_booked = models.BooleanField(default=False)
 
     constraints = models.TextField(blank=True, verbose_name=_("Constraints"))
     connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)
