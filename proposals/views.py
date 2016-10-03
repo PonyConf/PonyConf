@@ -337,10 +337,10 @@ def speaker_list(request):
             speakers = speakers.filter(sound=data['sound'])
         if data['transport_booked'] != None:
             show_filters = True
-            speakers = speakers.filter(transport_booked=data['sound'])
+            speakers = speakers.filter(transport_booked=data['transport_booked'])
         if data['hosting_booked'] != None:
             show_filters = True
-            speakers = speakers.filter(hosting_booked=data['sound'])
+            speakers = speakers.filter(hosting_booked=data['hosting_booked'])
     return render(request, 'proposals/speaker_list.html', {
         'speaker_list': speakers,
         'filter_form': filter_form,
