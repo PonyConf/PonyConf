@@ -68,7 +68,7 @@ class Participation(PonyConfModel):
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=2, verbose_name=_("Video licence"))
 
-    notes = models.TextField(default='', blank=True, verbose_name=_("Notes"))
+    notes = models.TextField(default='', blank=True, verbose_name=_("Notes"), help_text=_('This field is only visible by organizers.'))
     orga = models.BooleanField(default=False)
 
     class Meta:
