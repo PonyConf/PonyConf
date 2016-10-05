@@ -22,9 +22,9 @@
         |
         <a href="{{ track.get_absolute_url }}">{{ track.talk_set.count }} {% trans "talk" %}{{ track.talk_set.count|pluralize }}</a>
         |
-        <a href="{% url 'edit-track' track.slug %}">{% bootstrap_icon "pencil" %}</a>
-        |
         {{ track.estimated_duration|duration_format }}
+        |
+        <a href="{% url 'edit-track' track.slug %}">{% bootstrap_icon "pencil" %}</a>
     {% endif %}
   </div>
     {% cycle '' '<div class="clearfix visible-xs"></div>' %}
