@@ -84,7 +84,7 @@ class Event(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    duration = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
 
     class Meta:
         unique_together = ('site', 'name')
@@ -112,7 +112,7 @@ class Talk(PonyConfModel):
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
-    duration = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
 
     class Meta:
         ordering = ('title',)
