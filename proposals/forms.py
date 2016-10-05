@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from accounts.models import Transport
+from accounts.models import User, Transport
 from proposals.models import Conference, Event, Talk, Topic, Track
 
 STATUS_CHOICES = [
@@ -138,6 +138,10 @@ class TrackForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
+        if 'instance' in kwargs:
+            reviewers = User.objects.filter(topic__track=kwargs['instance'])
+            if reviewers.exists():
+                self.fields['managers'].help_text = 'Suggestion: ' + ', '.join([str(u) for u in reviewers.all()])
 
     class Meta:
         model = Track
