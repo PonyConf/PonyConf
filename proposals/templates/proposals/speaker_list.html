@@ -60,10 +60,14 @@
                 {% for transport in speaker.transport.all %}
                     {% if not forloop.first %}, {% endif %}
                     {{ transport }}
+                {% empty %}
+                Yes
                 {% endfor %}
             </td>
+            {% elif speaker.need_transport is None %}
+            <td>?</td>
             {% else %}
-            <td>—</td>
+            <td>No</td>
             {% endif %}
             {% if speaker.need_hosting %}
             <td class="{% if speaker.hosting_booked %}success{% else %}warning{% endif %}">

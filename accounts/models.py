@@ -51,7 +51,7 @@ class Participation(PonyConfModel):
     user = models.ForeignKey(User)
 
 
-    need_transport = models.BooleanField(verbose_name=_('Need transport?'), default=False)
+    need_transport = models.NullBooleanField(verbose_name=_('Need transport?'), default=None)
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)

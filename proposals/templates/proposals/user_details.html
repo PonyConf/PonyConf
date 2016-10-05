@@ -27,7 +27,7 @@
 <h2>{% trans "Preferences" %}</h2>
 
 <ul>
-    <li><b>{% trans "Need transport:" %}</b> {{ participation.need_transport|yesno }}</li>
+    <li><b>{% trans "Need transport:" %}</b> {{ participation.need_transport|yesno:"Yes,No,Not specified" }}</li>
     <li><b>{% trans "Arrival:" %}</b> {{ participation.arrival }}</li>
     <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
     <li><b>{% trans "Ok to travel by:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
