@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load accounts_tags i18n %}
 
 {% block participatetab %} class="active"{% endblock %}
 
@@ -19,8 +19,8 @@
 {% endif %}
 
 <br />
-{% if conf.cfp_is_open %}
-<a class="btn btn-success" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
+{% if conf.cfp_is_open or request|orga %}
+<a class="btn btn-{% if conf.cfp_is_open %}success{% else %}danger{% endif %}" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
 {% else %}
 {% trans "Sorry, the Call for Participation is closed." %}
 {% endif %}

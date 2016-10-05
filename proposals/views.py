@@ -145,7 +145,7 @@ def talk_edit(request, talk=None):
             raise PermissionDenied()
     else: # add new talk
         conf = Conference.objects.get(site=site)
-        if not conf.cfp_is_open():
+        if not is_orga(request, request.user) and not conf.cfp_is_open():
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
