@@ -44,6 +44,8 @@ class Track(PonyConfModel):
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
 
+    managers = models.ManyToManyField(User, blank=True, verbose_name=_('Managers'))
+
     class Meta:
         unique_together = ('site', 'name')
 

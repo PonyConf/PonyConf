@@ -141,7 +141,8 @@ class TrackForm(forms.ModelForm):
 
     class Meta:
         model = Track
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'managers']
+        widgets = {'managers': Select2TagWidget()}
 
     def clean_name(self):
         name = self.cleaned_data['name']
