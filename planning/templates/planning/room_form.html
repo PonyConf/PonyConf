@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block planningtab %} class="active"{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Room" %}</h1>
+
+{% include "_form.html" %}
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock %}

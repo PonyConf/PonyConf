@@ -25,6 +25,7 @@ from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterFor
 from .models import Talk, Track, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
+from .mixins import OnSiteFormMixin
 
 
 @login_required
@@ -208,17 +209,8 @@ class TopicMixin(object):
         return Topic.objects.filter(site=get_current_site(self.request)).all()
 
 
-class TopicFormMixin(object):
+class TopicFormMixin(OnSiteFormMixin):
     form_class = TopicForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'site': get_current_site(self.request)})
-        return kwargs
-
-    def form_valid(self, form):
-        form.instance.site = get_current_site(self.request)
-        return super().form_valid(form)
 
 
 class TopicList(LoginRequiredMixin, TopicMixin, ListView):
@@ -233,17 +225,8 @@ class TopicUpdate(OrgaRequiredMixin, TopicMixin, TopicFormMixin, UpdateView):
     pass
 
 
-class TrackFormMixin(object):
+class TrackFormMixin(OnSiteFormMixin):
     form_class = TrackForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'site': get_current_site(self.request)})
-        return kwargs
-
-    def form_valid(self, form):
-        form.instance.site = get_current_site(self.request)
-        return super().form_valid(form)
 
 
 class TrackMixin(object):

@@ -32,7 +32,7 @@ class ProposalsTests(TestCase):
         self.assertEqual(talk.description, 'this is my super talk')
         self.assertEqual(talk.notes, 'you can watch my previous talk videos')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
-                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': 1})
+                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': 1, 'duration': 60})
         self.assertEqual(str(talk), 'super talk')  # title is read only there
         talk = Talk.objects.first()
         self.assertEqual(talk.description, 'mega')
@@ -73,7 +73,7 @@ class ProposalsTests(TestCase):
         self.assertFalse(talk.is_moderable_by(b))  # b is not orga
         self.client.login(username='a', password='a')
         self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
-                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': (a.pk, b.pk)})
+                         {'title': 'mega talk', 'description': 'mega', 'event': 1, 'speakers': (a.pk, b.pk), 'duration': 60})
         talk = Talk.objects.get(slug='super-talk')
         self.assertTrue(b in talk.speakers.all())
         self.assertTrue(talk.is_editable_by(b))  # b is speaker now

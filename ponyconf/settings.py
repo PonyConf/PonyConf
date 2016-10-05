@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ponyconf',
     'proposals',
     'conversations',
+    'planning',
 
     # external apps
     'djangobower',

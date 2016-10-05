@@ -56,6 +56,14 @@
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request|staff %}
+            <li class="dropdown{% block planningtab %}{% endblock %}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Planning" %}&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-rooms' %}"><span class="glyphicon glyphicon-tent"></span>&nbsp;{% trans "Rooms" %}</a>
+                </li>
+              </ul>
+            </li>
             <li class="dropdown{% block admintab %}{% endblock %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">

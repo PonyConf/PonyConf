@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 accounts_tags i18n %}
+
+{% block planningtab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Rooms" %}</h1>
+
+{% if request|orga %}
+<p><a href="{% url 'add-room' %}" class="btn btn-success">{% trans "Add a room" %}</a><p>
+{% endif %}
+
+<div class="row">
+  {% for room in room_list %}
+  <div class="col-xs-6 col-sm-4">
+    <h2>{{ room }}</h2>
+    {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
+    {% if request|staff %}
+    |
+    <a href="{% url 'edit-room' room.slug %}">{% bootstrap_icon "pencil" %}</a>
+    {% endif %}
+  </div>
+    {% cycle '' '<div class="clearfix visible-xs"></div>' %}
+    {% cycle '' '' '<div class="clearfix hidden-xs"></div>' %}
+  {% empty %}
+  <div class="col-xs-12"><em>{% trans "No rooms." %}</em></div>
+  {% endfor %}
+</div>
+
+{% endblock %}
