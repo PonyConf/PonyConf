@@ -1,10 +1,8 @@
-{% load proposals_tags %}
-
 <div class="panel panel-{% block panelstyleblock %}default{% endblock %}">
   <div class="panel-heading">
     {{ message.created }} | <a href="{% url 'show-speaker' message.author.username %}">{{ message.author.profile }}</a>
   </div>
   <div class="panel-body">
-    {% markdown message.content %}
+    {{ message.content|linebreaksbr }}
   </div>
 </div>
