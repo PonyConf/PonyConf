@@ -153,10 +153,12 @@ def talk_edit(request, talk=None):
         form.fields['topics'].disabled = True
         if not talk.is_editable_by(request.user):
             form.fields.pop('track')
+            form.fields.pop('duration')
     else:
         form.fields['speakers'].initial = [request.user]
         if not is_orga(request, request.user):
             form.fields.pop('track')
+            form.fields.pop('duration')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()

@@ -49,6 +49,9 @@ class Track(PonyConfModel):
     class Meta:
         unique_together = ('site', 'name')
 
+    def estimated_duration(self):
+        return sum([talk.estimated_duration() for talk in self.talk_set.all()])
+
     def __str__(self):
         return self.name
 
@@ -81,6 +84,7 @@ class Event(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
+    duration = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ('site', 'name')
@@ -108,12 +112,16 @@ class Talk(PonyConfModel):
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
+    duration = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('title',)
 
     def __str__(self):
         return self.title
+
+    def estimated_duration(self):
+        return self.duration or self.event.duration
 
     def get_absolute_url(self):
         return reverse('show-talk', kwargs={'slug': self.slug})
