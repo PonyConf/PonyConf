@@ -100,7 +100,7 @@ class SpeakerFilterForm(forms.Form):
     accommodation= forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=Participation.ACCOMMODATION_CHOICES,
+            choices=[('unknown', 'Not specified')] + list(Participation.ACCOMMODATION_CHOICES),
     )
     sound = forms.NullBooleanField()
     transport_booked = forms.NullBooleanField()

@@ -311,7 +311,8 @@ def speaker_list(request):
             speakers = speakers.filter(need_transport=True).filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
         if len(data['accommodation']):
             show_filters = True
-            speakers = speakers.filter(reduce(lambda x, y: x | y, [Q(accommodation__pk=pk) for pk in data['accommodation']]))
+            accommodations = list(map(lambda x: None if x == 'unknown' else x, data['accommodation']))
+            speakers = speakers.filter(reduce(lambda x, y: x | y, [Q(accommodation=value) for value in accommodations]))
         if data['sound'] != None:
             show_filters = True
             speakers = speakers.filter(sound=data['sound'])

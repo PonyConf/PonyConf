@@ -32,7 +32,7 @@
     <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
     <li><b>{% trans "Ok to travel by:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
     <li><b>{% trans "Transport booked:" %}</b> {{ participation.transport_booked|yesno }}</li>
-    <li><b>{% trans "Need accommodation:" %}</b> {{ participation.get_accommodation_display }}</li>
+    <li><b>{% trans "Need accommodation:" %}</b> {% if participation.accommodation is None %}Not specified{% else %}{{ participation.get_accommodation_display }}{% endif %}</li>
     <li><b>{% trans "Accommodation booked:" %}</b> {{ participation.accommodation_booked|yesno }}</li>
     <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>
     <li><b>{% trans "Need sound:" %}</b> {{ participation.sound|yesno }}</li>

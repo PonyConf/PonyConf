@@ -69,8 +69,12 @@
             {% else %}
             <td>No</td>
             {% endif %}
-            <td{% if speaker.accommodation != speaker.ACCOMMODATION_NO %} class="{% if speaker.accommodation_booked %}success{% else %}warning{% endif %}"{% endif %}>
+            <td{% if speaker.accommodation is not None and speaker.accommodation != speaker.ACCOMMODATION_NO %} class="{% if speaker.accommodation_booked %}success{% else %}warning{% endif %}"{% endif %}>
+                {% if speaker.accommodation is None %}
+                ?
+                {% else %}
                 {{ speaker.get_accommodation_display }}
+                {% endif %}
             </td>
             {% if speaker.sound %}
             <td class="warning">Yes</td>
