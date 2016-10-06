@@ -46,6 +46,14 @@ class Connector(Option):
 class Participation(PonyConfModel):
 
     LICENCES = IntEnum('Video licence', 'CC-Zero CC-BY CC-BY-SA CC-BY-ND CC-BY-NC CC-BY-NC-SA CC-BY-NC-ND')
+    ACCOMMODATION_NO = 0
+    ACCOMMODATION_HOTEL = 1
+    ACCOMMODATION_HOMESTAY = 2
+    ACCOMMODATION_CHOICES = (
+        (ACCOMMODATION_NO, _('No')),
+        (ACCOMMODATION_HOTEL, _('Hotel')),
+        (ACCOMMODATION_HOMESTAY, _('Homestay')),
+    )
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     user = models.ForeignKey(User)
@@ -57,9 +65,8 @@ class Participation(PonyConfModel):
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
     transport_booked = models.BooleanField(default=False)
 
-    need_hosting = models.BooleanField(verbose_name=_('Need hosting?'), default=False)
-    homestay = models.BooleanField(verbose_name=_('Ok for homestay?'), default=False)
-    hosting_booked = models.BooleanField(default=False)
+    accommodation = models.IntegerField(choices=ACCOMMODATION_CHOICES, verbose_name=_('Need accommodation?'), null=True, blank=True)
+    accommodation_booked = models.BooleanField(default=False)
 
     constraints = models.TextField(blank=True, verbose_name=_("Constraints"))
     connector = models.ManyToManyField(Connector, verbose_name=_("I can output"), blank=True)

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2TagWidget
 
-from accounts.models import User, Transport
+from accounts.models import User, Participation, Transport
 from proposals.models import Conference, Event, Talk, Topic, Track
 
 STATUS_CHOICES = [
@@ -72,13 +72,13 @@ class TalkFilterForm(forms.Form):
         self.fields['track'].choices = [('none', 'Not assigned')] + list(tracks.values_list('slug', 'name'))
 
 
-def get_transports():
+def get_options(option):
     try:
-        transports = list(Transport.objects.values_list('pk', 'name'))
+        options = list(option.objects.values_list('pk', 'name'))
     except OperationalError:
         # happens when db doesn't exist yet
-        transports = []
-    return transports
+        options = []
+    return options
 
 
 class SpeakerFilterForm(forms.Form):
@@ -95,19 +95,16 @@ class SpeakerFilterForm(forms.Form):
     transport = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=get_transports(),
+            choices=get_options(Transport),
     )
-    hosting = forms.MultipleChoiceField(
+    accommodation= forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=[
-                    ('hotel', 'Hotel'),
-                    ('homestay', 'Homestay'),
-            ],
+            choices=Participation.ACCOMMODATION_CHOICES,
     )
     sound = forms.NullBooleanField()
     transport_booked = forms.NullBooleanField()
-    hosting_booked = forms.NullBooleanField()
+    accommodation_booked = forms.NullBooleanField()
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')

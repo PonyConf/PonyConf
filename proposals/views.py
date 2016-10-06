@@ -309,23 +309,18 @@ def speaker_list(request):
         if len(data['transport']):
             show_filters = True
             speakers = speakers.filter(need_transport=True).filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
-        if len(data['hosting']):
+        if len(data['accommodation']):
             show_filters = True
-            queries = []
-            if 'hotel' in data['hosting']:
-                queries += [ Q(need_hosting=True, homestay=False) ]
-            if 'homestay' in data['hosting']:
-                queries += [ Q(need_hosting=True, homestay=True) ]
-            speakers = speakers.filter(reduce(lambda x, y: x | y, queries))
+            speakers = speakers.filter(reduce(lambda x, y: x | y, [Q(accommodation__pk=pk) for pk in data['accommodation']]))
         if data['sound'] != None:
             show_filters = True
             speakers = speakers.filter(sound=data['sound'])
         if data['transport_booked'] != None:
             show_filters = True
             speakers = speakers.filter(need_transport=True).filter(transport_booked=data['transport_booked'])
-        if data['hosting_booked'] != None:
+        if data['accommodation_booked'] != None:
             show_filters = True
-            speakers = speakers.filter(need_hosting=True).filter(hosting_booked=data['hosting_booked'])
+            speakers = speakers.filter(need_accommodation=True).filter(accommodation_booked=data['accommodation_booked'])
     return render(request, 'proposals/speaker_list.html', {
         'speaker_list': speakers,
         'filter_form': filter_form,

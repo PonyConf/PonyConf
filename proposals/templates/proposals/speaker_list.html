@@ -19,8 +19,8 @@
                 <div class="col-md-4 col-xs-6">
                     {% bootstrap_field filter_form.transport layout="horizontal" %}
                     {% bootstrap_field filter_form.transport_booked layout="horizontal" %}
-                    {% bootstrap_field filter_form.hosting layout="horizontal" %}
-                    {% bootstrap_field filter_form.hosting_booked layout="horizontal" %}
+                    {% bootstrap_field filter_form.accommodation layout="horizontal" %}
+                    {% bootstrap_field filter_form.accommodation_booked layout="horizontal" %}
                 </div>
                 <div class="col-md-4 col-xs-6">
                     {% bootstrap_field filter_form.sound layout="horizontal" %}
@@ -42,7 +42,7 @@
             <th class="text-center">{% trans "Fullname" %}</th>
             <th class="text-center">{% trans "Talk count" %}</th>
             <th class="text-center">{% blocktrans context "table column title" %}Need transport?{% endblocktrans %}</th>
-            <th class="text-center">{% blocktrans context "table column title" %}Need hosting?{% endblocktrans %}</th>
+            <th class="text-center">{% blocktrans context "table column title" %}Need accommodation?{% endblocktrans %}</th>
             <th class="text-center">{% trans "Need sound?" %}</th>
             <th class="text-center"></th>
         </tr>
@@ -69,17 +69,9 @@
             {% else %}
             <td>No</td>
             {% endif %}
-            {% if speaker.need_hosting %}
-            <td class="{% if speaker.hosting_booked %}success{% else %}warning{% endif %}">
-                {% if speaker.homestay %}
-                Logement chez habitant
-                {% else %}
-                Hotel
-                {% endif %}
+            <td{% if speaker.accommodation != speaker.ACCOMMODATION_NO %} class="{% if speaker.accommodation_booked %}success{% else %}warning{% endif %}"{% endif %}>
+                {{ speaker.get_accommodation_display }}
             </td>
-            {% else %}
-            <td>—</td>
-            {% endif %}
             {% if speaker.sound %}
             <td class="warning">Yes</td>
             {% else %}
