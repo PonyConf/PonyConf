@@ -133,7 +133,13 @@ class Talk(PonyConfModel):
             participation = Participation.objects.get(site=self.site, user=user)
         except Participation.DoesNotExists:
             return False
-        return participation.orga or self.topics.filter(reviewers=participation.user).exists()
+        if participation.orga:
+            return True
+        if self.topics.filter(reviewers=participation.user).exists():
+            return True
+        if self.track and self.track.managers.filter(user=participation.user).exists():
+            return True
+        return False
 
     def is_editable_by(self, user):
         return user == self.proposer or user in self.speakers.all() or self.is_moderable_by(user)
