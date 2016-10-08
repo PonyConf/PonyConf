@@ -150,11 +150,12 @@ def talk_edit(request, talk=None):
             raise PermissionDenied()
     form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
-        form.fields['title'].disabled = True
         form.fields['topics'].disabled = True
         if not talk.is_editable_by(request.user):
             form.fields.pop('track')
             form.fields.pop('duration')
+        if not talk.is_moderable_by(request.user):
+            form.fields['title'].disabled = True
     else:
         form.fields['speakers'].initial = [request.user]
         if not is_orga(request, request.user):
