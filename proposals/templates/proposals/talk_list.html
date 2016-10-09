@@ -53,7 +53,7 @@
             <td>{{ talk.event }}</td>
             <td>
                 {% for speaker in talk.speakers.all %}
-                    {{ speaker }}
+                    {{ speaker.profile }}
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}
