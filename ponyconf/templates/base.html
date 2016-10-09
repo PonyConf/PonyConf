@@ -47,8 +47,6 @@
             <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">{% trans "Topics" %}</a></li>
             {% if request|staff %}
             <li{% block tracktab %}{% endblock %}><a href="{% url 'list-tracks' %}">{% trans "Tracks" %}</a></li>
-            <li{% block talktab %}{% endblock %}><a href="{% url 'list-talks' %}">{% trans "Talks" %}</a></li>
-            <li{% block speakertab %}{% endblock %}><a href="{% url 'list-speakers' %}">{% trans "Speakers" %}</a></li>
             {% endif %}
             {% endif %}
             {% block navbar-left %}{% endblock %}
@@ -56,6 +54,17 @@
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request|staff %}
+            <li class="dropdown{% block listingtab %}{% endblock %}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{% trans "Listing" %}&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-talks' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Talks" %}</a>
+                </li>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-speakers' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Speakers" %}</a>
+                </li>
+              </ul>
+            </li>
             <li class="dropdown{% block planningtab %}{% endblock %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Planning" %}&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
