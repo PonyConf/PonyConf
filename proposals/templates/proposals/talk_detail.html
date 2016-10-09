@@ -28,7 +28,7 @@
 
 {% for speaker in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
-    <li><a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a></li>
+    <li><a href="{% url 'show-speaker' speaker.username %}">{{ speaker.profile }}</a></li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <i>{% trans "No speakers." %}</i>
@@ -49,7 +49,7 @@
 <h3>{% trans "Track:" %}</h3>
 
 {% if talk.track %}
-    <p>{{ talk.track }}</p>
+    <p><a href="{{ talk.track.get_absolute_url }}">{{ talk.track }}</a></p>
 {% else %}
     <p><em>{% trans "No assigned yet." %}</em></p>
 {% for topic in talk.topics.distinct %}
