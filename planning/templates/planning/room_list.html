@@ -16,11 +16,14 @@
   {% for room in room_list %}
   <div class="col-xs-6 col-sm-4">
     <h2>{{ room }}</h2>
+    {% if room.label %}<p>{{ room.label }}</p>{% endif %}
+    <p>
     {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
     {% if request|staff %}
     |
     <a href="{% url 'edit-room' room.slug %}">{% bootstrap_icon "pencil" %}</a>
     {% endif %}
+    </p>
   </div>
     {% cycle '' '<div class="clearfix visible-xs"></div>' %}
     {% cycle '' '' '<div class="clearfix hidden-xs"></div>' %}

@@ -9,8 +9,9 @@ from autoslug import AutoSlugField
 class Room(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, blank=True, default="")
     slug = AutoSlugField(populate_from='name')
+    name = models.CharField(max_length=256, blank=True, default="")
+    label = models.CharField(max_length=256, blank=True, default="")
     capacity = models.IntegerField(default=0)
 
     class Meta:
