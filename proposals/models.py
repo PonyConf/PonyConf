@@ -135,9 +135,9 @@ class Talk(PonyConfModel):
             return False
         if participation.orga:
             return True
-        if self.topics.filter(reviewers=participation.user).exists():
+        if self.topics.filter(reviewers=user).exists():
             return True
-        if self.track and self.track.managers.filter(user=participation.user).exists():
+        if self.track and user in self.track.managers.all():
             return True
         return False
 

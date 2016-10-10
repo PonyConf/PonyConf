@@ -92,11 +92,15 @@ class Participation(PonyConfModel):
         return self.orga
 
     def is_staff(self):
-        return self.is_orga() or self.topic_set.exists()
+        return self.is_orga() or self.topic_set.exists() or self.track_set.exists()
 
     @property
     def topic_set(self):
         return self.user.topic_set.filter(site=self.site)
+
+    @property
+    def track_set(self):
+        return self.user.track_set.filter(site=self.site)
 
     @property
     def talk_set(self):
