@@ -105,3 +105,26 @@ class Participation(PonyConfModel):
     @property
     def talk_set(self):
         return self.user.talk_set.filter(site=self.site)
+
+    # return True, False or None if availabilities have not been filled
+    def is_available(self, start, end=None):
+        if not self.availabilities.exists():
+            return None
+        for timeslot in self.availabilities.all():
+            if start < timeslot.start:
+                continue
+            if start > timeslot.end:
+                continue
+            if end:
+                assert(start < end)
+                if end > timeslot.end:
+                    continue
+            return True
+        return False
+
+
+class AvailabilityTimeslot(models.Model):
+
+    participation = models.ForeignKey(Participation, related_name='availabilities')
+    start = models.DateTimeField(blank=True)
+    end = models.DateTimeField(blank=True)

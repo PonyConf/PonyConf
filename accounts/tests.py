@@ -71,3 +71,38 @@ class AccountTests(TestCase):
                                            }).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, 'foo')
         self.assertEqual(Participation.objects.get(user=User.objects.get(username='a')).video_licence, 2)
+
+
+from datetime import datetime
+from .models import AvailabilityTimeslot
+class DisponibilitiesTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user('a', email='a@example.org', password='a')
+        self.participation = Participation.objects.create(user=self.user, site=Site.objects.first())
+
+    def test_is_available(self):
+        from django.utils.timezone import is_naive, get_default_timezone
+        tz = get_default_timezone()
+        d = {}
+        for i in range(8, 18, 1):
+            d[i] = datetime(2016, 10, 10, i, 0, 0, tzinfo=tz)
+        self.assertEquals(self.participation.is_available(d[10]), None)
+        AvailabilityTimeslot.objects.create(participation=self.participation, start=d[10], end=d[12])
+        self.assertEquals(self.participation.is_available(d[9]), False)
+        self.assertEquals(self.participation.is_available(d[11]), True)
+        self.assertEquals(self.participation.is_available(d[13]), False)
+        self.assertEquals(self.participation.is_available(d[8], d[9]), False)
+        self.assertEquals(self.participation.is_available(d[9], d[11]), False)
+        self.assertEquals(self.participation.is_available(d[10], d[11]), True)
+        self.assertEquals(self.participation.is_available(d[11], d[12]), True)
+        self.assertEquals(self.participation.is_available(d[10], d[12]), True)
+        self.assertEquals(self.participation.is_available(d[11], d[13]), False)
+        self.assertEquals(self.participation.is_available(d[13], d[14]), False)
+        AvailabilityTimeslot.objects.create(participation=self.participation, start=d[14], end=d[16])
+        self.assertEquals(self.participation.is_available(d[10], d[12]), True)
+        self.assertEquals(self.participation.is_available(d[14], d[16]), True)
+        self.assertEquals(self.participation.is_available(d[11], d[15]), False)
+        self.assertEquals(self.participation.is_available(d[11], d[17]), False)
+        self.assertEquals(self.participation.is_available(d[13], d[17]), False)
+        self.assertEquals(self.participation.is_available(d[9], d[15]), False)
