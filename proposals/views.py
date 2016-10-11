@@ -21,7 +21,9 @@ from accounts.utils import is_staff, is_orga
 
 from conversations.models import ConversationWithParticipant, ConversationAboutTalk, Message
 
-from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm
+from planning.models import Room
+
+from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm, TalkActionForm
 from .models import Talk, Track, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
@@ -100,6 +102,37 @@ def talk_list(request):
             talks = talks.filter(room__isnull=not data['room'])
         if data['scheduled'] != None:
             talks = talks.filter(start_date__isnull=not data['scheduled'])
+    # Action
+    action_form = TalkActionForm(request.POST or None, talks=talks, site=get_current_site(request))
+    if not is_orga(request, request.user):
+        action_form.fields.pop('track')
+        action_form.fields.pop('room')
+    if request.method == 'POST':
+        if action_form.is_valid():
+            data = action_form.cleaned_data
+            permission_error = False
+            for talk in data['talks']:
+                talk = Talk.objects.get(site=get_current_site(request), slug=talk)
+                if data['decision'] != None:
+                    if not talk.is_moderable_by(request.user):
+                        permission_error = True
+                        continue
+                    # TODO: merge with talk_decide code
+                    conversation = ConversationAboutTalk.objects.get(talk=talk)
+                    if data['decision']:
+                        note = "The talk has been accepted."
+                    else:
+                        note = "The talk has been declined."
+                    Message.objects.create(conversation=conversation, author=request.user, content=note)
+                    talk.accepted = data['decision']
+                if data['track']:
+                    talk.track = Track.objects.get(site=get_current_site(request), slug=data['track'])
+                if data['room']:
+                    talk.room = Room.objects.get(site=get_current_site(request), slug=data['room'])
+                talk.save()
+            if permission_error:
+                messages.warning(request, 'Some actions were ignored due to missing permissions.')
+            return redirect(request.get_full_path())
     # Sorting
     if request.GET.get('order') == 'desc':
         reverse = True
@@ -137,6 +170,7 @@ def talk_list(request):
         'show_filters': show_filters,
         'talk_list': talks,
         'filter_form': filter_form,
+        'action_form': action_form,
         'sort_urls': sort_urls,
         'sort_glyphicons': sort_glyphicons,
     })

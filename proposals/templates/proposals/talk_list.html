@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load bootstrap3 i18n %}
+{% load bootstrap3 i18n accounts_tags %}
 
 {% block talktab %} class="active"{% endblock %}
 
@@ -35,9 +35,12 @@
     </div>
 </div>
 
+<form action="" method="post">
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
+            <th></th>
             <th class="text-center">{% trans "Title" %} <a href="?{{ sort_urls.title }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.title }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.kind }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.kind }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Speakers" %}</th>
@@ -49,9 +52,13 @@
     {% for talk in talk_list %}
     {% if forloop.first %}
     <tbody>
+        <tr>
+            <th colspan="5">{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</th>
+        </tr>
     {% endif %}
-        <tr class="clickable-row {{ talk.accepted|yesno:"success,danger,warning" }}" data-href="{% url 'show-talk' talk.slug %}">
-            <td>{{ talk.title }}</td>
+        <tr class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+            <td><input type="checkbox" name="talks" value="{{ talk.slug }}"></td>
+            <td><a href="{% url 'show-talk' talk.slug %}">{{ talk.title }}</a></td>
             <td>{{ talk.event }}</td>
             <td>
                 {% for speaker in talk.speakers.all %}
@@ -87,15 +94,30 @@
     </tfoot>
 </table>
 
+{% if action_form %}
+<div id="filter">
+    <div class="well">
+        <h4>For selected talks:</h4>
+        {% csrf_token %}
+        {% bootstrap_field action_form.decision %}
+        {% if request|orga %}
+        {% bootstrap_field action_form.track %}
+        {% bootstrap_field action_form.room %}
+        {% endif %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+        {% endbuttons %}
+    </div>
+</div>
+{% endif %}
+
+</form>
+
 {% endblock %}
 
 {% block js_end %}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-
     var anchor = window.location.hash.replace("#", "");
 	if (anchor == "filter") {
 		$("#filter").collapse('show');

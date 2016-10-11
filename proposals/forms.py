@@ -7,6 +7,7 @@ from django_select2.forms import Select2TagWidget
 
 from accounts.models import User, Participation, Transport
 from proposals.models import Conference, Event, Talk, Topic, Track
+from planning.models import Room
 
 STATUS_CHOICES = [
         ('pending', 'Pending decision'),
@@ -72,6 +73,23 @@ class TalkFilterForm(forms.Form):
         self.fields['topic'].choices = topics.values_list('slug', 'name')
         tracks = Track.objects.filter(site=site)
         self.fields['track'].choices = [('none', 'Not assigned')] + list(tracks.values_list('slug', 'name'))
+
+
+class TalkActionForm(forms.Form):
+    talks = forms.MultipleChoiceField(choices=[])
+    decision = forms.NullBooleanField(label=_('Accept talk?'))
+    track = forms.ChoiceField(required=False, choices=[], label=_('Assign to a track'))
+    room = forms.ChoiceField(required=False, choices=[], label=_('Put in a room'))
+
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        talks = kwargs.pop('talks')
+        super().__init__(*args, **kwargs)
+        self.fields['talks'].choices = [(talk.slug, None) for talk in talks.all()]
+        tracks = Track.objects.filter(site=site)
+        self.fields['track'].choices = [(None, "---------")] + list(tracks.values_list('slug', 'name'))
+        rooms = Room.objects.filter(site=site)
+        self.fields['room'].choices = [(None, "---------")] + list(rooms.values_list('slug', 'name'))
 
 
 def get_options(option):
