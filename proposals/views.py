@@ -154,6 +154,7 @@ def talk_edit(request, talk=None):
         if not talk.is_editable_by(request.user):
             form.fields.pop('track')
             form.fields.pop('duration')
+            form.fields.pop('start_date')
         if not talk.is_moderable_by(request.user):
             form.fields['title'].disabled = True
     else:
@@ -161,6 +162,7 @@ def talk_edit(request, talk=None):
         if not is_orga(request, request.user):
             form.fields.pop('track')
             form.fields.pop('duration')
+            form.fields.pop('start_date')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
