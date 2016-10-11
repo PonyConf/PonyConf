@@ -168,7 +168,8 @@ def talk_edit(request, talk=None):
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
-            talk_edited.send(talk.__class__, instance=talk, author=request.user)
+            if request.user == talk.proposer or request.user in talk.speakers.all():
+                talk_edited.send(talk.__class__, instance=talk, author=request.user)
             messages.success(request, _('Talk modified successfully!'))
         else:
             form.instance.site = get_current_site(request)
