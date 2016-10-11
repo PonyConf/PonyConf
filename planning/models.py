@@ -16,6 +16,7 @@ class Room(models.Model):
 
     class Meta:
         unique_together = ['site', 'name']
+        ordering = ['name']
 
     def __str__(self):
         return self.name
