@@ -22,3 +22,11 @@ class Room(models.Model):
 
     def get_absolute_url(self):
         return reverse('list-rooms')
+
+    @property
+    def talks_by_date(self):
+        return self.talk_set.filter(start_date__isnull=False).order_by('start_date').all()
+
+    @property
+    def unscheduled_talks(self):
+        return self.talk_set.filter(start_date__isnull=True).all()

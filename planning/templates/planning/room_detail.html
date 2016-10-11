@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block planningtab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{{ room.name }}</h1>
+
+{{ room.label }}
+
+<h4>Scheduled talks:</h4>
+{% for talk in room.talks_by_date %}
+{% if forloop.first %}<ul>{% endif %}
+<li>{{ talk.start_date }} ({{ talk.estimated_duration }} mins): <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a></li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<em>{% trans "No talks." %}</em>
+{% endfor %}
+
+<h4>Unscheduled talks:</h4>
+{% for talk in room.unscheduled_talks %}
+{% if forloop.first %}<ul>{% endif %}
+<li><a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a></li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<em>{% trans "No talks." %}</em>
+{% endfor %}
+
+{% endblock %}

@@ -15,15 +15,17 @@
 <div class="row">
   {% for room in room_list %}
   <div class="col-xs-6 col-sm-4">
-    <h2>{{ room }}</h2>
+    <h2><a href="{% url 'show-room' room.slug %}">{{ room }}</a></h2>
     {% if room.label %}<p>{{ room.label }}</p>{% endif %}
     <p>
     {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
     {% if request|staff %}
     |
     {{ room.talk_set.count }} {% trans "talk" %}{{ room.talk_set.count|pluralize }}
+    {% if request|orga %}
     |
     <a href="{% url 'edit-room' room.slug %}">{% bootstrap_icon "pencil" %}</a>
+    {% endif %}
     {% endif %}
     </p>
   </div>
