@@ -113,9 +113,9 @@ class Talk(PonyConfModel):
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
-    start_date = models.DateTimeField(null=True, default=None)
+    start_date = models.DateTimeField(null=True, blank=True, default=None)
     duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
-    room = models.ForeignKey(Room, null=True)
+    room = models.ForeignKey(Room, blank=True, null=True, default=None)
 
     class Meta:
         ordering = ('title',)
