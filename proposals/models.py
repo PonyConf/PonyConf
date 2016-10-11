@@ -13,6 +13,7 @@ from autoslug import AutoSlugField
 
 from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
+from planning.models import Room
 
 from .utils import query_sum
 
@@ -114,6 +115,7 @@ class Talk(PonyConfModel):
     accepted = models.NullBooleanField(default=None)
     start_date = models.DateTimeField(null=True, default=None)
     duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
+    room = models.ForeignKey(Room, null=True)
 
     class Meta:
         ordering = ('title',)

@@ -155,6 +155,7 @@ def talk_edit(request, talk=None):
             form.fields.pop('track')
             form.fields.pop('duration')
             form.fields.pop('start_date')
+            form.fields.pop('room')
         if not talk.is_moderable_by(request.user):
             form.fields['title'].disabled = True
     else:
@@ -163,6 +164,7 @@ def talk_edit(request, talk=None):
             form.fields.pop('track')
             form.fields.pop('duration')
             form.fields.pop('start_date')
+            form.fields.pop('room')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
