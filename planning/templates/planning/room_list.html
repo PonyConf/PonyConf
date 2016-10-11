@@ -21,6 +21,8 @@
     {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
     {% if request|staff %}
     |
+    {{ room.talk_set.count }} {% trans "talk" %}{{ room.talk_set.count|pluralize }}
+    |
     <a href="{% url 'edit-room' room.slug %}">{% bootstrap_icon "pencil" %}</a>
     {% endif %}
     </p>
