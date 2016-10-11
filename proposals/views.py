@@ -96,6 +96,10 @@ def talk_list(request):
                 talks = talks.filter(vote__user=request.user)
             else:
                 talks = talks.exclude(vote__user=request.user)
+        if data['room'] != None:
+            talks = talks.filter(room__isnull=not data['room'])
+        if data['scheduled'] != None:
+            talks = talks.filter(start_date__isnull=not data['scheduled'])
     # Sorting
     if request.GET.get('order') == 'desc':
         reverse = True

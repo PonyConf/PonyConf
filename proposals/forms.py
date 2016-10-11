@@ -60,6 +60,8 @@ class TalkFilterForm(forms.Form):
             choices=[],
     )
     vote = forms.NullBooleanField(help_text=_('Filter talks you already / not yet voted for'))
+    room = forms.NullBooleanField(help_text=_('Filter talks already / not yet affected to a room'))
+    scheduled = forms.NullBooleanField(help_text=_('Filter talks already / not yet scheduled'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
