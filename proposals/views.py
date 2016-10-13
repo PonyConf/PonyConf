@@ -373,7 +373,7 @@ def speaker_list(request):
             speakers = speakers.filter(need_transport=True).filter(transport_booked=data['transport_booked'])
         if data['accommodation_booked'] != None:
             show_filters = True
-            speakers = speakers.filter(need_accommodation=True).filter(accommodation_booked=data['accommodation_booked'])
+            speakers = speakers.exclude(accommodation=Participation.ACCOMMODATION_NO).filter(accommodation_booked=data['accommodation_booked'])
     return render(request, 'proposals/speaker_list.html', {
         'speaker_list': speakers,
         'filter_form': filter_form,
