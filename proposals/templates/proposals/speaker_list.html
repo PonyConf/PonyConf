@@ -52,7 +52,7 @@
         <tr class="clickable-row" data-href="{% url 'show-speaker' username=speaker.user.username %}">
             <td>{{ speaker.user.username }}</td>
             <td>{{ speaker.user.get_full_name }}</td>
-            <td class="text-right">{{ speaker.talk_set.count }}</td>
+            <td class="text-right">{{ speaker.not_refused_talk_set.count }}{% if speaker.pending_talk_set.count %} ({{ speaker.pending_talk_set.count }} pending){% endif %}</td>
             {% if speaker.need_transport %}
             <td class="{% if speaker.transport_booked %}success{% else %}warning{% endif %}">
                 {% for transport in speaker.transport.all %}

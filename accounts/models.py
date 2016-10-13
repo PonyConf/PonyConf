@@ -108,6 +108,19 @@ class Participation(PonyConfModel):
     def talk_set(self):
         return self.user.talk_set.filter(site=self.site)
 
+    @property
+    def accepted_talk_set(self):
+        return self.talk_set.filter(accepted=True)
+    @property
+    def pending_talk_set(self):
+        return self.talk_set.filter(accepted=None)
+    @property
+    def refused_talk_set(self):
+        return self.talk_set.filter(accepted=False)
+    @property
+    def not_refused_talk_set(self): # accepted + pending
+        return self.talk_set.exclude(accepted=False)
+
     # return True, False or None if availabilities have not been filled
     def is_available(self, start, end=None):
         if not self.availabilities.exists():
