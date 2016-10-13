@@ -20,10 +20,11 @@ CHANGE_AVATAR_BUTTON = ('avatar_change', 'default', _('Change avatar'))
 @login_required
 def profile(request):
 
-    forms = [UserForm(request.POST or None, instance=request.user),
-             ProfileForm(request.POST or None, instance=request.user.profile),
-             ParticipationForm(request.POST or None, instance=Participation.objects.get(site=get_current_site(request),
-                                                                                        user=request.user))]
+    user_form = UserForm(request.POST or None, instance=request.user)
+    profile_form = ProfileForm(request.POST or None, instance=request.user.profile)
+    participation_form = ParticipationForm(request.POST or None, instance=Participation.objects.get(site=get_current_site(request),
+                                                                                                    user=request.user))
+    forms = [user_form, profile_form, participation_form]
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
@@ -33,7 +34,12 @@ def profile(request):
         else:
             messages.error(request, 'Please correct those errors.')
 
-    return render(request, 'accounts/profile.html', {'forms': forms, 'buttons': [CHANGE_PASSWORD_BUTTON]})
+    return render(request, 'accounts/profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'participation_form': participation_form,
+        'buttons': [CHANGE_PASSWORD_BUTTON]
+    })
 
 
 @staff_required
