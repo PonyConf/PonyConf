@@ -49,7 +49,7 @@
     <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>
     <li><b>{% trans "Need sound:" %}</b> {{ participation.sound|yesno }}</li>
     <li><b>{% trans "Ok to be recorded on video:" %}</b> {{ participation.videotaped|yesno }}</li>
-    <li><b>{% trans "Video licence:" %}</b> {{ participation.video_licence|yesno }}</li>
+    <li><b>{% trans "Video licence:" %}</b> {{ participation.get_video_licence_display }}</li>
 </ul>
 
 <h2>{% trans "Constraints" %}</h2>
