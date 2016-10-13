@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.utils.translation import ugettext as _
@@ -355,7 +355,9 @@ def speaker_list(request):
             q = Q()
             if 'unknown' in data['transport']:
                 data['transport'].remove('unknown')
+                speakers = speakers.annotate(transport_count=Count('transport'))
                 q |= Q(need_transport=None)
+                q |= Q(need_transport=True, transport_count=0)
             if len(data['transport']):
                 q |= (Q(need_transport=True) & Q(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']])))
             speakers = speakers.filter(q)
