@@ -27,11 +27,23 @@
 <h2>{% trans "Preferences" %}</h2>
 
 <ul>
-    <li><b>{% trans "Need transport:" %}</b> {{ participation.need_transport|yesno:"Yes,No,Not specified" }}</li>
-    <li><b>{% trans "Arrival:" %}</b> {{ participation.arrival }}</li>
-    <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
-    <li><b>{% trans "Ok to travel by:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
-    <li><b>{% trans "Transport booked:" %}</b> {{ participation.transport_booked|yesno }}</li>
+    <li>
+        <b>{% trans "Need transport:" %}</b> {{ participation.need_transport|yesno:"Yes,No,Not specified" }}
+        {% if participation.need_transport %}
+        <ul>
+            {% comment %}
+            <li><b>{% trans "Arrival:" %}</b> {{ participation.arrival }}</li>
+            <li><b>{% trans "Departure:" %}</b> {{ participation.departure }}</li>
+            {% endcomment %}
+            <li><b>{% trans "Accepted transport means:" %}</b> {% for transport in participation.transport.all %}{% if not forloop.first %}, {% endif %}{{ transport }}{% endfor %}</li>
+            <li><b>{% trans "Departure city:" %}</b> {{ participation.transport_city_outward|default:'Not specified' }}</li>
+            {% if participation.transport_city_return %}
+            <li><b>{% trans "Return city:" %}</b> {{ participation.transport_city_return }}</li>
+            {% endif %}
+            <li><b>{% trans "Transport booked:" %}</b> {{ participation.transport_booked|yesno }}</li>
+        </ul>
+        {% endif %}
+    </li>
     <li><b>{% trans "Need accommodation:" %}</b> {% if participation.accommodation is None %}Not specified{% else %}{{ participation.get_accommodation_display }}{% endif %}</li>
     <li><b>{% trans "Accommodation booked:" %}</b> {{ participation.accommodation_booked|yesno }}</li>
     <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>

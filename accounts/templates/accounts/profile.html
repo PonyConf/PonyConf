@@ -22,10 +22,12 @@
       {% bootstrap_form user_form layout="horizontal" %}
       {% bootstrap_form profile_form layout="horizontal" %}
       {% bootstrap_field participation_form.need_transport layout="horizontal" %}
-      <div id="transport_field">
+      <div id="transport_fields">
       {% bootstrap_field participation_form.transport layout="horizontal" %}
+      {% bootstrap_field participation_form.transport_city_outward layout="horizontal" %}
+      {% bootstrap_field participation_form.transport_city_return layout="horizontal" %}
       </div>
-      {% bootstrap_form participation_form exclude="need_transport,transport" layout="horizontal" %}
+      {% bootstrap_form participation_form exclude="need_transport,transport,transport_city_outward,transport_city_return" layout="horizontal" %}
       {% buttons layout="horizontal" %}
       <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
       {% for url, class, text in buttons %}
@@ -50,9 +52,9 @@
 <script type="text/javascript">
 var update_transport = function() {
     if ($('#id_need_transport').val() == 2) { // 2 == 'Yes'
-        $("#transport_field").show();
+        $("#transport_fields").show();
     } else {
-        $("#transport_field").hide();
+        $("#transport_fields").hide();
     }
 }
 $(function(){

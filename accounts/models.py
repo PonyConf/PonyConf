@@ -63,6 +63,8 @@ class Participation(PonyConfModel):
     arrival = models.DateTimeField(blank=True, null=True)
     departure = models.DateTimeField(blank=True, null=True)
     transport = models.ManyToManyField(Transport, verbose_name=_("I'm ok to travel by"), blank=True)
+    transport_city_outward = models.CharField(blank=True, default='', max_length=256, verbose_name=_("Departure city"))
+    transport_city_return = models.CharField(blank=True, default='', max_length=256, verbose_name=_("Return city"), help_text=_("If different from departure city"))
     transport_booked = models.BooleanField(default=False)
 
     accommodation = models.IntegerField(choices=ACCOMMODATION_CHOICES, verbose_name=_('Need accommodation?'), null=True, blank=True)
