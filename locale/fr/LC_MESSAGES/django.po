@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-13 18:47+0000\n"
+"POT-Creation-Date: 2016-10-13 19:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -711,9 +711,13 @@ msgstr "Décliné"
 msgid "Pending, score: %(score)s"
 msgstr "En cours, score : %(score)s"
 
+#: proposals/templates/proposals/talk_list.html:100
+msgid "For selected talks:"
+msgstr "Pour les exposés sélectionnés :"
+
 #: proposals/templates/proposals/talk_list.html:108
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
 #: proposals/templates/proposals/topic_form.html:14
 msgid "Topic"

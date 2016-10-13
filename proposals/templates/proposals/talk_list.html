@@ -97,7 +97,7 @@
 {% if action_form %}
 <div id="filter">
     <div class="well">
-        <h4>For selected talks:</h4>
+        <h4>{% trans "For selected talks:" %}</h4>
         {% csrf_token %}
         {% bootstrap_field action_form.decision %}
         {% if request|orga %}
