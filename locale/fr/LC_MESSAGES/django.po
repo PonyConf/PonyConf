@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-13 18:35+0000\n"
+"POT-Creation-Date: 2016-10-13 18:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,12 +42,12 @@ msgid "Homestay"
 msgstr "Logement chez habitant"
 
 #: accounts/models.py:62
-msgid "Need transport?"
-msgstr "Besoin de défrayement pour le transport ?"
+msgid "Defray transportation?"
+msgstr "Défraiement du transport ?"
 
 #: accounts/models.py:65
-msgid "I'm ok to travel by"
-msgstr "J’accepte de voyager en"
+msgid "I want to travel by"
+msgstr "Je souhaite voyager en"
 
 #: accounts/models.py:66
 msgid "Departure city"
@@ -745,7 +745,7 @@ msgstr "Préférences"
 
 #: proposals/templates/proposals/user_details.html:31
 msgid "Need transport:"
-msgstr "Défrayement du transport :"
+msgstr "Défraiement du transport :"
 
 #: proposals/templates/proposals/user_details.html:39
 msgid "Accepted transport means:"
