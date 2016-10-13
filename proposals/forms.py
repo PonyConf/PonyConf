@@ -115,7 +115,7 @@ class SpeakerFilterForm(forms.Form):
     transport = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=get_options(Transport),
+            choices=[('unknown', 'Not answered')] + get_options(Transport),
     )
     accommodation= forms.MultipleChoiceField(
             required=False,

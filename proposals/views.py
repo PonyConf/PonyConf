@@ -352,7 +352,13 @@ def speaker_list(request):
         data = filter_form.cleaned_data
         if len(data['transport']):
             show_filters = True
-            speakers = speakers.filter(need_transport=True).filter(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']]))
+            q = Q()
+            if 'unknown' in data['transport']:
+                data['transport'].remove('unknown')
+                q |= Q(need_transport=None)
+            if len(data['transport']):
+                q |= (Q(need_transport=True) & Q(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']])))
+            speakers = speakers.filter(q)
         if len(data['accommodation']):
             show_filters = True
             accommodations = list(map(lambda x: None if x == 'unknown' else x, data['accommodation']))
