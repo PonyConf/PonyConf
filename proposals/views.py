@@ -347,16 +347,27 @@ def speaker_list(request):
         if len(data['topic']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(topics__slug=topic) for topic in data['topic']]))
+        if len(data['track']):
+            show_filters = True
+            q = Q()
+            if 'none' in data['track']:
+                data['track'].remove('none')
+                q |= Q(track__isnull=True)
+            if len(data['track']):
+                q |= Q(track__slug__in=data['track'])
+            talks = talks.filter(q)
     speakers = Participation.objects.filter(site=site,user__talk__in=talks).order_by('pk').distinct()
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['transport']):
             show_filters = True
             q = Q()
-            if 'unknown' in data['transport']:
-                data['transport'].remove('unknown')
-                speakers = speakers.annotate(transport_count=Count('transport'))
+            if 'unanswered' in data['transport']:
+                data['transport'].remove('unanswered')
                 q |= Q(need_transport=None)
+            if 'unspecified' in data['transport']:
+                data['transport'].remove('unspecified')
+                speakers = speakers.annotate(transport_count=Count('transport'))
                 q |= Q(need_transport=True, transport_count=0)
             if len(data['transport']):
                 q |= (Q(need_transport=True) & Q(reduce(lambda x, y: x | y, [Q(transport__pk=pk) for pk in data['transport']])))

@@ -19,13 +19,20 @@
                 <div class="col-md-6">
                     {% bootstrap_field filter_form.transport layout="horizontal" %}
                     {% bootstrap_field filter_form.transport_booked layout="horizontal" %}
-                    {% bootstrap_field filter_form.accommodation layout="horizontal" %}
-                    {% bootstrap_field filter_form.accommodation_booked layout="horizontal" %}
                     {% bootstrap_field filter_form.sound layout="horizontal" %}
-                    {% bootstrap_field filter_form.status layout="horizontal" %}
                 </div>
                 <div class="col-md-6">
+                    {% bootstrap_field filter_form.accommodation layout="horizontal" %}
+                    {% bootstrap_field filter_form.accommodation_booked layout="horizontal" %}
+                    {% bootstrap_field filter_form.status layout="horizontal" %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     {% bootstrap_field filter_form.topic layout="horizontal" %}
+                </div>
+                <div class="col-md-6">
+                    {% bootstrap_field filter_form.track layout="horizontal" %}
                 </div>
             </div>
             <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">

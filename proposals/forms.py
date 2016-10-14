@@ -112,25 +112,32 @@ class SpeakerFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
+    track = forms.MultipleChoiceField(
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
     transport = forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=[('unknown', 'Not answered')] + get_options(Transport),
+            choices=[('unanswered', 'Not answered'), ('unspecified', 'Not specified')] + get_options(Transport),
     )
+    transport_booked = forms.NullBooleanField()
     accommodation= forms.MultipleChoiceField(
             required=False,
             widget=forms.CheckboxSelectMultiple,
             choices=[('unknown', 'Not specified')] + list(Participation.ACCOMMODATION_CHOICES),
     )
-    sound = forms.NullBooleanField()
-    transport_booked = forms.NullBooleanField()
     accommodation_booked = forms.NullBooleanField()
+    sound = forms.NullBooleanField()
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
         topics = Topic.objects.filter(site=site)
         self.fields['topic'].choices = topics.values_list('slug', 'name')
+        tracks = Track.objects.filter(site=site)
+        self.fields['track'].choices = [('none', 'Not assigned')] + list(tracks.values_list('slug', 'name'))
 
 
 class TopicForm(forms.ModelForm):
