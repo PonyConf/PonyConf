@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-13 19:23+0000\n"
+"POT-Creation-Date: 2016-10-15 12:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
 "viande, etc."
 
-#: accounts/models.py:18 proposals/templates/proposals/user_details.html:19
+#: accounts/models.py:18 proposals/templates/proposals/user_details.html:17
 msgid "Biography"
 msgstr "Biographie"
 
@@ -65,7 +65,7 @@ msgstr "Si différent de la ville de départ"
 msgid "Need accommodation?"
 msgstr "Besoin d'un hébergement ?"
 
-#: accounts/models.py:73 proposals/templates/proposals/user_details.html:56
+#: accounts/models.py:73 proposals/templates/proposals/user_details.html:54
 msgid "Constraints"
 msgstr "Contraintes"
 
@@ -86,7 +86,7 @@ msgid "Video licence"
 msgstr "Licence vidéo"
 
 #: accounts/models.py:80 proposals/models.py:113
-#: proposals/templates/proposals/user_details.html:59
+#: proposals/templates/proposals/user_details.html:57
 msgid "Notes"
 msgstr "Notes"
 
@@ -340,7 +340,7 @@ msgstr ""
 
 #: ponyconf/templates/base.html:62
 #: proposals/templates/proposals/talk_list.html:9
-#: proposals/templates/proposals/user_details.html:22
+#: proposals/templates/proposals/user_details.html:20
 msgid "Talks"
 msgstr "Exposés"
 
@@ -440,9 +440,17 @@ msgstr "Durée (min)"
 msgid "Title"
 msgstr "Titre"
 
+#: proposals/models.py:107
+msgid "After submission, title can only be changed by the staff."
+msgstr "Après soumission, le titre ne peut être modifié que par l’équipe d’organisation."
+
 #: proposals/models.py:109
 msgid "Abstract"
 msgstr "Résumé"
+
+#: proposals/models.py:111
+msgid "The topics can not be changed after submission."
+msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
 #: proposals/models.py:112 proposals/templates/proposals/talk_list.html:48
 #: proposals/templates/proposals/track_form.html:14
@@ -517,49 +525,49 @@ msgstr "Désolé, l’appel à participation est fermé."
 msgid "Show filtering options…"
 msgstr "Afficher les options de filtrage…"
 
-#: proposals/templates/proposals/speaker_list.html:31
+#: proposals/templates/proposals/speaker_list.html:38
 #: proposals/templates/proposals/talk_list.html:33
 msgid "Filter"
 msgstr "Filtrer"
 
-#: proposals/templates/proposals/speaker_list.html:39
+#: proposals/templates/proposals/speaker_list.html:46
 msgid "Username"
 msgstr "Nom d’utilisateur"
 
-#: proposals/templates/proposals/speaker_list.html:40
+#: proposals/templates/proposals/speaker_list.html:47
 msgid "Fullname"
 msgstr "Prénom et nom"
 
-#: proposals/templates/proposals/speaker_list.html:41
+#: proposals/templates/proposals/speaker_list.html:48
 msgid "Talk count"
 msgstr "Nombre d’exposé"
 
-#: proposals/templates/proposals/speaker_list.html:42
+#: proposals/templates/proposals/speaker_list.html:49
 msgctxt "table column title"
 msgid "Need transport?"
 msgstr "Transport ?"
 
-#: proposals/templates/proposals/speaker_list.html:43
+#: proposals/templates/proposals/speaker_list.html:50
 msgctxt "table column title"
 msgid "Need accommodation?"
 msgstr "Hébergement ?"
 
-#: proposals/templates/proposals/speaker_list.html:44
+#: proposals/templates/proposals/speaker_list.html:51
 msgid "Need sound?"
 msgstr "Son ?"
 
-#: proposals/templates/proposals/speaker_list.html:83
-#: proposals/templates/proposals/user_details.html:11
+#: proposals/templates/proposals/speaker_list.html:90
+#: proposals/templates/proposals/user_details.html:9
 msgid "Contact"
 msgstr "Contacter"
 
-#: proposals/templates/proposals/speaker_list.html:93
+#: proposals/templates/proposals/speaker_list.html:100
 #: proposals/templates/proposals/talk_list.html:56
 #: proposals/templates/proposals/talk_list.html:92
 msgid "Total:"
 msgstr "Total :"
 
-#: proposals/templates/proposals/speaker_list.html:93
+#: proposals/templates/proposals/speaker_list.html:100
 msgid "speaker"
 msgstr "orateur"
 
@@ -605,7 +613,7 @@ msgid "Decline the proposal"
 msgstr "Décliner la proposition"
 
 #: proposals/templates/proposals/talk_detail.html:12
-#: proposals/templates/proposals/user_details.html:14
+#: proposals/templates/proposals/user_details.html:12
 msgid "Edit"
 msgstr "Éditer"
 
@@ -743,51 +751,51 @@ msgstr "responsable"
 msgid "No tracks."
 msgstr "Aucune session."
 
-#: proposals/templates/proposals/user_details.html:27
+#: proposals/templates/proposals/user_details.html:25
 msgid "Preferences"
 msgstr "Préférences"
 
-#: proposals/templates/proposals/user_details.html:31
+#: proposals/templates/proposals/user_details.html:29
 msgid "Need transport:"
 msgstr "Défraiement du transport :"
 
-#: proposals/templates/proposals/user_details.html:39
+#: proposals/templates/proposals/user_details.html:37
 msgid "Accepted transport means:"
 msgstr "Moyens de transport souhaités :"
 
-#: proposals/templates/proposals/user_details.html:40
+#: proposals/templates/proposals/user_details.html:38
 msgid "Departure city:"
 msgstr "Ville de départ :"
 
-#: proposals/templates/proposals/user_details.html:42
+#: proposals/templates/proposals/user_details.html:40
 msgid "Return city:"
 msgstr "Ville de retour :"
 
-#: proposals/templates/proposals/user_details.html:44
+#: proposals/templates/proposals/user_details.html:42
 msgid "Transport booked:"
 msgstr "Transport réservé :"
 
-#: proposals/templates/proposals/user_details.html:48
+#: proposals/templates/proposals/user_details.html:46
 msgid "Need accommodation:"
 msgstr "Besoin d'hébergement :"
 
-#: proposals/templates/proposals/user_details.html:49
+#: proposals/templates/proposals/user_details.html:47
 msgid "Accommodation booked:"
 msgstr "Hébergement réservé :"
 
-#: proposals/templates/proposals/user_details.html:50
+#: proposals/templates/proposals/user_details.html:48
 msgid "Video output:"
 msgstr "Sortie vidéo :"
 
-#: proposals/templates/proposals/user_details.html:51
+#: proposals/templates/proposals/user_details.html:49
 msgid "Need sound:"
 msgstr "Besoin de son :"
 
-#: proposals/templates/proposals/user_details.html:52
+#: proposals/templates/proposals/user_details.html:50
 msgid "Ok to be recorded on video:"
 msgstr "Accepte d’être enregistré en vidéo :"
 
-#: proposals/templates/proposals/user_details.html:53
+#: proposals/templates/proposals/user_details.html:51
 msgid "Video licence:"
 msgstr "Licence vidéo :"
 

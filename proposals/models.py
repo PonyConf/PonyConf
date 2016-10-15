@@ -104,11 +104,11 @@ class Talk(PonyConfModel):
 
     proposer = models.ForeignKey(User, related_name='+')
     speakers = models.ManyToManyField(User, verbose_name=_('Speakers'))
-    title = models.CharField(max_length=128, verbose_name=_('Title'))
+    title = models.CharField(max_length=128, verbose_name=_('Title'), help_text=_('After submission, title can only be changed by the staff.'))
     slug = AutoSlugField(populate_from='title', unique=True)
     abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
     description = models.TextField(blank=True, verbose_name=_('Description'))
-    topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'))
+    topics = models.ManyToManyField(Topic, blank=True, verbose_name=_('Topics'), help_text=_('The topics can not be changed after submission.'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
     notes = models.TextField(blank=True, verbose_name=_('Notes'))
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
