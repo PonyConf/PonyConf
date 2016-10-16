@@ -1,5 +1,6 @@
 from django.db.models import Q
-from django.utils.safestring import mark_safe, escape
+from django.utils.safestring import mark_safe
+from django.utils.html import escape
 from django.utils.timezone import localtime
 
 from datetime import datetime, timedelta
