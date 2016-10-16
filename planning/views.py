@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from accounts.decorators import staff_required
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from proposals.mixins import OnSiteFormMixin
 
@@ -34,6 +35,7 @@ class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
     pass
 
 
+@staff_required
 def program(request):
     program = Program(site=get_current_site(request))
     return render(request, 'planning/program.html', {
