@@ -5,9 +5,11 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from proposals.mixins import OnSiteFormMixin
 
+from proposals.models import Talk
+
 from .models import Room
 from .forms import RoomForm
-
+from .utils import Program
 
 class RoomMixin(object):
     def get_queryset(self):
@@ -30,3 +32,10 @@ class RoomUpdate(OrgaRequiredMixin, RoomMixin, RoomFormMixin, UpdateView):
 
 class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
     pass
+
+
+def program(request):
+    program = Program(site=get_current_site(request))
+    return render(request, 'planning/program.html', {
+        'program': program,
+    })

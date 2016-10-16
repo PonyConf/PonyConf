@@ -10,6 +10,7 @@ from django.utils.translation import ugettext
 from django.utils import timezone
 
 from autoslug import AutoSlugField
+from colorful.fields import RGBColorField
 
 from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
@@ -85,7 +86,8 @@ class Event(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
+    duration = models.IntegerField(default=0, verbose_name=_('Default duration (min)'))
+    color = RGBColorField(default='#ffffff', verbose_name=_("Color on program"))
 
     class Meta:
         unique_together = ('site', 'name')
@@ -122,6 +124,13 @@ class Talk(PonyConfModel):
 
     def __str__(self):
         return self.title
+
+    def get_speakers_str(self):
+        speakers = [str(speaker) for speaker in self.speakers.all()]
+        if len(speakers) == 1:
+            return speakers[0]
+        else:
+            return ', '.join(speakers[:-1]) + ' & ' + str(speakers[-1])
 
     def estimated_duration(self):
         return self.duration or self.event.duration
