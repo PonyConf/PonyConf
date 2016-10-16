@@ -63,7 +63,7 @@ class Program:
         output = '<td>Room</td>'
         room_cell = '<td%(options)s>%(name)s<br><b>%(label)s</b></td>'
         for room, colspan in self.cols.items():
-            options = ' colspan="%d"' % colspan
+            options = ' style="min-width: 100px;" colspan="%d"' % colspan
             output += room_cell % {'name': escape(room.name), 'label': escape(room.label), 'options': options}
         return '<tr>%s</tr>' % output
 
