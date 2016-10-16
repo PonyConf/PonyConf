@@ -25,9 +25,13 @@ class Room(models.Model):
         return reverse('list-rooms')
 
     @property
+    def talks(self):
+        return self.talk_set.exclude(accepted=False)
+
+    @property
     def talks_by_date(self):
-        return self.talk_set.filter(start_date__isnull=False).order_by('start_date').all()
+        return self.talks.filter(start_date__isnull=False).order_by('start_date').all()
 
     @property
     def unscheduled_talks(self):
-        return self.talk_set.filter(start_date__isnull=True).all()
+        return self.talks.filter(start_date__isnull=True).all()

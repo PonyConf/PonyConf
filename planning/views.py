@@ -12,6 +12,7 @@ from .models import Room
 from .forms import RoomForm
 from .utils import Program
 
+
 class RoomMixin(object):
     def get_queryset(self):
         return Room.objects.filter(site=get_current_site(self.request)).all()
