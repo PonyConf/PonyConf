@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, escape
 from django.utils.timezone import localtime
 
 from datetime import datetime, timedelta
@@ -39,13 +39,13 @@ class Program:
         self.cols = OrderedDict([(room, 1) for room in self.rooms])
         self.rows = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.timeslots[:-1]])
 
-        for talk in self.talks:
+        for talk in self.talks.all():
             self._add_talk(talk)
 
     def _add_talk(self, talk):
         room = talk.room
         d1 = self.timeslots.index(talk.start_date)
-        d2 = self.timeslots.index(talk.start_date + timedelta(minutes=talk.duration))
+        d2 = self.timeslots.index(talk.start_date + timedelta(minutes=talk.estimated_duration()))
         col = None
         for row, timeslot in enumerate(islice(self.timeslots, d1, d2)):
             if col is None:
@@ -63,7 +63,7 @@ class Program:
         room_cell = '<td%(options)s>%(name)s<br><b>%(label)s</b></td>'
         for room, colspan in self.cols.items():
             options = ' colspan="%d"' % colspan
-            output += room_cell % {'name': room.name, 'label': room.label, 'options': options}
+            output += room_cell % {'name': escape(room.name), 'label': escape(room.label), 'options': options}
         return '<tr>%s</tr>' % output
 
     def _body(self):
@@ -82,7 +82,7 @@ class Program:
                             continue
                         options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.event.color)
                         cellcontent = str(event.talk) + ' — ' + event.talk.get_speakers_str()
-                    content += cell % {'options': options, 'content': cellcontent}
+                    content += cell % {'options': options, 'content': escape(cellcontent)}
             style, timeslot = self._timeslot(ts)
             output.append(row % {
                 'style': style,
@@ -98,7 +98,7 @@ class Program:
         duration = (end - start).seconds / 60
         print(start, end, duration)
         date_to_string = lambda date: datetime.strftime(localtime(date), '%H:%M')
-        style = 'height: %dpx;' % int(duration * 0.8)
+        style = 'height: %dpx;' % int(duration * 1.2)
         timeslot = '<td>%s – %s</td>' % tuple(map(date_to_string, [start, end]))
         return style, timeslot
 
