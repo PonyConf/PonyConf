@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-15 12:01+0000\n"
+"POT-Creation-Date: 2016-10-16 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,7 +85,7 @@ msgstr "J’accepte d’être enregistré en vidéo"
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:80 proposals/models.py:113
+#: accounts/models.py:80 proposals/models.py:115
 #: proposals/templates/proposals/user_details.html:57
 msgid "Notes"
 msgstr "Notes"
@@ -208,7 +208,7 @@ msgid "Delete These"
 msgstr ""
 
 #: accounts/templates/registration/login.html:11
-#: ponyconf/templates/base.html:98
+#: ponyconf/templates/base.html:101
 msgid "Login"
 msgstr "Se connecter"
 
@@ -273,6 +273,10 @@ msgid "You can use this page to communicate with the staff."
 msgstr ""
 "Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
 
+#: planning/templates/planning/program.html:9 ponyconf/templates/base.html:76
+msgid "Program"
+msgstr "Programme"
+
 #: planning/templates/planning/room_detail.html:19
 #: planning/templates/planning/room_detail.html:28
 msgid "No talks."
@@ -323,7 +327,7 @@ msgstr "Accueil"
 msgid "Participate"
 msgstr "Participer"
 
-#: ponyconf/templates/base.html:48 proposals/models.py:111
+#: ponyconf/templates/base.html:48 proposals/models.py:113
 #: proposals/templates/proposals/talk_list.html:47
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
@@ -344,7 +348,7 @@ msgstr ""
 msgid "Talks"
 msgstr "Exposés"
 
-#: ponyconf/templates/base.html:65 proposals/models.py:106
+#: ponyconf/templates/base.html:65 proposals/models.py:108
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_list.html:46
 msgid "Speakers"
@@ -354,27 +358,27 @@ msgstr "Orateurs"
 msgid "Planning"
 msgstr ""
 
-#: ponyconf/templates/base.html:78
+#: ponyconf/templates/base.html:81
 msgid "Administration"
 msgstr "Administration"
 
-#: ponyconf/templates/base.html:85
+#: ponyconf/templates/base.html:88
 msgid "Conference"
 msgstr "Conférence"
 
-#: ponyconf/templates/base.html:87
+#: ponyconf/templates/base.html:90
 msgid "Participants"
 msgstr "Participants"
 
-#: ponyconf/templates/base.html:88
+#: ponyconf/templates/base.html:91
 msgid "Correspondence"
 msgstr "Correspondance"
 
-#: ponyconf/templates/base.html:97
+#: ponyconf/templates/base.html:100
 msgid "Register"
 msgstr "S’inscrire"
 
-#: ponyconf/templates/base.html:123
+#: ponyconf/templates/base.html:126
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -412,54 +416,64 @@ msgstr "Assigner à une session"
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: proposals/models.py:44 proposals/models.py:67
+#: proposals/models.py:45 proposals/models.py:68
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:46 proposals/models.py:69 proposals/models.py:110
+#: proposals/models.py:47 proposals/models.py:70 proposals/models.py:112
 msgid "Description"
 msgstr "Description"
 
-#: proposals/models.py:48
+#: proposals/models.py:49
 msgid "Managers"
 msgstr "Responsables"
 
-#: proposals/models.py:70
+#: proposals/models.py:71
 msgid "Destination track"
 msgstr "Session de destination"
 
-#: proposals/models.py:72
+#: proposals/models.py:73
 msgid "Reviewers"
 msgstr "Responsables"
 
-#: proposals/models.py:88 proposals/models.py:117
-msgid "Duration (min)"
-msgstr "Durée (min)"
+#: proposals/models.py:89
+msgid "Default duration (min)"
+msgstr "Durée par défaut (min)"
 
-#: proposals/models.py:107 proposals/templates/proposals/talk_list.html:44
+#: proposals/models.py:90
+msgid "Color on program"
+msgstr "Couleur sur le programme"
+
+#: proposals/models.py:109 proposals/templates/proposals/talk_list.html:44
 msgid "Title"
 msgstr "Titre"
 
-#: proposals/models.py:107
-msgid "After submission, title can only be changed by the staff."
-msgstr "Après soumission, le titre ne peut être modifié que par l’équipe d’organisation."
-
 #: proposals/models.py:109
+msgid "After submission, title can only be changed by the staff."
+msgstr ""
+"Après soumission, le titre ne peut être modifié que par l’équipe "
+"d’organisation."
+
+#: proposals/models.py:111
 msgid "Abstract"
 msgstr "Résumé"
 
-#: proposals/models.py:111
+#: proposals/models.py:113
 msgid "The topics can not be changed after submission."
 msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
-#: proposals/models.py:112 proposals/templates/proposals/talk_list.html:48
+#: proposals/models.py:114 proposals/templates/proposals/talk_list.html:48
 #: proposals/templates/proposals/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: proposals/models.py:114 proposals/templates/proposals/talk_list.html:45
+#: proposals/models.py:116 proposals/templates/proposals/talk_list.html:45
 msgid "Intervention kind"
 msgstr "Type d’intervention"
+
+#: proposals/models.py:119
+msgid "Duration (min)"
+msgstr "Durée (min)"
 
 #: proposals/signals.py:25
 msgid "conference (short)"
