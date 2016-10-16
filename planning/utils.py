@@ -74,8 +74,9 @@ class Program:
         for ts, rooms in self.rows.items():
             content = ''
             for room, events in rooms.items():
+                colspan = 1
                 for i in range(self.cols[room]):
-                    options = ''
+                    options = ' colspan="%d"' % colspan
                     cellcontent = ''
                     if i < len(events) and events[i]:
                         event = events[i]
@@ -83,6 +84,10 @@ class Program:
                             continue
                         options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.event.color)
                         cellcontent = str(event.talk) + ' — ' + event.talk.get_speakers_str()
+                    elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
+                        colspan += 1
+                        continue
+                    colspan = 1
                     content += cell % {'options': options, 'content': escape(cellcontent)}
             style, timeslot = self._timeslot(ts)
             output.append(row % {
