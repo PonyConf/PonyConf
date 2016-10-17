@@ -62,7 +62,7 @@
             <td>{{ talk.event }}</td>
             <td>
                 {% for speaker in talk.speakers.all %}
-                    {{ speaker.profile }}
+                    <a href="{% url 'show-speaker' speaker.username %}">{{ speaker.profile }}</a>
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}
