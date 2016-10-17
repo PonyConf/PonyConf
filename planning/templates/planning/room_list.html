@@ -21,7 +21,9 @@
     {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
     {% if request|staff %}
     |
+    <span{% if room.unscheduled_talks %} class="text-warning" data-toggle="tooltip" data-placement="bottom" title="{% trans "Some talks are not scheduled yet." %}"{% endif %}>
     {{ room.talks.count }} {% trans "talk" %}{{ room.talks.count|pluralize }}
+    </span>
     {% if request|orga %}
     |
     <a href="{% url 'edit-room' room.slug %}">{% bootstrap_icon "pencil" %}</a>
@@ -36,4 +38,13 @@
   {% endfor %}
 </div>
 
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
