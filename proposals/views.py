@@ -189,6 +189,8 @@ def talk_edit(request, talk=None):
     form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
         form.fields['topics'].disabled = True
+        if talk.event.duration:
+            form.fields['duration'].help_text = 'Default value if zero: %d min' % talk.duration
         if not talk.is_editable_by(request.user):
             form.fields.pop('track')
             form.fields.pop('duration')
