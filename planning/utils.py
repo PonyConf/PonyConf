@@ -32,39 +32,51 @@ class Program:
         else:
             self.rooms = Room.objects.filter(talk__in=self.talks.all()).order_by('name').distinct()
 
-        self.timeslots = []
+        self.days = {}
         for talk in self.talks.all():
             duration = talk.estimated_duration()
             assert(duration)
-            d1 = talk.start_date
-            d2 = d1 + timedelta(minutes=duration)
-            if d1 not in self.timeslots:
-                self.timeslots.append(d1)
-            if d2 not in self.timeslots:
-                self.timeslots.append(d2)
-        self.timeslots = sorted(self.timeslots)
+            dt1 = talk.start_date
+            d1 = localtime(dt1).date()
+            if d1 not in self.days.keys():
+                self.days[d1] = {'timeslots': []}
+            dt2 = dt1 + timedelta(minutes=duration)
+            d2 = localtime(dt2).date()
+            if d2 not in self.days.keys():
+                self.days[d2] = {'timeslots': []}
+            if dt1 not in self.days[d1]['timeslots']:
+                self.days[d1]['timeslots'].append(dt1)
+            if dt2 not in self.days[d2]['timeslots']:
+                self.days[d2]['timeslots'].append(dt2)
 
         self.cols = OrderedDict([(room, 1) for room in self.rooms])
-        self.rows = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.timeslots[:-1]])
+        for day in self.days.keys():
+            self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
+            self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
 
         for talk in self.talks.all():
             self._add_talk(talk)
 
     def _add_talk(self, talk):
         room = talk.room
-        d1 = self.timeslots.index(talk.start_date)
-        d2 = self.timeslots.index(talk.start_date + timedelta(minutes=talk.estimated_duration()))
+        dt1 = talk.start_date
+        d1 = localtime(dt1).date()
+        dt2 = talk.start_date + timedelta(minutes=talk.estimated_duration())
+        d2 = localtime(dt2).date()
+        assert(d1 == d2) # this is a current limitation
+        dt1 = self.days[d1]['timeslots'].index(dt1)
+        dt2 = self.days[d1]['timeslots'].index(dt2)
         col = None
-        for row, timeslot in enumerate(islice(self.timeslots, d1, d2)):
+        for row, timeslot in enumerate(islice(self.days[d1]['timeslots'], dt1, dt2)):
             if col is None:
                 col = 0
-                while col < len(self.rows[timeslot][room]) and self.rows[timeslot][room][col]:
+                while col < len(self.days[d1]['rows'][timeslot][room]) and self.days[d1]['rows'][timeslot][room][col]:
                     col += 1
                 self.cols[room] = max(self.cols[room], col+1)
-            event = Event(talk=talk, row=row, rowcount=d2-d1)
-            while len(self.rows[timeslot][room]) <= col:
-                self.rows[timeslot][room].append(None)
-            self.rows[timeslot][room][col] = event
+            event = Event(talk=talk, row=row, rowcount=dt2-dt1)
+            while len(self.days[d1]['rows'][timeslot][room]) <= col:
+                self.days[d1]['rows'][timeslot][room].append(None)
+            self.days[d1]['rows'][timeslot][room][col] = event
 
     def _header(self):
         output = '<td>Room</td>'
@@ -75,39 +87,60 @@ class Program:
         return '<tr>%s</tr>' % output
 
     def _body(self):
-        row = '<tr style="%(style)s">%(timeslot)s%(content)s</tr>'
-        cell = '<td%(options)s>%(content)s</td>'
+        output = ''
+        for day in self.days.keys():
+            output += self._day_header(day)
+            output += self._day(day)
+        return output
+
+    def _day_header(self, day):
+        row = '<tr><td colspan="%(colcount)s"><h3>%(day)s</h3></td></tr>'
+        colcount = 1
+        for room, col in self.cols.items():
+            colcount += col
+        return row % {
+            'colcount': colcount,
+            'day': datetime.strftime(day, '%A %d %B'),
+        }
+
+    def _day(self, day):
         output = []
-        for ts, rooms in self.rows.items():
-            content = ''
-            for room, events in rooms.items():
-                colspan = 1
-                for i in range(self.cols[room]):
-                    options = ' colspan="%d"' % colspan
-                    cellcontent = ''
-                    if i < len(events) and events[i]:
-                        event = events[i]
-                        if event.row != 0:
-                            continue
-                        options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.event.color)
-                        cellcontent = str(event.talk) + ' — ' + event.talk.get_speakers_str()
-                    elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
-                        colspan += 1
-                        continue
-                    colspan = 1
-                    content += cell % {'options': options, 'content': escape(cellcontent)}
-            style, timeslot = self._timeslot(ts)
-            output.append(row % {
-                'style': style,
-                'timeslot': timeslot,
-                'content': content,
-            })
+        rows = self.days[day]['rows']
+        for ts, rooms in rows.items():
+            output.append(self._row(day, ts, rooms))
         return '\n'.join(output)
 
-    def _timeslot(self, ts):
+    def _row(self, day, ts, rooms):
+        row = '<tr style="%(style)s">%(timeslot)s%(content)s</tr>'
+        cell = '<td%(options)s>%(content)s</td>'
+        content = ''
+        for room, events in rooms.items():
+            colspan = 1
+            for i in range(self.cols[room]):
+                options = ' colspan="%d"' % colspan
+                cellcontent = ''
+                if i < len(events) and events[i]:
+                    event = events[i]
+                    if event.row != 0:
+                        continue
+                    options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.event.color)
+                    cellcontent = str(event.talk) + ' — ' + event.talk.get_speakers_str()
+                elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
+                    colspan += 1
+                    continue
+                colspan = 1
+                content += cell % {'options': options, 'content': escape(cellcontent)}
+        style, timeslot = self._timeslot(day, ts)
+        return row % {
+            'style': style,
+            'timeslot': timeslot,
+            'content': content,
+        }
+
+    def _timeslot(self, day, ts):
         template = '<td>%(content)s</td>'
         start = ts
-        end = self.timeslots[self.timeslots.index(ts)+1]
+        end = self.days[day]['timeslots'][self.days[day]['timeslots'].index(ts)+1]
         duration = (end - start).seconds / 60
         print(start, end, duration)
         date_to_string = lambda date: datetime.strftime(localtime(date), '%H:%M')
