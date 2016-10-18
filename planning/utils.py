@@ -88,7 +88,7 @@ class Program:
 
     def _body(self):
         output = ''
-        for day in self.days.keys():
+        for day in sorted(self.days.keys()):
             output += self._day_header(day)
             output += self._day(day)
         return output
@@ -142,7 +142,6 @@ class Program:
         start = ts
         end = self.days[day]['timeslots'][self.days[day]['timeslots'].index(ts)+1]
         duration = (end - start).seconds / 60
-        print(start, end, duration)
         date_to_string = lambda date: datetime.strftime(localtime(date), '%H:%M')
         style = 'height: %dpx;' % int(duration * 1.2)
         timeslot = '<td>%s – %s</td>' % tuple(map(date_to_string, [start, end]))
