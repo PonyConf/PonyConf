@@ -1,4 +1,5 @@
 from enum import IntEnum
+from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -161,6 +162,11 @@ class Talk(PonyConfModel):
             return query_sum(self.vote_set, 'vote') / len(self.vote_set.all())
         else:
             return 0
+
+
+    @property
+    def end_date(self):
+        return self.start_date + timedelta(minutes=self.duration)
 
     class Meta:
         ordering = ('event__id',)
