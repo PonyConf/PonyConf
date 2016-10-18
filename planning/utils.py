@@ -17,12 +17,15 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 
 
 class Program:
-    def __init__(self, site, empty_rooms=False):
+    def __init__(self, site, empty_rooms=False, talk_filter=None):
         self.talks = Talk.objects.\
                             filter(site=site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(event__duration__gt=0)).\
                             exclude(accepted=False).\
                             order_by('start_date')
+
+        if talk_filter:
+            self.talks = self.talks.filter(talk_filter)
 
         if empty_rooms:
             self.rooms = Room.objects.filter(site=site)
