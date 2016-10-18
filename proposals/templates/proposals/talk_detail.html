@@ -17,17 +17,16 @@
 {% if moderate_perm %}
 
 <dl class="dl-horizontal">
-    <dt>{% trans "Format:" %}</dt>
+    <dt>{% trans "Format" %}</dt>
       <dd><a href="{{ talk.event.get_absolute_url }}">{{ talk.event }}</a></dd>
     <dt>{% trans "Topics:" %}</dt>
-      {% for topic in talk.topics.all %}
-          <dd><a href="{{ topic.get_absolute_url }}">{{ topic }}</a></dd>
-      {% if not forloop.last %}, {% endif %}
+      <dd>{% for topic in talk.topics.all %}
+      <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>{% if not forloop.last %}, {% endif %}
       {% empty %}
-      <dd><i>{% trans "No topics." %}</i></dd>
-      {% endfor %}
+      <i>{% trans "No topics." %}</i>
+      {% endfor %}</dd>
 
-    <dt>{% trans "Track:" %}</dt>
+    <dt>{% trans "Track" %}</dt>
       <dd>{% if talk.track %}
         <a href="{{ talk.track.get_absolute_url }}">{{ talk.track }}</a>
       {% else %}
@@ -44,7 +43,9 @@
       </dd>
     <dt>Salle</dt>
       <dd>{% if talk.room %}
-        <span class="label label-info">{{ talk.room }}</span>
+        <a href="{{ talk.room.get_absolute_url }}">
+          <span class="label label-info">{{ talk.room }}</span>
+        </a>
         {% else %}<em>{% trans "not defined" %}</em>
         {% endif %}
       </dd>
@@ -53,11 +54,11 @@
 
 {% endif %}
 
-<h3>{% trans "Description:" %}</h3>
+<h3>{% trans "Description" %}</h3>
 
 <p>{% if talk.description %}{{ talk.description|linebreaksbr }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</p>
 
-<h3>{% trans "Speakers:" %}</h3>
+<h3>{% trans "Speakers" %}</h3>
 
 {% for speaker in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
@@ -70,7 +71,7 @@
 {% if moderate_perm %}
 
 {% if not talk.track %}
-<h3>{% trans "Track:" %}</h3>
+<h3>{% trans "Track" %}</h3>
 <p><em>{% trans "No assigned yet." %}</em></p>
   {% for topic in talk.topics.distinct %}
     {% if forloop.first %}<p>{% endif %}
@@ -83,7 +84,7 @@
 
 {% endif %}
 
-<h3>{% trans "Notes:" %}</h3>
+<h3>{% trans "Notes" %}</h3>
 
 <p>{% if talk.notes %}{{ talk.notes|linebreaksbr }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
 
@@ -91,12 +92,12 @@
 
 <h2>{% trans "Moderation" %}</h2>
 
-<h3>{% trans "Status:" %}</h3>
+<h3>{% trans "Status" %}</h3>
 
 <span class="label label-{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}</span><br />
 
 {% if talk.accepted == None %}
-<h3>{% trans "Vote:" %}</h3>
+<h3>{% trans "Vote" %}</h3>
 <div class="btn-group" role="group" aria-label="vote">
   <a class="btn {% if vote.vote == -2 %} active {% endif %}btn-danger"  href="{% url 'vote' talk=talk.slug score='-2' %}">-2</a>
   <a class="btn {% if vote.vote == -1 %} active {% endif %}btn-warning" href="{% url 'vote' talk=talk.slug score='-1' %}">-1</a>
@@ -105,13 +106,13 @@
   <a class="btn {% if vote.vote == 2 %}  active {% endif %}btn-success" href="{% url 'vote' talk=talk.slug score='2'  %}">+2</a>
 </div>
 <br /><br />
-{{ talk.vote_set.all|length }} {% trans "vote" %}{{ talk.vote_set.all|length|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}
+<p>{{ talk.vote_set.all|length }} {% trans "vote" %}{{ talk.vote_set.all|length|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}</p>
 
 <a href="{% url 'accept-talk' talk.slug %}" class="btn btn-success">Accept</a>
 <a href="{% url 'decline-talk' talk.slug %}" class="btn btn-danger">Decline</a>
 {% endif %}
 
-<h3>{% trans "Messages:" %}</h3>
+<h3>{% trans "Messages" %}</h3>
 {% trans "These messages are for organization team only." %}<br /><br />
 {% for message in talk.conversation.messages.all %}
 {% include 'conversations/_message_detail.html' %}

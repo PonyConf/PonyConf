@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-16 21:36+0000\n"
+"POT-Creation-Date: 2016-10-18 22:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,7 @@ msgid "Video licence"
 msgstr "Licence vidéo"
 
 #: accounts/models.py:80 proposals/models.py:115
+#: proposals/templates/proposals/talk_detail.html:87
 #: proposals/templates/proposals/user_details.html:57
 msgid "Notes"
 msgstr "Notes"
@@ -205,7 +206,7 @@ msgstr ""
 
 #: accounts/templates/avatar/confirm_delete.html:14
 msgid "Delete These"
-msgstr ""
+msgstr "Supprimer ces"
 
 #: accounts/templates/registration/login.html:11
 #: ponyconf/templates/base.html:101
@@ -299,6 +300,12 @@ msgid "place"
 msgstr ""
 
 #: planning/templates/planning/room_list.html:24
+#, fuzzy
+#| msgid "Filter talks already / not yet scheduled"
+msgid "Some talks are not scheduled yet."
+msgstr "Filtrer les exposés déjà / pas encore planifiées"
+
+#: planning/templates/planning/room_list.html:25
 #: proposals/templates/proposals/talk_list.html:56
 #: proposals/templates/proposals/talk_list.html:92
 #: proposals/templates/proposals/topic_list.html:23
@@ -306,9 +313,34 @@ msgstr ""
 msgid "talk"
 msgstr "exposé"
 
-#: planning/templates/planning/room_list.html:35
+#: planning/templates/planning/room_list.html:37
 msgid "No rooms."
 msgstr "Aucune salle."
+
+#: planning/templates/planning/talk_detail.html:20
+#: proposals/templates/proposals/talk_detail.html:68
+msgid "No speakers."
+msgstr "Aucun orateur."
+
+#: planning/templates/planning/talk_detail.html:37 proposals/models.py:47
+#: proposals/models.py:70 proposals/models.py:112
+#: proposals/templates/proposals/talk_detail.html:57
+msgid "Description"
+msgstr "Description"
+
+#: planning/templates/planning/talk_detail2.html:62 proposals/models.py:111
+msgid "Abstract"
+msgstr "Résumé"
+
+#: planning/templates/planning/talk_detail2.html:78
+#, fuzzy
+#| msgid "average:"
+msgid "Coverage"
+msgstr "moyenne :"
+
+#: planning/templates/planning/talk_detail2.html:94
+msgid "See more"
+msgstr "Voir plus"
 
 #: ponyconf/settings.py:139
 msgid "English"
@@ -340,7 +372,7 @@ msgstr "Sessions"
 
 #: ponyconf/templates/base.html:59
 msgid "Listing"
-msgstr ""
+msgstr "Liste"
 
 #: ponyconf/templates/base.html:62
 #: proposals/templates/proposals/talk_list.html:9
@@ -350,6 +382,7 @@ msgstr "Exposés"
 
 #: ponyconf/templates/base.html:65 proposals/models.py:108
 #: proposals/templates/proposals/speaker_list.html:9
+#: proposals/templates/proposals/talk_detail.html:61
 #: proposals/templates/proposals/talk_list.html:46
 msgid "Speakers"
 msgstr "Orateurs"
@@ -420,10 +453,6 @@ msgstr "Assigner à une salle"
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:47 proposals/models.py:70 proposals/models.py:112
-msgid "Description"
-msgstr "Description"
-
 #: proposals/models.py:49
 msgid "Managers"
 msgstr "Responsables"
@@ -454,15 +483,13 @@ msgstr ""
 "Après soumission, le titre ne peut être modifié que par l’équipe "
 "d’organisation."
 
-#: proposals/models.py:111
-msgid "Abstract"
-msgstr "Résumé"
-
 #: proposals/models.py:113
 msgid "The topics can not be changed after submission."
 msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
-#: proposals/models.py:114 proposals/templates/proposals/talk_list.html:48
+#: proposals/models.py:114 proposals/templates/proposals/talk_detail.html:29
+#: proposals/templates/proposals/talk_detail.html:74
+#: proposals/templates/proposals/talk_list.html:48
 #: proposals/templates/proposals/track_form.html:14
 msgid "Track"
 msgstr "Session"
@@ -632,93 +659,78 @@ msgid "Edit"
 msgstr "Éditer"
 
 #: proposals/templates/proposals/talk_detail.html:15
-msgid "Format:"
-msgstr "Format :"
-
-#: proposals/templates/proposals/talk_detail.html:19
-msgid "Abstract:"
-msgstr "Résumé :"
-
-#: proposals/templates/proposals/talk_detail.html:21
 msgid "No abstract provided."
 msgstr "Aucun résumé fourni."
 
-#: proposals/templates/proposals/talk_detail.html:23
-msgid "Description:"
-msgstr "Description :"
+#: proposals/templates/proposals/talk_detail.html:20
+#, fuzzy
+#| msgid "Format:"
+msgid "Format"
+msgstr "Format :"
 
-#: proposals/templates/proposals/talk_detail.html:25
-msgid "No description provided."
-msgstr "Aucune description fournie."
-
-#: proposals/templates/proposals/talk_detail.html:27
-msgid "Speakers:"
-msgstr "Orateurs :"
-
-#: proposals/templates/proposals/talk_detail.html:34
-msgid "No speakers."
-msgstr "Aucun orateur."
-
-#: proposals/templates/proposals/talk_detail.html:37
+#: proposals/templates/proposals/talk_detail.html:22
 msgid "Topics:"
 msgstr "Thèmes :"
 
-#: proposals/templates/proposals/talk_detail.html:44
+#: proposals/templates/proposals/talk_detail.html:26
 #: proposals/templates/proposals/topic_list.html:31
 msgid "No topics."
 msgstr "Aucun thème."
 
-#: proposals/templates/proposals/talk_detail.html:49
-msgid "Track:"
-msgstr "Session :"
-
-#: proposals/templates/proposals/talk_detail.html:54
+#: proposals/templates/proposals/talk_detail.html:33
+#: proposals/templates/proposals/talk_detail.html:75
 msgid "No assigned yet."
 msgstr "Pas encore assigné."
 
-#: proposals/templates/proposals/talk_detail.html:58
+#: proposals/templates/proposals/talk_detail.html:41
+#: proposals/templates/proposals/talk_detail.html:49
+msgid "not defined"
+msgstr "non défini"
+
+#: proposals/templates/proposals/talk_detail.html:59
+msgid "No description provided."
+msgstr "Aucune description fournie."
+
+#: proposals/templates/proposals/talk_detail.html:79
 msgid "Assign to"
 msgstr "Assigner à"
 
-#: proposals/templates/proposals/talk_detail.html:66
-msgid "Notes:"
-msgstr "Notes :"
-
-#: proposals/templates/proposals/talk_detail.html:68
+#: proposals/templates/proposals/talk_detail.html:89
 msgid "No notes."
 msgstr "Aucune note."
 
-#: proposals/templates/proposals/talk_detail.html:72
+#: proposals/templates/proposals/talk_detail.html:93
 msgid "Moderation"
 msgstr "Modération"
 
-#: proposals/templates/proposals/talk_detail.html:74
-msgid "Vote:"
-msgstr "Vote :"
-
-#: proposals/templates/proposals/talk_detail.html:83
-msgid "vote"
-msgstr "vote"
-
-#: proposals/templates/proposals/talk_detail.html:83
-msgid "average:"
-msgstr "moyenne :"
-
-#: proposals/templates/proposals/talk_detail.html:85
-msgid "Status:"
-msgstr "Statut :"
-
-#: proposals/templates/proposals/talk_detail.html:94
-msgid "Messages:"
-msgstr "Messages :"
-
 #: proposals/templates/proposals/talk_detail.html:95
-msgid "These messages are for organization team only."
-msgstr "Ces messages sont à destination de la team d’organisation seulement."
-
 #: proposals/templates/proposals/talk_list.html:49
 msgid "Status"
 msgstr "Statut"
+
+#: proposals/templates/proposals/talk_detail.html:100
+#, fuzzy
+#| msgid "Vote:"
+msgid "Vote"
+msgstr "Vote :"
+
+#: proposals/templates/proposals/talk_detail.html:109
+msgid "vote"
+msgstr "vote"
+
+#: proposals/templates/proposals/talk_detail.html:109
+msgid "average:"
+msgstr "moyenne :"
+
+#: proposals/templates/proposals/talk_detail.html:115
+#, fuzzy
+#| msgid "Messages:"
+msgid "Messages"
+msgstr "Messages :"
+
+#: proposals/templates/proposals/talk_detail.html:116
+msgid "These messages are for organization team only."
+msgstr "Ces messages sont à destination de la team d’organisation seulement."
 
 #: proposals/templates/proposals/talk_list.html:78
 msgid "Accepted"
@@ -813,26 +825,44 @@ msgstr "Accepte d’être enregistré en vidéo :"
 msgid "Video licence:"
 msgstr "Licence vidéo :"
 
-#: proposals/views.py:211
+#: proposals/views.py:213
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:217
+#: proposals/views.py:219
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:232
+#: proposals/views.py:234
 msgid "Talk assigned to track successfully!"
 msgstr "Exposé assigné à la session avec succès !"
 
-#: proposals/views.py:301
+#: proposals/views.py:303
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:301
+#: proposals/views.py:303
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:327
+#: proposals/views.py:329
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
+
+#~ msgid "Abstract:"
+#~ msgstr "Résumé :"
+
+#~ msgid "Description:"
+#~ msgstr "Description :"
+
+#~ msgid "Speakers:"
+#~ msgstr "Orateurs :"
+
+#~ msgid "Track:"
+#~ msgstr "Session :"
+
+#~ msgid "Notes:"
+#~ msgstr "Notes :"
+
+#~ msgid "Status:"
+#~ msgstr "Statut :"
