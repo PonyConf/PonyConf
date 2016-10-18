@@ -126,7 +126,7 @@ class Talk(PonyConfModel):
         return self.title
 
     def get_speakers_str(self):
-        speakers = [str(speaker) for speaker in self.speakers.all()]
+        speakers = [str(Participation.objects.get(site=self.site, user=speaker)) for speaker in self.speakers.all()]
         if len(speakers) == 1:
             return speakers[0]
         else:
