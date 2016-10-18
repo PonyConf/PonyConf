@@ -69,8 +69,21 @@
 
 {% if moderate_perm %}
 
+<h2>{% trans "Informations" %}</h2>
+
+<ul>
+  <li><b>{% trans "Date and hour:" %}</b> {% if talk.start_date %}{{ talk.start_date }} {% else %}<i>{% trans "not defined" %}</i>{% endif %}</li>
+  <li><b>{% trans "Duration:" %}</b> {% if talk.estimated_duration %}{{ talk.estimated_duration }} min{% else %}<i>{% trans "not defined" %}</i>{% endif %}</li>
+  <li><b>{% trans "Room:" %}</b> {% if talk.room %}{{ talk.room }}{% else %}<i>{% trans "not defined" %}</i>{% endif %}</li>
+</ul>
+
 <h2>{% trans "Moderation" %}</h2>
 
+<h3>{% trans "Status:" %}</h3>
+
+{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}<br />
+
+{% if talk.accepted == None %}
 <h3>{% trans "Vote:" %}</h3>
 <div class="btn-group" role="group" aria-label="vote">
   <a class="btn {% if vote.vote == -2 %} active {% endif %}btn-danger"  href="{% url 'vote' talk=talk.slug score='-2' %}">-2</a>
@@ -82,11 +95,6 @@
 <br /><br />
 {{ talk.vote_set.all|length }} {% trans "vote" %}{{ talk.vote_set.all|length|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}
 
-<h3>{% trans "Status:" %}</h3>
-
-{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}<br />
-
-{% if talk.accepted == None %}
 <a href="{% url 'accept-talk' talk.slug %}" class="btn btn-success">Accept</a>
 <a href="{% url 'decline-talk' talk.slug %}" class="btn btn-danger">Decline</a>
 {% endif %}
