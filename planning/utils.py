@@ -124,12 +124,12 @@ class Program:
                     if event.row != 0:
                         continue
                     options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.event.color)
-                    cellcontent = str(event.talk) + ' — ' + event.talk.get_speakers_str()
+                    cellcontent = escape(str(event.talk)) + '<br><em>' + escape(event.talk.get_speakers_str()) + '</em>'
                 elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
                     colspan += 1
                     continue
                 colspan = 1
-                content += cell % {'options': options, 'content': escape(cellcontent)}
+                content += cell % {'options': options, 'content': mark_safe(cellcontent)}
         style, timeslot = self._timeslot(day, ts)
         return row % {
             'style': style,
