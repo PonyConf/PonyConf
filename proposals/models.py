@@ -53,7 +53,7 @@ class Track(PonyConfModel):
         unique_together = ('site', 'name')
 
     def estimated_duration(self):
-        return sum([talk.estimated_duration() for talk in self.talk_set.all()])
+        return sum([talk.estimated_duration for talk in self.talk_set.all()])
 
     def __str__(self):
         return self.name
@@ -87,7 +87,7 @@ class Event(models.Model):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    duration = models.IntegerField(default=0, verbose_name=_('Default duration (min)'))
+    duration = models.PositiveIntegerField(default=0, verbose_name=_('Default duration (min)'))
     color = RGBColorField(default='#ffffff', verbose_name=_("Color on program"))
 
     class Meta:
@@ -117,7 +117,7 @@ class Talk(PonyConfModel):
     event = models.ForeignKey(Event, verbose_name=_('Intervention kind'))
     accepted = models.NullBooleanField(default=None)
     start_date = models.DateTimeField(null=True, blank=True, default=None)
-    duration = models.IntegerField(default=0, verbose_name=_('Duration (min)'))
+    duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None)
 
     class Meta:
@@ -133,6 +133,7 @@ class Talk(PonyConfModel):
         else:
             return ', '.join(speakers[:-1]) + ' & ' + str(speakers[-1])
 
+    @property
     def estimated_duration(self):
         return self.duration or self.event.duration
 
@@ -163,10 +164,12 @@ class Talk(PonyConfModel):
         else:
             return 0
 
-
     @property
     def end_date(self):
-        return self.start_date + timedelta(minutes=self.duration)
+        if self.estimated_duration:
+            return self.start_date + timedelta(minutes=self.estimated_duration)
+        else:
+            return None
 
     class Meta:
         ordering = ('event__id',)

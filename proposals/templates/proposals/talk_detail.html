@@ -36,8 +36,7 @@
     <dt>Horaire</dt>
       <dd>{% if talk.start_date %}
           <span class="date">{{ talk.start_date|date:"l d b" }}</span>,
-          <span class="time">{{ talk.start_date|date:"H:i" }} &ndash;
-            {{ talk.end_date|date:"H:i" }}</span>
+          <span class="time">{{ talk.start_date|date:"H:i" }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
           {% else %}<em>{% trans "not defined" %}</em>
           {% endif %}
       </dd>
