@@ -129,7 +129,9 @@ class Talk(PonyConfModel):
 
     def get_speakers_str(self):
         speakers = [str(Participation.objects.get(site=self.site, user=speaker)) for speaker in self.speakers.all()]
-        if len(speakers) == 1:
+        if len(speakers) == 0:
+            return 'superman'
+        elif len(speakers) == 1:
             return speakers[0]
         else:
             return ', '.join(speakers[:-1]) + ' & ' + str(speakers[-1])
