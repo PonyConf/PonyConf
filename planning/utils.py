@@ -54,7 +54,10 @@ class Program:
             self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
             self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
 
-        for talk in self.talks.all():
+        for talk in self.talks.exclude(plenary=True).all():
+            self._add_talk(talk)
+
+        for talk in self.talks.filter(plenary=True).all():
             self._add_talk(talk)
 
     def _add_talk(self, talk):

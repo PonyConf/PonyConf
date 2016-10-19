@@ -119,6 +119,7 @@ class Talk(PonyConfModel):
     start_date = models.DateTimeField(null=True, blank=True, default=None)
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None)
+    plenary = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('title',)
