@@ -4,17 +4,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from proposals.models import Conference, Talk, Topic, Track, Event
 from planning.models import Room
 
+from ponyconf.admin import SiteAdminMixin
 
-class SiteAdminMixin:
-    exclude = ('site',)
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).filter(site=get_current_site(request))
-
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.site = get_current_site(request)
-        super().save_model(request, obj, form, change)
 
 
 class TalkAdmin(SiteAdminMixin, admin.ModelAdmin):

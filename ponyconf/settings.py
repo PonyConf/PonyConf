@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'proposals',
     'conversations',
     'planning',
+    'volunteers',
 
     # external apps
     'djangobower',

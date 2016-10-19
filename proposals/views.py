@@ -14,6 +14,8 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
+from ponyconf.mixins import OnSiteFormMixin
+
 from accounts.models import Participation
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 from accounts.decorators import orga_required, staff_required
@@ -27,7 +29,6 @@ from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterFor
 from .models import Talk, Track, Topic, Vote, Conference
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
-from .mixins import OnSiteFormMixin
 
 
 @login_required

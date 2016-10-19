@@ -2,9 +2,10 @@ from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from ponyconf.mixins import OnSiteFormMixin
+
 from accounts.decorators import staff_required
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
-from proposals.mixins import OnSiteFormMixin
 
 from proposals.models import Talk
 
