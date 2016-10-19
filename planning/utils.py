@@ -34,7 +34,7 @@ class Program:
 
         self.days = {}
         for talk in self.talks.all():
-            duration = talk.estimated_duration()
+            duration = talk.estimated_duration
             assert(duration)
             dt1 = talk.start_date
             d1 = localtime(dt1).date()
@@ -61,7 +61,7 @@ class Program:
         room = talk.room
         dt1 = talk.start_date
         d1 = localtime(dt1).date()
-        dt2 = talk.start_date + timedelta(minutes=talk.estimated_duration())
+        dt2 = talk.start_date + timedelta(minutes=talk.estimated_duration)
         d2 = localtime(dt2).date()
         assert(d1 == d2) # this is a current limitation
         dt1 = self.days[d1]['timeslots'].index(dt1)
