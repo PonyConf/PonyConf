@@ -2,6 +2,7 @@ from django.db import models
 
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from autoslug import AutoSlugField
 
@@ -30,8 +31,8 @@ class Room(models.Model):
 
     @property
     def talks_by_date(self):
-        return self.talks.filter(start_date__isnull=False).order_by('start_date').all()
+        return self.talks.filter(start_date__isnull=False).exclude(Q(duration=0) | Q(event__duration=0)).order_by('start_date').all()
 
     @property
     def unscheduled_talks(self):
-        return self.talks.filter(start_date__isnull=True).all()
+        return self.talks.filter(Q(start_date__isnull=True) | Q(duration=0, event__duration=0)).all()
