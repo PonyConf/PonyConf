@@ -17,12 +17,18 @@
 <h2>{% trans "Biography" %}</h2>
 <p>{{ profile.biography }}</p>
 
+{% if request|staff %}
+<p><a href="mailto:{{ profile.user.email }}?subject=[Capitole du Libre]">{{ profile.user.email }}</a></p>
+{% endif %}
+
 <h2>{% trans "Talks" %}</h2>
 {% include "proposals/_talk_list.html" %}
 
 {% if request|edit_profile:profile %}
 
-<h2>{% trans "Preferences" %}</h2>
+<h2>{% trans "Information" %}</h2>
+
+<h3>{% trans "Travels and hosting" %}</h3>
 
 <ul>
     <li>
@@ -44,16 +50,21 @@
     </li>
     <li><b>{% trans "Need accommodation:" %}</b> {% if participation.accommodation is None %}Not specified{% else %}{{ participation.get_accommodation_display }}{% endif %}</li>
     <li><b>{% trans "Accommodation booked:" %}</b> {{ participation.accommodation_booked|yesno }}</li>
+</ul>
+
+<h3>{% trans "Talk needs" %}</h3>
+
+<ul>
     <li><b>{% trans "Video output:" %}</b> {% for conn in participation.connector.all %}{% if not forloop.first %}, {% endif %}{{ conn }}{% endfor %}</li>
     <li><b>{% trans "Need sound:" %}</b> {{ participation.sound|yesno }}</li>
     <li><b>{% trans "Ok to be recorded on video:" %}</b> {{ participation.videotaped|yesno }}</li>
     <li><b>{% trans "Video licence:" %}</b> {{ participation.get_video_licence_display }}</li>
 </ul>
 
-<h2>{% trans "Constraints" %}</h2>
+<h3>{% trans "Constraints" %}</h3>
 <p>{{ participation.constraints|linebreaksbr }}</p>
 
-<h2>{% trans "Notes" %}</h2>
+<h3>{% trans "Notes" %}</h3>
 <p>{{ participation.notes|linebreaksbr }}</p>
 
 {% endif %}
