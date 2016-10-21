@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-18 22:01+0000\n"
+"POT-Creation-Date: 2016-10-21 22:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,8 +85,8 @@ msgstr "J’accepte d’être enregistré en vidéo"
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:80 proposals/models.py:115
-#: proposals/templates/proposals/talk_detail.html:87
+#: accounts/models.py:80 proposals/models.py:116
+#: proposals/templates/proposals/talk_detail.html:86
 #: proposals/templates/proposals/user_details.html:57
 msgid "Notes"
 msgstr "Notes"
@@ -209,7 +209,7 @@ msgid "Delete These"
 msgstr "Supprimer ces"
 
 #: accounts/templates/registration/login.html:11
-#: ponyconf/templates/base.html:101
+#: ponyconf/templates/base.html:111
 msgid "Login"
 msgstr "Se connecter"
 
@@ -274,20 +274,28 @@ msgid "You can use this page to communicate with the staff."
 msgstr ""
 "Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
 
-#: planning/templates/planning/program.html:9 ponyconf/templates/base.html:76
+#: planning/templates/planning/program.html:9 ponyconf/templates/base.html:86
 msgid "Program"
 msgstr "Programme"
 
-#: planning/templates/planning/room_detail.html:19
-#: planning/templates/planning/room_detail.html:28
+#: planning/templates/planning/room_detail.html:13
+msgid "Scheduled talks"
+msgstr "Exposés planifiés"
+
+#: planning/templates/planning/room_detail.html:22
+#: planning/templates/planning/room_detail.html:33
 msgid "No talks."
 msgstr "Aucun exposé."
+
+#: planning/templates/planning/room_detail.html:25
+msgid "Unscheduled talks"
+msgstr "Exposés non planifiés"
 
 #: planning/templates/planning/room_form.html:14
 msgid "Room"
 msgstr "Salle"
 
-#: planning/templates/planning/room_list.html:9 ponyconf/templates/base.html:73
+#: planning/templates/planning/room_list.html:9 ponyconf/templates/base.html:83
 msgid "Rooms"
 msgstr "Salles"
 
@@ -300,14 +308,11 @@ msgid "place"
 msgstr ""
 
 #: planning/templates/planning/room_list.html:24
-#, fuzzy
-#| msgid "Filter talks already / not yet scheduled"
 msgid "Some talks are not scheduled yet."
-msgstr "Filtrer les exposés déjà / pas encore planifiées"
+msgstr "Certains exposés ne sont pas encore planifiés."
 
 #: planning/templates/planning/room_list.html:25
-#: proposals/templates/proposals/talk_list.html:56
-#: proposals/templates/proposals/talk_list.html:92
+#: proposals/templates/proposals/talk_list.html:41
 #: proposals/templates/proposals/topic_list.html:23
 #: proposals/templates/proposals/track_list.html:23
 msgid "talk"
@@ -317,36 +322,11 @@ msgstr "exposé"
 msgid "No rooms."
 msgstr "Aucune salle."
 
-#: planning/templates/planning/talk_detail.html:20
-#: proposals/templates/proposals/talk_detail.html:68
-msgid "No speakers."
-msgstr "Aucun orateur."
-
-#: planning/templates/planning/talk_detail.html:37 proposals/models.py:47
-#: proposals/models.py:70 proposals/models.py:112
-#: proposals/templates/proposals/talk_detail.html:57
-msgid "Description"
-msgstr "Description"
-
-#: planning/templates/planning/talk_detail2.html:62 proposals/models.py:111
-msgid "Abstract"
-msgstr "Résumé"
-
-#: planning/templates/planning/talk_detail2.html:78
-#, fuzzy
-#| msgid "average:"
-msgid "Coverage"
-msgstr "moyenne :"
-
-#: planning/templates/planning/talk_detail2.html:94
-msgid "See more"
-msgstr "Voir plus"
-
-#: ponyconf/settings.py:139
+#: ponyconf/settings.py:140
 msgid "English"
 msgstr "Anglais"
 
-#: ponyconf/settings.py:140
+#: ponyconf/settings.py:141
 msgid "French"
 msgstr "Français"
 
@@ -354,64 +334,74 @@ msgstr "Français"
 msgid "Home"
 msgstr "Accueil"
 
-#: ponyconf/templates/base.html:47
+#: ponyconf/templates/base.html:48
 #: proposals/templates/proposals/participate.html:9
 msgid "Participate"
 msgstr "Participer"
 
-#: ponyconf/templates/base.html:48 proposals/models.py:113
-#: proposals/templates/proposals/talk_list.html:47
+#: ponyconf/templates/base.html:51
+msgid "Propose an intervention"
+msgstr "Proposer une intervention"
+
+#: ponyconf/templates/base.html:54
+#: volunteers/templates/volunteers/participate.html:9
+msgid "Enrole as volunteer"
+msgstr "Devenir bénévole"
+
+#: ponyconf/templates/base.html:58 proposals/models.py:114
+#: proposals/templates/proposals/talk_detail.html:22
+#: proposals/templates/proposals/talk_list.html:48
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
 
-#: ponyconf/templates/base.html:50
+#: ponyconf/templates/base.html:60
 #: proposals/templates/proposals/track_list.html:9
 msgid "Tracks"
 msgstr "Sessions"
 
-#: ponyconf/templates/base.html:59
+#: ponyconf/templates/base.html:69
 msgid "Listing"
 msgstr "Liste"
 
-#: ponyconf/templates/base.html:62
+#: ponyconf/templates/base.html:72
 #: proposals/templates/proposals/talk_list.html:9
 #: proposals/templates/proposals/user_details.html:20
 msgid "Talks"
 msgstr "Exposés"
 
-#: ponyconf/templates/base.html:65 proposals/models.py:108
+#: ponyconf/templates/base.html:75 proposals/models.py:109
 #: proposals/templates/proposals/speaker_list.html:9
-#: proposals/templates/proposals/talk_detail.html:61
-#: proposals/templates/proposals/talk_list.html:46
+#: proposals/templates/proposals/talk_detail.html:60
+#: proposals/templates/proposals/talk_list.html:47
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: ponyconf/templates/base.html:70
+#: ponyconf/templates/base.html:80
 msgid "Planning"
 msgstr ""
 
-#: ponyconf/templates/base.html:81
+#: ponyconf/templates/base.html:91
 msgid "Administration"
 msgstr "Administration"
 
-#: ponyconf/templates/base.html:88
+#: ponyconf/templates/base.html:98
 msgid "Conference"
 msgstr "Conférence"
 
-#: ponyconf/templates/base.html:90
+#: ponyconf/templates/base.html:100 volunteers/models.py:15
 msgid "Participants"
 msgstr "Participants"
 
-#: ponyconf/templates/base.html:91
+#: ponyconf/templates/base.html:101
 msgid "Correspondence"
 msgstr "Correspondance"
 
-#: ponyconf/templates/base.html:100
+#: ponyconf/templates/base.html:110
 msgid "Register"
 msgstr "S’inscrire"
 
-#: ponyconf/templates/base.html:126
+#: ponyconf/templates/base.html:136
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -449,56 +439,65 @@ msgstr "Assigner à une session"
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: proposals/models.py:45 proposals/models.py:68
+#: proposals/models.py:46 proposals/models.py:69 volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:49
+#: proposals/models.py:48 proposals/models.py:71 proposals/models.py:113
+#: proposals/templates/proposals/talk_detail.html:56 volunteers/models.py:14
+msgid "Description"
+msgstr "Description"
+
+#: proposals/models.py:50
 msgid "Managers"
 msgstr "Responsables"
 
-#: proposals/models.py:71
+#: proposals/models.py:72
 msgid "Destination track"
 msgstr "Session de destination"
 
-#: proposals/models.py:73
+#: proposals/models.py:74
 msgid "Reviewers"
 msgstr "Responsables"
 
-#: proposals/models.py:89
+#: proposals/models.py:90
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: proposals/models.py:90
+#: proposals/models.py:91
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: proposals/models.py:109 proposals/templates/proposals/talk_list.html:44
+#: proposals/models.py:110 proposals/templates/proposals/talk_list.html:45
 msgid "Title"
 msgstr "Titre"
 
-#: proposals/models.py:109
+#: proposals/models.py:110
 msgid "After submission, title can only be changed by the staff."
 msgstr ""
 "Après soumission, le titre ne peut être modifié que par l’équipe "
 "d’organisation."
 
-#: proposals/models.py:113
+#: proposals/models.py:112
+msgid "Abstract"
+msgstr "Résumé"
+
+#: proposals/models.py:114
 msgid "The topics can not be changed after submission."
 msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
-#: proposals/models.py:114 proposals/templates/proposals/talk_detail.html:29
-#: proposals/templates/proposals/talk_detail.html:74
-#: proposals/templates/proposals/talk_list.html:48
+#: proposals/models.py:115 proposals/templates/proposals/talk_detail.html:29
+#: proposals/templates/proposals/talk_detail.html:73
+#: proposals/templates/proposals/talk_list.html:49
 #: proposals/templates/proposals/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: proposals/models.py:116 proposals/templates/proposals/talk_list.html:45
+#: proposals/models.py:117 proposals/templates/proposals/talk_list.html:46
 msgid "Intervention kind"
 msgstr "Type d’intervention"
 
-#: proposals/models.py:119
+#: proposals/models.py:120
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
@@ -528,7 +527,7 @@ msgstr "par"
 
 #: proposals/templates/proposals/_talk_list.html:11
 #: proposals/templates/proposals/_talk_list.html:17
-#: proposals/templates/proposals/talk_list.html:66
+#: proposals/templates/proposals/talk_list.html:64
 msgid "and"
 msgstr "et"
 
@@ -571,46 +570,45 @@ msgstr "Afficher les options de filtrage…"
 msgid "Filter"
 msgstr "Filtrer"
 
-#: proposals/templates/proposals/speaker_list.html:46
+#: proposals/templates/proposals/speaker_list.html:44
+#: proposals/templates/proposals/talk_list.html:41
+msgid "Total:"
+msgstr "Total :"
+
+#: proposals/templates/proposals/speaker_list.html:44
+msgid "speaker"
+msgstr "orateur"
+
+#: proposals/templates/proposals/speaker_list.html:48
 msgid "Username"
 msgstr "Nom d’utilisateur"
 
-#: proposals/templates/proposals/speaker_list.html:47
+#: proposals/templates/proposals/speaker_list.html:49
 msgid "Fullname"
 msgstr "Prénom et nom"
 
-#: proposals/templates/proposals/speaker_list.html:48
+#: proposals/templates/proposals/speaker_list.html:50
 msgid "Talk count"
 msgstr "Nombre d’exposé"
 
-#: proposals/templates/proposals/speaker_list.html:49
+#: proposals/templates/proposals/speaker_list.html:51
 msgctxt "table column title"
 msgid "Need transport?"
 msgstr "Transport ?"
 
-#: proposals/templates/proposals/speaker_list.html:50
+#: proposals/templates/proposals/speaker_list.html:52
 msgctxt "table column title"
 msgid "Need accommodation?"
 msgstr "Hébergement ?"
 
-#: proposals/templates/proposals/speaker_list.html:51
+#: proposals/templates/proposals/speaker_list.html:53
 msgid "Need sound?"
 msgstr "Son ?"
 
-#: proposals/templates/proposals/speaker_list.html:90
+#: proposals/templates/proposals/speaker_list.html:92
 #: proposals/templates/proposals/user_details.html:9
 msgid "Contact"
 msgstr "Contacter"
-
-#: proposals/templates/proposals/speaker_list.html:100
-#: proposals/templates/proposals/talk_list.html:56
-#: proposals/templates/proposals/talk_list.html:92
-msgid "Total:"
-msgstr "Total :"
-
-#: proposals/templates/proposals/speaker_list.html:100
-msgid "speaker"
-msgstr "orateur"
 
 #: proposals/templates/proposals/talk_decide.html:9
 msgid "Are you sure to accept this proposals?"
@@ -663,14 +661,8 @@ msgid "No abstract provided."
 msgstr "Aucun résumé fourni."
 
 #: proposals/templates/proposals/talk_detail.html:20
-#, fuzzy
-#| msgid "Format:"
 msgid "Format"
-msgstr "Format :"
-
-#: proposals/templates/proposals/talk_detail.html:22
-msgid "Topics:"
-msgstr "Thèmes :"
+msgstr "Format"
 
 #: proposals/templates/proposals/talk_detail.html:26
 #: proposals/templates/proposals/topic_list.html:31
@@ -678,78 +670,78 @@ msgid "No topics."
 msgstr "Aucun thème."
 
 #: proposals/templates/proposals/talk_detail.html:33
-#: proposals/templates/proposals/talk_detail.html:75
+#: proposals/templates/proposals/talk_detail.html:74
 msgid "No assigned yet."
 msgstr "Pas encore assigné."
 
-#: proposals/templates/proposals/talk_detail.html:41
-#: proposals/templates/proposals/talk_detail.html:49
+#: proposals/templates/proposals/talk_detail.html:40
+#: proposals/templates/proposals/talk_detail.html:48
 msgid "not defined"
 msgstr "non défini"
 
-#: proposals/templates/proposals/talk_detail.html:59
+#: proposals/templates/proposals/talk_detail.html:58
 msgid "No description provided."
 msgstr "Aucune description fournie."
 
-#: proposals/templates/proposals/talk_detail.html:79
+#: proposals/templates/proposals/talk_detail.html:67
+msgid "No speakers."
+msgstr "Aucun orateur."
+
+#: proposals/templates/proposals/talk_detail.html:78
 msgid "Assign to"
 msgstr "Assigner à"
 
-#: proposals/templates/proposals/talk_detail.html:89
+#: proposals/templates/proposals/talk_detail.html:88
 msgid "No notes."
 msgstr "Aucune note."
 
-#: proposals/templates/proposals/talk_detail.html:93
+#: proposals/templates/proposals/talk_detail.html:92
 msgid "Moderation"
 msgstr "Modération"
 
-#: proposals/templates/proposals/talk_detail.html:95
-#: proposals/templates/proposals/talk_list.html:49
+#: proposals/templates/proposals/talk_detail.html:94
+#: proposals/templates/proposals/talk_list.html:50
 msgid "Status"
 msgstr "Statut"
 
-#: proposals/templates/proposals/talk_detail.html:100
-#, fuzzy
-#| msgid "Vote:"
+#: proposals/templates/proposals/talk_detail.html:99
 msgid "Vote"
-msgstr "Vote :"
+msgstr "Vote"
 
-#: proposals/templates/proposals/talk_detail.html:109
+#: proposals/templates/proposals/talk_detail.html:108
 msgid "vote"
 msgstr "vote"
 
-#: proposals/templates/proposals/talk_detail.html:109
+#: proposals/templates/proposals/talk_detail.html:108
 msgid "average:"
 msgstr "moyenne :"
 
-#: proposals/templates/proposals/talk_detail.html:115
-#, fuzzy
-#| msgid "Messages:"
+#: proposals/templates/proposals/talk_detail.html:114
 msgid "Messages"
-msgstr "Messages :"
+msgstr "Messages"
 
-#: proposals/templates/proposals/talk_detail.html:116
+#: proposals/templates/proposals/talk_detail.html:115
 msgid "These messages are for organization team only."
 msgstr "Ces messages sont à destination de la team d’organisation seulement."
 
-#: proposals/templates/proposals/talk_list.html:78
+#: proposals/templates/proposals/talk_list.html:76
 msgid "Accepted"
 msgstr "Accepté"
 
-#: proposals/templates/proposals/talk_list.html:80
+#: proposals/templates/proposals/talk_list.html:78
 msgid "Declined"
 msgstr "Décliné"
 
-#: proposals/templates/proposals/talk_list.html:82
+#: proposals/templates/proposals/talk_list.html:80
 #, python-format
 msgid "Pending, score: %(score)s"
 msgstr "En cours, score : %(score)s"
 
-#: proposals/templates/proposals/talk_list.html:100
+#: proposals/templates/proposals/talk_list.html:93
 msgid "For selected talks:"
 msgstr "Pour les exposés sélectionnés :"
 
-#: proposals/templates/proposals/talk_list.html:108
+#: proposals/templates/proposals/talk_list.html:101
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -825,44 +817,40 @@ msgstr "Accepte d’être enregistré en vidéo :"
 msgid "Video licence:"
 msgstr "Licence vidéo :"
 
-#: proposals/views.py:213
+#: proposals/views.py:214
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:219
+#: proposals/views.py:220
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:234
+#: proposals/views.py:235
 msgid "Talk assigned to track successfully!"
 msgstr "Exposé assigné à la session avec succès !"
 
-#: proposals/views.py:303
+#: proposals/views.py:304
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:303
+#: proposals/views.py:304
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:329
+#: proposals/views.py:330
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#~ msgid "Abstract:"
-#~ msgstr "Résumé :"
+#: volunteers/templates/volunteers/participate.html:19
+msgid "Sorry, I have a setback"
+msgstr "Désolé, j’ai un contretemps"
 
-#~ msgid "Description:"
-#~ msgstr "Description :"
+#: volunteers/templates/volunteers/participate.html:21
+msgid "I will be happy to help on that!"
+msgstr "Je serai heureux d’aider à cela !"
 
-#~ msgid "Speakers:"
-#~ msgstr "Orateurs :"
-
-#~ msgid "Track:"
-#~ msgstr "Session :"
-
-#~ msgid "Notes:"
-#~ msgstr "Notes :"
-
-#~ msgid "Status:"
-#~ msgstr "Statut :"
+#: volunteers/templates/volunteers/participate.html:28
+msgid "We are not yet looking for volunteers … come back later!"
+msgstr ""
+"Nous ne sommes pas encore en recherche de bénévoles … mais revenez plus "
+"tard !"
