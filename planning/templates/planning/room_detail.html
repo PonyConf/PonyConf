@@ -11,8 +11,8 @@
 </h1>
 
 <h2>{% trans "Scheduled talks" %}</h2>
-{% if forloop.first %}<ul>{% endif %}
 {% for talk in room.talks_by_date %}
+{% if forloop.first %}<ul>{% endif %}
 <li>
   <a href="{% url 'show-talk' talk.slug %}"><strong>{{ talk }}</strong></a> &ndash; <em>{{ talk.get_speakers_str }}</em><br />
   <span>{{ talk.start_date }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
