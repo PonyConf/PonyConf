@@ -6,20 +6,24 @@
 
 {% block content %}
 
-<h1>{{ room.name }}</h1>
+<h1>{{ room.name }}
+  <small>{{ room.label }}</small>
+</h1>
 
-{{ room.label }}
 
-<h4>Scheduled talks:</h4>
-{% for talk in room.talks_by_date %}
+<h2>{% trans "Scheduled talks" %}</h2>
 {% if forloop.first %}<ul>{% endif %}
-<li>{{ talk.start_date }} ({{ talk.estimated_duration }} mins): <a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a></li>
+{% for talk in room.talks_by_date %}
+<li>
+  <a href="{% url 'show-talk' talk.slug %}"><strong>{{ talk }}</strong></a> &ndash; <em>{{ talk.get_speakers_str }}</em><br />
+  <span>{{ talk.start_date }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
+</li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <em>{% trans "No talks." %}</em>
 {% endfor %}
 
-<h4>Unscheduled talks:</h4>
+<h3>{% trans "Unscheduled talks" %}</h3>
 {% for talk in room.unscheduled_talks %}
 {% if forloop.first %}<ul>{% endif %}
 <li><a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a></li>
