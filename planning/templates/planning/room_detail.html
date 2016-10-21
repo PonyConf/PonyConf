@@ -25,7 +25,9 @@
 <h3>{% trans "Unscheduled talks" %}</h3>
 {% for talk in room.unscheduled_talks %}
 {% if forloop.first %}<ul>{% endif %}
-<li><a href="{% url 'show-talk' talk.slug %}">{{ talk }}</a></li>
+<li>
+  <a href="{% url 'show-talk' talk.slug %}"><strong>{{ talk }}</strong></a> &ndash; <em>{{ talk.get_speakers_str }}</em>
+</li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <em>{% trans "No talks." %}</em>
