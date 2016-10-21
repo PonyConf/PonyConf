@@ -41,6 +41,8 @@
 </div>
 
 <table class="table table-bordered table-hover">
+    <caption>{% trans "Total:" %} {{ speaker_list|length }} {% trans "speaker" %}{{ speaker_list|length|pluralize }}
+    </caption>
     <thead>
         <tr>
             <th class="text-center">{% trans "Username" %}</th>
@@ -95,11 +97,6 @@
     </tbody>
     {% endif %}
     {% endfor %}
-    <tfoot>
-        <tr>
-            <th colspan="5">{% trans "Total:" %} {{ speaker_list|length }} {% trans "speaker" %}{{ speaker_list|length|pluralize }}</th>
-        </tr>
-    </tfoot>
 </table>
 
 {% endblock %}

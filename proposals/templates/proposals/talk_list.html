@@ -38,6 +38,7 @@
 <form action="" method="post">
 
 <table class="table table-bordered table-hover">
+    <caption>{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</caption>
     <thead>
         <tr>
             <th></th>
@@ -52,9 +53,6 @@
     {% for talk in talk_list %}
     {% if forloop.first %}
     <tbody>
-        <tr>
-            <th colspan="5">{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</th>
-        </tr>
     {% endif %}
         <tr class="{{ talk.accepted|yesno:"success,danger,warning" }}">
             <td><input type="checkbox" name="talks" value="{{ talk.slug }}"></td>
@@ -87,11 +85,6 @@
     </tbody>
     {% endif %}
     {% endfor %}
-    <tfoot>
-        <tr>
-            <th colspan="5">{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</th>
-        </tr>
-    </tfoot>
 </table>
 
 {% if action_form %}
