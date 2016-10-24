@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from ponyconf.mixins import OnSiteFormMixin
 
-from accounts.decorators import staff_required
+from accounts.decorators import orga_required, staff_required
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
 
 from proposals.models import Talk
@@ -39,12 +39,20 @@ class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
 
 
 @staff_required
-def program(request):
-    program = Program(site=get_current_site(request))
-    f = request.GET.get('format')
-    if f  == 'xml':
+def program_pending(request):
+    output = request.GET.get('format', 'html')
+    return program(request, pending=True, output=output)
+
+def program_public(request):
+    output = request.GET.get('format', 'html')
+    return program(request, pending=False, output=output)
+
+
+def program(request, pending, output):
+    program = Program(site=get_current_site(request), pending=pending)
+    if output == 'html':
+        return render(request, 'planning/program.html', {'program': program})
+    elif output == 'xml':
         return HttpResponse(program.as_xml(), content_type="application/xml")
     else:
-        return render(request, 'planning/program.html', {
-            'program': program,
-        })
+        raise Http404("Format not available")
