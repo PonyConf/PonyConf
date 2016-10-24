@@ -184,7 +184,7 @@ class Program:
 </conference>
 """ % {
             'title': self.site.name,
-            'venue': ', '.join(conference.venue.split('\n')),
+            'venue': ', '.join(map(lambda x: x.strip(), conference.venue.split('\n'))),
             'city': conference.city,
             'start_date': sorted(self.days.keys())[0].strftime('%Y-%m-%d'),
             'end_date': sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d'),
