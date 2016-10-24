@@ -7,6 +7,8 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext_noop
 
+from ponyconf.decorators import disable_for_loaddata
+
 from .models import Connector, Participation, Profile, Transport
 
 
@@ -36,8 +38,8 @@ def on_user_logged_out(sender, request, **kwargs):
     messages.success(request, _('Goodbye!'), fail_silently=True)  # FIXME
 
 
+@receiver(post_save, sender=User, weak=False, dispatch_uid='create_profile')
+@disable_for_loaddata
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
-post_save.connect(create_profile, sender=User, weak=False, dispatch_uid='create_profile')

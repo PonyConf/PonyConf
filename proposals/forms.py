@@ -179,4 +179,10 @@ class TrackForm(forms.ModelForm):
         return name
 
 
-ConferenceForm = modelform_factory(Conference, fields=['cfp_opening_date', 'cfp_closing_date', 'home'])
+ConferenceForm = modelform_factory(Conference,
+                    fields=['cfp_opening_date', 'cfp_closing_date', 'venue', 'city', 'home'],
+                    widgets={
+                        'cfp_opening_date': forms.TextInput(),
+                        'cfp_closing_date': forms.TextInput(),
+                        'venue': forms.Textarea(attrs={'rows': 4}),
+                    })

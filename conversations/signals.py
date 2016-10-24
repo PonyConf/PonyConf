@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from ponyconf.decorators import disable_for_loaddata
 from accounts.models import Participation
 from proposals.models import Talk
 from proposals.signals import talk_added, talk_edited
@@ -11,6 +12,7 @@ from .models import ConversationAboutTalk, ConversationWithParticipant, Message
 
 
 @receiver(post_save, sender=Participation, dispatch_uid="Create ConversationWithParticipant")
+@disable_for_loaddata
 def create_conversation_with_participant(sender, instance, created, **kwargs):
     if not created:
         return
@@ -19,6 +21,7 @@ def create_conversation_with_participant(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Talk, dispatch_uid="Create ConversationAboutTalk")
+@disable_for_loaddata
 def create_conversation_about_talk(sender, instance, created, **kwargs):
     if not created:
         return
@@ -53,6 +56,7 @@ def notify_talk_edited(sender, instance, author, **kwargs):
 
 
 @receiver(post_save, sender=Message, dispatch_uid="Notify new message")
+@disable_for_loaddata
 def notify_new_message(sender, instance, created, **kwargs):
     if not created:
         # Possibly send a modification notification?

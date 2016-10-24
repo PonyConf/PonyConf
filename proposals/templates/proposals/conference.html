@@ -15,6 +15,7 @@
         {% csrf_token %}
           {% bootstrap_field form.cfp_opening_date addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
           {% bootstrap_field form.cfp_closing_date addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
+          {% bootstrap_form form exclude='cfp_opening_date,cfp_closing_date,home' %}
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#editor" role="tab" data-toggle="tab">Editor</a></li>
             <li><a href="#preview" role="tab" data-toggle="tab">Preview</a></li>

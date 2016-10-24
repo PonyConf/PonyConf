@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.http import HttpResponse
 
 from ponyconf.mixins import OnSiteFormMixin
 
@@ -40,6 +41,10 @@ class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
 @staff_required
 def program(request):
     program = Program(site=get_current_site(request))
-    return render(request, 'planning/program.html', {
-        'program': program,
-    })
+    f = request.GET.get('format')
+    if f  == 'xml':
+        return HttpResponse(program.as_xml(), content_type="application/xml")
+    else:
+        return render(request, 'planning/program.html', {
+            'program': program,
+        })

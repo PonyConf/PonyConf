@@ -24,6 +24,8 @@ class Conference(models.Model):
 
     site = models.OneToOneField(Site, on_delete=models.CASCADE)
     home = models.TextField(blank=True, default="")
+    venue = models.TextField(blank=True, default="")
+    city = models.CharField(max_length=64, blank=True, default="")
     cfp_opening_date = models.DateTimeField(null=True, blank=True, default=None)
     cfp_closing_date = models.DateTimeField(null=True, blank=True, default=None)
 

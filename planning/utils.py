@@ -10,7 +10,7 @@ from itertools import islice
 
 from .models import Room
 
-from proposals.models import Talk
+from proposals.models import Conference, Talk
 
 
 Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
@@ -18,6 +18,7 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 
 class Program:
     def __init__(self, site, empty_rooms=False, talk_filter=None):
+        self.site = site
         self.talks = Talk.objects.\
                             filter(site=site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(event__duration__gt=0)).\
@@ -48,17 +49,6 @@ class Program:
                 self.days[d1]['timeslots'].append(dt1)
             if dt2 not in self.days[d2]['timeslots']:
                 self.days[d2]['timeslots'].append(dt2)
-
-        self.cols = OrderedDict([(room, 1) for room in self.rooms])
-        for day in self.days.keys():
-            self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
-            self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
-
-        for talk in self.talks.exclude(plenary=True).all():
-            self._add_talk(talk)
-
-        for talk in self.talks.filter(plenary=True).all():
-            self._add_talk(talk)
 
     def _add_talk(self, talk):
         room = talk.room
@@ -150,9 +140,111 @@ class Program:
         timeslot = '<td>%s – %s</td>' % tuple(map(date_to_string, [start, end]))
         return style, timeslot
 
-    def __str__(self):
+    def as_html(self):
         template = """<table class="table table-bordered text-center">\n%(header)s\n%(body)s\n</table>"""
+
+        self.cols = OrderedDict([(room, 1) for room in self.rooms])
+        for day in self.days.keys():
+            self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
+            self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
+
+        for talk in self.talks.exclude(plenary=True).all():
+            self._add_talk(talk)
+
+        for talk in self.talks.filter(plenary=True).all():
+            self._add_talk(talk)
+
         return mark_safe(template % {
             'header': self._header(),
             'body': self._body(),
         })
+
+    def as_xml(self):
+        result = """<?xml version="1.0" encoding="UTF-8"?>
+<schedule>
+%(conference)s
+%(days)s
+</schedule>
+"""
+
+        if not len(self.days):
+            return result % {'conference': '', 'days': ''}
+
+        conference = Conference.objects.get(site=self.site)
+        conference_xml = """<conference>
+  <title>%(title)s</title>
+  <subtitle></subtitle>
+  <venue>%(venue)s</venue>
+  <city>%(city)s</city>
+  <start>%(start_date)s</start>
+  <end>%(end_date)s</end>
+  <days>%(days_count)s</days>
+  <day_change>09:00:00</day_change>
+  <timeslot_duration>00:05:00</timeslot_duration>
+</conference>
+""" % {
+            'title': self.site.name,
+            'venue': ', '.join(conference.venue.split('\n')),
+            'city': conference.city,
+            'start_date': sorted(self.days.keys())[0].strftime('%Y-%m-%d'),
+            'end_date': sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d'),
+            'days_count': len(self.days),
+        }
+
+        days_xml = ''
+        for index, day in enumerate(sorted(self.days.keys())):
+            days_xml += '<day index="%(index)s" date="%(date)s">\n' % {
+                'index': index + 1,
+                'date': day.strftime('%Y-%m-%d'),
+            }
+            for room in self.rooms.all():
+                days_xml += '  <room name="%s">\n' % room.name
+                for talk in self.talks.filter(room=room).order_by('start_date'):
+                    if localtime(talk.start_date).date() != day:
+                        continue
+                    duration = talk.estimated_duration
+                    persons = ''
+                    for speaker in talk.speakers.all():
+                        persons += '          <person id="%(person_id)s">%(person)s</person>\n' % {
+                            'person_id': speaker.id,
+                            'person': str(speaker),
+                        }
+                    days_xml += """    <event id="%(id)s">
+        <start>%(start)s</start>
+        <duration>%(duration)s</duration>
+        <room>%(room)s</room>
+        <slug>%(slug)s</slug>
+        <title>%(title)s</title>
+        <subtitle/>
+        <track>%(track)s</track>
+        <type>%(type)s</type>
+        <language/>
+        <abstract>%(abstract)s</abstract>
+        <description>%(description)s</description>
+        <persons>
+%(persons)s        </persons>
+        <links>
+        </links>
+      </event>\n""" % {
+                        'id': talk.id,
+                        'start': localtime(talk.start_date).strftime('%H:%M'),
+                        'duration': '%02d:%02d' % (talk.estimated_duration / 60, talk.estimated_duration % 60),
+                        'room': escape(room.name),
+                        'slug': escape(talk.slug),
+                        'title': escape(talk.title),
+                        'track': escape(talk.track),
+                        'type': escape(talk.event.name),
+                        'abstract': escape(talk.abstract),
+                        'description': escape(talk.description),
+                        'persons': persons,
+                    }
+                days_xml += '  </room>\n'
+            days_xml += '</day>\n'
+
+        return result % {
+            'conference': '\n'.join(map(lambda x: '  ' + x, conference_xml.split('\n'))),
+            'days': '\n'.join(map(lambda x: '  ' + x, days_xml.split('\n'))),
+        }
+
+    def __str__(self):
+        return self.as_html()
