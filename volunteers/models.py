@@ -12,7 +12,7 @@ class Activity(models.Model):
     name = models.CharField(max_length=256, verbose_name=_('Name'))
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
-    participants = models.ManyToManyField(User, blank=True, verbose_name=_('Participants'))
+    participants = models.ManyToManyField(User, blank=True, related_name='activities', verbose_name=_('Participants'))
 
     class Meta:
         unique_together = ('site', 'name')

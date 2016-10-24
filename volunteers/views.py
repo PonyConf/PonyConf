@@ -5,10 +5,12 @@ from django.contrib.auth.decorators import login_required
 
 from ponyconf.mixins import OnSiteFormMixin
 
+from accounts.decorators import orga_required, staff_required
 from accounts.mixins import OrgaRequiredMixin, StaffRequiredMixin
+from accounts.models import Participation
 
 from .models import Activity
-from .forms import ActivityForm
+from .forms import ActivityForm, VolunteerFilterForm
 
 
 
@@ -52,3 +54,22 @@ class ActivityUpdate(OrgaRequiredMixin, ActivityMixin, ActivityFormMixin, Update
 
 class ActivityDetail(StaffRequiredMixin, ActivityMixin, DetailView):
     pass
+
+
+@staff_required
+def volunteer_list(request):
+    show_filters = False
+    site = get_current_site(request)
+    filter_form = VolunteerFilterForm(request.GET or None, site=site)
+    # Filtering
+    volunteers = Participation.objects.filter(site=site,user__activities__isnull=False).order_by('pk').distinct()
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['activity']):
+            show_filters = True
+            volunteers = volunteers.filter(user__activities__slug__in=data['activity'])
+    return render(request, 'volunteers/volunteer_list.html', {
+        'volunteer_list': volunteers,
+        'filter_form': filter_form,
+        'show_filters': show_filters,
+    })
