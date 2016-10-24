@@ -19,6 +19,7 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 class Program:
     def __init__(self, site, pending=False, empty_rooms=False, talk_filter=None):
         self.site = site
+        self.conference = Conference.objects.get(site=self.site)
         self.talks = Talk.objects.\
                             filter(site=site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(event__duration__gt=0))
@@ -175,7 +176,6 @@ class Program:
         if not len(self.days):
             return result % {'conference': '', 'days': ''}
 
-        conference = Conference.objects.get(site=self.site)
         conference_xml = """<conference>
   <title>%(title)s</title>
   <subtitle></subtitle>
@@ -189,8 +189,8 @@ class Program:
 </conference>
 """ % {
             'title': self.site.name,
-            'venue': ', '.join(map(lambda x: x.strip(), conference.venue.split('\n'))),
-            'city': conference.city,
+            'venue': ', '.join(map(lambda x: x.strip(), self.conference.venue.split('\n'))),
+            'city': self.conference.city,
             'start_date': sorted(self.days.keys())[0].strftime('%Y-%m-%d'),
             'end_date': sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d'),
             'days_count': len(self.days),

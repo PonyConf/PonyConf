@@ -1,0 +1,57 @@
+{% load staticfiles bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+    {% comment %}<link rel="icon" href="{% static 'favicon.ico' %}">{% endcomment %}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+
+    {% bootstrap_css %}
+    <link href="{% static 'css/ponyconf.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+
+    {% block js %}{% endblock %}
+  </head>
+
+  <body>
+
+    {% block pageheader %}
+    {% endblock %}
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-md-12">
+
+          {% bootstrap_messages %}
+
+          {% block content %}{% endblock %}
+
+        </div> <!-- /col -->
+
+      </div> <!-- /row -->
+
+      {% block pagefooter %}
+      {% endblock %}
+
+    </div> <!-- /container -->
+
+    <script src="{% bootstrap_jquery_url %}"></script>
+    {% bootstrap_javascript %}
+    <script src="{% static 'js/ponyconf.js' %}"></script>
+    {% block js_end %}{% endblock %}
+  </body>
+</html>
