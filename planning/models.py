@@ -23,7 +23,7 @@ class Room(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('list-rooms')
+        return reverse('show-room', kwargs={'slug': self.slug})
 
     @property
     def talks(self):
