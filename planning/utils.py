@@ -164,10 +164,10 @@ class Program:
         template = """<table class="table table-bordered text-center">\n%(header)s\n%(body)s\n</table>"""
         if not self.initialized:
             self._lazy_init()
-        return mark_safe(template % {
+        return template % {
             'header': self._html_header(),
             'body': self._html_body(),
-        })
+        }
 
     def _as_xml(self):
         if not self.initialized:
@@ -264,9 +264,9 @@ class Program:
             if not result:
                 result = getattr(self, '_as_%s' % output)()
                 cache.set(cache_entry, result, 3 * 60 * 60) # 3H
-            return result
+            return mark_safe(result)
         else:
-            return getattr(self, '_as_%s' % output)()
+            return mark_safe(getattr(self, '_as_%s' % output)())
 
     def __str__(self):
         return self.render()
