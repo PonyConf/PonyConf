@@ -213,7 +213,7 @@ class Program:
                     for speaker in talk.speakers.all():
                         persons += '          <person id="%(person_id)s">%(person)s</person>\n' % {
                             'person_id': speaker.id,
-                            'person': str(speaker),
+                            'person': str(speaker.profile),
                         }
                     days_xml += """    <event id="%(id)s">
         <start>%(start)s</start>
