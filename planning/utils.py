@@ -21,6 +21,7 @@ class Program:
         self.site = site
         self.conference = Conference.objects.get(site=self.site)
         self.talks = Talk.objects.\
+                            exclude(event__label__exact='').\
                             filter(site=site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(event__duration__gt=0))
 
@@ -237,8 +238,8 @@ class Program:
                         'room': escape(room.name),
                         'slug': escape(talk.slug),
                         'title': escape(talk.title),
-                        'track': escape(talk.track),
-                        'type': escape(talk.event.name),
+                        'track': escape(talk.track or ''),
+                        'type': escape(talk.event.label),
                         'abstract': escape(talk.abstract),
                         'description': escape(talk.description),
                         'persons': persons,

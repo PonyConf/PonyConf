@@ -91,6 +91,7 @@ class Event(models.Model):
     name = models.CharField(max_length=64)
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Default duration (min)'))
     color = RGBColorField(default='#ffffff', verbose_name=_("Color on program"))
+    label = models.CharField(max_length=64, verbose_name=_("Label on program"), blank=True, default="")
 
     class Meta:
         unique_together = ('site', 'name')
