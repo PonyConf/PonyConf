@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.utils.timezone import localtime
+from django.core.cache import cache
 
 from datetime import datetime, timedelta
 from copy import deepcopy
@@ -17,28 +18,27 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 
 
 class Program:
-    def __init__(self, site, pending=False, empty_rooms=False, talk_filter=None):
+    def __init__(self, site, pending=False, cache=True):
         self.site = site
+        self.pending = pending
+        self.cache = cache
+        self.initialized = False
+
+    def _lazy_init(self):
         self.conference = Conference.objects.get(site=self.site)
         self.talks = Talk.objects.\
                             exclude(event__label__exact='').\
-                            filter(site=site, room__isnull=False, start_date__isnull=False).\
+                            filter(site=self.site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(event__duration__gt=0))
 
-        if pending:
+        if self.pending:
             self.talks = self.talks.exclude(accepted=False)
         else:
             self.talks = self.talks.filter(accepted=True)
 
         self.talks = self.talks.order_by('start_date')
 
-        if talk_filter:
-            self.talks = self.talks.filter(talk_filter)
-
-        if empty_rooms:
-            self.rooms = Room.objects.filter(site=site)
-        else:
-            self.rooms = Room.objects.filter(talk__in=self.talks.all()).order_by('name').distinct()
+        self.rooms = Room.objects.filter(talk__in=self.talks.all()).order_by('name').distinct()
 
         self.days = {}
         for talk in self.talks.all():
@@ -56,6 +56,19 @@ class Program:
                 self.days[d1]['timeslots'].append(dt1)
             if dt2 not in self.days[d2]['timeslots']:
                 self.days[d2]['timeslots'].append(dt2)
+
+        self.cols = OrderedDict([(room, 1) for room in self.rooms])
+        for day in self.days.keys():
+            self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
+            self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
+
+        for talk in self.talks.exclude(plenary=True).all():
+            self._add_talk(talk)
+
+        for talk in self.talks.filter(plenary=True).all():
+            self._add_talk(talk)
+
+        self.initialized = True
 
     def _add_talk(self, talk):
         room = talk.room
@@ -78,7 +91,7 @@ class Program:
                 self.days[d1]['rows'][timeslot][room].append(None)
             self.days[d1]['rows'][timeslot][room][col] = event
 
-    def _header(self):
+    def _html_header(self):
         output = '<td>Room</td>'
         room_cell = '<td%(options)s>%(name)s<br><b>%(label)s</b></td>'
         for room, colspan in self.cols.items():
@@ -86,14 +99,14 @@ class Program:
             output += room_cell % {'name': escape(room.name), 'label': escape(room.label), 'options': options}
         return '<tr>%s</tr>' % output
 
-    def _body(self):
+    def _html_body(self):
         output = ''
         for day in sorted(self.days.keys()):
-            output += self._day_header(day)
-            output += self._day(day)
+            output += self._html_day_header(day)
+            output += self._html_day(day)
         return output
 
-    def _day_header(self, day):
+    def _html_day_header(self, day):
         row = '<tr><td colspan="%(colcount)s"><h3>%(day)s</h3></td></tr>'
         colcount = 1
         for room, col in self.cols.items():
@@ -103,14 +116,14 @@ class Program:
             'day': datetime.strftime(day, '%A %d %B'),
         }
 
-    def _day(self, day):
+    def _html_day(self, day):
         output = []
         rows = self.days[day]['rows']
         for ts, rooms in rows.items():
-            output.append(self._row(day, ts, rooms))
+            output.append(self._html_row(day, ts, rooms))
         return '\n'.join(output)
 
-    def _row(self, day, ts, rooms):
+    def _html_row(self, day, ts, rooms):
         row = '<tr style="%(style)s">%(timeslot)s%(content)s</tr>'
         cell = '<td%(options)s>%(content)s</td>'
         content = ''
@@ -130,14 +143,14 @@ class Program:
                     continue
                 colspan = 1
                 content += cell % {'options': options, 'content': mark_safe(cellcontent)}
-        style, timeslot = self._timeslot(day, ts)
+        style, timeslot = self._html_timeslot(day, ts)
         return row % {
             'style': style,
             'timeslot': timeslot,
             'content': content,
         }
 
-    def _timeslot(self, day, ts):
+    def _html_timeslot(self, day, ts):
         template = '<td>%(content)s</td>'
         start = ts
         end = self.days[day]['timeslots'][self.days[day]['timeslots'].index(ts)+1]
@@ -147,26 +160,18 @@ class Program:
         timeslot = '<td>%s – %s</td>' % tuple(map(date_to_string, [start, end]))
         return style, timeslot
 
-    def as_html(self):
+    def _as_html(self):
         template = """<table class="table table-bordered text-center">\n%(header)s\n%(body)s\n</table>"""
-
-        self.cols = OrderedDict([(room, 1) for room in self.rooms])
-        for day in self.days.keys():
-            self.days[day]['timeslots'] = sorted(self.days[day]['timeslots'])
-            self.days[day]['rows'] = OrderedDict([(timeslot, OrderedDict([(room, []) for room in self.rooms])) for timeslot in self.days[day]['timeslots'][:-1]])
-
-        for talk in self.talks.exclude(plenary=True).all():
-            self._add_talk(talk)
-
-        for talk in self.talks.filter(plenary=True).all():
-            self._add_talk(talk)
-
+        if not self.initialized:
+            self._lazy_init()
         return mark_safe(template % {
-            'header': self._header(),
-            'body': self._body(),
+            'header': self._html_header(),
+            'body': self._html_body(),
         })
 
-    def as_xml(self):
+    def _as_xml(self):
+        if not self.initialized:
+            self._lazy_init()
         result = """<?xml version="1.0" encoding="UTF-8"?>
 <schedule>
 %(conference)s
@@ -252,5 +257,16 @@ class Program:
             'days': '\n'.join(map(lambda x: '  ' + x, days_xml.split('\n'))),
         }
 
+    def render(self, output='html'):
+        if self.cache:
+            cache_entry = 'program.%s.%s' % ('pending' if self.pending else 'final', output)
+            result = cache.get(cache_entry)
+            if not result:
+                result = getattr(self, '_as_%s' % output)()
+                cache.set(cache_entry, result, 3 * 60 * 60) # 3H
+            return result
+        else:
+            return getattr(self, '_as_%s' % output)()
+
     def __str__(self):
-        return self.as_html()
+        return self.render()

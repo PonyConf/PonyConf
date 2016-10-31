@@ -210,3 +210,9 @@ LOGOUT_REDIRECT_URL = 'home'
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
 INCLUDE_REGISTER_URL = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
