@@ -39,7 +39,7 @@ def call_first_site_post_save(apps, **kwargs):
         site.first().save()
 
 
-#@receiver(m2m_changed, sender=Talk.speakers.through, dispatch_uid="Create Participation for speakers")
+@receiver(m2m_changed, sender=Talk.speakers.through, dispatch_uid="Create Participation for speakers")
 def create_participation_for_speakers(sender, instance, action, reverse, model, pk_set, using, **kwargs):
     if action != "pre_add":
         pass
@@ -47,7 +47,7 @@ def create_participation_for_speakers(sender, instance, action, reverse, model, 
         Participation.objects.get_or_create(user=speaker, site=instance.site)
 
 
-#@receiver(m2m_changed, sender=Topic.reviewers.through, dispatch_uid="Create Participation for reviewers")
+@receiver(m2m_changed, sender=Topic.reviewers.through, dispatch_uid="Create Participation for reviewers")
 def create_participation_for_reviewers(sender, instance, action, reverse, model, pk_set, using, **kwargs):
     if action != "pre_add":
         pass
