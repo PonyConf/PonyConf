@@ -1,5 +1,7 @@
 import re
 import chardet
+import logging
+from functools import reduce
 
 from email import policy
 from email.parser import BytesParser
@@ -52,7 +54,9 @@ def email_recv(request):
     regexp = '^%s\+(?P<dest>[a-z0-9]{12})(?P<token>[a-z0-9]{60})(?P<key>[a-z0-9]{12})@%s$' % (name, domain)
     p = re.compile(regexp)
     m = None
-    for _mto in map(lambda x: x.strip(), msg.get('To').split(',')):
+    addrs = map(lambda x: x.split(',') if x else [], [msg.get('To'), msg.get('Cc')])
+    addrs = reduce(lambda x, y: x + y, addrs)
+    for _mto in map(lambda x: x.strip(), addrs):
         m = p.match(_mto)
         if m:
             break
