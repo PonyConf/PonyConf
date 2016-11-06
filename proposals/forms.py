@@ -31,7 +31,7 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ['title', 'abstract', 'description', 'topics', 'track', 'notes', 'event', 'speakers', 'duration', 'start_date', 'room']
+        fields = ['title', 'abstract', 'description', 'topics', 'track', 'notes', 'event', 'speakers', 'duration', 'start_date', 'room', 'registration_required', 'attendees_limit']
         widgets = {'topics': forms.CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
         help_texts = {
             'abstract': _('Should be less than 255 characters'),

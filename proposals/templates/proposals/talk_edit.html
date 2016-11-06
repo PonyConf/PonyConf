@@ -20,4 +20,17 @@
 {% block js_end %}
 {{ block.super }}
 {{ form.media.js }}
+<script type="text/javascript">
+var update_attendees_limit = function() {
+    if ($("#id_registration_required").is(":checked")) {
+        $(".form-group:has(#id_attendees_limit)").show();
+    } else {
+        $(".form-group:has(#id_attendees_limit)").hide();
+    }
+}
+$(function() {
+    update_attendees_limit();
+    $("#id_registration_required").change(update_attendees_limit);
+})
+</script>
 {% endblock js_end %}

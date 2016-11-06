@@ -200,7 +200,7 @@ class Talk(PonyConfModel):
             return None
 
     @property
-    def remaining_attendee(self):
+    def remaining_attendees(self):
         if self.registration_required and self.attendees_limit:
             return self.attendees_limit - self.attendees.count()
         else:
