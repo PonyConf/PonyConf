@@ -104,6 +104,25 @@ class Event(models.Model):
         return reverse('list-talks') + '?kind=%d' % self.pk
 
 
+class Attendee(PonyConfModel):
+
+    user = models.ForeignKey(User, null=True)
+    name = models.CharField(max_length=64, blank=True, default="")
+    email = models.EmailField(blank=True, default="")
+
+    def get_name(self):
+        if user:
+            return str(user.profile)
+        else:
+            return name
+
+    def get_email(self):
+        if user:
+            return user.email
+        else:
+            return self.email
+
+
 class Talk(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -123,6 +142,9 @@ class Talk(PonyConfModel):
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None)
     plenary = models.BooleanField(default=False)
+    registration_required = models.BooleanField(default=False)
+    attendees = models.ManyToManyField(Attendee, verbose_name=_('Attendees'))
+    attendees_limit = models.PositiveIntegerField(default=0, verbose_name=_('Max. number of attendees'))
 
     class Meta:
         ordering = ('title',)
@@ -176,6 +198,13 @@ class Talk(PonyConfModel):
             return self.start_date + timedelta(minutes=self.estimated_duration)
         else:
             return None
+
+    @property
+    def remaining_attendee(self):
+        if self.registration_required and self.attendees_limit:
+            return self.attendees_limit - self.attendees.count()
+        else:
+            return None # = infinity \o/
 
     class Meta:
         ordering = ('event__id',)
