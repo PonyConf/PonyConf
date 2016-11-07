@@ -180,7 +180,7 @@ class TrackForm(forms.ModelForm):
 
 
 ConferenceForm = modelform_factory(Conference,
-                    fields=['cfp_opening_date', 'cfp_closing_date', 'venue', 'city', 'home'],
+                    fields=['cfp_opening_date', 'cfp_closing_date', 'subscriptions_open', 'venue', 'city', 'home'],
                     widgets={
                         'cfp_opening_date': forms.TextInput(),
                         'cfp_closing_date': forms.TextInput(),

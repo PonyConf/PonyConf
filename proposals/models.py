@@ -28,6 +28,7 @@ class Conference(models.Model):
     city = models.CharField(max_length=64, blank=True, default="")
     cfp_opening_date = models.DateTimeField(null=True, blank=True, default=None)
     cfp_closing_date = models.DateTimeField(null=True, blank=True, default=None)
+    subscriptions_open = models.BooleanField(default=False)
 
     def cfp_is_open(self):
         now = timezone.now()
