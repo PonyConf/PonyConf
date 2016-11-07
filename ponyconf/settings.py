@@ -87,6 +87,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'ponyconf.context_processors.site',
+                'proposals.context_processors.conference',
             ],
         },
     },

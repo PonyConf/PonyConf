@@ -51,21 +51,18 @@ def conference(request):
         messages.success(request, 'Conference updated!')
         return redirect(reverse('conference'))
     return render(request, 'proposals/conference.html', {
-        'conference': conference,
         'form': form,
     })
 
 @login_required
 def participate(request):
     site = get_current_site(request)
-    conf = Conference.objects.get(site=site)
     talks = Talk.objects.filter(site=site)
     my_talks = talks.filter(speakers=request.user)
     proposed_talks = talks.exclude(speakers=request.user).filter(proposer=request.user)
     return render(request, 'proposals/participate.html', {
         'my_talks': my_talks,
         'proposed_talks': proposed_talks,
-        'conf': conf,
     })
 
 @staff_required
