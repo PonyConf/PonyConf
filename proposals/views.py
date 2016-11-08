@@ -194,6 +194,8 @@ def talk_edit(request, talk=None):
             form.fields.pop('duration')
             form.fields.pop('start_date')
             form.fields.pop('room')
+            form.fields.pop('registration_required')
+            form.fields.pop('attendees_limit')
         if not talk.is_moderable_by(request.user):
             form.fields['title'].disabled = True
     else:
@@ -203,6 +205,8 @@ def talk_edit(request, talk=None):
             form.fields.pop('duration')
             form.fields.pop('start_date')
             form.fields.pop('room')
+            form.fields.pop('registration_required')
+            form.fields.pop('attendees_limit')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
