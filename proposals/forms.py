@@ -179,6 +179,18 @@ class TrackForm(forms.ModelForm):
         return name
 
 
+class SubscribeForm(forms.Form):
+    email = forms.EmailField()
+    name = forms.CharField(max_length=128, label=_('Name or nickname'))
+    captcha = forms.IntegerField(label=_('How much is 3+4?'), help_text=_('Anti-bot'))
+
+    def clean_captcha(self):
+        value = self.cleaned_data['captcha']
+        if value != 7:
+            raise forms.ValidationError(_("Please re-do the maths."))
+        return value
+
+
 ConferenceForm = modelform_factory(Conference,
                     fields=['cfp_opening_date', 'cfp_closing_date', 'subscriptions_open', 'venue', 'city', 'home'],
                     widgets={

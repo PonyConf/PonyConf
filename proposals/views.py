@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from ponyconf.mixins import OnSiteFormMixin
 
@@ -25,8 +25,8 @@ from conversations.models import ConversationWithParticipant, ConversationAboutT
 
 from planning.models import Room
 
-from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm, TalkActionForm
-from .models import Talk, Track, Topic, Vote, Conference
+from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm, TalkActionForm, SubscribeForm
+from .models import Talk, Track, Topic, Vote, Conference, Attendee
 from .signals import talk_added, talk_edited
 from .utils import allowed_talks, markdown_to_html
 
@@ -179,11 +179,11 @@ def talk_edit(request, talk=None):
     if talk: # edit existing talk
         talk = get_object_or_404(Talk, slug=talk, site=site)
         if not talk.is_editable_by(request.user):
-            raise PermissionDenied()
+            raise PermissionDenied
     else: # add new talk
         conf = Conference.objects.get(site=site)
         if not is_orga(request, request.user) and not conf.cfp_is_open():
-            raise PermissionDenied()
+            raise PermissionDenied
     form = TalkForm(request.POST or None, instance=talk, site=site)
     if talk:
         form.fields['topics'].disabled = True
@@ -225,7 +225,7 @@ def talk_edit(request, talk=None):
 def talk_assign_to_track(request, talk, track):
     talk = get_object_or_404(Talk, slug=talk, site=get_current_site(request))
     if not talk.is_moderable_by(request.user):
-        raise PermissionDenied()
+        raise PermissionDenied
     track = get_object_or_404(Track, slug=track, site=get_current_site(request))
     talk.track = track
     talk.save()
@@ -294,7 +294,7 @@ class TrackUpdate(OrgaRequiredMixin, TrackMixin, TrackFormMixin, UpdateView):
 def vote(request, talk, score):
     talk = get_object_or_404(Talk, site=get_current_site(request), slug=talk)
     if not talk.is_moderable_by(request.user):
-        raise PermissionDenied()
+        raise PermissionDenied
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
@@ -307,7 +307,7 @@ def talk_decide(request, talk, accepted):
     site = get_current_site(request)
     talk = get_object_or_404(Talk, site=site, slug=talk)
     if not talk.is_moderable_by(request.user):
-        raise PermissionDenied()
+        raise PermissionDenied
     if request.method == 'POST':
         # Does we need to send a notification to the proposer?
         m = request.POST.get('message', '').strip()
@@ -400,4 +400,49 @@ def user_details(request, username):
         'profile': user.profile,
         'participation': participation,
         'talk_list': allowed_talks(Talk.objects.filter(site=get_current_site(request), speakers=user), request),
+    })
+
+
+def talk_subscriptions(request):
+    site = get_current_site(request)
+    if not Conference.objects.get(site=site).subscriptions_open:
+        raise Http404
+    talks = Talk.objects.filter(site=site, registration_required=True)
+    if request.user.is_authenticated():
+        attendee = Attendee.objects.filter(user=request.user).first() # None if it does not exists
+    else:
+        attendee = None
+    return render(request, 'proposals/subscriptions_list.html', {
+        'talks': talks,
+        'attendee': attendee,
+    })
+
+
+def talk_subscribe(request, talk):
+    talk = get_object_or_404(Talk, site=get_current_site(request), registration_required=True, slug=talk)
+
+    form = SubscribeForm(request.POST or None)
+
+    if request.user.is_authenticated() or (request.method == 'POST' and form.is_valid()):
+        if request.user.is_authenticated():
+            attendee, created = Attendee.objects.get_or_create(user=request.user)
+        else:
+            attendee, created = Attendee.objects.get_or_create(email=form.cleaned_data['email'], name=form.cleaned_data['name'])
+        if attendee in talk.attendees.all():
+            if request.user.is_authenticated():
+                talk.attendees.remove(attendee)
+                messages.success(request, _("Unregistered :-("))
+            else:
+                messages.error(request, _("Already registered!"))
+        elif talk.remaining_attendees == 0:
+            raise PermissionDenied
+        else:
+            talk.attendees.add(attendee)
+            messages.success(request, _("Registered!"))
+        talk.save()
+        return redirect('subscriptions-list')
+
+    return render(request, 'proposals/talk_subscribe.html', {
+        'talk': talk,
+        'form': form,
     })

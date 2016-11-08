@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load accounts_tags i18n %}
+
+{% block subscriptiontab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Subscribe to a workshop" %}</h1>
+
+{% for talk in talks %}
+{% if forloop.first %}<div class="list-group">{% endif %}
+  <div class="list-group-item{% if attendee in talk.attendees.all %} list-group-item-info{% endif %}">
+    <h4 clas="list-group-item-heading">{{ talk.title }}</h4>
+    <p class="list-group-item-text">
+      <p>{{ talk.description }}</p>
+      {% if talk.attendees_limit %}
+      <p><em>{% blocktrans count remaining=talk.remaining_attendees %}{{ remaining }} remaining seat{% plural %}{{ remaining }} remaining seats{% endblocktrans %}</em></p>
+      {% endif %}
+      {% if talk.remaining_attendees != 0 or attendee in talk.attendees.all %}
+      <p>
+        {% if attendee in talk.attendees.all %}
+        <a class="btn btn-danger" href="{% url 'subscribe-to-talk' talk=talk.slug %}">{% trans "Unregister" %}</a>
+        {% else %}
+        <a class="btn btn-primary" href="{% url 'subscribe-to-talk' talk=talk.slug %}">{% trans "Register" %}</a>
+        {% endif %}
+      </p>
+      {% endif %}
+    </p>
+  </div>
+{% if forloop.last %}</div>{% endif %}
+{% empty %}
+<em>{% trans "There are no workshops requiring registration for now … come back later!" %}</em>
+{% endfor %}
+
+{% endblock %}

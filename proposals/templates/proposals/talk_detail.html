@@ -48,6 +48,10 @@
         {% else %}<em>{% trans "not defined" %}</em>
         {% endif %}
       </dd>
+    {% if talk.registration_required %}
+    <dt>{% trans "Registrations" %}</dt>
+      <dd>{% if talk.attendees_limit %}{{ talk.attendees.count }} / {{ talk.attendees_limit }}{% else %}{% trans "required but unlimited" %}{% endif %}</dd>
+    {% endif %}
 
 </dl>
 
@@ -109,6 +113,19 @@
 
 <a href="{% url 'accept-talk' talk.slug %}" class="btn btn-success">Accept</a>
 <a href="{% url 'decline-talk' talk.slug %}" class="btn btn-danger">Decline</a>
+{% endif %}
+
+{% if talk.registration_required %}
+<h3>{% trans "Attendees" %}</h3>
+
+{% for attendee in talk.attendees.all %}
+{% if forloop.first %}<ol>{% endif %}
+  <li><a href="mailto:{{ attendee.get_email }}">{{ attendee.get_name }}</a></li>
+{% if forloop.last %}</ol>{% endif %}
+{% empty %}
+<em>{% trans "No attendees yet." %}</em>
+{% endfor %}
+
 {% endif %}
 
 <h3>{% trans "Messages" %}</h3>

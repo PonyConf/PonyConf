@@ -29,9 +29,13 @@
                 </li>
               </ul>
             </li>
+            {% endif %}
+            {% if conference.subscriptions_open %}
+            <li{% block subscriptiontab %}{% endblock %}><a href="{% url 'subscriptions-list' %}"><span class="glyphicon glyphicon-check"></span>&nbsp;{% trans "Subscribe to a workshop" %}</a></li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            {% if not request|staff %}
             <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">{% trans "Topics" %}</a></li>
-            {% if request|staff %}
-            <li{% block tracktab %}{% endblock %}><a href="{% url 'list-tracks' %}">{% trans "Tracks" %}</a></li>
             {% endif %}
             {% endif %}
             {% block navbar-left %}{% endblock %}
@@ -50,6 +54,12 @@
                 </li>
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{% url 'list-volunteers' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a>
+                </li>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-topics' %}"><span class="glyphicon glyphicon-tag"></span>&nbsp;{% trans "Topics" %}</a></li>
+                </li>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{% url 'list-tracks' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Tracks" %}</a></li>
                 </li>
               </ul>
             </li>

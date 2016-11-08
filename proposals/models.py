@@ -112,16 +112,21 @@ class Attendee(PonyConfModel):
     email = models.EmailField(blank=True, default="")
 
     def get_name(self):
-        if user:
-            return str(user.profile)
+        if self.user:
+            return str(self.user.profile)
         else:
-            return name
+            return self.name
+    get_name.short_description = _('Name')
 
     def get_email(self):
-        if user:
-            return user.email
+        if self.user:
+            return self.user.email
         else:
             return self.email
+    get_email.short_description = _('Email')
+
+    def __str__(self):
+        return self.get_name()
 
 
 class Talk(PonyConfModel):

@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^track/(?P<slug>[-\w]+)/edit/$', views.TrackUpdate.as_view(), name='edit-track'),
     url(r'^speakers/$', views.speaker_list, name='list-speakers'),
     url(r'^speaker/(?P<username>[\w.@+-]+)$', views.user_details, name='show-speaker'),
+    url(r'^subscribe/$', views.talk_subscriptions, name='subscriptions-list'),
+    url(r'^subscribe/(?P<talk>[-\w]+)$', views.talk_subscribe, name='subscribe-to-talk'),
 ]
