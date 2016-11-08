@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.utils.timezone import localtime
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from datetime import datetime, timedelta
 from copy import deepcopy
@@ -220,6 +221,19 @@ class Program:
                             'person_id': speaker.id,
                             'person': str(speaker.profile),
                         }
+                    links = ''
+                    registration = ''
+                    if talk.registration_required:
+                        links += mark_safe("""
+                        <link tag="registration">%(link)s</link>""" % {
+                            'link': reverse('subscribe-to-talk', args={'talk': talk.slug}),
+                        })
+                        registration = """
+                      <attendees_max>%(max)s</attendees_max>
+                      <attendees_remain>%(remain)s</attendees_remain>""" % {
+                        'max': talk.attendees_limit,
+                        'remain': talk.remaining_attendees or 0,
+                      }
                     days_xml += """    <event id="%(id)s">
         <start>%(start)s</start>
         <duration>%(duration)s</duration>
@@ -234,8 +248,8 @@ class Program:
         <description>%(description)s</description>
         <persons>
 %(persons)s        </persons>
-        <links>
-        </links>
+        <links>%(links)s
+        </links>%(registration)s
       </event>\n""" % {
                         'id': talk.id,
                         'start': localtime(talk.start_date).strftime('%H:%M'),
@@ -248,6 +262,8 @@ class Program:
                         'abstract': escape(talk.abstract),
                         'description': escape(talk.description),
                         'persons': persons,
+                        'links': links,
+                        'registration': registration,
                     }
                 days_xml += '  </room>\n'
             days_xml += '</day>\n'
