@@ -223,7 +223,7 @@ class Program:
                         }
                     links = ''
                     registration = ''
-                    if talk.registration_required:
+                    if talk.registration_required and self.conference.subscriptions_open:
                         links += mark_safe("""
                         <link tag="registration">%(link)s</link>""" % {
                             'link': reverse('subscribe-to-talk', args={'talk': talk.slug}),
