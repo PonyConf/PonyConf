@@ -16,6 +16,8 @@ class Activity(models.Model):
 
     class Meta:
         unique_together = ('site', 'name')
+        verbose_name = _('Activity')
+        verbose_name_plural = _('Activities')
 
     def __str__(self):
         return self.name
