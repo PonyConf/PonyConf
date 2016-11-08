@@ -353,10 +353,8 @@ msgstr "Devenir bénévole"
 #: ponyconf/templates/base.html:34
 #: proposals/templates/proposals/subscriptions_list.html:9
 #: proposals/templates/proposals/talk_subscribe.html:14
-#, fuzzy
-#| msgid "Subscribe to the conversation"
 msgid "Subscribe to a workshop"
-msgstr "S’abonner à la discussion"
+msgstr "S’inscrire à un atelier"
 
 #: ponyconf/templates/base.html:38 ponyconf/templates/base.html:59
 #: proposals/models.py:142 proposals/templates/proposals/talk_detail.html:22
