@@ -11,9 +11,13 @@
 
 {% block content %}
 
-<h1>{% trans "Subscribe to a workshop" %}</h1>
+<h1>{% trans "Subscribe to a workshop" %}<br /><small>{{ talk.title }}</small></h1>
 
 {% include "_form.html" %}
+
+<p class="text-center">
+    <a href="{% url "login" %}?next={% url "subscribe-to-talk" talk.slug %}">{% trans "Login to register with you're account" %}</a>
+</p>
 
 {% endblock %}
 
