@@ -934,15 +934,15 @@ msgstr "Décision enregistrée"
 
 #: proposals/views.py:438
 msgid "Unregistered :-("
-msgstr "Déinscrit :-("
+msgstr "Vous avez été désinscrit :-("
 
 #: proposals/views.py:440
 msgid "Already registered!"
-msgstr "Déjà inscrit !"
+msgstr "Vous êtes déjà inscrit !"
 
 #: proposals/views.py:445
 msgid "Registered!"
-msgstr "Inscrit !"
+msgstr "Vous avez été inscrit !"
 
 #: volunteers/models.py:19
 msgid "Activity"
