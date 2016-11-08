@@ -212,6 +212,14 @@ class Talk(PonyConfModel):
         else:
             return None # = infinity \o/
 
+    @property
+    def dtstart(self):
+        return self.start_date.strftime('%Y%m%dT%H%M%SZ')
+
+    @property
+    def dtend(self):
+        return self.end_date.strftime('%Y%m%dT%H%M%SZ')
+
     class Meta:
         ordering = ('event__id',)
 
