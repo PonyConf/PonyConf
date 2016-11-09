@@ -1,4 +1,4 @@
-{{ content }}
+{{ content|safe }}
 
 --
 Reply {% if answering %}to this email directly or view it {% endif %}online: https://{{ uri }}
