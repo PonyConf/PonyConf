@@ -5,6 +5,7 @@ from django.core import mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
+from django.utils.safestring import mark_safe
 
 
 def hexdigest_sha256(*args):
@@ -39,7 +40,7 @@ def notify_by_email(template, data, subject, sender, dests, message_id, ref=None
     if hasattr(settings, 'REPLY_EMAIL') and hasattr(settings, 'REPLY_KEY'):
         data.update({'answering': True})
 
-    text_message = render_to_string('conversations/emails/%s.txt' % template, data)
+    text_message = render_to_string('conversations/emails/%s.txt' % template, {k: mark_safe(v) for k, v in data.items()})
     html_message = render_to_string('conversations/emails/%s.html' % template, data)
 
     from_email = '{name} <{email}>'.format(
