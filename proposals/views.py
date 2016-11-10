@@ -10,7 +10,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, Http404
 
@@ -196,6 +197,11 @@ def talk_edit(request, talk=None):
             form.fields.pop('room')
             form.fields.pop('registration_required')
             form.fields.pop('attendees_limit')
+        elif talk.room and talk.room.capacity:
+            form.fields['attendees_limit'].help_text=ungettext_lazy(
+                    "Note: the room %(room)s has %(capacity)s seat.",
+                    "Note: the room %(room)s has %(capacity)s seats.",
+                    talk.room.capacity) % {'room': talk.room.name, 'capacity': talk.room.capacity}
         if not talk.is_moderable_by(request.user):
             form.fields['title'].disabled = True
     else:
