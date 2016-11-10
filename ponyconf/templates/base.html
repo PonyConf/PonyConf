@@ -61,19 +61,12 @@
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{% url 'list-tracks' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Tracks" %}</a></li>
                 </li>
-              </ul>
-            </li>
-            <li class="dropdown{% block planningtab %}{% endblock %}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Planning" %}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{% url 'list-rooms' %}"><span class="glyphicon glyphicon-tent"></span>&nbsp;{% trans "Rooms" %}</a>
                 </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'pending-program' %}"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;{% trans "Program" %}</a>
-                </li>
               </ul>
             </li>
+            <li{% block planningtab %}{% endblock %}><a href="{% url 'pending-program' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Program" %}</a></li>
             <li class="dropdown{% block admintab %}{% endblock %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
