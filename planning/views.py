@@ -41,7 +41,7 @@ class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
 @staff_required
 def program_pending(request):
     output = request.GET.get('format', 'html')
-    return program(request, pending=True, output=output, html_template='pending-program.html', cache=False)
+    return program(request, pending=True, output=output, html_template='schedule.html', cache=False)
 
 
 def program_public(request):
@@ -52,7 +52,7 @@ def program_public(request):
 def program(request, pending=False, output='html', html_template='public-program.html', cache=True):
     program = Program(site=get_current_site(request), pending=pending, cache=cache)
     if output == 'html':
-        return render(request, 'planning/' + html_template, {'program': program})
+        return render(request, 'planning/' + html_template, {'program': program.render('html')})
     elif output == 'xml':
         return HttpResponse(program.render('xml'), content_type="application/xml")
     else:

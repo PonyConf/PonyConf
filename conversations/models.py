@@ -53,7 +53,7 @@ class ConversationWithParticipant(Conversation):
         return "Conversation with %s" % self.participation.user
 
     def get_absolute_url(self):
-        return reverse('conversation', kwargs={'username': self.participation.user.username})
+        return reverse('user-conversation', kwargs={'username': self.participation.user.username})
 
     def get_site(self):
         return self.participation.site
@@ -67,7 +67,7 @@ class ConversationWithParticipant(Conversation):
             self.subscribers.add(message.author)
         data = {
             'content': message.content,
-            'uri': site.domain + reverse('conversation', args=[self.participation.user.username]),
+            'uri': site.domain + reverse('user-conversation', args=[self.participation.user.username]),
         }
         first = self.messages.first()
         if first != message:
@@ -117,7 +117,7 @@ class ConversationAboutTalk(Conversation):
             data.update({
                 'talk': self.talk,
                 'proposer': message.author,
-                'proposer_uri': site.domain + reverse('show-speaker', args=[message.author.username])
+                'proposer_uri': site.domain + reverse('show-participant', args=[message.author.username])
             })
         else:
             subject = 'Re: [%s] Talk: %s' % (site.name, self.talk.title)

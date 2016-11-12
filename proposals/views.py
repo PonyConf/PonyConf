@@ -29,7 +29,7 @@ from planning.models import Room
 from .forms import TalkForm, TopicForm, TrackForm, ConferenceForm, TalkFilterForm, STATUS_VALUES, SpeakerFilterForm, TalkActionForm, SubscribeForm
 from .models import Talk, Track, Topic, Vote, Conference, Attendee
 from .signals import talk_added, talk_edited
-from .utils import allowed_talks, markdown_to_html
+from .utils import markdown_to_html
 
 
 @login_required
@@ -43,6 +43,11 @@ def home(request):
     return render(request, 'proposals/home.html')
 
 
+@staff_required
+def staff(request):
+    return render(request, 'staff.html')
+
+
 @orga_required
 def conference(request):
     conference = Conference.objects.get(site=get_current_site(request))
@@ -50,7 +55,7 @@ def conference(request):
     if request.method == 'POST' and form.is_valid():
         form.save()
         messages.success(request, 'Conference updated!')
-        return redirect(reverse('conference'))
+        return redirect(reverse('edit-conference'))
     return render(request, 'proposals/conference.html', {
         'form': form,
     })
@@ -185,34 +190,19 @@ def talk_edit(request, talk=None):
         conf = Conference.objects.get(site=site)
         if not is_orga(request, request.user) and not conf.cfp_is_open():
             raise PermissionDenied
-    form = TalkForm(request.POST or None, instance=talk, site=site)
+    staff = talk.is_moderable_by(request.user) if talk else is_orga(request, request.user)
+    form = TalkForm(request.POST or None, instance=talk, site=site, staff=staff)
     if talk:
         form.fields['topics'].disabled = True
-        if talk.event.duration:
+        if 'duration' in form.fields and talk.event.duration:
             form.fields['duration'].help_text = 'Default value if zero: %d min' % talk.duration
-        if not talk.is_editable_by(request.user):
-            form.fields.pop('track')
-            form.fields.pop('duration')
-            form.fields.pop('start_date')
-            form.fields.pop('room')
-            form.fields.pop('registration_required')
-            form.fields.pop('attendees_limit')
-        elif talk.room and talk.room.capacity:
+        if 'attendees_limit' in form.fields and talk.is_editable_by(request.user) and talk.room and talk.room.capacity:
             form.fields['attendees_limit'].help_text=ungettext_lazy(
                     "Note: the room %(room)s has %(capacity)s seat.",
                     "Note: the room %(room)s has %(capacity)s seats.",
                     talk.room.capacity) % {'room': talk.room.name, 'capacity': talk.room.capacity}
-        if not talk.is_moderable_by(request.user):
-            form.fields['title'].disabled = True
     else:
         form.fields['speakers'].initial = [request.user]
-        if not is_orga(request, request.user):
-            form.fields.pop('track')
-            form.fields.pop('duration')
-            form.fields.pop('start_date')
-            form.fields.pop('room')
-            form.fields.pop('registration_required')
-            form.fields.pop('attendees_limit')
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
             talk = form.save()
@@ -227,6 +217,8 @@ def talk_edit(request, talk=None):
             messages.success(request, _('Talk proposed successfully!'))
         return redirect(talk.get_absolute_url())
     return render(request, 'proposals/talk_edit.html', {
+        'base_template': 'staff.html' if staff else 'base.html',
+        'talk': talk,
         'form': form,
     })
 
@@ -255,6 +247,10 @@ class TalkDetail(LoginRequiredMixin, DetailView):
                        form_url=reverse('talk-conversation', kwargs={'talk': self.object.slug}))
         else:
             ctx['edit_perm'] = self.object.is_editable_by(self.request.user)
+        if is_staff(self.request, self.request.user):
+            ctx.update(base_template='staff.html')
+        else:
+            ctx.update(base_template='base.html')
         return super().get_context_data(**ctx)
 
 
@@ -402,18 +398,7 @@ def speaker_list(request):
     })
 
 
-@login_required
-def user_details(request, username):
-    user = get_object_or_404(User, username=username)
-    participation = get_object_or_404(Participation, user=user, site=get_current_site(request))
-    return render(request, 'proposals/user_details.html', {
-        'profile': user.profile,
-        'participation': participation,
-        'talk_list': allowed_talks(Talk.objects.filter(site=get_current_site(request), speakers=user), request),
-    })
-
-
-def talk_subscriptions(request):
+def talk_registrable_list(request):
     site = get_current_site(request)
     if not Conference.objects.get(site=site).subscriptions_open:
         raise Http404
@@ -422,13 +407,13 @@ def talk_subscriptions(request):
         attendee = Attendee.objects.filter(user=request.user).first() # None if it does not exists
     else:
         attendee = None
-    return render(request, 'proposals/subscriptions_list.html', {
+    return render(request, 'proposals/talk_registrable_list.html', {
         'talks': talks,
         'attendee': attendee,
     })
 
 
-def talk_subscribe(request, talk):
+def talk_register(request, talk):
     talk = get_object_or_404(Talk, site=get_current_site(request), registration_required=True, slug=talk)
 
     form = SubscribeForm(request.POST or None)
@@ -450,9 +435,9 @@ def talk_subscribe(request, talk):
             talk.attendees.add(attendee)
             messages.success(request, _("Registered!"))
         talk.save()
-        return redirect('subscriptions-list')
+        return redirect('list-registrable-talks')
 
-    return render(request, 'proposals/talk_subscribe.html', {
+    return render(request, 'proposals/talk_register.html', {
         'talk': talk,
         'form': form,
     })

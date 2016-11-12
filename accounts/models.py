@@ -88,7 +88,7 @@ class Participation(PonyConfModel):
         return str(self.user.profile)
 
     def get_absolute_url(self):
-        return reverse('show-speaker', kwargs={'username': self.user.username})
+        return reverse('show-participant', kwargs={'username': self.user.username})
 
     def is_orga(self):
         return self.orga

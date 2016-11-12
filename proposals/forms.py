@@ -24,10 +24,16 @@ STATUS_VALUES = [
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
+        staff = kwargs.pop('staff')
         super(TalkForm, self).__init__(*args, **kwargs)
         self.fields['topics'].queryset = Topic.objects.filter(site=site)
         self.fields['track'].queryset = Track.objects.filter(site=site)
         self.fields['event'].queryset = Event.objects.filter(site=site)
+        if not staff:
+            for field in ['track', 'duration', 'start_date', 'room', 'registration_required', 'attendees_limit']:
+                self.fields.pop(field)
+            if self.instance.pk is not None:
+                self.fields['title'].disabled = True
 
     class Meta:
         model = Talk

@@ -5,7 +5,8 @@ from proposals import views
 urlpatterns = [
     url(r'^markdown/$', views.markdown_preview, name='markdown'),
     url(r'^$', views.home, name='home'),
-    url(r'^conference/$', views.conference, name='conference'),
+    url(r'^staff/$', views.staff, name='staff'),
+    url(r'^conference/$', views.conference, name='edit-conference'),
     url(r'^talk/propose/$', views.participate, name='participate-as-speaker'),
     url(r'^talk/$', views.talk_list, name='list-talks'),
     url(r'^talk/add/$', views.talk_edit, name='add-talk'),
@@ -22,7 +23,6 @@ urlpatterns = [
     url(r'^track/add/$', views.TrackCreate.as_view(), name='add-track'),
     url(r'^track/(?P<slug>[-\w]+)/edit/$', views.TrackUpdate.as_view(), name='edit-track'),
     url(r'^speakers/$', views.speaker_list, name='list-speakers'),
-    url(r'^speaker/(?P<username>[\w.@+-]+)$', views.user_details, name='show-speaker'),
-    url(r'^subscribe/$', views.talk_subscriptions, name='subscriptions-list'),
-    url(r'^subscribe/(?P<talk>[-\w]+)$', views.talk_subscribe, name='subscribe-to-talk'),
+    url(r'^register/$', views.talk_registrable_list, name='list-registrable-talks'),
+    url(r'^register/(?P<talk>[-\w]+)$', views.talk_register, name='register-for-a-talk'),
 ]

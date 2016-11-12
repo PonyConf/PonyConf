@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'staff.html' %}
 
 {% load bootstrap3 i18n accounts_tags %}
 
-{% block listingtab %} active{% endblock %}
+{% block talkstab %} class="active"{% endblock %}
 
 {% block content %}
 
@@ -60,7 +60,7 @@
             <td>{{ talk.event }}</td>
             <td>
                 {% for speaker in talk.speakers.all %}
-                    <a href="{% url 'show-speaker' speaker.username %}">{{ speaker.profile }}</a>
+                    <a href="{% url 'show-participant' speaker.username %}">{{ speaker.profile }}</a>
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}

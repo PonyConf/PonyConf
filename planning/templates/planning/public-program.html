@@ -1,10 +1,14 @@
 {% extends '_base.html' %}
 {% load i18n %}
 
-{% block content %}
+{% block body %}
 
-<h1>{{ site.name }} – {% trans "Program" %}</h1>
+<div class="container">
+
+<h1>{{ site.name }} – {% trans "Schedule" %}</h1>
 
 {{ program }}
+
+</div>
 
 {% endblock %}

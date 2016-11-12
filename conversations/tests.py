@@ -37,12 +37,14 @@ class ConversationTests(TestCase):
         self.assertEqual(self.client.get(url).status_code, 302)
         self.client.login(username='c', password='c')
         self.assertEqual(self.client.get(url).status_code, 403)
-        self.assertEqual(self.client.get(reverse('correspondents')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('list-correspondents')).status_code, 403) # c is not staff
         self.assertEqual(self.client.get(reverse('inbox')).status_code, 200)
         self.client.post(reverse('inbox'), {'content': 'coucou'})
         self.client.login(username='d', password='d')
         self.client.post(url, {'content': 'im superuser'})
         self.assertEqual(Message.objects.last().content, 'im superuser')
+        self.client.login(username='d', password='d')
+        self.assertEqual(self.client.get(reverse('list-correspondents')).status_code, 200)
 
 
 @override_settings(DEFAULT_FROM_EMAIL='noreply@example.org',

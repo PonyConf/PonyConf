@@ -5,6 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import ugettext_lazy as _
 
 from accounts.decorators import staff_required
 from accounts.models import Participation
@@ -36,13 +37,14 @@ def user_conversation(request, username=None):
         form.instance.conversation = conversation
         form.instance.author = request.user
         form.save()
-        messages.success(request, 'Message sent!')
+        messages.success(request, _('Message sent!'))
         if username:
-            return redirect(reverse('conversation', args=[username]))
+            return redirect(reverse('user-conversation', args=[username]))
         else:
             return redirect('inbox')
 
     return render(request, template, {
+        'correspondent': user,
         'message_list': message_list,
         'form': form,
     })
@@ -63,13 +65,13 @@ def talk_conversation(request, talk):
     return redirect(talk.get_absolute_url())
 
 
-@login_required
-def correspondents(request):
+@staff_required
+def correspondent_list(request):
 
     correspondent_list = Participation.objects.filter(site=get_current_site(request),
                                                       conversation__subscribers=request.user)
 
-    return render(request, 'conversations/correspondents.html', {
+    return render(request, 'conversations/correspondent_list.html', {
             'correspondent_list': correspondent_list,
     })
 
@@ -81,7 +83,7 @@ def subscribe(request, username):
     participation.conversation.subscribers.add(request.user)
     messages.success(request, 'Subscribed.')
 
-    next_url = request.GET.get('next') or reverse('conversation', args=[username])
+    next_url = request.GET.get('next') or reverse('user-conversation', args=[username])
 
     return redirect(next_url)
 
@@ -93,6 +95,6 @@ def unsubscribe(request, username):
     participation.conversation.subscribers.remove(request.user)
     messages.success(request, 'Unsubscribed.')
 
-    next_url = request.GET.get('next') or reverse('conversation', args=[username])
+    next_url = request.GET.get('next') or reverse('user-conversation', args=[username])
 
     return redirect(next_url)

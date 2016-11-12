@@ -2,11 +2,11 @@
 
 {% load accounts_tags i18n %}
 
-{% block subscriptiontab %} class="active"{% endblock %}
+{% block wsregtab %} class="active"{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Subscribe to a workshop" %}</h1>
+<h1>{% trans "Register to a workshop" %}</h1>
 
 {% for talk in talks %}
 {% if forloop.first %}<div class="list-group">{% endif %}
@@ -20,9 +20,9 @@
       {% if talk.remaining_attendees != 0 or attendee in talk.attendees.all %}
       <p>
         {% if attendee in talk.attendees.all %}
-        <a class="btn btn-danger" href="{% url 'subscribe-to-talk' talk=talk.slug %}">{% trans "Unregister" %}</a>
+        <a class="btn btn-danger" href="{% url 'register-for-a-talk' talk=talk.slug %}">{% trans "Unregister" %}</a>
         {% else %}
-        <a class="btn btn-primary" href="{% url 'subscribe-to-talk' talk=talk.slug %}">{% trans "Register" %}</a>
+        <a class="btn btn-primary" href="{% url 'register-for-a-talk' talk=talk.slug %}">{% trans "Register" %}</a>
         {% endif %}
       </p>
       {% endif %}

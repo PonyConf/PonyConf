@@ -1,14 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'staff.html' %}
 
 {% load bootstrap3 accounts_tags i18n %}
 
-{% block admintab %} active{% endblock %}
+{% block participantstab %} class="active"{% endblock %}
 
 {% block content %}
 
-<div class="page-header">
-  <h1>Participants</h1>
-</div>
+<h1>{% trans "Participants" %}</h1>
 
 <table class="table table-striped">
   <tr>
@@ -26,14 +24,14 @@
     <td>{% for topic in participation.topic_set.all %}{{ topic.get_link }}{% if not forloop.last %},
       {% endif %}{% endfor %}</td>
     <td>
-      <a href="{% url 'conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom"
+      <a href="{% url 'user-conversation' participation.user.username %}" data-toggle="tooltip" data-placement="bottom"
         title="{% trans "View conversation" %}"><span class="glyphicon glyphicon-envelope"></span></a>
       {% if request.user in participation.conversation.subscribers.all %}
-      <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
+      <a href="{% url 'unsubscribe-conversation' participation.user.username %}?next={% url 'list-participants' %}"
         data-toggle="tooltip" data-placement="bottom" title="{% trans "Unsubscribe from the conversation" %}">
         <span class="glyphicon glyphicon-star"></span></a>
       {% else %}
-      <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'list-participant' %}"
+      <a href="{% url 'subscribe-conversation' participation.user.username %}?next={% url 'list-participants' %}"
         data-toggle="tooltip" data-placement="bottom" title="{% trans "Subscribe to the conversation" %}">
         <span class="glyphicon glyphicon-star-empty"></span></a>
       {% endif %}

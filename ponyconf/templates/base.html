@@ -1,105 +1,62 @@
 {% extends '_base.html' %}
-{% load accounts_tags i18n %} 
+{% load accounts_tags i18n bootstrap3 %} 
 
-{% block pageheader %}
-    <!-- Static navbar -->
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
+{% block body %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{{ site.name }}</a>
+          <a class="navbar-brand" href="{% url 'home' %}">{{ site.name }}</a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a></li>
             {% if request.user.is_authenticated %}
-            <li class="dropdown{% block participatetab %}{% endblock %}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span>&nbsp;{% trans "Participate" %}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Propose an intervention" %}</a>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'participate-as-volunteer' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Enrole as volunteer" %}</a>
-                </li>
-              </ul>
-            </li>
+            <li{% block exhibitortab %}{% endblock %}><a href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Exhibitor" %}</a></li>
+            <li{% block volunteertab %}{% endblock %}><a href="{% url 'enrole-as-volunteer' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteer" %}</a></li>
             {% endif %}
-            {% if conference.subscriptions_open %}
-            <li{% block subscriptiontab %}{% endblock %}><a href="{% url 'subscriptions-list' %}"><span class="glyphicon glyphicon-check"></span>&nbsp;{% trans "Subscribe to a workshop" %}</a></li>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            {% if not request|staff %}
-            <li{% block topictab %}{% endblock %}><a href="{% url 'list-topics' %}">{% trans "Topics" %}</a></li>
-            {% endif %}
-            {% endif %}
-            {% block navbar-left %}{% endblock %}
+            <li{% block wsregtab %}{% endblock %}><a href="{% url 'list-registrable-talks' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Workshop registration" %}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request|staff %}
-            <li class="dropdown{% block listingtab %}{% endblock %}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span>&nbsp;{% trans "Listing" %}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-talks' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Talks" %}</a>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-speakers' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Speakers" %}</a>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-volunteers' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-topics' %}"><span class="glyphicon glyphicon-tag"></span>&nbsp;{% trans "Topics" %}</a></li>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-tracks' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Tracks" %}</a></li>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-rooms' %}"><span class="glyphicon glyphicon-tent"></span>&nbsp;{% trans "Rooms" %}</a>
-                </li>
-              </ul>
-            </li>
-            <li{% block planningtab %}{% endblock %}><a href="{% url 'pending-program' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Program" %}</a></li>
-            <li class="dropdown{% block admintab %}{% endblock %}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li role="presentation">
-                  {% if request.user.is_staff %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django Admin</a>
-                  {% endif %}
-                  {% if request|orga %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'conference' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Conference" %}</a>
-                  {% endif %}
-                  <a role="menuitem" tabindex="-1" href="{% url 'list-participant' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Participants" %}</a>
-                  <a role="menuitem" tabindex="-1" href="{% url 'correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;{% trans "Correspondence" %}</a>
-                </li>
-              </ul>
-            </li>
+            <li{% block stafftab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Staff" %}</a></li>
             {% endif %}
-            <li{% block inboxtab %}{% endblock %}><a href="{% url 'inbox' %}" data-toggle="tooltip" data-placement="bottom" title="Inbox"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Inbox</a></li>
-            <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="bottom" title="Profile"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ request.user.username }}</a></li>
+            <li{% block inboxtab %}{% endblock %}><a href="{% url 'inbox' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Inbox</a></li>
+            <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Profile" %}</a></li>
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
             <li{% block registrationtab %}{% endblock %}><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Register" %}</a></li>
             <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
             {% endif %}
           </ul>
-          {% block navbar-right %}{% endblock %}
-        </div><!--/.nav-collapse -->
-      </div><!--/.container-fluid -->
-    </div>
+        </div>
+      </div>
+    </nav>
 {% endblock %}
 
+{% block container %}
+	<div class="container">
+      <div class="row">
+        <div id="content" class="col-md-12">
+        {% bootstrap_messages %}
+{% block content %}{% endblock %}
 {% block pagefooter %}
-     <hr>
-     <footer>
-       <p class="text-muted">{% trans "Powered by" %} <a href="https://github.com/toulibre/ponyconf">PonyConf</a></p>
-     </footer>
+        <hr>
+        <footer>
+          <p class="text-muted">{% trans "Powered by" %} <a href="https://github.com/toulibre/ponyconf">PonyConf</a></p>
+        </footer>
+{% endblock %}
+        </div>
+      </div>
+	</div>
+{% endblock %}
+
 {% endblock %}

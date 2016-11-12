@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'staff.html' %}
 
 {% load bootstrap3 i18n %}
 
-{% block listingtab %} active{% endblock %}
+{% block speakerstab %} class="active"{% endblock %}
 
 {% block content %}
 
@@ -58,8 +58,8 @@
     {% if forloop.first %}
     <tbody>
     {% endif %}
-        <tr class="clickable-row" data-href="{% url 'show-speaker' username=speaker.user.username %}">
-            <td>{{ speaker.user.username }}</td>
+        <tr>
+            <td><a href="{% url 'show-participant' username=speaker.user.username %}">{{ speaker.user.username }}</a></td>
             <td>{{ speaker.user.get_full_name }}</td>
             <td class="text-right">{{ speaker.not_refused_talk_set.count }}{% if speaker.pending_talk_set.count %} ({{ speaker.pending_talk_set.count }} pending){% endif %}</td>
             {% if speaker.need_transport %}
@@ -89,10 +89,9 @@
             <td>No</td>
             {% endif %}
             <td>
-                <a class="btn btn-{% if speaker.conversation.messages.last.author == speaker.user %}primary{% else %}default{% endif %}" href="{% url 'conversation' speaker.user.username %}">{% trans "Contact" %}</a>
+                <a class="btn btn-{% if speaker.conversation.messages.last.author == speaker.user %}primary{% else %}default{% endif %}" href="{% url 'user-conversation' speaker.user.username %}">{% trans "Contact" %}</a>
             </td>
         </tr>
-    </li>
     {% if forloop.last %}
     </tbody>
     {% endif %}
@@ -104,10 +103,6 @@
 {% block js_end %}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-
     var anchor = window.location.hash.replace("#", "");
     if (anchor == "filter") {
         $("#filter").collapse('show');

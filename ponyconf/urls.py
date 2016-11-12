@@ -22,8 +22,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
     url(r'', include('proposals.urls')),
-    url(r'^conversations/', include('conversations.urls')),
-    url(r'^planning/', include('planning.urls')),
+    url(r'', include('planning.urls')),
     url(r'^volunteers/', include('volunteers.urls')),
+    url(r'^conversations/', include('conversations.urls')),
     url(r'^select2/', include('django_select2.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

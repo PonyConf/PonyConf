@@ -47,7 +47,7 @@ class ProposalsTests(TestCase):
         self.assertEqual(self.client.get(reverse('list-speakers')).status_code, 403)
         self.assertEqual(self.client.get(reverse('edit-talk', kwargs={'talk': talk.slug})).status_code, 200)
         self.assertEqual(self.client.get(reverse('show-talk', kwargs={'slug': talk.slug})).status_code, 200)
-        self.assertEqual(self.client.get(reverse('show-speaker', kwargs={'username': 'a'})).status_code, 200)
+        self.assertEqual(self.client.get(reverse('show-participant', kwargs={'username': 'a'})).status_code, 200)
 
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.post(reverse('edit-talk', kwargs={'talk': 'super-talk'}),
