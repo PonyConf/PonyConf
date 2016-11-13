@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-13 22:35+0000\n"
+"POT-Creation-Date: 2016-11-13 23:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,7 +89,7 @@ msgstr "Licence vidéo"
 
 #: accounts/models.py:80
 #: accounts/templates/accounts/participant_details.html:71
-#: proposals/models.py:148 proposals/templates/proposals/talk_detail.html:94
+#: proposals/models.py:156 proposals/templates/proposals/talk_detail.html:94
 msgid "Notes"
 msgstr "Notes"
 
@@ -466,7 +466,7 @@ msgstr "S’inscrire"
 msgid "Powered by"
 msgstr "Propulsé par"
 
-#: ponyconf/templates/staff.html:9 proposals/models.py:146
+#: ponyconf/templates/staff.html:9 proposals/models.py:154
 #: proposals/templates/proposals/talk_detail.html:26
 #: proposals/templates/proposals/talk_list.html:48
 #: proposals/templates/proposals/topic_list.html:9
@@ -478,7 +478,7 @@ msgstr "Thèmes"
 msgid "Tracks"
 msgstr "Sessions"
 
-#: ponyconf/templates/staff.html:12 proposals/models.py:141
+#: ponyconf/templates/staff.html:12 proposals/models.py:149
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:68
 #: proposals/templates/proposals/talk_list.html:47
@@ -494,132 +494,132 @@ msgstr "Bénévoles"
 msgid "Conference"
 msgstr "conférence"
 
-#: proposals/forms.py:43
+#: proposals/forms.py:45
 msgid "Should be less than 255 characters"
 msgstr "Texte court, moins de 255 caractères"
 
-#: proposals/forms.py:44
+#: proposals/forms.py:46
 msgid "If you want to add some precisions for the organizers."
 msgstr "Si vous souhaitez apporter des précisions à l'équipe d'organisation."
 
-#: proposals/forms.py:69
+#: proposals/forms.py:71
 msgid "Filter talks you already / not yet voted for"
 msgstr ""
 "Filtrer les propositions pour lesquelles vous avez déjà voté / pas encore "
 "voté"
 
-#: proposals/forms.py:70
+#: proposals/forms.py:72
 msgid "Filter talks already / not yet affected to a room"
 msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 
-#: proposals/forms.py:71
+#: proposals/forms.py:73
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: proposals/forms.py:86
+#: proposals/forms.py:88
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: proposals/forms.py:87
+#: proposals/forms.py:89
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: proposals/forms.py:88
+#: proposals/forms.py:90
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: proposals/forms.py:190
+#: proposals/forms.py:192
 msgid "Name or nickname"
 msgstr "Nom ou pseudo"
 
-#: proposals/forms.py:191
+#: proposals/forms.py:193
 msgid "How much is 3+4?"
 msgstr "Combien font 3+4 ?"
 
-#: proposals/forms.py:191
+#: proposals/forms.py:193
 msgid "Anti-bot"
 msgstr "Anti-robot"
 
-#: proposals/forms.py:196
+#: proposals/forms.py:198
 msgid "Please re-do the maths."
 msgstr "Refaites les calculs."
 
-#: proposals/models.py:43 proposals/models.py:66 proposals/models.py:123
+#: proposals/models.py:51 proposals/models.py:74 proposals/models.py:131
 #: volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: proposals/models.py:45 proposals/models.py:68 proposals/models.py:145
+#: proposals/models.py:53 proposals/models.py:76 proposals/models.py:153
 #: proposals/templates/proposals/talk_detail.html:64 volunteers/models.py:14
 msgid "Description"
 msgstr "Description"
 
-#: proposals/models.py:47
+#: proposals/models.py:55
 msgid "Managers"
 msgstr "Responsables"
 
-#: proposals/models.py:69
+#: proposals/models.py:77
 msgid "Destination track"
 msgstr "Session de destination"
 
-#: proposals/models.py:71
+#: proposals/models.py:79
 msgid "Reviewers"
 msgstr "Responsables"
 
-#: proposals/models.py:87
+#: proposals/models.py:95
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: proposals/models.py:88
+#: proposals/models.py:96
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: proposals/models.py:89
+#: proposals/models.py:97
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: proposals/models.py:130
+#: proposals/models.py:138
 msgid "Email"
 msgstr ""
 
-#: proposals/models.py:142 proposals/templates/proposals/talk_list.html:45
+#: proposals/models.py:150 proposals/templates/proposals/talk_list.html:45
 msgid "Title"
 msgstr "Titre"
 
-#: proposals/models.py:142
+#: proposals/models.py:150
 msgid "After submission, title can only be changed by the staff."
 msgstr ""
 "Après soumission, le titre ne peut être modifié que par l’équipe "
 "d’organisation."
 
-#: proposals/models.py:144
+#: proposals/models.py:152
 msgid "Abstract"
 msgstr "Résumé"
 
-#: proposals/models.py:146
+#: proposals/models.py:154
 msgid "The topics can not be changed after submission."
 msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
-#: proposals/models.py:147 proposals/templates/proposals/talk_detail.html:33
+#: proposals/models.py:155 proposals/templates/proposals/talk_detail.html:33
 #: proposals/templates/proposals/talk_detail.html:81
 #: proposals/templates/proposals/talk_list.html:49
 #: proposals/templates/proposals/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: proposals/models.py:149 proposals/templates/proposals/talk_list.html:46
+#: proposals/models.py:157 proposals/templates/proposals/talk_list.html:46
 msgid "Intervention kind"
 msgstr "Type d’intervention"
 
-#: proposals/models.py:152
+#: proposals/models.py:160
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
-#: proposals/models.py:156 proposals/templates/proposals/talk_detail.html:123
+#: proposals/models.py:164 proposals/templates/proposals/talk_detail.html:123
 msgid "Attendees"
 msgstr "Inscrits"
 
-#: proposals/models.py:157
+#: proposals/models.py:165
 msgid "Max. number of attendees"
 msgstr "Nombre maximum d’inscrits"
 
@@ -678,11 +678,20 @@ msgid "Proposed talks for others speakers:"
 msgstr "Exposés proposés pour un tier :"
 
 #: proposals/templates/proposals/participate.html:23
+msgid "The Call for Participation is currently open for following categories:"
+msgstr "L’appel à participation est actuellement ouvert pour les catégories suivantes :"
+
+#: proposals/templates/proposals/participate.html:26
+#, python-format
+msgid "until %(closing_date)s"
+msgstr "jusqu’au %(closing_date)s"
+
+#: proposals/templates/proposals/participate.html:30
 #: proposals/templates/proposals/talk_edit.html:10
 msgid "Propose a talk"
 msgstr "Proposer un exposé"
 
-#: proposals/templates/proposals/participate.html:25
+#: proposals/templates/proposals/participate.html:32
 msgid "Sorry, the Call for Participation is closed."
 msgstr "Désolé, l’appel à participation est fermé."
 
