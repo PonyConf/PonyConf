@@ -309,10 +309,10 @@ END:VCALENDAR"""
 ICS_TALK = """BEGIN:VEVENT
 DTSTART:{talk.dtstart}
 DTEND:{talk.dtend}
-SUMMARY:{talk.abstract}
+SUMMARY:{talk.title}
 LOCATION:{talk.room}
 STATUS: CONFIRMED
-DESCRIPTION:{talk.description}
+DESCRIPTION:{talk.abstract}\n---\n\n{talk.description}
 UID:{site.domain}/{talk.id}
 END:VEVENT
 """
