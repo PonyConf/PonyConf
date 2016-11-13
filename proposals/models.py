@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -26,17 +27,18 @@ class Conference(models.Model):
     home = models.TextField(blank=True, default="")
     venue = models.TextField(blank=True, default="")
     city = models.CharField(max_length=64, blank=True, default="")
-    cfp_opening_date = models.DateTimeField(null=True, blank=True, default=None)
-    cfp_closing_date = models.DateTimeField(null=True, blank=True, default=None)
-    subscriptions_open = models.BooleanField(default=False)
+    subscriptions_open = models.BooleanField(default=False) # workshop subscription
 
     def cfp_is_open(self):
+        events = Event.objects.filter(site=self.site)
+        return any(map(lambda x: x.is_open(), events))
+
+    @property
+    def opened_events(self):
         now = timezone.now()
-        if self.cfp_opening_date and now < self.cfp_opening_date:
-            return False
-        if self.cfp_closing_date and now > self.cfp_closing_date:
-            return False
-        return True
+        return Event.objects.filter(site=self.site)\
+                            .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
+                            .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
 
     def __str__(self):
         return str(self.site)
@@ -93,6 +95,16 @@ class Event(models.Model):
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Default duration (min)'))
     color = RGBColorField(default='#ffffff', verbose_name=_("Color on program"))
     label = models.CharField(max_length=64, verbose_name=_("Label on program"), blank=True, default="")
+    opening_date = models.DateTimeField(null=True, blank=True, default=None)
+    closing_date = models.DateTimeField(null=True, blank=True, default=None)
+
+    def is_open(self):
+        now = timezone.now()
+        if self.opening_date and now < self.opening_date:
+            return False
+        if self.closing_date and now > self.closing_date:
+            return False
+        return True
 
     class Meta:
         unique_together = ('site', 'name')

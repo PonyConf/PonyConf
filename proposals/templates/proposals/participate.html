@@ -19,7 +19,14 @@
 {% endif %}
 
 <br />
-{% if conference.cfp_is_open or request|orga %}
+{% if conference.cfp_is_open %}
+{% trans "The Call for Participation is currently open for following categories:" %}
+{% for event in conference.opened_events.all %}
+{% if forloop.first %}<ul>{% endif %}
+  <li>{{ event }}{% if event.closing_date %} ({% blocktrans with closing_date=event.closing_date|date:"DATETIME_FORMAT" %}until {{ closing_date }}{% endblocktrans %}){% endif %}</li>
+{% if forloop.last %}</ul>{% endif %}
+{% endfor %}
+<br />
 <a class="btn btn-{% if conference.cfp_is_open %}success{% else %}danger{% endif %}" href="{% url 'add-talk' %}">{% trans "Propose a talk" %}</a>
 {% else %}
 {% trans "Sorry, the Call for Participation is closed." %}

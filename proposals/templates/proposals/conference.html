@@ -13,9 +13,7 @@
     <div class="panel-body">
         <form method="post" role="form">
         {% csrf_token %}
-          {% bootstrap_field form.cfp_opening_date addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
-          {% bootstrap_field form.cfp_closing_date addon_after='<span class="glyphicon glyphicon-calendar"></span>' %}
-          {% bootstrap_form form exclude='cfp_opening_date,cfp_closing_date,home' %}
+          {% bootstrap_form form exclude='home' %}
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#editor" role="tab" data-toggle="tab">Editor</a></li>
             <li><a href="#preview" role="tab" data-toggle="tab">Preview</a></li>
@@ -43,7 +41,6 @@
 {% block css %}
 {{ block.super }}
 {{ form.media.css }}
-<link rel="stylesheet" href="{% static 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" />
 {% endblock css %}
 
 {% block js_end %}
@@ -52,28 +49,5 @@
 <script type="text/javascript">
 var markdown_preview_url = "{% url 'markdown' %}";
 </script>
-<script src="{% static 'moment/min/moment.min.js' %}"></script>
-<script src="{% static 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
-<script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/markdown-preview.js' %}"></script>
-<script type="text/javascript">
-$(function() {
-    $("#id_cfp_opening_date").datetimepicker({
-        "format": "YYYY-MM-DD HH:mm",
-        "widgetPositioning": {
-            "horizontal": "right",
-            "vertical": "auto"
-        },
-        "showClear": true
-    });
-    $("#id_cfp_closing_date").datetimepicker({
-        "format": "YYYY-MM-DD HH:mm",
-        "widgetPositioning": {
-            "horizontal": "right",
-            "vertical": "auto"
-        },
-        "showClear": true
-    });
-});
-</script>
 {% endblock js_end %}
