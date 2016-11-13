@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-13 23:26+0000\n"
+"POT-Creation-Date: 2016-11-14 22:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,74 +26,78 @@ msgstr ""
 "viande, etc."
 
 #: accounts/models.py:18
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+#: accounts/models.py:19
 #: accounts/templates/accounts/participant_details.html:20
 msgid "Biography"
 msgstr "Biographie"
 
-#: accounts/models.py:53
+#: accounts/models.py:54
 msgid "No"
 msgstr "Non"
 
-#: accounts/models.py:54
+#: accounts/models.py:55
 msgid "Hotel"
 msgstr ""
 
-#: accounts/models.py:55
+#: accounts/models.py:56
 msgid "Homestay"
 msgstr "Logement chez habitant"
 
-#: accounts/models.py:62
+#: accounts/models.py:63
 msgid "Defray transportation?"
 msgstr "Défraiement du transport ?"
 
-#: accounts/models.py:65
+#: accounts/models.py:66
 msgid "I want to travel by"
 msgstr "Je souhaite voyager en"
 
-#: accounts/models.py:66
+#: accounts/models.py:67
 msgid "Departure city"
 msgstr "Ville de départ"
 
-#: accounts/models.py:67
+#: accounts/models.py:68
 msgid "Return city"
 msgstr "Ville de retour"
 
-#: accounts/models.py:67
+#: accounts/models.py:68
 msgid "If different from departure city"
 msgstr "Si différent de la ville de départ"
 
-#: accounts/models.py:70
+#: accounts/models.py:71
 msgid "Need accommodation?"
 msgstr "Besoin d'un hébergement ?"
 
-#: accounts/models.py:73
+#: accounts/models.py:74
 #: accounts/templates/accounts/participant_details.html:68
 msgid "Constraints"
 msgstr "Contraintes"
 
-#: accounts/models.py:74
+#: accounts/models.py:75
 msgid "I can output"
 msgstr "Sortie vidéo"
 
-#: accounts/models.py:75
+#: accounts/models.py:76
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: accounts/models.py:77
+#: accounts/models.py:78
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: accounts/models.py:78
+#: accounts/models.py:79
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: accounts/models.py:80
+#: accounts/models.py:81
 #: accounts/templates/accounts/participant_details.html:71
 #: proposals/models.py:156 proposals/templates/proposals/talk_detail.html:94
 msgid "Notes"
 msgstr "Notes"
 
-#: accounts/models.py:80
+#: accounts/models.py:81
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
@@ -327,21 +331,21 @@ msgstr "Changer de mot de passe"
 
 #: accounts/views.py:36 accounts/views.py:65
 msgid "Profile updated successfully."
-msgstr "Profil mis à jour avec succès !"
+msgstr "Profil modifié avec succès !"
 
 #: accounts/views.py:38 accounts/views.py:67
 msgid "Please correct those errors."
-msgstr "Veuillez corriger les erreurs."
+msgstr "Merci de corriger ces erreurs."
 
 #: accounts/views.py:83
 #, python-format
 msgid "%(name)s added to participants"
-msgstr "%(name)s ajouter aux participants"
+msgstr "%(name)s a été ajouté aux participants"
 
 #: accounts/views.py:85
 #, python-format
 msgid "%(name)s is already a participant"
-msgstr "%(name)s est déjà un participant"
+msgstr "%(name)s est déjà participant"
 
 #: conversations/templates/conversations/_message_form.html:4
 msgid "Send a message"
@@ -492,7 +496,7 @@ msgstr "Bénévoles"
 
 #: ponyconf/templates/staff.html:18
 msgid "Conference"
-msgstr "conférence"
+msgstr "Conférence"
 
 #: proposals/forms.py:45
 msgid "Should be less than 255 characters"
@@ -918,7 +922,7 @@ msgstr "Se désinscrire"
 msgid ""
 "There are no workshops requiring registration for now … come back later!"
 msgstr ""
-"Il n’y a pas d’atelier nécessitante de s’inscrire pour le moment … mais "
+"Il n’y a pas d’atelier nécessitant de s’inscrire pour le moment … mais "
 "revenez plus tard !"
 
 #: proposals/templates/proposals/topic_form.html:14

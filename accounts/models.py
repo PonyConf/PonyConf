@@ -15,6 +15,7 @@ from .utils import generate_user_uid
 class Profile(PonyConfModel):
 
     user = models.OneToOneField(User)
+    phone_number = models.CharField(max_length=16, blank=True, default='', verbose_name=_('Phone number'))
     biography = models.TextField(blank=True, verbose_name=_('Biography'))
     email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
 
