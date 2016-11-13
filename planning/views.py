@@ -55,5 +55,7 @@ def program(request, pending=False, output='html', html_template='public-program
         return render(request, 'planning/' + html_template, {'program': program})
     elif output == 'xml':
         return HttpResponse(program.render('xml'), content_type="application/xml")
+    elif output == 'ics':
+        return HttpResponse(program.render('ics'), content_type="text/calendar")
     else:
         raise Http404("Format not available")

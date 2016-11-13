@@ -273,6 +273,12 @@ class Program:
             'days': '\n'.join(map(lambda x: '  ' + x, days_xml.split('\n'))),
         }
 
+    def _as_ics(self):
+        if not self.initialized:
+            self._lazy_init()
+        talks = [ICS_TALK.format(site=self.site, talk=talk) for talk in self.talks]
+        return ICS_MAIN.format(site=self.site, talks='\n'.join(talks))
+
     def render(self, output='html'):
         if self.cache:
             cache_entry = 'program.%s.%s' % ('pending' if self.pending else 'final', output)
@@ -286,3 +292,27 @@ class Program:
 
     def __str__(self):
         return self.render()
+
+
+# FIXME definitely the wrong place for this, but hey, other templates are already here :P
+
+ICS_MAIN = """BEGIN:VCALENDAR
+PRODID:-//{site.domain}//{site.name}//FR
+X-WR-CALNAME:PonyConf
+X-WR-TIMEZONE:Europe/Paris
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+{talks}
+END:VCALENDAR"""
+
+ICS_TALK = """BEGIN:VEVENT
+DTSTART:{talk.dtstart}
+DTEND:{talk.dtend}
+SUMMARY:{talk.abstract}
+LOCATION:{talk.room}
+STATUS: CONFIRMED
+DESCRIPTION:{talk.description}
+UID:{site.domain}/{talk.id}
+END:VEVENT
+"""
