@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-14 22:09+0000\n"
+"POT-Creation-Date: 2016-11-14 22:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,7 +138,7 @@ msgid "Goodbye!"
 msgstr "Au revoir !"
 
 #: accounts/templates/accounts/participant_details.html:12
-#: proposals/templates/proposals/speaker_list.html:92
+#: proposals/templates/proposals/speaker_list.html:97
 #: volunteers/templates/volunteers/volunteer_list.html:48
 msgid "Contact"
 msgstr "Contacter"
@@ -683,7 +683,9 @@ msgstr "Exposés proposés pour un tier :"
 
 #: proposals/templates/proposals/participate.html:23
 msgid "The Call for Participation is currently open for following categories:"
-msgstr "L’appel à participation est actuellement ouvert pour les catégories suivantes :"
+msgstr ""
+"L’appel à participation est actuellement ouvert pour les catégories "
+"suivantes :"
 
 #: proposals/templates/proposals/participate.html:26
 #, python-format
@@ -748,6 +750,10 @@ msgstr "Hébergement ?"
 #: proposals/templates/proposals/speaker_list.html:53
 msgid "Need sound?"
 msgstr "Son ?"
+
+#: proposals/templates/proposals/speaker_list.html:59
+msgid "Contact:"
+msgstr "Contacter :"
 
 #: proposals/templates/proposals/talk_decide.html:9
 msgid "Are you sure to accept this proposals?"
@@ -980,15 +986,15 @@ msgstr "Vote mis à jour"
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: proposals/views.py:429
+#: proposals/views.py:431
 msgid "Unregistered :-("
 msgstr "Vous avez été désinscrit :-("
 
-#: proposals/views.py:431
+#: proposals/views.py:433
 msgid "Already registered!"
 msgstr "Vous êtes déjà inscrit !"
 
-#: proposals/views.py:436
+#: proposals/views.py:438
 msgid "Registered!"
 msgstr "Vous avez été inscrit !"
 
