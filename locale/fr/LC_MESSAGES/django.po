@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 20:31+0000\n"
+"POT-Creation-Date: 2016-11-14 22:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgid "Delete These"
 msgstr "Supprimer ces"
 
 #: accounts/templates/registration/login.html:11
-#: ponyconf/templates/base.html:98
+#: ponyconf/templates/base.html:91
 msgid "Login"
 msgstr "Se connecter"
 
@@ -276,7 +276,7 @@ msgstr ""
 
 #: planning/templates/planning/pending-program.html:9
 #: planning/templates/planning/public-program.html:6
-#: ponyconf/templates/base.html:73
+#: ponyconf/templates/base.html:69
 msgid "Program"
 msgstr "Programme"
 
@@ -297,7 +297,7 @@ msgstr "Exposés non planifiés"
 msgid "Room"
 msgstr "Salle"
 
-#: planning/templates/planning/room_list.html:9 ponyconf/templates/base.html:70
+#: planning/templates/planning/room_list.html:9 ponyconf/templates/base.html:65
 msgid "Rooms"
 msgstr "Salles"
 
@@ -390,32 +390,28 @@ msgstr "Bénévoles"
 msgid "Tracks"
 msgstr "Sessions"
 
-#: ponyconf/templates/base.html:67
-msgid "Planning"
-msgstr "Programme"
-
-#: ponyconf/templates/base.html:78
+#: ponyconf/templates/base.html:71
 msgid "Administration"
 msgstr "Administration"
 
-#: ponyconf/templates/base.html:85
+#: ponyconf/templates/base.html:78
 msgid "Conference"
 msgstr "Conférence"
 
-#: ponyconf/templates/base.html:87 volunteers/models.py:15
+#: ponyconf/templates/base.html:80 volunteers/models.py:15
 msgid "Participants"
 msgstr "Participants"
 
-#: ponyconf/templates/base.html:88
+#: ponyconf/templates/base.html:81
 msgid "Correspondence"
 msgstr "Correspondance"
 
-#: ponyconf/templates/base.html:97
+#: ponyconf/templates/base.html:90
 #: proposals/templates/proposals/subscriptions_list.html:25
 msgid "Register"
 msgstr "S’inscrire"
 
-#: ponyconf/templates/base.html:110
+#: ponyconf/templates/base.html:103
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -657,7 +653,11 @@ msgstr "Hébergement ?"
 msgid "Need sound?"
 msgstr "Son ?"
 
-#: proposals/templates/proposals/speaker_list.html:92
+#: proposals/templates/proposals/speaker_list.html:59
+msgid "Contact:"
+msgstr "Contacter :"
+
+#: proposals/templates/proposals/speaker_list.html:97
 #: proposals/templates/proposals/user_details.html:9
 #: volunteers/templates/volunteers/volunteer_list.html:48
 msgid "Contact"
@@ -678,8 +678,8 @@ msgstr "Se désinscrire"
 msgid ""
 "There are no workshops requiring registration for now … come back later!"
 msgstr ""
-"Il n’y a pas d’atelier nécessitante inscription pour le moment … mais"
-" revenez plus tard !"
+"Il n’y a pas d’atelier nécessitante inscription pour le moment … mais "
+"revenez plus tard !"
 
 #: proposals/templates/proposals/talk_decide.html:9
 msgid "Are you sure to accept this proposals?"
@@ -828,6 +828,10 @@ msgstr "Pour les exposés sélectionnés :"
 msgid "Apply"
 msgstr "Appliquer"
 
+#: proposals/templates/proposals/talk_subscribe.html:19
+msgid "Login to register with you're account"
+msgstr ""
+
 #: proposals/templates/proposals/topic_form.html:14
 msgid "Topic"
 msgstr "Thème"
@@ -908,39 +912,46 @@ msgstr "Accepte d’être enregistré en vidéo :"
 msgid "Video licence:"
 msgstr "Licence vidéo :"
 
-#: proposals/views.py:215
+#: proposals/views.py:202
+#, python-format
+msgid "Note: the room %(room)s has %(capacity)s seat."
+msgid_plural "Note: the room %(room)s has %(capacity)s seats."
+msgstr[0] ""
+msgstr[1] ""
+
+#: proposals/views.py:221
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:221
+#: proposals/views.py:227
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:236
+#: proposals/views.py:242
 msgid "Talk assigned to track successfully!"
 msgstr "Exposé assigné à la session avec succès !"
 
-#: proposals/views.py:305
+#: proposals/views.py:311
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:305
+#: proposals/views.py:311
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:331
+#: proposals/views.py:337
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: proposals/views.py:438
+#: proposals/views.py:446
 msgid "Unregistered :-("
 msgstr "Vous avez été désinscrit :-("
 
-#: proposals/views.py:440
+#: proposals/views.py:448
 msgid "Already registered!"
 msgstr "Vous êtes déjà inscrit !"
 
-#: proposals/views.py:445
+#: proposals/views.py:453
 msgid "Registered!"
 msgstr "Vous avez été inscrit !"
 

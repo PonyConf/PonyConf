@@ -54,6 +54,11 @@
             <th class="text-center"></th>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="7">{% trans "Contact:" %}<a href="{{ contact_link }}">lien</a></td>
+        </tr>
+    </tfoot>
     {% for speaker in speaker_list %}
     {% if forloop.first %}
     <tbody>

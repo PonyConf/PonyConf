@@ -395,10 +395,12 @@ def speaker_list(request):
         if data['accommodation_booked'] != None:
             show_filters = True
             speakers = speakers.exclude(accommodation=Participation.ACCOMMODATION_NO).filter(accommodation_booked=data['accommodation_booked'])
+    contact_link = 'mailto:' + ','.join([speaker.user.email for speaker in speakers.all() if speaker.user.email])
     return render(request, 'proposals/speaker_list.html', {
         'speaker_list': speakers,
         'filter_form': filter_form,
         'show_filters': show_filters,
+        'contact_link': contact_link,
     })
 
 
