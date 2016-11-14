@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-14 22:22+0000\n"
+"POT-Creation-Date: 2016-11-14 22:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -754,6 +754,10 @@ msgstr "Son ?"
 #: proposals/templates/proposals/speaker_list.html:59
 msgid "Contact:"
 msgstr "Contacter :"
+
+#: proposals/templates/proposals/speaker_list.html:59
+msgid "link"
+msgstr "lien"
 
 #: proposals/templates/proposals/talk_decide.html:9
 msgid "Are you sure to accept this proposals?"
