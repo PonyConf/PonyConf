@@ -1,5 +1,5 @@
 {% load bootstrap3 i18n %}
-<form action="" method="post" class="form-horizontal">
+<form action="" method="post" class="form-horizontal"{% if multipart %} enctype=multipart/form-data{% endif %}>
   {% csrf_token %}
   {% block beforeform %}{% endblock %}
   {% if form %}

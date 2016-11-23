@@ -1,5 +1,6 @@
 from enum import IntEnum
 from datetime import timedelta
+from os.path import join, basename
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -141,6 +142,10 @@ class Attendee(PonyConfModel):
         return self.get_name()
 
 
+def talk_materials_destination(talk, filename):
+    return join(talk.site.name, talk.slug, filename)
+
+
 class Talk(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -163,6 +168,8 @@ class Talk(PonyConfModel):
     registration_required = models.BooleanField(default=False)
     attendees = models.ManyToManyField(Attendee, verbose_name=_('Attendees'))
     attendees_limit = models.PositiveIntegerField(default=0, verbose_name=_('Max. number of attendees'))
+    materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
+                                 help_text=_('You can use this field to share some materials related to your intervention.'))
 
     class Meta:
         ordering = ('title',)
@@ -231,6 +238,10 @@ class Talk(PonyConfModel):
     @property
     def dtend(self):
         return self.end_date.strftime('%Y%m%dT%H%M%SZ')
+
+    @property
+    def materials_name(self):
+        return basename(self.materials.name)
 
     class Meta:
         ordering = ('event__id',)

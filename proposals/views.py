@@ -191,7 +191,7 @@ def talk_edit(request, talk=None):
         if not is_orga(request, request.user) and not conf.cfp_is_open():
             raise PermissionDenied
     staff = talk.is_moderable_by(request.user) if talk else is_orga(request, request.user)
-    form = TalkForm(request.POST or None, instance=talk, site=site, staff=staff)
+    form = TalkForm(request.POST or None, request.FILES or None, instance=talk, site=site, staff=staff)
     if talk:
         form.fields['topics'].disabled = True
         if 'duration' in form.fields and talk.event.duration:
@@ -202,6 +202,7 @@ def talk_edit(request, talk=None):
                     "Note: the room %(room)s has %(capacity)s seats.",
                     talk.room.capacity) % {'room': talk.room.name, 'capacity': talk.room.capacity}
     else:
+        form.fields.pop('materials')
         form.fields['speakers'].initial = [request.user]
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):
