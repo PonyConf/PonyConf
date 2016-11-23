@@ -226,7 +226,7 @@ class Program:
                     if talk.registration_required and self.conference.subscriptions_open:
                         links += mark_safe("""
                         <link tag="registration">%(link)s</link>""" % {
-                            'link': reverse('subscribe-to-talk', args=[talk.slug]),
+                            'link': reverse('register-for-a-talk', args=[talk.slug]),
                         })
                         registration = """
                       <attendees_max>%(max)s</attendees_max>

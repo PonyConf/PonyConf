@@ -15,6 +15,7 @@ from .utils import generate_user_uid
 class Profile(PonyConfModel):
 
     user = models.OneToOneField(User)
+    phone_number = models.CharField(max_length=16, blank=True, default='', verbose_name=_('Phone number'))
     biography = models.TextField(blank=True, verbose_name=_('Biography'))
     email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
 
@@ -88,7 +89,7 @@ class Participation(PonyConfModel):
         return str(self.user.profile)
 
     def get_absolute_url(self):
-        return reverse('show-speaker', kwargs={'username': self.user.username})
+        return reverse('show-participant', kwargs={'username': self.user.username})
 
     def is_orga(self):
         return self.orga

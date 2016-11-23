@@ -2,7 +2,7 @@
 
 {% load bootstrap3 i18n %}
 
-{% block subscriptiontab %} class="active"{% endblock %}
+{% block wsregtab %} class="active"{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -11,12 +11,14 @@
 
 {% block content %}
 
-<h1>{% trans "Subscribe to a workshop" %}<br /><small>{{ talk.title }}</small></h1>
+<h1>{% trans "Register for a workshop" %}<br /><small>{{ talk.title }}</small></h1>
+
+<hr>
 
 {% include "_form.html" %}
 
 <p class="text-center">
-    <a href="{% url "login" %}?next={% url "subscribe-to-talk" talk.slug %}">{% trans "Login to register with you're account" %}</a>
+    <a href="{% url "login" %}?next={% url "register-for-a-talk" talk.slug %}">{% trans "Login to register with your account" %}</a>
 </p>
 
 {% endblock %}

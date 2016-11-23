@@ -47,7 +47,7 @@ class AccountTests(TestCase):
     def test_participant_views(self):
         self.assertEqual(self.client.get(reverse('registration_register')).status_code, 200)
         self.client.login(username='b', password='b')
-        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 403)
+        self.assertEqual(self.client.get(reverse('list-participants')).status_code, 403)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
                                           {'biography': 'foo'}).status_code, 403)
         b = User.objects.get(username='b')
@@ -55,12 +55,12 @@ class AccountTests(TestCase):
         b.save()
         p = Participation.objects.get(user=b)
         self.assertFalse(p.orga)
-        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 403)
+        self.assertEqual(self.client.get(reverse('list-participants')).status_code, 403)
         # login signal should set orga to True due to superuser status
         self.client.login(username='b', password='b')
         p = Participation.objects.get(user=b)
         self.assertTrue(p.orga)
-        self.assertEqual(self.client.get(reverse('list-participant')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('list-participants')).status_code, 200)
         self.assertEqual(self.client.post(reverse('edit-participant', kwargs={'username': 'a'}),
                                           {'biography': 'foo', 'nootes': 'bar'}).status_code, 200)
         self.assertEqual(User.objects.get(username='a').profile.biography, '')

@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
+{% extends base_template %}
+
+{% if staff %}
+{% block talkstab %} class="active"{% endblock %}
+{% else %}
+{% block exhibitortab %} class="active"{% endblock %}
+{% endif %}
 
 {% load i18n %}
-
-{% block listingtab %} active{% endblock %}
 
 {% block content %}
 
@@ -65,7 +69,7 @@
 
 {% for speaker in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
-    <li><a href="{% url 'show-speaker' speaker.username %}">{{ speaker.profile }}</a></li>
+    <li><a href="{% url 'show-participant' speaker.username %}">{{ speaker.profile }}</a></li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <i>{% trans "No speakers." %}</i>

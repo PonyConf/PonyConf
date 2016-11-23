@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
+{% extends base_template %}
 
-{% load bootstrap3 staticfiles i18n %}
+{% load i18n %}
 
-{% block listingtab %} active{% endblock %}
+{% block talkstab %}{% if base_template == 'staff.html' %} class="active"{% endif %}{% endblock %}
+{% block exhibitortab %}{% if base_template == 'base.html' %} class="active"{% endif %}{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Propose a talk" %}</h1>
+<h1>{% if talk %}{% trans "Edit a talk" %}{% else %}{% trans "Propose a talk" %}{% endif %}</h1>
 
 {% include "_form.html" %}
 

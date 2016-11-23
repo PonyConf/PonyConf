@@ -24,10 +24,18 @@ STATUS_VALUES = [
 class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
+        staff = kwargs.pop('staff')
         super(TalkForm, self).__init__(*args, **kwargs)
         self.fields['topics'].queryset = Topic.objects.filter(site=site)
         self.fields['track'].queryset = Track.objects.filter(site=site)
-        self.fields['event'].queryset = Event.objects.filter(site=site)
+        if staff:
+            self.fields['event'].queryset = Event.objects.filter(site=site)
+        else:
+            self.fields['event'].queryset = Conference.objects.get(site=site).opened_events
+            for field in ['track', 'duration', 'start_date', 'room', 'registration_required', 'attendees_limit']:
+                self.fields.pop(field)
+            if self.instance.pk is not None:
+                self.fields['title'].disabled = True
 
     class Meta:
         model = Talk
@@ -192,9 +200,7 @@ class SubscribeForm(forms.Form):
 
 
 ConferenceForm = modelform_factory(Conference,
-                    fields=['cfp_opening_date', 'cfp_closing_date', 'subscriptions_open', 'venue', 'city', 'home'],
+                    fields=['subscriptions_open', 'venue', 'city', 'home'],
                     widgets={
-                        'cfp_opening_date': forms.TextInput(),
-                        'cfp_closing_date': forms.TextInput(),
                         'venue': forms.Textarea(attrs={'rows': 4}),
                     })

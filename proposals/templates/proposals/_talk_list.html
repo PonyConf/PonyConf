@@ -7,7 +7,7 @@
         {{ talk.get_link }}
         <i>{% trans "by" %}</i>
         {% for speaker in talk.speakers.all %}
-        <a href="{% url 'show-speaker' speaker.username %}">{{ speaker }}</a>
+        <a href="{% url 'show-participant' speaker.username %}">{{ speaker }}</a>
         {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
         {% endfor %}
         {% if talk.topics.exists %}

@@ -15,7 +15,7 @@ from .forms import ActivityForm, VolunteerFilterForm
 
 
 @login_required
-def participate(request, slug=None):
+def enrole(request, slug=None):
     if slug:
         # TODO: enrole action should be done on post (with bootstrap modal confirmation box?)
         activity = get_object_or_404(Activity, site=get_current_site(request), slug=slug)
@@ -24,10 +24,29 @@ def participate(request, slug=None):
         else:
             activity.participants.add(request.user)
         activity.save()
-        return redirect('participate-as-volunteer')
+        return redirect('enrole-as-volunteer')
     activities = Activity.objects.filter(site=get_current_site(request))
-    return render(request, 'volunteers/participate.html', {
+    return render(request, 'volunteers/volunteer_enrole.html', {
         'activities': activities,
+    })
+
+
+@staff_required
+def volunteer_list(request):
+    show_filters = False
+    site = get_current_site(request)
+    filter_form = VolunteerFilterForm(request.GET or None, site=site)
+    # Filtering
+    volunteers = Participation.objects.filter(site=site,user__activities__isnull=False).order_by('pk').distinct()
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['activity']):
+            show_filters = True
+            volunteers = volunteers.filter(user__activities__slug__in=data['activity'])
+    return render(request, 'volunteers/volunteer_list.html', {
+        'volunteer_list': volunteers,
+        'filter_form': filter_form,
+        'show_filters': show_filters,
     })
 
 
@@ -54,22 +73,3 @@ class ActivityUpdate(OrgaRequiredMixin, ActivityMixin, ActivityFormMixin, Update
 
 class ActivityDetail(StaffRequiredMixin, ActivityMixin, DetailView):
     pass
-
-
-@staff_required
-def volunteer_list(request):
-    show_filters = False
-    site = get_current_site(request)
-    filter_form = VolunteerFilterForm(request.GET or None, site=site)
-    # Filtering
-    volunteers = Participation.objects.filter(site=site,user__activities__isnull=False).order_by('pk').distinct()
-    if filter_form.is_valid():
-        data = filter_form.cleaned_data
-        if len(data['activity']):
-            show_filters = True
-            volunteers = volunteers.filter(user__activities__slug__in=data['activity'])
-    return render(request, 'volunteers/volunteer_list.html', {
-        'volunteer_list': volunteers,
-        'filter_form': filter_form,
-        'show_filters': show_filters,
-    })

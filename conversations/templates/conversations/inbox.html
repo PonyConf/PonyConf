@@ -1,12 +1,18 @@
-{% extends 'conversations/conversation.html' %}
+{% extends 'base.html' %}
 
 {% load i18n %}
 
 {% block inboxtab %} class="active"{% endblock %}
-{% block admintab %}{% endblock %}
 
-{% block heading %}
+{% block content %}
+
+<h1>{% trans "Messaging" %}</h1>
 <p>{% trans "You can use this page to communicate with the staff." %}</p>
-{% endblock %}
 
-{% block panelstyleblock %}{% if message.author == message.conversation.participation.user %}info{% else %}success{% endif %}{% endblock %}
+{% for message in message_list %}
+{% include 'conversations/_message_detail.html' %}
+{% endfor %}
+
+{% include 'conversations/_message_form.html' %}
+
+{% endblock %}

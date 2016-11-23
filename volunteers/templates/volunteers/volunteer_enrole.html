@@ -2,7 +2,7 @@
 
 {% load accounts_tags i18n %}
 
-{% block participatetab %} class="active"{% endblock %}
+{% block volunteertab %} class="active"{% endblock %}
 
 {% block content %}
 
@@ -16,9 +16,9 @@
       <p>{{ activity.description }}</p>
       <p>
         {% if request.user in activity.participants.all %}
-        <a class="btn btn-danger" href="{% url 'enrole-in-activity' slug=activity.slug %}">{% trans "Sorry, I have a setback" %}</a>
+        <a class="btn btn-danger" href="{% url 'enrole-as-volunteer' slug=activity.slug %}">{% trans "Sorry, I have a setback" %}</a>
         {% else %}
-        <a class="btn btn-primary" href="{% url 'enrole-in-activity' slug=activity.slug %}">{% trans "I will be happy to help on that!" %}</a>
+        <a class="btn btn-primary" href="{% url 'enrole-as-volunteer' slug=activity.slug %}">{% trans "I will be happy to help on that!" %}</a>
         {% endif %}
       </p>
     </p>
