@@ -106,6 +106,8 @@ def talk_list(request):
             talks = talks.filter(room__isnull=not data['room'])
         if data['scheduled'] != None:
             talks = talks.filter(start_date__isnull=not data['scheduled'])
+        if data['materials'] != None:
+            talks = talks.filter(start_date__isnull=not data['materials'])
     # Action
     action_form = TalkActionForm(request.POST or None, talks=talks, site=get_current_site(request))
     if not is_orga(request, request.user):

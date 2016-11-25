@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-23 23:36+0000\n"
+"POT-Creation-Date: 2016-11-25 13:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -423,7 +423,7 @@ msgid "Some talks are not scheduled yet."
 msgstr "Certains exposés ne sont pas encore planifiés."
 
 #: planning/templates/planning/room_list.html:25
-#: proposals/templates/proposals/talk_list.html:41
+#: proposals/templates/proposals/talk_list.html:42
 #: proposals/templates/proposals/topic_list.html:23
 #: proposals/templates/proposals/track_list.html:23
 msgid "talk"
@@ -472,7 +472,7 @@ msgstr "Propulsé par"
 
 #: ponyconf/templates/staff.html:9 proposals/models.py:159
 #: proposals/templates/proposals/talk_detail.html:26
-#: proposals/templates/proposals/talk_list.html:48
+#: proposals/templates/proposals/talk_list.html:49
 #: proposals/templates/proposals/topic_list.html:9
 msgid "Topics"
 msgstr "Thèmes"
@@ -485,7 +485,7 @@ msgstr "Sessions"
 #: ponyconf/templates/staff.html:12 proposals/models.py:154
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:72
-#: proposals/templates/proposals/talk_list.html:47
+#: proposals/templates/proposals/talk_list.html:48
 msgid "Speakers"
 msgstr "Orateurs"
 
@@ -520,31 +520,35 @@ msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: proposals/forms.py:89
+#: proposals/forms.py:75
+msgid "Filter talks with / without materials"
+msgstr "Filtrer les exposés avec / sans supports"
+
+#: proposals/forms.py:90
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: proposals/forms.py:90
+#: proposals/forms.py:91
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: proposals/forms.py:91
+#: proposals/forms.py:92
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: proposals/forms.py:193
+#: proposals/forms.py:194
 msgid "Name or nickname"
 msgstr "Nom ou pseudo"
 
-#: proposals/forms.py:194
+#: proposals/forms.py:195
 msgid "How much is 3+4?"
 msgstr "Combien font 3+4 ?"
 
-#: proposals/forms.py:194
+#: proposals/forms.py:195
 msgid "Anti-bot"
 msgstr "Anti-robot"
 
-#: proposals/forms.py:199
+#: proposals/forms.py:200
 msgid "Please re-do the maths."
 msgstr "Refaites les calculs."
 
@@ -586,7 +590,7 @@ msgstr "Label dans le xml du programme"
 msgid "Email"
 msgstr "E-mail"
 
-#: proposals/models.py:155 proposals/templates/proposals/talk_list.html:45
+#: proposals/models.py:155 proposals/templates/proposals/talk_list.html:46
 msgid "Title"
 msgstr "Titre"
 
@@ -606,12 +610,12 @@ msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
 
 #: proposals/models.py:160 proposals/templates/proposals/talk_detail.html:33
 #: proposals/templates/proposals/talk_detail.html:85
-#: proposals/templates/proposals/talk_list.html:49
+#: proposals/templates/proposals/talk_list.html:50
 #: proposals/templates/proposals/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: proposals/models.py:162 proposals/templates/proposals/talk_list.html:46
+#: proposals/models.py:162 proposals/templates/proposals/talk_list.html:47
 msgid "Intervention kind"
 msgstr "Type d’intervention"
 
@@ -634,7 +638,9 @@ msgstr "Supports"
 #: proposals/models.py:172
 msgid ""
 "You can use this field to share some materials related to your intervention."
-msgstr "Vous pouvez utiliser ce champs pour partager les supports de votre intervention."
+msgstr ""
+"Vous pouvez utiliser ce champs pour partager les supports de votre "
+"intervention."
 
 #: proposals/signals.py:28
 msgid "conference (short)"
@@ -662,7 +668,7 @@ msgstr "par"
 
 #: proposals/templates/proposals/_talk_list.html:11
 #: proposals/templates/proposals/_talk_list.html:17
-#: proposals/templates/proposals/talk_list.html:64
+#: proposals/templates/proposals/talk_list.html:65
 msgid "and"
 msgstr "et"
 
@@ -717,13 +723,13 @@ msgid "Show filtering options…"
 msgstr "Afficher les options de filtrage…"
 
 #: proposals/templates/proposals/speaker_list.html:38
-#: proposals/templates/proposals/talk_list.html:33
+#: proposals/templates/proposals/talk_list.html:34
 #: volunteers/templates/volunteers/volunteer_list.html:19
 msgid "Filter"
 msgstr "Filtrer"
 
 #: proposals/templates/proposals/speaker_list.html:44
-#: proposals/templates/proposals/talk_list.html:41
+#: proposals/templates/proposals/talk_list.html:42
 #: volunteers/templates/volunteers/volunteer_list.html:25
 msgid "Total:"
 msgstr "Total :"
@@ -861,7 +867,7 @@ msgid "Moderation"
 msgstr "Modération"
 
 #: proposals/templates/proposals/talk_detail.html:106
-#: proposals/templates/proposals/talk_list.html:50
+#: proposals/templates/proposals/talk_list.html:51
 msgid "Status"
 msgstr "Statut"
 
@@ -893,24 +899,24 @@ msgstr "Ces messages sont à destination de la team d’organisation seulement."
 msgid "Edit a talk"
 msgstr "Éditer un exposé"
 
-#: proposals/templates/proposals/talk_list.html:76
+#: proposals/templates/proposals/talk_list.html:77
 msgid "Accepted"
 msgstr "Accepté"
 
-#: proposals/templates/proposals/talk_list.html:78
+#: proposals/templates/proposals/talk_list.html:79
 msgid "Declined"
 msgstr "Décliné"
 
-#: proposals/templates/proposals/talk_list.html:80
+#: proposals/templates/proposals/talk_list.html:81
 #, python-format
 msgid "Pending, score: %(score)s"
 msgstr "En cours, score : %(score)s"
 
-#: proposals/templates/proposals/talk_list.html:93
+#: proposals/templates/proposals/talk_list.html:94
 msgid "For selected talks:"
 msgstr "Pour les exposés sélectionnés :"
 
-#: proposals/templates/proposals/talk_list.html:101
+#: proposals/templates/proposals/talk_list.html:102
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -968,46 +974,46 @@ msgstr "responsable"
 msgid "No tracks."
 msgstr "Aucune session."
 
-#: proposals/views.py:201
+#: proposals/views.py:203
 #, python-format
 msgid "Note: the room %(room)s has %(capacity)s seat."
 msgid_plural "Note: the room %(room)s has %(capacity)s seats."
 msgstr[0] "Note : la salle %(room)s a %(capacity)s place."
 msgstr[1] "Note : la salle %(room)s a %(capacity)s places."
 
-#: proposals/views.py:212
+#: proposals/views.py:214
 msgid "Talk modified successfully!"
 msgstr "Exposé modifié avec succès !"
 
-#: proposals/views.py:218
+#: proposals/views.py:220
 msgid "Talk proposed successfully!"
 msgstr "Exposé proposé avec succès !"
 
-#: proposals/views.py:235
+#: proposals/views.py:237
 msgid "Talk assigned to track successfully!"
 msgstr "Exposé assigné à la session avec succès !"
 
-#: proposals/views.py:308
+#: proposals/views.py:310
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: proposals/views.py:308
+#: proposals/views.py:310
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: proposals/views.py:334
+#: proposals/views.py:336
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: proposals/views.py:432
+#: proposals/views.py:434
 msgid "Unregistered :-("
 msgstr "Vous avez été désinscrit :-("
 
-#: proposals/views.py:434
+#: proposals/views.py:436
 msgid "Already registered!"
 msgstr "Vous êtes déjà inscrit !"
 
-#: proposals/views.py:439
+#: proposals/views.py:441
 msgid "Registered!"
 msgstr "Vous avez été inscrit !"
 
