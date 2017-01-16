@@ -170,6 +170,7 @@ class Talk(PonyConfModel):
     attendees_limit = models.PositiveIntegerField(default=0, verbose_name=_('Max. number of attendees'))
     materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
                                  help_text=_('You can use this field to share some materials related to your intervention.'))
+    video = models.URLField(max_length=1000, blank=True, default='', verbose_name='URL vidéo')
 
     class Meta:
         ordering = ('title',)

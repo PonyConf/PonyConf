@@ -40,7 +40,7 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ['title', 'abstract', 'description', 'topics', 'track', 'notes', 'event', 'speakers', 'materials', 'duration', 'start_date', 'room', 'registration_required', 'attendees_limit']
+        fields = ['title', 'abstract', 'description', 'topics', 'track', 'notes', 'event', 'speakers', 'materials', 'video', 'duration', 'start_date', 'room', 'registration_required', 'attendees_limit']
         widgets = {'topics': forms.CheckboxSelectMultiple(), 'speakers': Select2TagWidget()}
         help_texts = {
             'abstract': _('Should be less than 255 characters'),
@@ -73,6 +73,7 @@ class TalkFilterForm(forms.Form):
     room = forms.NullBooleanField(help_text=_('Filter talks already / not yet affected to a room'))
     scheduled = forms.NullBooleanField(help_text=_('Filter talks already / not yet scheduled'))
     materials = forms.NullBooleanField(help_text=_('Filter talks with / without materials'))
+    video = forms.NullBooleanField(help_text=_('Filter talks with / without video'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')

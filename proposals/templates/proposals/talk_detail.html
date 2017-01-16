@@ -60,6 +60,10 @@
     <dt>{% trans "Materials" %}</dt>
       <dd><a href="{{ talk.materials.url }}">{{ talk.materials_name }}</a></dd>
     {% endif %}
+    {% if talk.video %}
+    <dt>{% trans "Video" %}</dt>
+      <dd><a href="{{ talk.video }}">{% trans "download" %}</a></dd>
+    {% endif %}
 
 </dl>
 

@@ -98,16 +98,26 @@ def talk_list(request):
                 q |= Q(track__slug__in=data['track'])
             talks = talks.filter(q)
         if data['vote'] != None:
+            show_filters = True
             if data['vote']:
                 talks = talks.filter(vote__user=request.user)
             else:
                 talks = talks.exclude(vote__user=request.user)
         if data['room'] != None:
+            show_filters = True
             talks = talks.filter(room__isnull=not data['room'])
         if data['scheduled'] != None:
+            show_filters = True
             talks = talks.filter(start_date__isnull=not data['scheduled'])
         if data['materials'] != None:
+            show_filters = True
             talks = talks.filter(materials__isnull=not data['materials'])
+        if data['video'] != None:
+            show_filters = True
+            if data['video']:
+                talks = talks.exclude(video__exact='')
+            else:
+                talks = talks.filter(video__exact='')
     # Action
     action_form = TalkActionForm(request.POST or None, talks=talks, site=get_current_site(request))
     if not is_orga(request, request.user):
@@ -205,6 +215,7 @@ def talk_edit(request, talk=None):
                     talk.room.capacity) % {'room': talk.room.name, 'capacity': talk.room.capacity}
     else:
         form.fields.pop('materials')
+        form.fields.pop('video')
         form.fields['speakers'].initial = [request.user]
     if request.method == 'POST' and form.is_valid():
         if hasattr(talk, 'id'):

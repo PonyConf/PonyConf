@@ -234,6 +234,16 @@ class Program:
                         'max': talk.attendees_limit,
                         'remain': talk.remaining_attendees or 0,
                       }
+                    if talk.materials:
+                        links += mark_safe("""
+                        <link tag="slides">%(link)s</link>""" % {
+                            'link': talk.materials.url,
+                        })
+                    if talk.video:
+                        links += mark_safe("""
+                        <link tag="video">%(link)s</link>""" % {
+                            'link': talk.video,
+                        })
                     days_xml += """    <event id="%(id)s">
         <start>%(start)s</start>
         <duration>%(duration)s</duration>
