@@ -9,7 +9,7 @@ from .models import Participation, Profile
 
 UserForm = modelform_factory(User, fields=['first_name', 'last_name', 'email', 'username'])
 
-ProfileForm = modelform_factory(Profile, fields=['phone_number', 'biography'])
+ProfileForm = modelform_factory(Profile, fields=['phone_number', 'biography', 'twitter', 'website', 'linkedin', 'facebook', 'mastodon'])
 
 ParticipationForm = modelform_factory(Participation,
                                       fields=['need_transport', 'transport', 'transport_city_outward', 'transport_city_return',

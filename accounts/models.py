@@ -19,6 +19,12 @@ class Profile(PonyConfModel):
     biography = models.TextField(blank=True, verbose_name=_('Biography'))
     email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
 
+    twitter = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Twitter'))
+    linkedin = models.CharField(max_length=100, blank=True, default='', verbose_name=_('LinkedIn'))
+    website = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Website'))
+    facebook = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Facebook'))
+    mastodon = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Mastodon'))
+
     def __str__(self):
         return self.user.get_full_name() or self.user.username
 
