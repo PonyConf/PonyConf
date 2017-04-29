@@ -1,4 +1,4 @@
-django<1.11
+django<1.12
 
 django-autoslug
 django-bootstrap3
