@@ -21,6 +21,7 @@ class Profile(PonyConfModel):
 
     twitter = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Twitter'))
     linkedin = models.CharField(max_length=100, blank=True, default='', verbose_name=_('LinkedIn'))
+    github = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Github'))
     website = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Website'))
     facebook = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Facebook'))
     mastodon = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Mastodon'))
