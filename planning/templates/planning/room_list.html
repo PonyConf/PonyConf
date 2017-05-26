@@ -15,7 +15,10 @@
 <div class="row">
   {% for room in room_list %}
   <div class="col-xs-6 col-sm-4">
-    <h2><a href="{% url 'show-room' room.slug %}">{{ room }}</a></h2>
+    <h2>
+      <a href="{% url 'show-room' room.slug %}">{{ room }}</a>
+      <span class="glyphicon glyphicon-volume-{% if room.sound %}up{% else %}off{% endif %}"></span>
+    </h2>
     {% if room.label %}<p>{{ room.label }}</p>{% endif %}
     <p>
     {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}

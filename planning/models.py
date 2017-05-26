@@ -14,6 +14,7 @@ class Room(models.Model):
     name = models.CharField(max_length=256, blank=True, default="")
     label = models.CharField(max_length=256, blank=True, default="")
     capacity = models.IntegerField(default=0)
+    sound = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ['site', 'name']

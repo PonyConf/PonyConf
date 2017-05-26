@@ -8,6 +8,7 @@
 
 <h1>{{ room.name }}
   <small>{{ room.label }}</small>
+  <span class="glyphicon glyphicon-volume-{% if room.sound %}up{% else %}off{% endif %}"></span>
 </h1>
 
 <h2>{% trans "Scheduled talks" %}</h2>
