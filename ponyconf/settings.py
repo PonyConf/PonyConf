@@ -37,19 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # our apps
-    'accounts',
+    #'accounts',
     'ponyconf',
-    'proposals',
-    'conversations',
-    'planning',
-    'volunteers',
+    'cfp',
+    #'proposals',
+    #'conversations',
+    #'planning',
+    #'volunteers',
 
     # external apps
-    'djangobower',
+    #'djangobower',
     'bootstrap3',
-    'registration',
-    'django_select2',
-    'avatar',
+    #'registration',
+    #'django_select2',
+    #'avatar',
 
     # build-in apps
     'django.contrib.admin',
