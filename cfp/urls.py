@@ -1,8 +1,10 @@
 from django.conf.urls import url
 
-#from proposals import views
+from . import views
 
 urlpatterns = [
+    url(r'^propose/$', views.ProposeView.as_view(), name='propose'),
+    url(r'^thanks/$', views.CompleteView.as_view(), name='propose-complete'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
     #url(r'^$', views.home, name='home'),
     #url(r'^staff/$', views.staff, name='staff'),

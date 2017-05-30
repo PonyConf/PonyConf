@@ -6,6 +6,5 @@ class CFPConfig(AppConfig):
     name = 'cfp'
 
     def ready(self):
-        pass
-        #import cfp.signals  # noqa
-        #post_migrate.connect(proposals.signals.call_first_site_post_save, sender=self)
+        import cfp.signals  # noqa
+        post_migrate.connect(cfp.signals.call_first_site_post_save, sender=self)
