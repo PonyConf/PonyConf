@@ -15,16 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.conf.urls.static import static
-from django.conf import settings
+#from django.conf.urls.static import static
+#from django.conf import settings
+
+from . import views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^', views.home, name='home'),
     url(r'^', include('cfp.urls')),
     #url(r'', include('proposals.urls')),
     #url(r'', include('planning.urls')),
     #url(r'^volunteers/', include('volunteers.urls')),
     #url(r'^conversations/', include('conversations.urls')),
     #url(r'^select2/', include('django_select2.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

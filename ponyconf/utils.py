@@ -2,6 +2,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.utils.html import mark_safe
 
+from markdown import markdown
+import bleach
+
 
 def enum_to_choices(enum):
     return ((item.value, item.name.replace('_', ' ')) for item in list(enum))
@@ -20,3 +23,10 @@ class PonyConfModel(models.Model):
 
     def get_link(self):
         return mark_safe('<a href="%s">%s</a>' % (self.get_absolute_url(), self))
+
+
+def markdown_to_html(md):
+    html = markdown(md)
+    allowed_tags = bleach.ALLOWED_TAGS + ['p', 'pre', 'span' ] + ['h%d' % i for i in range(1, 7) ]
+    html = bleach.clean(html, tags=allowed_tags)
+    return mark_safe(html)

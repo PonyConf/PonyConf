@@ -12,13 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.utils import timezone
 
-#from autoslug import AutoSlugField
-#from colorful.fields import RGBColorField
-
-#from accounts.models import Participation
 from ponyconf.utils import PonyConfModel, enum_to_choices
-
-#from .utils import generate_user_uid
 
 from enum import IntEnum
 from datetime import timedelta
@@ -37,10 +31,6 @@ from django.utils import timezone
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
 
-#from accounts.models import Participation
-#from ponyconf.utils import PonyConfModel, enum_to_choices
-#from planning.models import Room
-
 from .utils import query_sum
 from .utils import generate_user_uid
 
@@ -55,6 +45,29 @@ from django.utils.translation import ugettext
 
 #from ponyconf.utils import PonyConfModel, enum_to_choices
 
+
+
+class Conference(models.Model):
+
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
+    home = models.TextField(blank=True, default="")
+    venue = models.TextField(blank=True, default="")
+    city = models.CharField(max_length=64, blank=True, default="")
+    #subscriptions_open = models.BooleanField(default=False) # workshop subscription
+
+    #def cfp_is_open(self):
+    #    events = Event.objects.filter(site=self.site)
+    #    return any(map(lambda x: x.is_open(), events))
+
+    #@property
+    #def opened_events(self):
+    #    now = timezone.now()
+    #    return Event.objects.filter(site=self.site)\
+    #                        .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
+    #                        .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
+
+    def __str__(self):
+        return str(self.site)
 
 
 class Participant(PonyConfModel):
@@ -121,29 +134,6 @@ class Participant(PonyConfModel):
     #    return self.talk_set.exclude(accepted=False)
 
 
-class Conference(models.Model):
-
-    site = models.OneToOneField(Site, on_delete=models.CASCADE)
-    home = models.TextField(blank=True, default="")
-    venue = models.TextField(blank=True, default="")
-    city = models.CharField(max_length=64, blank=True, default="")
-    #subscriptions_open = models.BooleanField(default=False) # workshop subscription
-
-    #def cfp_is_open(self):
-    #    events = Event.objects.filter(site=self.site)
-    #    return any(map(lambda x: x.is_open(), events))
-
-    #@property
-    #def opened_events(self):
-    #    now = timezone.now()
-    #    return Event.objects.filter(site=self.site)\
-    #                        .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
-    #                        .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
-
-    def __str__(self):
-        return str(self.site)
-
-
 class Track(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -165,27 +155,6 @@ class Track(PonyConfModel):
 
     #def get_absolute_url(self):
     #    return reverse('list-talks') + '?track=%s' % self.slug
-
-
-#class Topic(PonyConfModel):
-#
-#    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-#
-#    name = models.CharField(max_length=128, verbose_name=_('Name'))
-#    slug = AutoSlugField(populate_from='name', unique=True)
-#    description = models.TextField(blank=True, verbose_name=_('Description'))
-#    track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Destination track'))
-#
-#    reviewers = models.ManyToManyField(User, blank=True, verbose_name=_('Reviewers'))
-#
-#    class Meta:
-#        unique_together = ('site', 'name')
-#
-#    def __str__(self):
-#        return self.name
-#
-#    def get_absolute_url(self):
-#        return reverse('list-talks') + '?topic=%s' % self.slug
 
 
 class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)

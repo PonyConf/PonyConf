@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     #'volunteers',
 
     # external apps
-    #'djangobower',
+    'djangobower',
     'bootstrap3',
     #'registration',
     #'django_select2',
@@ -88,7 +88,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'ponyconf.context_processors.site',
-                'proposals.context_processors.conference',
+                #'proposals.context_processors.conference',
             ],
         },
     },
@@ -206,7 +206,7 @@ BOOTSTRAP3 = {
 SELECT2_JS = 'select2/dist/js/select2.min.js'
 SELECT2_CSS = 'select2/dist/css/select2.min.css'
 
-AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
+#AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
 
 # django-registration

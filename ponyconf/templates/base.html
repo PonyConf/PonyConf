@@ -1,5 +1,5 @@
 {% extends '_base.html' %}
-{% load accounts_tags i18n bootstrap3 %} 
+{% load i18n bootstrap3 %} 
 
 {% block body %}
 
@@ -18,22 +18,28 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a></li>
+            {% comment %}
             {% if request.user.is_authenticated %}
             <li{% block exhibitortab %}{% endblock %}><a href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Exhibitor" %}</a></li>
             <li{% block volunteertab %}{% endblock %}><a href="{% url 'enrole-as-volunteer' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteer" %}</a></li>
             {% endif %}
             <li{% block wsregtab %}{% endblock %}><a href="{% url 'list-registrable-talks' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Workshop registration" %}</a></li>
+            {% endcomment %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
+            {% comment %}
             {% if request|staff %}
             <li{% block stafftab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Staff" %}</a></li>
             {% endif %}
             <li{% block inboxtab %}{% endblock %}><a href="{% url 'inbox' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Inbox</a></li>
             <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Profile" %}</a></li>
+            {% endcomment %}
+            {% if request.user.is_staff %}
+            <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp; Administration</a></li>
+            {% endif %}
             <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
             {% else %}
-            <li{% block registrationtab %}{% endblock %}><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-edit"></span>&nbsp;{% trans "Register" %}</a></li>
             <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
             {% endif %}
           </ul>
