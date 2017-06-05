@@ -13,7 +13,11 @@
 
 <div class="row">
   <div class="col-md-12">
-    <p>Merci pour votre participation !</p>
+      <p>{% trans "Thanks for your proposal" %}</p>
+      <p>{% trans "You can edit your talk at anytime:" %} <a href="{% url 'talk-proposal-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ site.domain }}{% url 'talk-proposal-edit' talk.token participant.token %}</a></p>
+      <p>{% trans "You can add an additionnal speaker:" %} <a href="{% url 'talk-proposal-speaker-add' talk.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ site.domain }}{% url 'talk-proposal-speaker-add' talk.token %}</a></p>
+      <p>{% trans "You can edit your profile:" %} <a href="{% url 'talk-proposal-speaker-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ site.domain }}{% url 'talk-proposal-speaker-edit' talk.token participant.token %}</a></p>
+      <p>{% trans "An email has been sent to you with those URLs" %}
   </div>
 </div>
 {% endblock %}

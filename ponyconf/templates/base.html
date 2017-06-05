@@ -18,7 +18,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a></li>
-            <li{% block proposetab %}{% endblock %}><a href="{% url 'propose' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a></li>
+            <li{% block proposetab %}{% endblock %}><a href="{% url 'talk-proposal' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a></li>
             {% comment %}
             {% if request.user.is_authenticated %}
             <li{% block exhibitortab %}{% endblock %}><a href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Exhibitor" %}</a></li>

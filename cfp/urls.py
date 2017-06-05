@@ -3,8 +3,10 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^propose/$', views.ProposeView.as_view(), name='propose'),
-    url(r'^thanks/$', views.CompleteView.as_view(), name='propose-complete'),
+    url(r'^$', views.talk_proposal, name='talk-proposal'),
+    url(r'^(?P<talk_id>[\w\-]+)/speaker/add/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-add'),
+    url(r'^(?P<talk_id>[\w\-]+)/speaker/(?P<speaker_id>[\w\-]+)/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-edit'),
+    url(r'^(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/$', views.talk_proposal, name='talk-proposal-edit'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
     #url(r'^$', views.home, name='home'),
     #url(r'^staff/$', views.staff, name='staff'),

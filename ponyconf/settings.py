@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     #'registration',
     #'django_select2',
     #'avatar',
+    'crispy_forms',
 
     # build-in apps
     'django.contrib.admin',
@@ -209,6 +210,8 @@ SELECT2_CSS = 'select2/dist/css/select2.min.css'
 #AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
 
+CRISPY_TEMPLATE_PACK='bootstrap3'
+
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
 INCLUDE_REGISTER_URL = True
@@ -218,3 +221,9 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+SERVER_EMAIL = 'ponyconf@example.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+

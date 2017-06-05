@@ -17,7 +17,6 @@
 <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
     {% csrf_token %}
     {{ participant_form|crispy }}
-    {{ talk_form|crispy }}
     <div class="col-md-12 text-center">
         <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
     </div>

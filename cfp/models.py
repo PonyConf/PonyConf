@@ -1,6 +1,7 @@
-from enum import IntEnum
+
+import uuid
+
 from datetime import timedelta
-from os.path import join, basename
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -12,29 +13,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.utils import timezone
 
-from ponyconf.utils import PonyConfModel, enum_to_choices
-
-from enum import IntEnum
-from datetime import timedelta
-from os.path import join, basename
-
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
-from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
-from django.utils import timezone
+from ponyconf.utils import PonyConfModel
 
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
 
 from .utils import query_sum
-from .utils import generate_user_uid
-
-from enum import IntEnum
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -42,6 +26,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
+
 
 #from ponyconf.utils import PonyConfModel, enum_to_choices
 
@@ -50,9 +35,11 @@ from django.utils.translation import ugettext
 class Conference(models.Model):
 
     site = models.OneToOneField(Site, on_delete=models.CASCADE)
+    name = models.CharField(blank=True, max_length=100)
     home = models.TextField(blank=True, default="")
     venue = models.TextField(blank=True, default="")
     city = models.CharField(max_length=64, blank=True, default="")
+    contact_email = models.CharField(max_length=100, blank=True)
     #subscriptions_open = models.BooleanField(default=False) # workshop subscription
 
     #def cfp_is_open(self):
@@ -66,6 +53,9 @@ class Conference(models.Model):
     #                        .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
     #                        .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
 
+    def from_email(self):
+        return self.name+' <'+self.contact_email+'>'
+
     def __str__(self):
         return str(self.site)
 
@@ -76,13 +66,12 @@ class Participant(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, blank=True)
     email = models.EmailField()
 
     phone_number = models.CharField(max_length=16, blank=True, default='', verbose_name=_('Phone number'))
     biography = models.TextField(blank=True, verbose_name=_('Biography'))
-    #email_token = models.CharField(max_length=12, default=generate_user_uid, unique=True)
-
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
 
     # TALK
     #videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
@@ -178,6 +167,8 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
     class Meta:
         unique_together = ('site', 'name')
         ordering = ('pk',)
+        verbose_name = "category"
+        verbose_name_plural = "categories"
 
     def __str__(self):
         return ugettext(self.name)
@@ -216,21 +207,28 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
 
 class Talk(PonyConfModel):
 
-    LICENCES = IntEnum('Video licence', 'CC-Zero CC-BY CC-BY-SA CC-BY-ND CC-BY-NC CC-BY-NC-SA CC-BY-NC-ND')
+    LICENCES = (
+        ('CC-Zero CC-BY', 'CC-Zero CC-BY'),
+        ('CC-BY-SA', 'CC-BY-SA'),
+        ('CC-BY-ND', 'CC-BY-ND'),
+        ('CC-BY-NC', 'CC-BY-NC'),
+        ('CC-BY-NC-SA','CC-BY-NC-SA'),
+        ('CC-BY-NC-ND', 'CC-BY-NC-ND'),
+    )
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     #proposer = models.ForeignKey(User, related_name='+')
     speakers = models.ManyToManyField(Participant, verbose_name=_('Speakers'))
-    title = models.CharField(max_length=128, verbose_name=_('Title'), help_text=_('After submission, title can only be changed by the staff.'))
+    title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
     #abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
-    description = models.TextField(blank=True, verbose_name=_('Description'))
+    description = models.TextField(blank=True, verbose_name=_('Description of your talk'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
-    notes = models.TextField(blank=True, verbose_name=_('Message to organizers'))
-    category = models.ForeignKey(TalkCategory, verbose_name=_('Intervention kind'))
+    notes = models.TextField(blank=True, verbose_name=_('Message to organizers'), help_text=_('If you have any constraint or if you have anything that may help you to select your talk, like a video or slides of your talk, please write it down here'))
+    category = models.ForeignKey(TalkCategory, blank=True, null=True, verbose_name=_('Talk Category'))
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
-    video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=2, verbose_name=_("Video licence"))
+    video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA', max_length=10, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)
     accepted = models.NullBooleanField(default=None)
     #start_date = models.DateTimeField(null=True, blank=True, default=None)
@@ -239,6 +237,8 @@ class Talk(PonyConfModel):
     plenary = models.BooleanField(default=False)
     #materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
     #                             help_text=_('You can use this field to share some materials related to your intervention.'))
+
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
 
 
     class Meta:
