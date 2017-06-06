@@ -40,6 +40,10 @@ class Conference(models.Model):
     venue = models.TextField(blank=True, default="")
     city = models.CharField(max_length=64, blank=True, default="")
     contact_email = models.CharField(max_length=100, blank=True)
+
+    custom_css = models.TextField(blank=True)
+    external_css_link = models.URLField(blank=True)
+
     #subscriptions_open = models.BooleanField(default=False) # workshop subscription
 
     #def cfp_is_open(self):
@@ -62,23 +66,27 @@ class Conference(models.Model):
 
 class Participant(PonyConfModel):
 
-    #LICENCES = IntEnum('Video licence', 'CC-Zero CC-BY CC-BY-SA CC-BY-ND CC-BY-NC CC-BY-NC-SA CC-BY-NC-ND')
-
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=128, blank=True)
+    name = models.CharField(max_length=128, verbose_name=_('Your Name'))
     email = models.EmailField()
 
-    phone_number = models.CharField(max_length=16, blank=True, default='', verbose_name=_('Phone number'))
-    biography = models.TextField(blank=True, verbose_name=_('Biography'))
+    biography = models.TextField(verbose_name=_('Biography'))
     token = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    # TALK
-    #videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
-    #video_licence = models.IntegerField(choices=enum_to_choices(LICENCES), default=2, verbose_name=_("Video licence"))
-    #sound = models.BooleanField(_("I need sound"), default=False)
+    twitter = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Twitter'))
+    linkedin = models.CharField(max_length=100, blank=True, default='', verbose_name=_('LinkedIn'))
+    github = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Github'))
+    website = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Website'))
+    facebook = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Facebook'))
+    mastodon = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Mastodon'))
+
+    phone_number = models.CharField(max_length=64, blank=True, default='', verbose_name=_('Phone number'))
+
+    language = models.CharField(max_length=10, blank=True)
 
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"), help_text=_('This field is only visible by organizers.'))
+
     vip = models.BooleanField(default=False)
 
     class Meta:
@@ -223,10 +231,10 @@ class Talk(PonyConfModel):
     title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
     #abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
-    description = models.TextField(blank=True, verbose_name=_('Description of your talk'))
+    description = models.TextField(verbose_name=_('Description of your talk'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
     notes = models.TextField(blank=True, verbose_name=_('Message to organizers'), help_text=_('If you have any constraint or if you have anything that may help you to select your talk, like a video or slides of your talk, please write it down here'))
-    category = models.ForeignKey(TalkCategory, blank=True, null=True, verbose_name=_('Talk Category'))
+    category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'))
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA', max_length=10, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)

@@ -33,6 +33,7 @@ def talk_proposal(request, talk_id=None, participant_id=None):
         participant, created = Participant.objects.get_or_create(email=participant_form.cleaned_data['email'], site=site)
         participant_form = ParticipantForm(request.POST, instance=participant)
         participant = participant_form.save()
+        participant.language = request.LANGUAGE_CODE
         participant.save()
 
         talk.save()
@@ -50,7 +51,7 @@ Your talk has been submitted for {}.
 
 Here are the details of your talk:
 Title: {}
-Description {}
+Description: {}
 
 You can at anytime:
 - edit your talk: {}
