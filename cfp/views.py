@@ -52,9 +52,10 @@ Here are the details of your talk:
 Title: {}
 Description {}
 
-You can edit your talk at anytume: {}
-You can add a new co-speaker here: {}
-You can edit your profile here: {}
+You can at anytime:
+- edit your talk: {}
+- add a new co-speaker: {}
+- edit your profile: {}
 
 If you have any question, your can answer to this email.
 
