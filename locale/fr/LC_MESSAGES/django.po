@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-06 07:31+0000\n"
+"POT-Creation-Date: 2017-06-06 21:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,31 +24,31 @@ msgstr ""
 "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
 "viande, etc."
 
-#: accounts/models.py:18 cfp/models.py:72
+#: accounts/models.py:18 cfp/models.py:84
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: accounts/models.py:20
+#: accounts/models.py:20 cfp/models.py:77
 msgid "Twitter"
 msgstr ""
 
-#: accounts/models.py:21
+#: accounts/models.py:21 cfp/models.py:78
 msgid "LinkedIn"
 msgstr ""
 
-#: accounts/models.py:22
+#: accounts/models.py:22 cfp/models.py:79
 msgid "Github"
 msgstr ""
 
-#: accounts/models.py:23
+#: accounts/models.py:23 cfp/models.py:80
 msgid "Website"
 msgstr ""
 
-#: accounts/models.py:24
+#: accounts/models.py:24 cfp/models.py:81
 msgid "Facebook"
 msgstr ""
 
-#: accounts/models.py:25
+#: accounts/models.py:25 cfp/models.py:82
 msgid "Mastodon"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr "Contacter"
 msgid "Edit"
 msgstr "Éditer"
 
-#: accounts/templates/accounts/participant_details.html:20 cfp/models.py:73
+#: accounts/templates/accounts/participant_details.html:20 cfp/models.py:74
 msgid "Biography"
 msgstr "Biographie"
 
@@ -169,7 +169,7 @@ msgstr "Licence vidéo :"
 msgid "Constraints"
 msgstr "Contraintes"
 
-#: accounts/templates/accounts/participant_details.html:71 cfp/models.py:81
+#: accounts/templates/accounts/participant_details.html:71 cfp/models.py:88
 #: proposals/models.py:161 proposals/templates/proposals/talk_detail.html:102
 msgid "Notes"
 msgstr "Notes"
@@ -282,49 +282,53 @@ msgstr "%(name)s a été ajouté aux participants"
 msgid "%(name)s is already a participant"
 msgstr "%(name)s est déjà participant"
 
-#: cfp/models.py:81
+#: cfp/models.py:71
+msgid "Your Name"
+msgstr "Votre Nom"
+
+#: cfp/models.py:88
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
-#: cfp/models.py:130 proposals/models.py:52 proposals/models.py:75
+#: cfp/models.py:138 proposals/models.py:52 proposals/models.py:75
 #: proposals/models.py:132 volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/models.py:132 proposals/models.py:54 proposals/models.py:77
+#: cfp/models.py:140 proposals/models.py:54 proposals/models.py:77
 #: proposals/models.py:158 proposals/templates/proposals/talk_detail.html:72
 #: volunteers/models.py:14
 msgid "Description"
 msgstr "Description"
 
-#: cfp/models.py:153 proposals/models.py:96
+#: cfp/models.py:161 proposals/models.py:96
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: cfp/models.py:154 proposals/models.py:97
+#: cfp/models.py:162 proposals/models.py:97
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: cfp/models.py:155 proposals/models.py:98
+#: cfp/models.py:163 proposals/models.py:98
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:222 ponyconf/templates/staff.html:12 proposals/models.py:154
+#: cfp/models.py:230 ponyconf/templates/staff.html:12 proposals/models.py:154
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:76
 #: proposals/templates/proposals/talk_list.html:49
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: cfp/models.py:223
+#: cfp/models.py:231
 msgid "Talk Title"
 msgstr "Titre de votre proposition:"
 
-#: cfp/models.py:226
+#: cfp/models.py:234
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:227 proposals/models.py:160
+#: cfp/models.py:235 proposals/models.py:160
 #: proposals/templates/proposals/talk_detail.html:33
 #: proposals/templates/proposals/talk_detail.html:89
 #: proposals/templates/proposals/talk_list.html:51
@@ -332,11 +336,11 @@ msgstr "Description de votre proposition"
 msgid "Track"
 msgstr "Session"
 
-#: cfp/models.py:228
+#: cfp/models.py:236
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
-#: cfp/models.py:228
+#: cfp/models.py:236
 msgid ""
 "If you have any constraint or if you have anything that may help you to "
 "select your talk, like a video or slides of your talk, please write it down "
@@ -346,23 +350,23 @@ msgstr ""
 "votre proposition, comme une vidéo, des slides, n'hésitez pas à les ajouter "
 "ici."
 
-#: cfp/models.py:229
+#: cfp/models.py:237
 msgid "Talk Category"
 msgstr "Catégorie de proposition"
 
-#: cfp/models.py:230
+#: cfp/models.py:238
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: cfp/models.py:231
+#: cfp/models.py:239
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: cfp/models.py:232
+#: cfp/models.py:240
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: cfp/models.py:235 proposals/models.py:165
+#: cfp/models.py:243 proposals/models.py:165
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
@@ -403,11 +407,11 @@ msgstr "Participer"
 msgid "Save"
 msgstr "Envoyer"
 
-#: cfp/views.py:46
+#: cfp/views.py:47
 msgid "Your talk \"{}\" has been submitted for {}"
 msgstr "Votre proposition \"{}\" a été transmise à {}"
 
-#: cfp/views.py:47
+#: cfp/views.py:48
 msgid ""
 "Hi {},\n"
 "\n"
@@ -415,7 +419,7 @@ msgid ""
 "\n"
 "Here are the details of your talk:\n"
 "Title: {}\n"
-"Description {}\n"
+"Description: {}\n"
 "\n"
 "You can at anytime:\n"
 "- edit your talk: {}\n"
