@@ -1,3 +1,9 @@
 .subnav {
     padding-bottom: 20px;
 }
+
+span.asteriskField {                                                            
+    color: red;                                                                 
+    font-size: 15px;                                                            
+}
+
