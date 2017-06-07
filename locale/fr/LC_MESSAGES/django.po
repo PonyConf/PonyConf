@@ -551,7 +551,7 @@ msgstr "Accueil"
 
 #: ponyconf/templates/base.html:21
 msgid "Call for participation"
-msgstr "Appal à participation"
+msgstr "Appel à participation"
 
 #: ponyconf/templates/base.html:46
 #: ponyconf/templates/registration/login.html:10
