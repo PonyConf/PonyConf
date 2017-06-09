@@ -5,7 +5,8 @@ PonyConf
 
 Organise your conferences
 
-Jabber : [ponyconf@chat.cannelle.eu.org](https://jappix.cannelle.eu.org/?r=ponyconf@chat.cannelle.eu.org)
+- Jabber : [ponyconf@chat.cannelle.eu.org](https://jappix.cannelle.eu.org/?r=ponyconf@chat.cannelle.eu.org)
+- IRC: #ponyconf on freenode
 
 
 HowTo Test
