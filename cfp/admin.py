@@ -7,7 +7,7 @@ from .models import Conference, Participant, Talk, TalkCategory, Track
 
 
 class ConferenceAdmin(SiteAdminMixin, admin.ModelAdmin):
-    pass
+    filter_horizontal = ('staff',)
 
 
 class ParticipantAdmin(SiteAdminMixin, admin.ModelAdmin):
