@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from cfp.decorators import staff_required
 from .utils import is_staff
-from .models import Participant, Talk, Vote
+from .models import Participant, Talk, TalkCategory, Vote
 from .forms import TalkForm, ParticipantForm
 
 
@@ -22,15 +22,21 @@ def home(request, conference):
 def talk_proposal(request, conference, talk_id=None, participant_id=None):
 
     site = conference.site
+    if is_staff(request, request.user):
+        categories = TalkCategory.objects.filter(site=site)
+    else:
+        categories = conference.opened_categories
     talk = None
     participant = None
 
     if talk_id and participant_id:
         talk = get_object_or_404(Talk, token=talk_id, site=site)
         participant = get_object_or_404(Participant, token=participant_id, site=site)
+    elif not categories.exists():
+        return render(request, 'cfp/closed.html')
 
     participant_form = ParticipantForm(request.POST or None, instance=participant)
-    talk_form = TalkForm(request.POST or None, conference=conference, staff=is_staff(request, request.user), instance=talk)
+    talk_form = TalkForm(request.POST or None, categories=categories, instance=talk)
 
     if request.method == 'POST' and talk_form.is_valid() and participant_form.is_valid():
         talk = talk_form.save(commit=False)
