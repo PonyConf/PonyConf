@@ -6,16 +6,23 @@
 {% block navbar %}
     {{ block.super }}
     <ul class="nav nav-tabs nav-justified subnav">
+      {% comment %}
       <li{% block topicstab %}{% endblock %}><a href="{% url 'list-topics' %}"><span class="glyphicon glyphicon-tag"></span>&nbsp;{% trans "Topics" %}</a></li>
       <li{% block trackstab %}{% endblock %}><a href="{% url 'list-tracks' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Tracks" %}</a></li>
-      <li{% block talkstab %}{% endblock %}><a href="{% url 'list-talks' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Talks" %}</a></li>
-      <li{% block speakerstab %}{% endblock %}><a href="{% url 'list-speakers' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Speakers" %}</a></li>
       <li{% block volunteerstab %}{% endblock %}><a href="{% url 'list-volunteers' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a></li>
       <li{% block roomstab %}{% endblock %}><a href="{% url 'list-rooms' %}"><span class="glyphicon glyphicon-tent"></span>&nbsp;{% trans "Rooms" %}</a></li>
       <li{% block scheduletab %}{% endblock %}><a href="{% url 'show-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a></li>
-      <li{% block participantstab %}{% endblock %}><a href="{% url 'list-participants' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Participants" %}</a></li>
       <li{% block correspondentstab %}{% endblock %}><a href="{% url 'list-correspondents' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;{% trans "Correspondents" %}</a></li>
       <li{% block conferencetab %}{% endblock %}><a href="{% url 'edit-conference' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Conference" %}</a></li>
+      {% endcomment %}
+      <li{% block talkstab %}{% endblock %}><a href="{% url 'talk-list' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Talks" %}</a></li>
+      <li{% block speakerstab %}{% endblock %}><a href="{% url 'participant-list' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Speakers" %}</a></li>
+      {% if request.user.is_staff %}
       <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django-Admin</a></li>
+      {% endif %}
     </ul>
+{% endblock %}
+
+{% block content %}
+{% trans "Please select a category." %}
 {% endblock %}

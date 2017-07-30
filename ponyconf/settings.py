@@ -72,6 +72,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'cfp.middleware.ConferenceMiddleware',
 ]
 
 ROOT_URLCONF = 'ponyconf.urls'
@@ -88,8 +90,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'ponyconf.context_processors.site',
-                #'proposals.context_processors.conference',
+                #'ponyconf.context_processors.site',
+                'cfp.context_processors.conference',
             ],
         },
     },

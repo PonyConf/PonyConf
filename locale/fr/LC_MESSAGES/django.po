@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-06 21:13+0000\n"
+"POT-Creation-Date: 2017-07-30 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,31 +24,31 @@ msgstr ""
 "Par exemple, vous devez rentrer le samedi soir, vous ne pouvez pas manger de "
 "viande, etc."
 
-#: accounts/models.py:18 cfp/models.py:84
+#: accounts/models.py:18 cfp/models.py:83
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: accounts/models.py:20 cfp/models.py:77
+#: accounts/models.py:20 cfp/models.py:76
 msgid "Twitter"
 msgstr ""
 
-#: accounts/models.py:21 cfp/models.py:78
+#: accounts/models.py:21 cfp/models.py:77
 msgid "LinkedIn"
 msgstr ""
 
-#: accounts/models.py:22 cfp/models.py:79
+#: accounts/models.py:22 cfp/models.py:78
 msgid "Github"
 msgstr ""
 
-#: accounts/models.py:23 cfp/models.py:80
+#: accounts/models.py:23 cfp/models.py:79
 msgid "Website"
 msgstr ""
 
-#: accounts/models.py:24 cfp/models.py:81
+#: accounts/models.py:24 cfp/models.py:80
 msgid "Facebook"
 msgstr ""
 
-#: accounts/models.py:25 cfp/models.py:82
+#: accounts/models.py:25 cfp/models.py:81
 msgid "Mastodon"
 msgstr ""
 
@@ -99,12 +99,15 @@ msgstr "Contacter"
 msgid "Edit"
 msgstr "Éditer"
 
-#: accounts/templates/accounts/participant_details.html:20 cfp/models.py:74
+#: accounts/templates/accounts/participant_details.html:20 cfp/models.py:73
+#: cfp/templates/cfp/staff/participant_details.html:10
 msgid "Biography"
 msgstr "Biographie"
 
 #: accounts/templates/accounts/participant_details.html:27
-#: ponyconf/templates/staff.html:11
+#: cfp/templates/cfp/staff/base.html:20
+#: cfp/templates/cfp/staff/participant_details.html:32
+#: cfp/templates/cfp/staff/talk_list.html:8
 #: proposals/templates/proposals/talk_list.html:9
 msgid "Talks"
 msgstr "Exposés"
@@ -169,8 +172,10 @@ msgstr "Licence vidéo :"
 msgid "Constraints"
 msgstr "Contraintes"
 
-#: accounts/templates/accounts/participant_details.html:71 cfp/models.py:88
-#: proposals/models.py:161 proposals/templates/proposals/talk_detail.html:102
+#: accounts/templates/accounts/participant_details.html:71 cfp/models.py:87
+#: cfp/templates/cfp/staff/participant_details.html:27
+#: cfp/templates/cfp/staff/talk_details.html:92 proposals/models.py:161
+#: proposals/templates/proposals/talk_detail.html:102
 msgid "Notes"
 msgstr "Notes"
 
@@ -179,8 +184,7 @@ msgstr "Notes"
 msgid "%(profile)s's profile"
 msgstr "Profil de %(profile)s"
 
-#: accounts/templates/accounts/participant_list.html:9
-#: ponyconf/templates/staff.html:16 volunteers/models.py:15
+#: accounts/templates/accounts/participant_list.html:9 volunteers/models.py:15
 msgid "Participants"
 msgstr "Participants"
 
@@ -282,53 +286,62 @@ msgstr "%(name)s a été ajouté aux participants"
 msgid "%(name)s is already a participant"
 msgstr "%(name)s est déjà participant"
 
-#: cfp/models.py:71
+#: cfp/models.py:41 ponyconf/templates/base.html:36
+msgid "Staff"
+msgstr ""
+
+#: cfp/models.py:70
 msgid "Your Name"
 msgstr "Votre Nom"
 
-#: cfp/models.py:88
+#: cfp/models.py:87 cfp/templates/cfp/staff/participant_details.html:28
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
-#: cfp/models.py:138 proposals/models.py:52 proposals/models.py:75
-#: proposals/models.py:132 volunteers/models.py:12
+#: cfp/models.py:137 cfp/templates/cfp/staff/participant_list.html:49
+#: proposals/models.py:52 proposals/models.py:75 proposals/models.py:132
+#: volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/models.py:140 proposals/models.py:54 proposals/models.py:77
-#: proposals/models.py:158 proposals/templates/proposals/talk_detail.html:72
-#: volunteers/models.py:14
+#: cfp/models.py:139 cfp/templates/cfp/staff/talk_details.html:71
+#: proposals/models.py:54 proposals/models.py:77 proposals/models.py:158
+#: proposals/templates/proposals/talk_detail.html:72 volunteers/models.py:14
 msgid "Description"
 msgstr "Description"
 
-#: cfp/models.py:161 proposals/models.py:96
+#: cfp/models.py:160 proposals/models.py:96
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: cfp/models.py:162 proposals/models.py:97
+#: cfp/models.py:161 proposals/models.py:97
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: cfp/models.py:163 proposals/models.py:98
+#: cfp/models.py:162 proposals/models.py:98
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:230 ponyconf/templates/staff.html:12 proposals/models.py:154
+#: cfp/models.py:229 cfp/templates/cfp/staff/base.html:21
+#: cfp/templates/cfp/staff/participant_list.html:8
+#: cfp/templates/cfp/staff/talk_details.html:75
+#: cfp/templates/cfp/staff/talk_list.html:18 proposals/models.py:154
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:76
 #: proposals/templates/proposals/talk_list.html:49
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: cfp/models.py:231
+#: cfp/models.py:230
 msgid "Talk Title"
 msgstr "Titre de votre proposition:"
 
-#: cfp/models.py:234
+#: cfp/models.py:233
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:235 proposals/models.py:160
+#: cfp/models.py:234 cfp/templates/cfp/staff/talk_details.html:85
+#: cfp/templates/cfp/staff/talk_list.html:19 proposals/models.py:160
 #: proposals/templates/proposals/talk_detail.html:33
 #: proposals/templates/proposals/talk_detail.html:89
 #: proposals/templates/proposals/talk_list.html:51
@@ -336,11 +349,11 @@ msgstr "Description de votre proposition"
 msgid "Track"
 msgstr "Session"
 
-#: cfp/models.py:236
+#: cfp/models.py:235
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
-#: cfp/models.py:236
+#: cfp/models.py:235
 msgid ""
 "If you have any constraint or if you have anything that may help you to "
 "select your talk, like a video or slides of your talk, please write it down "
@@ -350,23 +363,23 @@ msgstr ""
 "votre proposition, comme une vidéo, des slides, n'hésitez pas à les ajouter "
 "ici."
 
-#: cfp/models.py:237
+#: cfp/models.py:236
 msgid "Talk Category"
 msgstr "Catégorie de proposition"
 
-#: cfp/models.py:238
+#: cfp/models.py:237
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: cfp/models.py:239
+#: cfp/models.py:238
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: cfp/models.py:240
+#: cfp/models.py:239
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: cfp/models.py:243 proposals/models.py:165
+#: cfp/models.py:242 proposals/models.py:165
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
@@ -407,11 +420,182 @@ msgstr "Participer"
 msgid "Save"
 msgstr "Envoyer"
 
-#: cfp/views.py:47
+#: cfp/templates/cfp/staff/base.html:29
+msgid "Please select a category."
+msgstr "Veuillez sélectionner une catégorie."
+
+#: cfp/templates/cfp/staff/participant_details.html:13
+msgid "Informations"
+msgstr "Informations"
+
+#: cfp/templates/cfp/staff/participant_details.html:15
+msgid "E-mail:"
+msgstr "E-mail :"
+
+#: cfp/templates/cfp/staff/participant_details.html:16
+msgid "Twitter:"
+msgstr "Twitter :"
+
+#: cfp/templates/cfp/staff/participant_details.html:17
+msgid "LinkedIn:"
+msgstr "LinkedIn :"
+
+#: cfp/templates/cfp/staff/participant_details.html:18
+msgid "Github:"
+msgstr "Github :"
+
+#: cfp/templates/cfp/staff/participant_details.html:19
+msgid "Website:"
+msgstr "Website :"
+
+#: cfp/templates/cfp/staff/participant_details.html:20
+msgid "Facebook:"
+msgstr "Facebook :"
+
+#: cfp/templates/cfp/staff/participant_details.html:21
+msgid "Mastodon:"
+msgstr "Mastodon :"
+
+#: cfp/templates/cfp/staff/participant_details.html:22
+msgid "Phone number:"
+msgstr "Numéro de téléphone :"
+
+#: cfp/templates/cfp/staff/participant_details.html:23
+msgid "Language:"
+msgstr "Langue :"
+
+#: cfp/templates/cfp/staff/participant_details.html:39
+#: proposals/templates/proposals/_talk_list.html:8
+msgid "by"
+msgstr "par"
+
+#: cfp/templates/cfp/staff/participant_details.html:42
+#: cfp/templates/cfp/staff/talk_list.html:35
+#: proposals/templates/proposals/_talk_list.html:11
+#: proposals/templates/proposals/_talk_list.html:17
+#: proposals/templates/proposals/talk_list.html:66
+msgid "and"
+msgstr "et"
+
+#: cfp/templates/cfp/staff/participant_details.html:45
+#: proposals/templates/proposals/_talk_list.html:14
+msgid "in"
+msgstr "dans la session"
+
+#: cfp/templates/cfp/staff/participant_details.html:51
+#: proposals/templates/proposals/_talk_list.html:23
+msgid "No talks"
+msgstr "Aucun exposé"
+
+#: cfp/templates/cfp/staff/participant_list.html:45
+#: cfp/templates/cfp/staff/talk_list.html:11
+#: proposals/templates/proposals/speaker_list.html:44
+#: proposals/templates/proposals/talk_list.html:43
+#: volunteers/templates/volunteers/volunteer_list.html:25
+msgid "Total:"
+msgstr "Total :"
+
+#: cfp/templates/cfp/staff/participant_list.html:45
+#: proposals/templates/proposals/speaker_list.html:44
+msgid "speaker"
+msgstr "orateur"
+
+#: cfp/templates/cfp/staff/participant_list.html:50
+#: proposals/templates/proposals/speaker_list.html:50
+msgid "Talk count"
+msgstr "Nombre d’exposé"
+
+#: cfp/templates/cfp/staff/participant_list.html:70
+#, python-format
+msgid "accepted: %(accepted)s"
+msgid_plural "accepted: %(accepted)s"
+msgstr[0] "accepté : %(accepted)s"
+msgstr[1] "acceptés : %(accepted)s"
+
+#: cfp/templates/cfp/staff/participant_list.html:72
+#, python-format
+msgid "pending: %(pending)s"
+msgid_plural "pending: %(pending)s"
+msgstr[0] "en attente : %(pending)s"
+msgstr[1] "en attente : %(pending)s"
+
+#: cfp/templates/cfp/staff/participant_list.html:74
+#, python-format
+msgid "refused: %(refused)s"
+msgid_plural "refused: %(refused)s"
+msgstr[0] "refusé : %(refused)s"
+msgstr[1] "refusés : %(refused)s"
+
+#: cfp/templates/cfp/staff/talk_details.html:16
+#: proposals/templates/proposals/talk_detail.html:19
+msgid "No abstract provided."
+msgstr "Aucun résumé fourni."
+
+#: cfp/templates/cfp/staff/talk_details.html:73
+#: proposals/templates/proposals/talk_detail.html:74
+msgid "No description provided."
+msgstr "Aucune description fournie."
+
+#: cfp/templates/cfp/staff/talk_details.html:82
+#: proposals/templates/proposals/talk_detail.html:83
+msgid "No speakers."
+msgstr "Aucun orateur."
+
+#: cfp/templates/cfp/staff/talk_details.html:89
+msgctxt "session"
+msgid "No assigned yet."
+msgstr "Pas encore assignée."
+
+#: cfp/templates/cfp/staff/talk_details.html:94
+#: proposals/templates/proposals/talk_detail.html:104
+msgid "No notes."
+msgstr "Aucune note."
+
+#: cfp/templates/cfp/staff/talk_list.html:11
+#: planning/templates/planning/room_list.html:28
+#: proposals/templates/proposals/talk_list.html:43
+#: proposals/templates/proposals/topic_list.html:23
+#: proposals/templates/proposals/track_list.html:23
+msgid "talk"
+msgstr "exposé"
+
+#: cfp/templates/cfp/staff/talk_list.html:16 proposals/models.py:155
+#: proposals/templates/proposals/talk_list.html:47
+msgid "Title"
+msgstr "Titre"
+
+#: cfp/templates/cfp/staff/talk_list.html:17 proposals/models.py:162
+#: proposals/templates/proposals/talk_list.html:48
+msgid "Intervention kind"
+msgstr "Type d’intervention"
+
+#: cfp/templates/cfp/staff/talk_list.html:20
+#: proposals/templates/proposals/talk_detail.html:110
+#: proposals/templates/proposals/talk_list.html:52
+msgid "Status"
+msgstr "Statut"
+
+#: cfp/templates/cfp/staff/talk_list.html:42
+#: proposals/templates/proposals/talk_list.html:78
+msgid "Accepted"
+msgstr "Accepté"
+
+#: cfp/templates/cfp/staff/talk_list.html:44
+#: proposals/templates/proposals/talk_list.html:80
+msgid "Declined"
+msgstr "Décliné"
+
+#: cfp/templates/cfp/staff/talk_list.html:46
+#: proposals/templates/proposals/talk_list.html:82
+#, python-format
+msgid "Pending, score: %(score)s"
+msgstr "En cours, score : %(score)s"
+
+#: cfp/views.py:53
 msgid "Your talk \"{}\" has been submitted for {}"
 msgstr "Votre proposition \"{}\" a été transmise à {}"
 
-#: cfp/views.py:48
+#: cfp/views.py:54
 msgid ""
 "Hi {},\n"
 "\n"
@@ -465,7 +649,6 @@ msgid "Conversation with %(correspondent)s"
 msgstr "Conversation avec %(correspondent)s"
 
 #: conversations/templates/conversations/correspondent_list.html:9
-#: ponyconf/templates/staff.html:17
 msgid "Correspondents"
 msgstr "Correspondants"
 
@@ -487,7 +670,7 @@ msgid "Message sent!"
 msgstr "Message envoyé !"
 
 #: planning/templates/planning/public-program.html:8
-#: planning/templates/planning/schedule.html:9 ponyconf/templates/staff.html:15
+#: planning/templates/planning/schedule.html:9
 msgid "Schedule"
 msgstr "Programme"
 
@@ -514,7 +697,6 @@ msgid "Add a room"
 msgstr "Ajouter une salle"
 
 #: planning/templates/planning/room_list.html:9
-#: ponyconf/templates/staff.html:14
 msgid "Rooms"
 msgstr "Salles"
 
@@ -526,66 +708,38 @@ msgstr "place"
 msgid "Some talks are not scheduled yet."
 msgstr "Certains exposés ne sont pas encore planifiés."
 
-#: planning/templates/planning/room_list.html:28
-#: proposals/templates/proposals/talk_list.html:43
-#: proposals/templates/proposals/topic_list.html:23
-#: proposals/templates/proposals/track_list.html:23
-msgid "talk"
-msgstr "exposé"
-
 #: planning/templates/planning/room_list.html:40
 msgid "No rooms."
 msgstr "Aucune salle."
 
-#: ponyconf/settings.py:143
+#: ponyconf/settings.py:145
 msgid "English"
 msgstr "Anglais"
 
-#: ponyconf/settings.py:144
+#: ponyconf/settings.py:146
 msgid "French"
 msgstr "Français"
 
-#: ponyconf/templates/base.html:20
+#: ponyconf/templates/base.html:21
 msgid "Home"
 msgstr "Accueil"
 
-#: ponyconf/templates/base.html:21
+#: ponyconf/templates/base.html:23
 msgid "Call for participation"
 msgstr "Appel à participation"
 
-#: ponyconf/templates/base.html:46
+#: ponyconf/templates/base.html:50
 #: ponyconf/templates/registration/login.html:10
 msgid "Login"
 msgstr "Se connecter"
 
-#: ponyconf/templates/base.html:63
+#: ponyconf/templates/base.html:67
 msgid "Powered by"
 msgstr "Propulsé par"
 
 #: ponyconf/templates/registration/password_change_form.html:9
 msgid "Password Change"
 msgstr "Changement de mot de passe"
-
-#: ponyconf/templates/staff.html:9 proposals/models.py:159
-#: proposals/templates/proposals/talk_detail.html:26
-#: proposals/templates/proposals/talk_list.html:50
-#: proposals/templates/proposals/topic_list.html:9
-msgid "Topics"
-msgstr "Thèmes"
-
-#: ponyconf/templates/staff.html:10
-#: proposals/templates/proposals/track_list.html:9
-msgid "Tracks"
-msgstr "Sessions"
-
-#: ponyconf/templates/staff.html:13
-#: volunteers/templates/volunteers/volunteer_list.html:9
-msgid "Volunteers"
-msgstr "Bénévoles"
-
-#: ponyconf/templates/staff.html:18
-msgid "Conference"
-msgstr "Conférence"
 
 #: proposals/forms.py:46
 msgid "Should be less than 255 characters"
@@ -661,10 +815,6 @@ msgstr "Responsables"
 msgid "Email"
 msgstr "E-mail"
 
-#: proposals/models.py:155 proposals/templates/proposals/talk_list.html:47
-msgid "Title"
-msgstr "Titre"
-
 #: proposals/models.py:155
 msgid "After submission, title can only be changed by the staff."
 msgstr ""
@@ -675,13 +825,15 @@ msgstr ""
 msgid "Abstract"
 msgstr "Résumé"
 
+#: proposals/models.py:159 proposals/templates/proposals/talk_detail.html:26
+#: proposals/templates/proposals/talk_list.html:50
+#: proposals/templates/proposals/topic_list.html:9
+msgid "Topics"
+msgstr "Thèmes"
+
 #: proposals/models.py:159
 msgid "The topics can not be changed after submission."
 msgstr "Les thèmes ne peuvent pas être modifiés après soumission."
-
-#: proposals/models.py:162 proposals/templates/proposals/talk_list.html:48
-msgid "Intervention kind"
-msgstr "Type d’intervention"
 
 #: proposals/models.py:169 proposals/templates/proposals/talk_detail.html:131
 msgid "Attendees"
@@ -721,24 +873,6 @@ msgstr "stand"
 #: proposals/signals.py:32
 msgid "other"
 msgstr "autre"
-
-#: proposals/templates/proposals/_talk_list.html:8
-msgid "by"
-msgstr "par"
-
-#: proposals/templates/proposals/_talk_list.html:11
-#: proposals/templates/proposals/_talk_list.html:17
-#: proposals/templates/proposals/talk_list.html:66
-msgid "and"
-msgstr "et"
-
-#: proposals/templates/proposals/_talk_list.html:14
-msgid "in"
-msgstr "portant sur"
-
-#: proposals/templates/proposals/_talk_list.html:23
-msgid "No talks"
-msgstr "Aucun exposé"
 
 #: proposals/templates/proposals/conference.html:11
 msgid "Home page"
@@ -784,16 +918,6 @@ msgstr "Afficher les options de filtrage…"
 msgid "Filter"
 msgstr "Filtrer"
 
-#: proposals/templates/proposals/speaker_list.html:44
-#: proposals/templates/proposals/talk_list.html:43
-#: volunteers/templates/volunteers/volunteer_list.html:25
-msgid "Total:"
-msgstr "Total :"
-
-#: proposals/templates/proposals/speaker_list.html:44
-msgid "speaker"
-msgstr "orateur"
-
 #: proposals/templates/proposals/speaker_list.html:48
 #: volunteers/templates/volunteers/volunteer_list.html:29
 msgid "Username"
@@ -803,10 +927,6 @@ msgstr "Nom d’utilisateur"
 #: volunteers/templates/volunteers/volunteer_list.html:30
 msgid "Fullname"
 msgstr "Prénom et nom"
-
-#: proposals/templates/proposals/speaker_list.html:50
-msgid "Talk count"
-msgstr "Nombre d’exposé"
 
 #: proposals/templates/proposals/speaker_list.html:51
 msgctxt "table column title"
@@ -871,10 +991,6 @@ msgstr "Accepter la proposition"
 msgid "Decline the proposal"
 msgstr "Décliner la proposition"
 
-#: proposals/templates/proposals/talk_detail.html:19
-msgid "No abstract provided."
-msgstr "Aucun résumé fourni."
-
 #: proposals/templates/proposals/talk_detail.html:24
 msgid "Format"
 msgstr "Format"
@@ -910,30 +1026,13 @@ msgstr "Vidéo"
 msgid "download"
 msgstr "Télécharger"
 
-#: proposals/templates/proposals/talk_detail.html:74
-msgid "No description provided."
-msgstr "Aucune description fournie."
-
-#: proposals/templates/proposals/talk_detail.html:83
-msgid "No speakers."
-msgstr "Aucun orateur."
-
 #: proposals/templates/proposals/talk_detail.html:94
 msgid "Assign to"
 msgstr "Assigner à"
 
-#: proposals/templates/proposals/talk_detail.html:104
-msgid "No notes."
-msgstr "Aucune note."
-
 #: proposals/templates/proposals/talk_detail.html:108
 msgid "Moderation"
 msgstr "Modération"
-
-#: proposals/templates/proposals/talk_detail.html:110
-#: proposals/templates/proposals/talk_list.html:52
-msgid "Status"
-msgstr "Statut"
 
 #: proposals/templates/proposals/talk_detail.html:115
 msgid "Vote"
@@ -962,19 +1061,6 @@ msgstr "Ces messages sont à destination de la team d’organisation seulement."
 #: proposals/templates/proposals/talk_edit.html:10
 msgid "Edit a talk"
 msgstr "Éditer un exposé"
-
-#: proposals/templates/proposals/talk_list.html:78
-msgid "Accepted"
-msgstr "Accepté"
-
-#: proposals/templates/proposals/talk_list.html:80
-msgid "Declined"
-msgstr "Décliné"
-
-#: proposals/templates/proposals/talk_list.html:82
-#, python-format
-msgid "Pending, score: %(score)s"
-msgstr "En cours, score : %(score)s"
 
 #: proposals/templates/proposals/talk_list.html:95
 msgid "For selected talks:"
@@ -1029,6 +1115,10 @@ msgstr "Ajouter un thème"
 #: proposals/templates/proposals/topic_list.html:21
 msgid "reviewer"
 msgstr "Responsable"
+
+#: proposals/templates/proposals/track_list.html:9
+msgid "Tracks"
+msgstr "Sessions"
 
 #: proposals/templates/proposals/track_list.html:12
 msgid "Add a track"
@@ -1112,6 +1202,13 @@ msgstr ""
 "Nous ne sommes pas encore en recherche de bénévoles … mais revenez plus "
 "tard !"
 
+#: volunteers/templates/volunteers/volunteer_list.html:9
+msgid "Volunteers"
+msgstr "Bénévoles"
+
 #: volunteers/templates/volunteers/volunteer_list.html:25
 msgid "volunteer"
 msgstr "bénévole"
+
+#~ msgid "Conference"
+#~ msgstr "Conférence"

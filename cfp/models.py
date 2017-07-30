@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -17,8 +17,6 @@ from ponyconf.utils import PonyConfModel
 
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
-
-from .utils import query_sum
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -40,6 +38,7 @@ class Conference(models.Model):
     venue = models.TextField(blank=True, default="")
     city = models.CharField(max_length=64, blank=True, default="")
     contact_email = models.CharField(max_length=100, blank=True)
+    staff = models.ManyToManyField(User, verbose_name=_('Staff'), blank=True)
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
@@ -117,15 +116,15 @@ class Participant(PonyConfModel):
     #def talk_set(self):
     #    return self.user.talk_set.filter(site=self.site)
 
-    #@property
-    #def accepted_talk_set(self):
-    #    return self.talk_set.filter(accepted=True)
-    #@property
-    #def pending_talk_set(self):
-    #    return self.talk_set.filter(accepted=None)
-    #@property
-    #def refused_talk_set(self):
-    #    return self.talk_set.filter(accepted=False)
+    @property
+    def accepted_talk_set(self):
+        return self.talk_set.filter(accepted=True)
+    @property
+    def pending_talk_set(self):
+        return self.talk_set.filter(accepted=None)
+    @property
+    def refused_talk_set(self):
+        return self.talk_set.filter(accepted=False)
     #@property
     #def not_refused_talk_set(self): # accepted + pending
     #    return self.talk_set.exclude(accepted=False)
@@ -268,14 +267,11 @@ class Talk(PonyConfModel):
     def estimated_duration(self):
         return self.duration or self.category.duration
 
-    #def get_absolute_url(self):
-    #    return reverse('show-talk', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('talk-details', kwargs={'talk_id': self.token})
 
     def score(self):
-        if self.vote_set.exists():
-            return query_sum(self.vote_set, 'vote') / len(self.vote_set.all())
-        else:
-            return 0
+        return self.vote_set.aggregate(Avg('vote'))['vote__avg'] or 0
 
     @property
     def end_date(self):

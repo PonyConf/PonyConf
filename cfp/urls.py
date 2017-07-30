@@ -3,10 +3,20 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.talk_proposal, name='talk-proposal'),
-    url(r'^(?P<talk_id>[\w\-]+)/speaker/add/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-add'),
-    url(r'^(?P<talk_id>[\w\-]+)/speaker/(?P<participant_id>[\w\-]+)/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-edit'),
-    url(r'^(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/$', views.talk_proposal, name='talk-proposal-edit'),
+    url(r'^$', views.home, name='home'),
+    url(r'^cfp/$', views.talk_proposal, name='talk-proposal'),
+    url(r'^cfp/(?P<talk_id>[\w\-]+)/speaker/add/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-add'),
+    url(r'^cfp/(?P<talk_id>[\w\-]+)/speaker/(?P<participant_id>[\w\-]+)/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-edit'),
+    url(r'^cfp/(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/$', views.talk_proposal, name='talk-proposal-edit'),
+    url(r'^staff/$', views.staff, name='staff'),
+    url(r'^staff/talks/$', views.talk_list, name='talk-list'),
+    url(r'^staff/talks/(?P<talk_id>[\w\-]+)/$', views.talk_details, name='talk-details'),
+    url(r'^staff/talks/(?P<talk_id>[\w\-]+)/vote/(?P<score>[-+0-2]+)/$', views.talk_vote, name='talk-vote'),
+    url(r'^staff/talks/(?P<talk_id>[\w\-]+)/accept/$', views.talk_decide, {'accept': True}, name='talk-accept'),
+    url(r'^staff/talks/(?P<talk_id>[\w\-]+)/decline/$', views.talk_decide, {'accept': False}, name='talk-decline'),
+    url(r'^staff/speakers/$', views.participant_list, name='participant-list'),
+    url(r'^staff/speakers/(?P<participant_id>[\w\-]+)/$', views.participant_details, name='participant-details'),
+
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
     #url(r'^$', views.home, name='home'),
     #url(r'^staff/$', views.staff, name='staff'),

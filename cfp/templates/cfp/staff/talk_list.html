@@ -1,0 +1,54 @@
+{% extends 'cfp/staff/base.html' %}
+{% load bootstrap3 i18n %}
+
+{% block talkstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Talks" %}</h1>
+
+<table class="table table-bordered table-hover">
+    <caption>{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</caption>
+    <thead>
+        <tr>
+            {% comment %}<th></th>{% endcomment %}
+            <th class="text-center">{% trans "Title" %} <a href="?{{ sort_urls.title }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.title }} pull-right"></span></a></th>
+            <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.kind }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.kind }} pull-right"></span></a></th>
+            <th class="text-center">{% trans "Speakers" %}</th>
+            <th class="text-center">{% trans "Track" %}</th>
+            <th class="text-center">{% trans "Status" %} <a href="?{{ sort_urls.status }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.status }} pull-right"></span></a></th>
+        </tr>
+    </thead>
+    {% for talk in talk_list %}
+    {% if forloop.first %}
+    <tbody>
+    {% endif %}
+        <tr class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+            {% comment %}<td><input type="checkbox" name="talks" value="{{ talk.slug }}"></td>{% endcomment %}
+            <td><a href="{% url 'talk-details' talk.token %}">{{ talk.title }}</a></td>
+            <td>{{ talk.category }}</td>
+            <td>
+                {% for participant in talk.speakers.all %}
+                    <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+                    {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+                    {% empty %}–
+                {% endfor %}
+            </td>
+            <td>{{ talk.track|default:"–" }}</td>
+            <td>
+                {% if talk.accepted == True %}
+                    {% trans "Accepted" %}
+                {% elif talk.accepted == False %}
+                    {% trans "Declined" %}
+                {% else %}
+                    {% blocktrans with score=talk.score|floatformat:1 %}Pending, score: {{ score }}{% endblocktrans %}
+                {% endif %}
+            </td>
+        </tr>
+    {% if forloop.last%}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% endblock %}

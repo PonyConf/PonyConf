@@ -1,0 +1,99 @@
+{% extends 'cfp/staff/base.html' %}
+{% load bootstrap3 i18n %}
+
+{% block speakerstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Speakers" %}</h1>
+
+{% comment %}
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a>
+
+<br /><br />
+
+<div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
+    <div class="well">
+        <form class="form-horizontal" method="get">
+            <div class="row">
+                <div class="col-md-6">
+                    {% bootstrap_field filter_form.transport layout="horizontal" %}
+                    {% bootstrap_field filter_form.transport_booked layout="horizontal" %}
+                    {% bootstrap_field filter_form.sound layout="horizontal" %}
+                </div>
+                <div class="col-md-6">
+                    {% bootstrap_field filter_form.accommodation layout="horizontal" %}
+                    {% bootstrap_field filter_form.accommodation_booked layout="horizontal" %}
+                    {% bootstrap_field filter_form.status layout="horizontal" %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {% bootstrap_field filter_form.topic layout="horizontal" %}
+                </div>
+                <div class="col-md-6">
+                    {% bootstrap_field filter_form.track layout="horizontal" %}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
+        </form>
+    </div>
+</div>
+{% endcomment %}
+
+<table class="table table-bordered table-hover">
+    <caption>{% trans "Total:" %} {{ participant_list|length }} {% trans "speaker" %}{{ participant_list|length|pluralize }}
+    </caption>
+    <thead>
+        <tr>
+            <th class="text-center">{% trans "Name" %}</th>
+            <th class="text-center">{% trans "Talk count" %}</th>
+            {% comment %}<th class="text-center"></th>{% endcomment %}
+        </tr>
+    </thead>
+    {% comment %}
+    <tfoot>
+        <tr>
+            <td colspan="7">{% trans "Contact:" %} <a href="{{ contact_link }}">{% trans "link" %}</a></td>
+        </tr>
+    </tfoot>
+    {% endcomment %}
+    {% for participant in participant_list %}
+    {% if forloop.first %}
+    <tbody>
+    {% endif %}
+        <tr>
+            <td><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a></td>
+            <td>
+                <span class="text-success">{% blocktrans count accepted=participant.accepted_talk_set.count %}accepted: {{ accepted }}{% plural %}accepted: {{ accepted }}{% endblocktrans %}</span>
+                —
+                <span class="text-warning">{% blocktrans count pending=participant.pending_talk_set.count %}pending: {{ pending }}{% plural %}pending: {{ pending }}{% endblocktrans %}</span>
+                —
+                <span class="text-danger">{% blocktrans count refused=participant.refused_talk_set.count %}refused: {{ refused }}{% plural %}refused: {{ refused }}{% endblocktrans %}</span>
+            </td>
+            {% comment %}
+            <td>
+                <a class="btn btn-{% if speaker.conversation.messages.last.author == speaker.user %}primary{% else %}default{% endif %}" href="{% url 'user-conversation' speaker.user.username %}">{% trans "Contact" %}</a>
+            </td>
+            {% endcomment %}
+        </tr>
+    {% if forloop.last %}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% endblock %}
+
+{% comment %}
+{% block js_end %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    var anchor = window.location.hash.replace("#", "");
+    if (anchor == "filter") {
+        $("#filter").collapse('show');
+    }
+});
+</script>
+{% endblock %}
+{% endcomment %}

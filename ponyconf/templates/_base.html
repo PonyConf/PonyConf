@@ -8,7 +8,7 @@
 
     {% comment %}<link rel="icon" href="{% static 'favicon.ico' %}">{% endcomment %}
 
-    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    <title>{% block title %}{{ conference.name }}{% endblock %}</title>
 
     {% bootstrap_css %}
     <link href="{% static 'css/ponyconf.css' %}" rel="stylesheet">
@@ -16,8 +16,8 @@
 
     {% block js %}{% endblock %}
 
-    {% if site.conference.external_css_link %}
-    <link href="{{ site.conference.external_css_link }}" rel="stylesheet">
+    {% if conference.external_css_link %}
+    <link href="{{ conference.external_css_link }}" rel="stylesheet">
     {% endif %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
