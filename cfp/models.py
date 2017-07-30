@@ -49,12 +49,12 @@ class Conference(models.Model):
     #    events = Event.objects.filter(site=self.site)
     #    return any(map(lambda x: x.is_open(), events))
 
-    #@property
-    #def opened_events(self):
-    #    now = timezone.now()
-    #    return Event.objects.filter(site=self.site)\
-    #                        .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
-    #                        .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
+    @property
+    def opened_categories(self):
+        now = timezone.now()
+        return TalkCategory.objects.filter(site=self.site)\
+                            .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
+                            .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
 
     def from_email(self):
         return self.name+' <'+self.contact_email+'>'

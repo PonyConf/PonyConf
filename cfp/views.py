@@ -1,6 +1,5 @@
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
-from django.forms.models import modelform_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -8,7 +7,9 @@ from django.views.generic import FormView, TemplateView
 from django.contrib import messages
 
 from cfp.decorators import staff_required
+from .utils import is_staff
 from .models import Participant, Talk, Vote
+from .forms import TalkForm, ParticipantForm
 
 
 def home(request, conference):
@@ -28,10 +29,8 @@ def talk_proposal(request, conference, talk_id=None, participant_id=None):
         talk = get_object_or_404(Talk, token=talk_id, site=site)
         participant = get_object_or_404(Participant, token=participant_id, site=site)
 
-    ParticipantForm = modelform_factory(Participant, fields=('name','email', 'biography'))
     participant_form = ParticipantForm(request.POST or None, instance=participant)
-    TalkForm = modelform_factory(Talk, fields=('category', 'title', 'description','notes'))
-    talk_form = TalkForm(request.POST or None, instance=talk)
+    talk_form = TalkForm(request.POST or None, conference=conference, staff=is_staff(request, request.user), instance=talk)
 
     if request.method == 'POST' and talk_form.is_valid() and participant_form.is_valid():
         talk = talk_form.save(commit=False)
@@ -98,7 +97,6 @@ def talk_proposal_speaker_edit(request, conference, talk_id, participant_id=None
     if participant_id:
         participant = get_object_or_404(Participant, token=participant_id, site=conference.site)
 
-    ParticipantForm = modelform_factory(Participant, fields=('name','email', 'biography'))
     participant_form = ParticipantForm(request.POST or None, instance=participant)
 
     if request.method == 'POST' and participant_form.is_valid():

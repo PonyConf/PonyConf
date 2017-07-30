@@ -9,6 +9,12 @@ from .models import Conference, Participant, Talk, TalkCategory, Track
 class ConferenceAdmin(SiteAdminMixin, admin.ModelAdmin):
     filter_horizontal = ('staff',)
 
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class ParticipantAdmin(SiteAdminMixin, admin.ModelAdmin):
     pass

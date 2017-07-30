@@ -37,4 +37,5 @@ def markdown_to_html(md):
 
   
 def is_staff(request, user):
-    return user.is_authenticated and (user.is_superuser or user in site.conference.staff)
+    conference = get_current_conf(request)
+    return user.is_authenticated and (user.is_superuser or conference.staff.filter(pk=user.pk).exists())
