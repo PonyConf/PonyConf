@@ -17,8 +17,8 @@
       <p>{% trans "You can at anytime:" %}
       <ul>
           <li>{% trans "Edit your talk:" %} <a href="{% url 'talk-proposal-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-edit' talk.token participant.token %}</a></li>
-      <li>{% trans "add an additionnal speaker:" %} <a href="{% url 'talk-proposal-speaker-add' talk.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-add' talk.token %}</a></li>
-      <li>{% trans "You can edit your profile:" %} <a href="{% url 'talk-proposal-speaker-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-edit' talk.token participant.token %}</a></li>
+      <li>{% trans "Add an additionnal speaker:" %} <a href="{% url 'talk-proposal-speaker-add' talk.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-add' talk.token %}</a></li>
+      <li>{% trans "Edit your profile:" %} <a href="{% url 'talk-proposal-speaker-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-edit' talk.token participant.token %}</a></li>
       </ul>
       </p>
       <p>{% trans "An email has been sent to you with those URLs" %}</p>
