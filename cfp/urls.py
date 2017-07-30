@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/decline/$', views.talk_decide, {'accept': False}, name='talk-decline'),
     url(r'^staff/speakers/$', views.participant_list, name='participant-list'),
     url(r'^staff/speakers/(?P<participant_id>[\w\-]+)/$', views.participant_details, name='participant-details'),
+    url(r'^staff/add-user/$', views.create_user, name='create-user'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
 
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),

@@ -12,7 +12,7 @@ from cfp.decorators import staff_required
 from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote
-from .forms import TalkForm, ParticipantForm, ConferenceForm
+from .forms import TalkForm, ParticipantForm, ConferenceForm, CreateUserForm
 
 
 def home(request, conference):
@@ -203,11 +203,26 @@ def conference(request, conference):
     form = ConferenceForm(request.POST or None, instance=conference)
 
     if request.method == 'POST' and form.is_valid():
+        # TODO mail notifications to new staff members
         form.save()
         messages.success(request, _('Modifications successfully saved.'))
         return redirect(reverse('conference'))
 
     return render(request, 'cfp/staff/conference.html', {
+        'form': form,
+    })
+
+
+@staff_required
+def create_user(request, conference):
+    form = CreateUserForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, _('User created successfully.'))
+        return redirect(reverse('create-user'))
+
+    return render(request, 'cfp/staff/create_user.html', {
         'form': form,
     })
 
