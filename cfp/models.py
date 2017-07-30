@@ -33,12 +33,12 @@ from django.utils.translation import ugettext
 class Conference(models.Model):
 
     site = models.OneToOneField(Site, on_delete=models.CASCADE)
-    name = models.CharField(blank=True, max_length=100)
-    home = models.TextField(blank=True, default="")
-    venue = models.TextField(blank=True, default="")
-    city = models.CharField(max_length=64, blank=True, default="")
-    contact_email = models.CharField(max_length=100, blank=True)
-    staff = models.ManyToManyField(User, verbose_name=_('Staff'), blank=True)
+    name = models.CharField(blank=True, max_length=100, verbose_name=_('Conference name'))
+    home = models.TextField(blank=True, default="", verbose_name=_('Homepage (markdown)'))
+    venue = models.TextField(blank=True, default="", verbose_name=_('Venue information'))
+    city = models.CharField(max_length=64, blank=True, default="", verbose_name=_('City'))
+    contact_email = models.CharField(max_length=100, blank=True, verbose_name=_('Contact email'))
+    staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)

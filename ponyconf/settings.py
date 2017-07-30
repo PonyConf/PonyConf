@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'djangobower',
     'bootstrap3',
     #'registration',
-    #'django_select2',
+    'django_select2',
     #'avatar',
     'crispy_forms',
 
@@ -208,6 +208,7 @@ BOOTSTRAP3 = {
 
 SELECT2_JS = 'select2/dist/js/select2.min.js'
 SELECT2_CSS = 'select2/dist/css/select2.min.css'
+SELECT2_I18N_PATH = 'select2/dist/js/i18n'
 
 #AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
 LOGOUT_REDIRECT_URL = 'home'
@@ -221,8 +222,14 @@ INCLUDE_REGISTER_URL = True
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'select2',
+    },
 }
+
+SELECT2_CACHE_BACKEND = 'select2'
 
 SERVER_EMAIL = 'ponyconf@example.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

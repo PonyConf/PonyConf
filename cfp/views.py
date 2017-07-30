@@ -6,10 +6,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 from django.contrib import messages
 
+from django_select2.views import AutoResponseView
+
 from cfp.decorators import staff_required
+from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote
-from .forms import TalkForm, ParticipantForm
+from .forms import TalkForm, ParticipantForm, ConferenceForm
 
 
 def home(request, conference):
@@ -193,3 +196,21 @@ def participant_details(request, conference, participant_id):
     return render(request, 'cfp/staff/participant_details.html', {
         'participant': participant,
     })
+
+
+@staff_required
+def conference(request, conference):
+    form = ConferenceForm(request.POST or None, instance=conference)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, _('Modifications successfully saved.'))
+        return redirect(reverse('conference'))
+
+    return render(request, 'cfp/staff/conference.html', {
+        'form': form,
+    })
+
+
+class Select2View(StaffRequiredMixin, AutoResponseView):
+    pass

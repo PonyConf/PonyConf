@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-30 14:00+0000\n"
+"POT-Creation-Date: 2017-07-30 18:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,7 @@ msgstr "Biographie"
 
 #: accounts/templates/accounts/participant_details.html:27
 #: cfp/templates/cfp/staff/base.html:20
-#: cfp/templates/cfp/staff/participant_details.html:32
+#: cfp/templates/cfp/staff/participant_details.html:31
 #: cfp/templates/cfp/staff/talk_list.html:8
 #: proposals/templates/proposals/talk_list.html:9
 msgid "Talks"
@@ -173,7 +173,7 @@ msgid "Constraints"
 msgstr "Contraintes"
 
 #: accounts/templates/accounts/participant_details.html:71 cfp/models.py:87
-#: cfp/templates/cfp/staff/participant_details.html:27
+#: cfp/templates/cfp/staff/participant_details.html:14
 #: cfp/templates/cfp/staff/talk_details.html:92 proposals/models.py:161
 #: proposals/templates/proposals/talk_detail.html:102
 msgid "Notes"
@@ -214,7 +214,8 @@ msgstr "Changer d’avatar"
 msgid "Submit"
 msgstr "Envoyer"
 
-#: accounts/templates/accounts/profile.html:36 ponyconf/templates/_form.html:16
+#: accounts/templates/accounts/profile.html:36
+#: cfp/templates/cfp/staff/talk_decide.html:27 ponyconf/templates/_form.html:16
 #: proposals/templates/proposals/talk_decide.html:23
 msgid "Cancel"
 msgstr "Annuler"
@@ -286,15 +287,35 @@ msgstr "%(name)s a été ajouté aux participants"
 msgid "%(name)s is already a participant"
 msgstr "%(name)s est déjà participant"
 
-#: cfp/models.py:41 ponyconf/templates/base.html:36
-msgid "Staff"
-msgstr ""
+#: cfp/models.py:36
+msgid "Conference name"
+msgstr "Nom de la conférence"
+
+#: cfp/models.py:37
+msgid "Homepage (markdown)"
+msgstr "Page d’accueil (markdown)"
+
+#: cfp/models.py:38
+msgid "Venue information"
+msgstr "Informations sur le lieu"
+
+#: cfp/models.py:39
+msgid "City"
+msgstr "Ville"
+
+#: cfp/models.py:40
+msgid "Contact email"
+msgstr "Email de contact"
+
+#: cfp/models.py:41
+msgid "Staff members"
+msgstr "Membres du staff"
 
 #: cfp/models.py:70
 msgid "Your Name"
 msgstr "Votre Nom"
 
-#: cfp/models.py:87 cfp/templates/cfp/staff/participant_details.html:28
+#: cfp/models.py:87
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
@@ -383,9 +404,19 @@ msgstr "J’ai besoin de son"
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
+#: cfp/templates/cfp/closed.html:9 cfp/templates/cfp/propose.html:11
+#: cfp/templates/cfp/speaker.html:11
+#: proposals/templates/proposals/participate.html:9
+msgid "Participate"
+msgstr "Participer"
+
+#: cfp/templates/cfp/closed.html:13
+msgid "Sorry, the Call for Participation is closed!"
+msgstr "Désolé, l’appel à participation est fermé."
+
 #: cfp/templates/cfp/complete.html:10
 msgid "Your proposition have been successfully submitted!"
-msgstr "Votre proposition a été transmise avec succès!"
+msgstr "Votre proposition a été transmise avec succès !"
 
 #: cfp/templates/cfp/complete.html:16
 msgid "Thanks for your proposal"
@@ -393,83 +424,84 @@ msgstr "Merci pour votre proposition"
 
 #: cfp/templates/cfp/complete.html:17
 msgid "You can at anytime:"
-msgstr "Vous pouvez à tout moment:"
+msgstr "Vous pouvez à tout moment :"
 
 #: cfp/templates/cfp/complete.html:19
 msgid "Edit your talk:"
 msgstr "Éditer un exposé"
 
 #: cfp/templates/cfp/complete.html:20
-msgid "add an additionnal speaker:"
-msgstr "ajouter un co-speaker:"
+msgid "Add an additionnal speaker:"
+msgstr "Ajouter un co-speaker :"
 
 #: cfp/templates/cfp/complete.html:21
-msgid "You can edit your profile:"
-msgstr "Vous pouvez éditer votre profil:"
+msgid "Edit your profile:"
+msgstr "Éditer votre profil :"
 
 #: cfp/templates/cfp/complete.html:24
 msgid "An email has been sent to you with those URLs"
 msgstr "Un mail vous a été envoyé avec toutes les URLs"
 
-#: cfp/templates/cfp/propose.html:11 cfp/templates/cfp/speaker.html:11
-#: proposals/templates/proposals/participate.html:9
-msgid "Participate"
-msgstr "Participer"
-
 #: cfp/templates/cfp/propose.html:22 cfp/templates/cfp/speaker.html:21
+#: cfp/templates/cfp/staff/conference.html:13
 msgid "Save"
 msgstr "Envoyer"
+
+#: cfp/templates/cfp/staff/base.html:19
+#: cfp/templates/cfp/staff/conference.html:8
+msgid "Conference"
+msgstr "Conférence"
 
 #: cfp/templates/cfp/staff/base.html:29
 msgid "Please select a category."
 msgstr "Veuillez sélectionner une catégorie."
 
-#: cfp/templates/cfp/staff/participant_details.html:13
+#: cfp/templates/cfp/staff/participant_details.html:18
 msgid "Informations"
 msgstr "Informations"
 
-#: cfp/templates/cfp/staff/participant_details.html:15
+#: cfp/templates/cfp/staff/participant_details.html:20
 msgid "E-mail:"
 msgstr "E-mail :"
 
-#: cfp/templates/cfp/staff/participant_details.html:16
+#: cfp/templates/cfp/staff/participant_details.html:21
 msgid "Twitter:"
 msgstr "Twitter :"
 
-#: cfp/templates/cfp/staff/participant_details.html:17
+#: cfp/templates/cfp/staff/participant_details.html:22
 msgid "LinkedIn:"
 msgstr "LinkedIn :"
 
-#: cfp/templates/cfp/staff/participant_details.html:18
+#: cfp/templates/cfp/staff/participant_details.html:23
 msgid "Github:"
 msgstr "Github :"
 
-#: cfp/templates/cfp/staff/participant_details.html:19
+#: cfp/templates/cfp/staff/participant_details.html:24
 msgid "Website:"
 msgstr "Website :"
 
-#: cfp/templates/cfp/staff/participant_details.html:20
+#: cfp/templates/cfp/staff/participant_details.html:25
 msgid "Facebook:"
 msgstr "Facebook :"
 
-#: cfp/templates/cfp/staff/participant_details.html:21
+#: cfp/templates/cfp/staff/participant_details.html:26
 msgid "Mastodon:"
 msgstr "Mastodon :"
 
-#: cfp/templates/cfp/staff/participant_details.html:22
+#: cfp/templates/cfp/staff/participant_details.html:27
 msgid "Phone number:"
 msgstr "Numéro de téléphone :"
 
-#: cfp/templates/cfp/staff/participant_details.html:23
+#: cfp/templates/cfp/staff/participant_details.html:28
 msgid "Language:"
 msgstr "Langue :"
 
-#: cfp/templates/cfp/staff/participant_details.html:39
+#: cfp/templates/cfp/staff/participant_details.html:38
 #: proposals/templates/proposals/_talk_list.html:8
 msgid "by"
 msgstr "par"
 
-#: cfp/templates/cfp/staff/participant_details.html:42
+#: cfp/templates/cfp/staff/participant_details.html:41
 #: cfp/templates/cfp/staff/talk_list.html:35
 #: proposals/templates/proposals/_talk_list.html:11
 #: proposals/templates/proposals/_talk_list.html:17
@@ -477,12 +509,12 @@ msgstr "par"
 msgid "and"
 msgstr "et"
 
-#: cfp/templates/cfp/staff/participant_details.html:45
+#: cfp/templates/cfp/staff/participant_details.html:44
 #: proposals/templates/proposals/_talk_list.html:14
 msgid "in"
 msgstr "dans la session"
 
-#: cfp/templates/cfp/staff/participant_details.html:51
+#: cfp/templates/cfp/staff/participant_details.html:50
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
 msgstr "Aucun exposé"
@@ -526,6 +558,41 @@ msgid_plural "refused: %(refused)s"
 msgstr[0] "refusé : %(refused)s"
 msgstr[1] "refusés : %(refused)s"
 
+#: cfp/templates/cfp/staff/talk_decide.html:8
+#: proposals/templates/proposals/talk_decide.html:9
+msgid "Are you sure to accept this proposals?"
+msgstr "Êtes-vous sûr d’accepter cette propositon d’intervention ?"
+
+#: cfp/templates/cfp/staff/talk_decide.html:8
+#: proposals/templates/proposals/talk_decide.html:9
+msgid "Are you sure to decline this proposals?"
+msgstr "Êtes-vous sûr de décliner cette propositon d’intervention ?"
+
+#: cfp/templates/cfp/staff/talk_decide.html:10
+#: proposals/templates/proposals/talk_decide.html:11
+msgid "Information about the proposals"
+msgstr "Information sur la propositon d’intervention"
+
+#: cfp/templates/cfp/staff/talk_decide.html:11
+#: proposals/templates/proposals/talk_decide.html:12
+msgid "Title:"
+msgstr "Titre :"
+
+#: cfp/templates/cfp/staff/talk_decide.html:12
+#: proposals/templates/proposals/talk_decide.html:13
+msgid "Kind:"
+msgstr "Type d’intervention :"
+
+#: cfp/templates/cfp/staff/talk_decide.html:26
+#: proposals/templates/proposals/talk_decide.html:22
+msgid "Accept the proposal"
+msgstr "Accepter la proposition"
+
+#: cfp/templates/cfp/staff/talk_decide.html:26
+#: proposals/templates/proposals/talk_decide.html:22
+msgid "Decline the proposal"
+msgstr "Décliner la proposition"
+
 #: cfp/templates/cfp/staff/talk_details.html:16
 #: proposals/templates/proposals/talk_detail.html:19
 msgid "No abstract provided."
@@ -551,6 +618,33 @@ msgstr "Pas encore assignée."
 msgid "No notes."
 msgstr "Aucune note."
 
+#: cfp/templates/cfp/staff/talk_details.html:96
+#: proposals/templates/proposals/talk_detail.html:108
+msgid "Moderation"
+msgstr "Modération"
+
+#: cfp/templates/cfp/staff/talk_details.html:98
+#: cfp/templates/cfp/staff/talk_list.html:20
+#: proposals/templates/proposals/talk_detail.html:110
+#: proposals/templates/proposals/talk_list.html:52
+msgid "Status"
+msgstr "Statut"
+
+#: cfp/templates/cfp/staff/talk_details.html:103
+#: proposals/templates/proposals/talk_detail.html:115
+msgid "Vote"
+msgstr "Vote"
+
+#: cfp/templates/cfp/staff/talk_details.html:112
+#: proposals/templates/proposals/talk_detail.html:124
+msgid "vote"
+msgstr "vote"
+
+#: cfp/templates/cfp/staff/talk_details.html:112
+#: proposals/templates/proposals/talk_detail.html:124
+msgid "average:"
+msgstr "moyenne :"
+
 #: cfp/templates/cfp/staff/talk_list.html:11
 #: planning/templates/planning/room_list.html:28
 #: proposals/templates/proposals/talk_list.html:43
@@ -569,12 +663,6 @@ msgstr "Titre"
 msgid "Intervention kind"
 msgstr "Type d’intervention"
 
-#: cfp/templates/cfp/staff/talk_list.html:20
-#: proposals/templates/proposals/talk_detail.html:110
-#: proposals/templates/proposals/talk_list.html:52
-msgid "Status"
-msgstr "Statut"
-
 #: cfp/templates/cfp/staff/talk_list.html:42
 #: proposals/templates/proposals/talk_list.html:78
 msgid "Accepted"
@@ -591,11 +679,11 @@ msgstr "Décliné"
 msgid "Pending, score: %(score)s"
 msgstr "En cours, score : %(score)s"
 
-#: cfp/views.py:53
+#: cfp/views.py:62
 msgid "Your talk \"{}\" has been submitted for {}"
 msgstr "Votre proposition \"{}\" a été transmise à {}"
 
-#: cfp/views.py:54
+#: cfp/views.py:63
 msgid ""
 "Hi {},\n"
 "\n"
@@ -634,6 +722,24 @@ msgstr ""
 "\n"
 "{}\n"
 "\n"
+
+#: cfp/views.py:154 proposals/views.py:321
+msgid "Vote successfully created"
+msgstr "A voté !"
+
+#: cfp/views.py:154 proposals/views.py:321
+msgid "Vote successfully updated"
+msgstr "Vote mis à jour"
+
+#: cfp/views.py:177 proposals/views.py:347
+msgid "Decision taken in account"
+msgstr "Décision enregistrée"
+
+#: cfp/views.py:207
+#, fuzzy
+#| msgid "Vote successfully created"
+msgid "Modifications successfully saved."
+msgstr "A voté !"
 
 #: conversations/templates/conversations/_message_form.html:4
 msgid "Send a message"
@@ -727,6 +833,10 @@ msgstr "Accueil"
 #: ponyconf/templates/base.html:23
 msgid "Call for participation"
 msgstr "Appel à participation"
+
+#: ponyconf/templates/base.html:36
+msgid "Staff"
+msgstr ""
 
 #: ponyconf/templates/base.html:50
 #: ponyconf/templates/registration/login.html:10
@@ -950,26 +1060,6 @@ msgstr "Contacter :"
 msgid "link"
 msgstr "lien"
 
-#: proposals/templates/proposals/talk_decide.html:9
-msgid "Are you sure to accept this proposals?"
-msgstr "Êtes-vous sûr d’accepter cette propositon d’intervention ?"
-
-#: proposals/templates/proposals/talk_decide.html:9
-msgid "Are you sure to decline this proposals?"
-msgstr "Êtes-vous sûr de décliner cette propositon d’intervention ?"
-
-#: proposals/templates/proposals/talk_decide.html:11
-msgid "Information about the proposals"
-msgstr "Information sur la propositon d’intervention"
-
-#: proposals/templates/proposals/talk_decide.html:12
-msgid "Title:"
-msgstr "Titre :"
-
-#: proposals/templates/proposals/talk_decide.html:13
-msgid "Kind:"
-msgstr "Type d’intervention :"
-
 #: proposals/templates/proposals/talk_decide.html:15
 msgid "Information for the proposer"
 msgstr "Information à destination de l’auteur de la proposition"
@@ -982,14 +1072,6 @@ msgstr ""
 "Si vous souhaitez envoyer un message à l’auteur de la proposition, saisissez-"
 "le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
 "d’intervention votre message fait référence."
-
-#: proposals/templates/proposals/talk_decide.html:22
-msgid "Accept the proposal"
-msgstr "Accepter la proposition"
-
-#: proposals/templates/proposals/talk_decide.html:22
-msgid "Decline the proposal"
-msgstr "Décliner la proposition"
 
 #: proposals/templates/proposals/talk_detail.html:24
 msgid "Format"
@@ -1029,22 +1111,6 @@ msgstr "Télécharger"
 #: proposals/templates/proposals/talk_detail.html:94
 msgid "Assign to"
 msgstr "Assigner à"
-
-#: proposals/templates/proposals/talk_detail.html:108
-msgid "Moderation"
-msgstr "Modération"
-
-#: proposals/templates/proposals/talk_detail.html:115
-msgid "Vote"
-msgstr "Vote"
-
-#: proposals/templates/proposals/talk_detail.html:124
-msgid "vote"
-msgstr "vote"
-
-#: proposals/templates/proposals/talk_detail.html:124
-msgid "average:"
-msgstr "moyenne :"
 
 #: proposals/templates/proposals/talk_detail.html:138
 msgid "No attendees yet."
@@ -1151,18 +1217,6 @@ msgstr "Exposé proposé avec succès !"
 msgid "Talk assigned to track successfully!"
 msgstr "Exposé assigné à la session avec succès !"
 
-#: proposals/views.py:321
-msgid "Vote successfully created"
-msgstr "A voté !"
-
-#: proposals/views.py:321
-msgid "Vote successfully updated"
-msgstr "Vote mis à jour"
-
-#: proposals/views.py:347
-msgid "Decision taken in account"
-msgstr "Décision enregistrée"
-
 #: proposals/views.py:445
 msgid "Unregistered :-("
 msgstr "Vous avez été désinscrit :-("
@@ -1209,6 +1263,3 @@ msgstr "Bénévoles"
 #: volunteers/templates/volunteers/volunteer_list.html:25
 msgid "volunteer"
 msgstr "bénévole"
-
-#~ msgid "Conference"
-#~ msgstr "Conférence"
