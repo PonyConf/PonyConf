@@ -8,7 +8,12 @@
 <h1>{{ participant }}</h1>
 
 <h2>{% trans "Biography" %}</h2>
-<p>{{ participant.biography }}</p>
+<p>{{ participant.biography|linebreaksbr }}</p>
+
+{% if participant.notes %}
+<h2>{% trans "Notes" %}</h2>
+<p>{{ participant.notes|linebreaksbr }}</p>
+{% endif %}
 
 <h2>{% trans "Informations" %}</h2>
 <ul>
@@ -22,12 +27,6 @@
     {% if participant.phone_number %}<li><b>{% trans "Phone number:" %}</b> {{ participant.phone_number }}</li>{% endif %}
     {% if participant.language %}<li><b>{% trans "Language:" %}</b> {{ participant.language }}</li>{% endif %}
 </ul>
-
-{% if participant.notes %}
-<h2>{% trans "Notes" %}</h2>
-<em>{% trans "This field is only visible by organizers." %}</em>
-<p>{{ participant.notes }}</p>
-{% endif %}
 
 <h2>{% trans "Talks" %}</h2>
 {% regroup participant.talk_set.all by category as category_list %}
