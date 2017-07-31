@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-31 21:38+0000\n"
+"POT-Creation-Date: 2017-07-31 23:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,11 +288,16 @@ msgstr "%(name)s a été ajouté aux participants"
 msgid "%(name)s is already a participant"
 msgstr "%(name)s est déjà participant"
 
-#: cfp/forms.py:55
+#: cfp/forms.py:44
+msgid "New staff members will be informed of their new position by e-mail."
+msgstr ""
+"Les nouveaux membres du staff seront informés de leur nouveau rôle par courrier électronique."
+
+#: cfp/forms.py:64
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:60
+#: cfp/forms.py:69
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -751,10 +756,38 @@ msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
 #: cfp/views.py:214
+msgid "[{}] You have been added to the staff team"
+msgstr "[{}] Vous avez été ajouté aux membres du staff"
+
+#: cfp/views.py:215
+msgid ""
+"Hi {},\n"
+"\n"
+"You have been added to the staff team.\n"
+"\n"
+"You can now:\n"
+"- login: {}\n"
+"- reset your password: {}\n"
+"\n"
+"{}\n"
+"\n"
+msgstr ""
+"Bonjour {},\n"
+"\n"
+"Vous avez été ajouté à l’équipe d’organisation.\n"
+"\n"
+"Vous pouvez à présent :\n"
+"- vous connecter : {}\n"
+"- réinitialiser votre mot de passe : {}\n"
+"\n"
+"{}\n"
+"\n"
+
+#: cfp/views.py:235
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:228
+#: cfp/views.py:249
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
@@ -873,7 +906,7 @@ msgstr "Mot de passe oublié ?"
 msgid "Password Change"
 msgstr "Changement de mot de passe"
 
-#: ponyconf/urls.py:27
+#: ponyconf/urls.py:26
 msgid "Email address"
 msgstr ""
 

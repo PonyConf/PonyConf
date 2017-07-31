@@ -203,8 +203,35 @@ def conference(request, conference):
     form = ConferenceForm(request.POST or None, instance=conference)
 
     if request.method == 'POST' and form.is_valid():
-        # TODO mail notifications to new staff members
-        form.save()
+        old_staff = set(conference.staff.all())
+        new_conference = form.save()
+        new_staff = set(new_conference.staff.all())
+        added_staff = new_staff - old_staff
+        protocol = 'http' if request.is_secure() else 'http'
+        base_url = protocol+'://'+conference.site.domain
+        url_login = base_url + reverse('login')
+        url_password_reset = base_url + reverse('password_reset')
+        msg_title = _('[{}] You have been added to the staff team').format(conference.name)
+        msg_body_template = _("""Hi {},
+
+You have been added to the staff team.
+
+You can now:
+- login: {}
+- reset your password: {}
+
+{}
+
+""")
+        for user in added_staff:
+            msg_body = msg_body_template.format(user.get_full_name(), url_login, url_password_reset, conference.name)
+            send_mail(
+                msg_title,
+                msg_body,
+                conference.from_email(),
+                [user.email],
+                fail_silently=False,
+            )
         messages.success(request, _('Modifications successfully saved.'))
         return redirect(reverse('conference'))
 

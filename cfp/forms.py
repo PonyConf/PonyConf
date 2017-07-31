@@ -33,7 +33,16 @@ class UsersWidget(ModelSelect2MultipleWidget):
     search_fields = [ '%s__icontains' % field for field in UserAdmin.search_fields ]
 
 
-ConferenceForm = modelform_factory(Conference, fields=['name', 'home', 'venue', 'city', 'contact_email', 'staff',], widgets={'staff': UsersWidget(),})
+class ConferenceForm(forms.ModelForm):
+    class Meta:
+        model = Conference
+        fields = ['name', 'home', 'venue', 'city', 'contact_email', 'staff',]
+        widgets = {
+            'staff': UsersWidget(),
+        }
+        help_texts = {
+            'staff': _('New staff members will be informed of their new position by e-mail.'),
+        }
 
 
 class CreateUserForm(forms.ModelForm):
