@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import ugettext as _
+from django.template.defaultfilters import slugify
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
@@ -38,8 +39,20 @@ ConferenceForm = modelform_factory(Conference, fields=['name', 'home', 'venue', 
 class CreateUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("username", "email")
-        field_classes = {'username': UsernameField}
+        fields = ("first_name", "last_name", "email")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+
+    def clean(self):
+        super().clean()
+        user = User(first_name=self.cleaned_data.get('first_name'), last_name=self.cleaned_data.get('last_name'))
+        username = slugify(user.get_full_name())
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError(_('An user with that firstname and lastname already exists.'))
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -49,6 +62,7 @@ class CreateUserForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.username = slugify(user.get_full_name())
         user.set_unusable_password()
         if commit:
             user.save()
