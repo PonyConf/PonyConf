@@ -54,7 +54,7 @@ def talk_proposal(request, conference, talk_id=None, participant_id=None):
         talk.save()
         talk.speakers.add(participant)
 
-        protocol = 'http' if request.is_secure() else 'http'
+        protocol = 'https' if request.is_secure() else 'http'
         base_url = protocol+'://'+site.domain
         url_talk_proposal_edit = base_url + reverse('talk-proposal-edit', args=[talk.token, participant.token])
         url_talk_proposal_speaker_add = base_url + reverse('talk-proposal-speaker-add', args=[talk.token])
@@ -207,7 +207,7 @@ def conference(request, conference):
         new_conference = form.save()
         new_staff = set(new_conference.staff.all())
         added_staff = new_staff - old_staff
-        protocol = 'http' if request.is_secure() else 'http'
+        protocol = 'https' if request.is_secure() else 'http'
         base_url = protocol+'://'+conference.site.domain
         url_login = base_url + reverse('login')
         url_password_reset = base_url + reverse('password_reset')
