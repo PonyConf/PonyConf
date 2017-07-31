@@ -15,10 +15,24 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
+from django.utils.translation import ugettext_lazy as _
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = _('Email address')
+
+
+class EmailLoginView(LoginView):
+    authentication_form = EmailAuthenticationForm
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'accounts/login/', EmailLoginView.as_view()),
     url(r'accounts/', include('django.contrib.auth.urls')),
     url(r'^', include('cfp.urls')),
 ]

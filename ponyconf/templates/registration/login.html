@@ -17,11 +17,11 @@
         {% bootstrap_form_errors form layout="horizontal" %}
         <form method="post" class="form-horizontal">
             {% csrf_token %}
-            {% bootstrap_field form.username layout="horizontal" placeholder="Nom d’utilisateur, e-mail ou numéro d’adhérent" %}
+            {% bootstrap_field form.username layout="horizontal" %}
             {% bootstrap_field form.password layout="horizontal" %}
             {% buttons layout="horizontal" %}
-                <button type="submit" class="btn btn-primary">Login</button>
-                <a class="btn btn-default" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+                <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+                <a class="btn btn-default" href="{% url 'password_reset' %}">{% trans "Forgot password?" %}</a>
             {% endbuttons %}
         </form>
       </div>

@@ -52,7 +52,7 @@ class CreateUserForm(forms.ModelForm):
         user = User(first_name=self.cleaned_data.get('first_name'), last_name=self.cleaned_data.get('last_name'))
         username = slugify(user.get_full_name())
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError(_('An user with that firstname and lastname already exists.'))
+            raise forms.ValidationError(_('An user with that firstname and that lastname already exists.'))
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

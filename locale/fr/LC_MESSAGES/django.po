@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-30 19:44+0000\n"
+"POT-Creation-Date: 2017-07-31 21:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,7 +288,11 @@ msgstr "%(name)s a été ajouté aux participants"
 msgid "%(name)s is already a participant"
 msgstr "%(name)s est déjà participant"
 
-#: cfp/forms.py:47
+#: cfp/forms.py:55
+msgid "An user with that firstname and that lastname already exists."
+msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
+
+#: cfp/forms.py:60
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -448,7 +452,7 @@ msgid "An email has been sent to you with those URLs"
 msgstr "Un mail vous a été envoyé avec toutes les URLs"
 
 #: cfp/templates/cfp/propose.html:22 cfp/templates/cfp/speaker.html:21
-#: cfp/templates/cfp/staff/conference.html:13
+#: cfp/templates/cfp/staff/conference.html:14
 #: cfp/templates/cfp/staff/create_user.html:13
 msgid "Save"
 msgstr "Envoyer"
@@ -462,6 +466,7 @@ msgstr "Conférence"
 msgid "Please select a category."
 msgstr "Veuillez sélectionner une catégorie."
 
+#: cfp/templates/cfp/staff/conference.html:13
 #: cfp/templates/cfp/staff/create_user.html:8
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
@@ -745,11 +750,11 @@ msgstr "Vote mis à jour"
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:208
+#: cfp/views.py:214
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:222
+#: cfp/views.py:228
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
@@ -830,11 +835,11 @@ msgstr "Certains exposés ne sont pas encore planifiés."
 msgid "No rooms."
 msgstr "Aucune salle."
 
-#: ponyconf/settings.py:145
+#: ponyconf/settings.py:147
 msgid "English"
 msgstr "Anglais"
 
-#: ponyconf/settings.py:146
+#: ponyconf/settings.py:148
 msgid "French"
 msgstr "Français"
 
@@ -852,6 +857,7 @@ msgstr "Staff"
 
 #: ponyconf/templates/base.html:50
 #: ponyconf/templates/registration/login.html:10
+#: ponyconf/templates/registration/login.html:23
 msgid "Login"
 msgstr "Se connecter"
 
@@ -859,9 +865,17 @@ msgstr "Se connecter"
 msgid "Powered by"
 msgstr "Propulsé par"
 
+#: ponyconf/templates/registration/login.html:24
+msgid "Forgot password?"
+msgstr "Mot de passe oublié ?"
+
 #: ponyconf/templates/registration/password_change_form.html:9
 msgid "Password Change"
 msgstr "Changement de mot de passe"
+
+#: ponyconf/urls.py:27
+msgid "Email address"
+msgstr ""
 
 #: proposals/forms.py:46
 msgid "Should be less than 255 characters"

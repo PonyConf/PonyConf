@@ -210,7 +210,10 @@ SELECT2_JS = 'select2/dist/js/select2.min.js'
 SELECT2_CSS = 'select2/dist/css/select2.min.css'
 SELECT2_I18N_PATH = 'select2/dist/js/i18n'
 
-#AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'ponyconf.backends.EmailBackend',
+]
 LOGOUT_REDIRECT_URL = 'home'
 
 CRISPY_TEMPLATE_PACK='bootstrap3'
