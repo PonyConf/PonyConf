@@ -68,6 +68,10 @@
 {% endif %}
 {% endcomment %}
 
+<h3>{% trans "Category" %}</h3>
+
+<p>{{ talk.category }}</p>
+
 <h3>{% trans "Description" %}</h3>
 
 <p>{% if talk.description %}{{ talk.description|linebreaksbr }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</p>

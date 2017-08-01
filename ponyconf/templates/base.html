@@ -43,9 +43,9 @@
             <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp; Administration</a></li>
             {% endif %}
             {% endcomment %}
-            <li><a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="bottom" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
+            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;{% trans "Logout" %}</a></li>
             {% else %}
-            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Login" %}</a></li>
+            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Staff" %}</a></li>
             {% endif %}
           </ul>
         </div>

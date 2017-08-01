@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-31 23:09+0000\n"
+"POT-Creation-Date: 2017-08-01 11:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgstr "Contraintes"
 
 #: accounts/templates/accounts/participant_details.html:71 cfp/models.py:87
 #: cfp/templates/cfp/staff/participant_details.html:14
-#: cfp/templates/cfp/staff/talk_details.html:92 proposals/models.py:161
+#: cfp/templates/cfp/staff/talk_details.html:96 proposals/models.py:161
 #: proposals/templates/proposals/talk_detail.html:102
 msgid "Notes"
 msgstr "Notes"
@@ -291,7 +291,8 @@ msgstr "%(name)s est déjà participant"
 #: cfp/forms.py:44
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
-"Les nouveaux membres du staff seront informés de leur nouveau rôle par courrier électronique."
+"Les nouveaux membres du staff seront informés de leur nouveau rôle par "
+"courrier électronique."
 
 #: cfp/forms.py:64
 msgid "An user with that firstname and that lastname already exists."
@@ -339,7 +340,7 @@ msgstr "Ce champs est uniquement visible par les organisateurs."
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/models.py:139 cfp/templates/cfp/staff/talk_details.html:71
+#: cfp/models.py:139 cfp/templates/cfp/staff/talk_details.html:75
 #: proposals/models.py:54 proposals/models.py:77 proposals/models.py:158
 #: proposals/templates/proposals/talk_detail.html:72 volunteers/models.py:14
 msgid "Description"
@@ -359,7 +360,7 @@ msgstr "Label dans le xml du programme"
 
 #: cfp/models.py:229 cfp/templates/cfp/staff/base.html:20
 #: cfp/templates/cfp/staff/participant_list.html:8
-#: cfp/templates/cfp/staff/talk_details.html:75
+#: cfp/templates/cfp/staff/talk_details.html:79
 #: cfp/templates/cfp/staff/talk_list.html:18 proposals/models.py:154
 #: proposals/templates/proposals/speaker_list.html:9
 #: proposals/templates/proposals/talk_detail.html:76
@@ -375,7 +376,7 @@ msgstr "Titre de votre proposition:"
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:234 cfp/templates/cfp/staff/talk_details.html:85
+#: cfp/models.py:234 cfp/templates/cfp/staff/talk_details.html:89
 #: cfp/templates/cfp/staff/talk_list.html:19 proposals/models.py:160
 #: proposals/templates/proposals/talk_detail.html:33
 #: proposals/templates/proposals/talk_detail.html:89
@@ -618,49 +619,53 @@ msgstr "Décliner la proposition"
 msgid "No abstract provided."
 msgstr "Aucun résumé fourni."
 
-#: cfp/templates/cfp/staff/talk_details.html:73
+#: cfp/templates/cfp/staff/talk_details.html:71
+msgid "Category"
+msgstr "Catégorie"
+
+#: cfp/templates/cfp/staff/talk_details.html:77
 #: proposals/templates/proposals/talk_detail.html:74
 msgid "No description provided."
 msgstr "Aucune description fournie."
 
-#: cfp/templates/cfp/staff/talk_details.html:82
+#: cfp/templates/cfp/staff/talk_details.html:86
 #: proposals/templates/proposals/talk_detail.html:83
 msgid "No speakers."
 msgstr "Aucun orateur."
 
-#: cfp/templates/cfp/staff/talk_details.html:89
+#: cfp/templates/cfp/staff/talk_details.html:93
 msgctxt "session"
 msgid "No assigned yet."
 msgstr "Pas encore assignée."
 
-#: cfp/templates/cfp/staff/talk_details.html:94
+#: cfp/templates/cfp/staff/talk_details.html:98
 #: proposals/templates/proposals/talk_detail.html:104
 msgid "No notes."
 msgstr "Aucune note."
 
-#: cfp/templates/cfp/staff/talk_details.html:96
+#: cfp/templates/cfp/staff/talk_details.html:100
 #: proposals/templates/proposals/talk_detail.html:108
 msgid "Moderation"
 msgstr "Modération"
 
-#: cfp/templates/cfp/staff/talk_details.html:98
+#: cfp/templates/cfp/staff/talk_details.html:102
 #: cfp/templates/cfp/staff/talk_list.html:20
 #: proposals/templates/proposals/talk_detail.html:110
 #: proposals/templates/proposals/talk_list.html:52
 msgid "Status"
 msgstr "Statut"
 
-#: cfp/templates/cfp/staff/talk_details.html:103
+#: cfp/templates/cfp/staff/talk_details.html:107
 #: proposals/templates/proposals/talk_detail.html:115
 msgid "Vote"
 msgstr "Vote"
 
-#: cfp/templates/cfp/staff/talk_details.html:112
+#: cfp/templates/cfp/staff/talk_details.html:116
 #: proposals/templates/proposals/talk_detail.html:124
 msgid "vote"
 msgstr "vote"
 
-#: cfp/templates/cfp/staff/talk_details.html:112
+#: cfp/templates/cfp/staff/talk_details.html:116
 #: proposals/templates/proposals/talk_detail.html:124
 msgid "average:"
 msgstr "moyenne :"
@@ -884,21 +889,31 @@ msgstr "Accueil"
 msgid "Call for participation"
 msgstr "Appel à participation"
 
-#: ponyconf/templates/base.html:36
+#: ponyconf/templates/base.html:36 ponyconf/templates/base.html:50
 msgid "Staff"
 msgstr "Staff"
 
-#: ponyconf/templates/base.html:50
-#: ponyconf/templates/registration/login.html:10
-#: ponyconf/templates/registration/login.html:23
-msgid "Login"
-msgstr "Se connecter"
+#: ponyconf/templates/base.html:48
+msgid "Logout"
+msgstr ""
 
 #: ponyconf/templates/base.html:67
 msgid "Powered by"
 msgstr "Propulsé par"
 
+#: ponyconf/templates/registration/login.html:10
+msgid "Staff area"
+msgstr "Espace organisateurs"
+
+#: ponyconf/templates/registration/login.html:12
+msgid "Please login to access staff area."
+msgstr "Veuillez vous connecter pour accéder à l’espace organisateurs."
+
 #: ponyconf/templates/registration/login.html:24
+msgid "Login"
+msgstr "Se connecter"
+
+#: ponyconf/templates/registration/login.html:25
 msgid "Forgot password?"
 msgstr "Mot de passe oublié ?"
 
