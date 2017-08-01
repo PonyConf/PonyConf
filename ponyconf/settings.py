@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     #'accounts',
     'ponyconf',
     'cfp',
+    'mailing',
     #'proposals',
     #'conversations',
     #'planning',
@@ -237,5 +238,5 @@ SELECT2_CACHE_BACKEND = 'select2'
 SERVER_EMAIL = 'ponyconf@example.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+EMAIL_PORT = 25
 

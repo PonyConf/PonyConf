@@ -50,4 +50,11 @@
 {% empty %}{% trans "No talks" %}
 {% endfor %}
 
+<h2>{% trans "Messaging" %}</h2>
+
+{% include 'mailing/_message_list.html' with messages=participant.conversation.message_set.all %}
+
+{% trans "Send a message – <em>this message will be received by this participant and all the staff team</em>" as message_form_title %}
+{% include 'mailing/_message_form.html' %}
+
 {% endblock %}

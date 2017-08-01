@@ -134,14 +134,11 @@
 {% endif %}
 {% endcomment %}
 
-{% comment %}
-<h3>{% trans "Messages" %}</h3>
-{% trans "These messages are for organization team only." %}<br /><br />
-{% for message in talk.conversation.messages.all %}
-{% include 'conversations/_message_detail.html' %}
-{% endfor %}
+<h3>{% trans "Messaging" %}</h3>
 
-{% include 'conversations/_message_form.html' %}
-{% endcomment %}
+{% include 'mailing/_message_list.html' with messages=talk.conversation.message_set.all %}
+
+{% trans "Send a message – <em>this message will be received by the staff team only</em>" as message_form_title %}
+{% include 'mailing/_message_form.html' %}
 
 {% endblock %}

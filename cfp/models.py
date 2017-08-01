@@ -1,32 +1,21 @@
-
-import uuid
-
-from datetime import timedelta
-
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, Avg, Case, When
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
 from django.utils import timezone
-
-from ponyconf.utils import PonyConfModel
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
 
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
+import uuid
+from datetime import timedelta
 
-
-#from ponyconf.utils import PonyConfModel, enum_to_choices
+from ponyconf.utils import PonyConfModel
+from mailing.models import MessageThread
 
 
 
@@ -38,6 +27,7 @@ class Conference(models.Model):
     venue = models.TextField(blank=True, default="", verbose_name=_('Venue information'))
     city = models.CharField(max_length=64, blank=True, default="", verbose_name=_('City'))
     contact_email = models.CharField(max_length=100, blank=True, verbose_name=_('Contact email'))
+    reply_email = models.CharField(max_length=100, blank=True, verbose_name=_('Reply email'))
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
 
     custom_css = models.TextField(blank=True)
@@ -58,6 +48,16 @@ class Conference(models.Model):
 
     def from_email(self):
         return self.name+' <'+self.contact_email+'>'
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude)
+        if self.reply_email is not None:
+            try:
+                self.reply_email.format(token='a' * 80)
+            except Exception:
+                raise ValidationError({
+                    'reply_email': _('The reply email should be a formatable string accepting a token argument (e.g. ponyconf+{token}@exemple.com).'),
+                })
 
     def __str__(self):
         return str(self.site)
@@ -87,6 +87,8 @@ class Participant(PonyConfModel):
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"), help_text=_('This field is only visible by organizers.'))
 
     vip = models.BooleanField(default=False)
+
+    conversation = models.OneToOneField(MessageThread)
 
     class Meta:
         # A User can participe only once to a Conference (= Site)
@@ -253,6 +255,8 @@ class Talk(PonyConfModel):
     #                             help_text=_('You can use this field to share some materials related to your intervention.'))
 
     token = models.UUIDField(default=uuid.uuid4, editable=False)
+
+    conversation = models.OneToOneField(MessageThread)
 
 
     objects = TalkManager()

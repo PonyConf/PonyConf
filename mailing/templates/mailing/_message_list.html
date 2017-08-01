@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% for message in messages %}
+<div class="panel panel-{% if message.author == participant.email %}info{% else %}default{% endif %}">
+  <div class="panel-heading">
+    {{ message.created }} | {{ message.author }}
+  </div>
+  <div class="panel-body">
+    {{ message.content|linebreaksbr }}
+  </div>
+</div>
+{% empty %}
+<p><em>{% trans "No messages." %}</em></p>
+{% endfor %}

@@ -11,7 +11,9 @@ from django_select2.views import AutoResponseView
 
 from functools import reduce
 
-from cfp.decorators import staff_required
+from mailing.models import Message
+from mailing.forms import MessageForm
+from .decorators import staff_required
 from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote
@@ -62,8 +64,7 @@ def talk_proposal(request, conference, talk_id=None, participant_id=None):
         url_talk_proposal_edit = base_url + reverse('talk-proposal-edit', args=[talk.token, participant.token])
         url_talk_proposal_speaker_add = base_url + reverse('talk-proposal-speaker-add', args=[talk.token])
         url_talk_proposal_speaker_edit = base_url + reverse('talk-proposal-speaker-edit', args=[talk.token, participant.token])
-        msg_title = _('Your talk "{}" has been submitted for {}').format(talk.title, conference.name)
-        msg_body = _("""Hi {},
+        body = _("""Hi {},
 
 Your talk has been submitted for {}.
 
@@ -84,12 +85,10 @@ Thanks!
 
 """).format(participant.name, conference.name, talk.title, talk.description, url_talk_proposal_edit, url_talk_proposal_speaker_add, url_talk_proposal_speaker_edit, conference.name)
 
-        send_mail(
-            msg_title,
-            msg_body,
-            conference.from_email(),
-            [participant.email],
-            fail_silently=False,
+        Message.objects.create(
+            thread=participant.conversation,
+            author=conference.contact_email,
+            content=body,
         )
 
         return render(request, 'cfp/complete.html', {'talk': talk, 'participant': participant})
@@ -163,9 +162,9 @@ def talk_list(request, conference):
                 talks = talks.exclude(vote__user=request.user)
     # Sorting
     if request.GET.get('order') == 'desc':
-        reverse = True
+        sort_reverse = True
     else:
-        reverse = False
+        sort_reverse = False
     SORT_MAPPING = {
         'title': 'title',
         'category': 'category',
@@ -173,7 +172,7 @@ def talk_list(request, conference):
     }
     sort = request.GET.get('sort')
     if sort in SORT_MAPPING.keys():
-        if reverse:
+        if sort_reverse:
             talks = talks.order_by('-' + SORT_MAPPING[sort])
         else:
             talks = talks.order_by(SORT_MAPPING[sort])
@@ -184,7 +183,7 @@ def talk_list(request, conference):
         url = request.GET.copy()
         url['sort'] = c
         if c == sort:
-            if reverse:
+            if sort_reverse:
                 del url['order']
                 glyphicon = 'sort-by-attributes-alt'
             else:
@@ -207,6 +206,14 @@ def talk_list(request, conference):
 @staff_required
 def talk_details(request, conference, talk_id):
     talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
+    message_form = MessageForm(request.POST or None)
+    if request.method == 'POST' and message_form.is_valid():
+        message = message_form.save(commit=False)
+        message.author = request.user.email
+        message.thread = talk.conversation
+        message.save()
+        messages.success(request, _('Message sent!'))
+        return redirect(reverse('talk-details', args=[talk.token]))
     return render(request, 'cfp/staff/talk_details.html', {
         'talk': talk,
     })
@@ -260,6 +267,14 @@ def participant_list(request, conference):
 @staff_required
 def participant_details(request, conference, participant_id):
     participant = get_object_or_404(Participant, token=participant_id, site=conference.site)
+    message_form = MessageForm(request.POST or None)
+    if request.method == 'POST' and message_form.is_valid():
+        message = message_form.save(commit=False)
+        message.author = request.user.email
+        message.thread = participant.conversation
+        message.save()
+        messages.success(request, _('Message sent!'))
+        return redirect(reverse('participant-details', args=[participant.token]))
     return render(request, 'cfp/staff/participant_details.html', {
         'participant': participant,
     })
@@ -290,6 +305,7 @@ You can now:
 {}
 
 """)
+        # TODO: send bulk emails
         for user in added_staff:
             msg_body = msg_body_template.format(user.get_full_name(), url_login, url_password_reset, conference.name)
             send_mail(

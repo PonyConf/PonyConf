@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{ message_form_title }}
+  </div>
+  <div class="panel-body">
+    <form action="{{ message_form_url }}" method="post" role="form">
+      {% csrf_token %}
+      <div class="form-group">
+        <textarea class="form-control" name="content" rows="6" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-envelope"></span> {% trans "Send" %}</button>
+    </form>
+  </div>
+</div>
