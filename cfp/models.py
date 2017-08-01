@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Case, When
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -212,6 +212,13 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
 #    return join(talk.site.name, talk.slug, filename)
 
 
+class TalkManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.annotate(score=Case(When(vote=None, then=0), default=Avg('vote__vote')))
+        return qs
+
+
 class Talk(PonyConfModel):
 
     LICENCES = (
@@ -248,6 +255,9 @@ class Talk(PonyConfModel):
     token = models.UUIDField(default=uuid.uuid4, editable=False)
 
 
+    objects = TalkManager()
+
+
     class Meta:
         ordering = ('title',)
 
@@ -269,9 +279,6 @@ class Talk(PonyConfModel):
 
     def get_absolute_url(self):
         return reverse('talk-details', kwargs={'talk_id': self.token})
-
-    def score(self):
-        return self.vote_set.aggregate(Avg('vote'))['vote__avg'] or 0
 
     @property
     def end_date(self):
