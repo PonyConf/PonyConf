@@ -194,6 +194,7 @@ def talk_list(request, conference):
             glyphicon = 'sort'
         sort_urls[c] = url.urlencode()
         sort_glyphicons[c] = glyphicon
+    talks = talks.prefetch_related('speakers')
     return render(request, 'cfp/staff/talk_list.html', {
         'show_filters': show_filters,
         'talk_list': talks,
