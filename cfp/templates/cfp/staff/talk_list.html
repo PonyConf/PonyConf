@@ -7,6 +7,28 @@
 
 <h1>{% trans "Talks" %}</h1>
 
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controls="filter">{% trans "Show filtering options…" %}</a>
+
+<br /><br />
+
+<div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
+    <div class="well">
+        <form class="form-horizontal" method="get">
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    {% bootstrap_field filter_form.status layout="horizontal" %}
+                    {% bootstrap_field filter_form.category layout="horizontal" %}
+                    {% bootstrap_field filter_form.vote layout="horizontal" %}
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    {% bootstrap_field filter_form.track layout="horizontal" %}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
+        </form>
+    </div>
+</div>
+
 <table class="table table-bordered table-hover">
     <caption>{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</caption>
     <thead>

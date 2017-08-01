@@ -5,14 +5,17 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 from django.contrib import messages
+from django.db.models import Q
 
 from django_select2.views import AutoResponseView
+
+from functools import reduce
 
 from cfp.decorators import staff_required
 from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote
-from .forms import TalkForm, ParticipantForm, ConferenceForm, CreateUserForm
+from .forms import TalkForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES
 
 
 def home(request, conference):
@@ -131,7 +134,33 @@ def staff(request, conference):
 
 @staff_required
 def talk_list(request, conference):
+    show_filters = False
     talks = Talk.objects.filter(site=conference.site)
+    filter_form = TalkFilterForm(request.GET or None, site=conference.site)
+    # Filtering
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['category']):
+            show_filters = True
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(category__pk=pk) for pk in data['category']]))
+        if len(data['status']):
+            show_filters = True
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+        if len(data['track']):
+            show_filters = True
+            q = Q()
+            if 'none' in data['track']:
+                data['track'].remove('none')
+                q |= Q(track__isnull=True)
+            if len(data['track']):
+                q |= Q(track__slug__in=data['track'])
+            talks = talks.filter(q)
+        if data['vote'] != None:
+            show_filters = True
+            if data['vote']:
+                talks = talks.filter(vote__user=request.user)
+            else:
+                talks = talks.exclude(vote__user=request.user)
     # Sorting
     if request.GET.get('order') == 'desc':
         reverse = True
@@ -166,7 +195,9 @@ def talk_list(request, conference):
         sort_urls[c] = url.urlencode()
         sort_glyphicons[c] = glyphicon
     return render(request, 'cfp/staff/talk_list.html', {
+        'show_filters': show_filters,
         'talk_list': talks,
+        'filter_form': filter_form,
         'sort_urls': sort_urls,
         'sort_glyphicons': sort_glyphicons,
     })

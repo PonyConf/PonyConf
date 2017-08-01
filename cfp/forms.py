@@ -3,12 +3,24 @@ from django.forms.models import modelform_factory
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UsernameField
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
-from .models import Participant, Talk, Conference
+from .models import Participant, Talk, TalkCategory, Track, Conference
+
+
+STATUS_CHOICES = [
+        ('pending', _('Pending decision')),
+        ('accepted', _('Accepted')),
+        ('declined', _('Declined')),
+]
+STATUS_VALUES = [
+        ('pending', None),
+        ('accepted', True),
+        ('declined', False),
+]
 
 
 class TalkForm(forms.ModelForm):
@@ -23,6 +35,39 @@ class TalkForm(forms.ModelForm):
     class Meta:
         model = Talk
         fields = ('category', 'title', 'description','notes')
+
+
+class TalkFilterForm(forms.Form):
+    category = forms.MultipleChoiceField(
+            label=_('Category'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    status = forms.MultipleChoiceField(
+            label=_('Status'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=STATUS_CHOICES,
+    )
+    track = forms.MultipleChoiceField(
+            label=_('Track'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    vote = forms.NullBooleanField(
+            label=_('Vote'),
+            help_text=_('Filter talks you already / not yet voted for'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        categories = TalkCategory.objects.filter(site=site)
+        self.fields['category'].choices = categories.values_list('pk', 'name')
+        tracks = Track.objects.filter(site=site)
+        self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
 
 
 ParticipantForm = modelform_factory(Participant, fields=('name','email', 'biography'))
