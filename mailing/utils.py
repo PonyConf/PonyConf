@@ -43,7 +43,6 @@ def fetch_imap_box(user, password, host, port=993, inbox='INBOX', trash='Trash')
         typ, data = M.uid('search', None, 'UNSEEN')
         if typ != 'OK':
             raise Exception(data[0].decode('utf-8'))
-        logging.info("Fetching %d messages" % len(data[0].split()))
         for num in data[0].split():
             typ, data = M.uid('fetch', num, '(RFC822)')
             if typ != 'OK':
@@ -84,7 +83,9 @@ def fetch_imap_box(user, password, host, port=993, inbox='INBOX', trash='Trash')
         if typ != 'OK':
             failure += 1
             raise Exception(data[0].decode('utf-8'))
-    logging.info("Finished, success: %d, failure: %d" % (success, failure))
+    if failure:
+        total = success + failure
+        logging.info("Total: %d, success: %d, failure: %d" % (total, success, failure))
 
 
 def process_email(raw_email):
