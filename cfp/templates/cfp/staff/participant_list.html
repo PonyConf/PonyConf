@@ -65,11 +65,11 @@
         <tr>
             <td><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a></td>
             <td>
-                <span class="text-success">{% blocktrans count accepted=participant.accepted_talk_set.count %}accepted: {{ accepted }}{% plural %}accepted: {{ accepted }}{% endblocktrans %}</span>
+                <span class="text-success">{% blocktrans count accepted=participant.accepted_talk_count %}accepted: {{ accepted }}{% plural %}accepted: {{ accepted }}{% endblocktrans %}</span>
                 —
-                <span class="text-warning">{% blocktrans count pending=participant.pending_talk_set.count %}pending: {{ pending }}{% plural %}pending: {{ pending }}{% endblocktrans %}</span>
+                <span class="text-warning">{% blocktrans count pending=participant.pending_talk_count %}pending: {{ pending }}{% plural %}pending: {{ pending }}{% endblocktrans %}</span>
                 —
-                <span class="text-danger">{% blocktrans count refused=participant.refused_talk_set.count %}refused: {{ refused }}{% plural %}refused: {{ refused }}{% endblocktrans %}</span>
+                <span class="text-danger">{% blocktrans count refused=participant.refused_talk_count %}refused: {{ refused }}{% plural %}refused: {{ refused }}{% endblocktrans %}</span>
             </td>
             {% comment %}
             <td>

@@ -63,6 +63,17 @@ class Conference(models.Model):
         return str(self.site)
 
 
+class ParticipantManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.annotate(
+            accepted_talk_count=models.Sum(models.Case(models.When(talk__accepted=True, then=1), default=0, output_field=models.IntegerField())),
+            pending_talk_count=models.Sum(models.Case(models.When(talk__accepted=None, then=1), default=0, output_field=models.IntegerField())),
+            refused_talk_count=models.Sum(models.Case(models.When(talk__accepted=False, then=1), default=0, output_field=models.IntegerField())),
+        )
+        return qs
+
+
 class Participant(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
@@ -89,6 +100,8 @@ class Participant(PonyConfModel):
     vip = models.BooleanField(default=False)
 
     conversation = models.OneToOneField(MessageThread)
+
+    objects = ParticipantManager()
 
     class Meta:
         # A User can participe only once to a Conference (= Site)
