@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.utils.crypto import get_random_string
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
@@ -117,7 +118,7 @@ class CreateUserForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = slugify(user.get_full_name())
-        user.set_unusable_password()
+        user.set_password(get_random_string(length=32))
         if commit:
             user.save()
         return user
