@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 
 class EmailAuthenticationForm(AuthenticationForm):
@@ -36,3 +37,9 @@ urlpatterns = [
     url(r'accounts/', include('django.contrib.auth.urls')),
     url(r'^', include('cfp.urls')),
 ]
+
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
