@@ -235,19 +235,17 @@ def talk_vote(request, conference, talk_id, score):
 def talk_decide(request, conference, talk_id, accept):
     talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
     if request.method == 'POST':
-        # # Does we need to send a notification to the proposer?
-        # m = request.POST.get('message', '').strip()
-        # if m:
-        #     participation = Participation.objects.get(site=site, user=talk.proposer)
-        #     conversation = ConversationWithParticipant.objects.get(participation=participation)
-        #     Message.objects.create(conversation=conversation, author=request.user, content=m)
-        # # Save the decision in the talk's conversation
-        # conversation = ConversationAboutTalk.objects.get(talk=talk)
+        # Does we need to send a notification to the proposer?
+        m = request.POST.get('message', '').strip()
+        if m:
+            for participant in talk.speakers.all():
+                Message.objects.create(thread=talk.conversation, author=request.user, content=m)
+        # Save the decision in the talk's conversation
         if accept:
-            note = "The talk has been accepted."
+            note = _("The talk has been accepted.")
         else:
-            note = "The talk has been declined."
-        #Message.objects.create(conversation=conversation, author=request.user, content=note)
+            note = _("The talk has been declined.")
+        Message.objects.create(thread=talk.conversation, author=request.user, content=note)
         talk.accepted = accept
         talk.save()
         messages.success(request, _('Decision taken in account'))

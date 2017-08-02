@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-02 00:42+0000\n"
+"POT-Creation-Date: 2017-08-02 10:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,7 +216,7 @@ msgstr "Envoyer"
 
 #: accounts/templates/accounts/profile.html:36
 #: cfp/templates/cfp/staff/create_user.html:14
-#: cfp/templates/cfp/staff/talk_decide.html:27 ponyconf/templates/_form.html:16
+#: cfp/templates/cfp/staff/talk_decide.html:22 ponyconf/templates/_form.html:16
 #: proposals/templates/proposals/talk_decide.html:23
 msgid "Cancel"
 msgstr "Annuler"
@@ -473,16 +473,17 @@ msgstr "J’ai besoin de son"
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
-#: cfp/signals.py:50
+#: cfp/signals.py:78
 #, python-format
 msgid "[%(prefix)s] Message from the staff"
 msgstr "[%(prefix)s] Message du staff"
 
-#: cfp/signals.py:51
+#: cfp/signals.py:79
+#, python-format
 msgid "[%(prefix)s] Conversation with %(dest)s"
 msgstr "[%(prefix)s] Conversation avec %(dest)s"
 
-#: cfp/signals.py:62
+#: cfp/signals.py:93
 #, python-format
 msgid "[%(prefix)s] Talk: %(talk)s"
 msgstr "[%(prefix)s] Talk: %(talk)s"
@@ -686,12 +687,27 @@ msgstr "Titre :"
 msgid "Kind:"
 msgstr "Type d’intervention :"
 
-#: cfp/templates/cfp/staff/talk_decide.html:26
+#: cfp/templates/cfp/staff/talk_decide.html:14
+#: proposals/templates/proposals/talk_decide.html:15
+msgid "Information for the proposer"
+msgstr "Information à destination de l’auteur de la proposition"
+
+#: cfp/templates/cfp/staff/talk_decide.html:18
+#: proposals/templates/proposals/talk_decide.html:19
+msgid ""
+"If you want to send a message to the proposer, please enter it below. "
+"Remember to indicate which talk your message is reffering."
+msgstr ""
+"Si vous souhaitez envoyer un message à l’auteur de la proposition, saisissez-"
+"le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
+"d’intervention votre message fait référence."
+
+#: cfp/templates/cfp/staff/talk_decide.html:21
 #: proposals/templates/proposals/talk_decide.html:22
 msgid "Accept the proposal"
 msgstr "Accepter la proposition"
 
-#: cfp/templates/cfp/staff/talk_decide.html:26
+#: cfp/templates/cfp/staff/talk_decide.html:21
 #: proposals/templates/proposals/talk_decide.html:22
 msgid "Decline the proposal"
 msgstr "Décliner la proposition"
@@ -822,27 +838,35 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:215 cfp/views.py:276 conversations/views.py:40
+#: cfp/views.py:217 cfp/views.py:277 conversations/views.py:40
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
-#: cfp/views.py:228 proposals/views.py:321
+#: cfp/views.py:230 proposals/views.py:321
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: cfp/views.py:228 proposals/views.py:321
+#: cfp/views.py:230 proposals/views.py:321
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
+
+#: cfp/views.py:245
+msgid "The talk has been accepted."
+msgstr "L’exposé a été accepté."
+
+#: cfp/views.py:247
+msgid "The talk has been declined."
+msgstr "L’exposé a été décliné."
 
 #: cfp/views.py:251 proposals/views.py:347
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:296
+#: cfp/views.py:297
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:297
+#: cfp/views.py:298
 msgid ""
 "Hi {},\n"
 "\n"
@@ -866,11 +890,11 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:318
+#: cfp/views.py:319
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:332
+#: cfp/views.py:333
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
@@ -900,6 +924,11 @@ msgstr "Ceci est la liste des participants que vous suivez."
 msgid "You can use this page to communicate with the staff."
 msgstr ""
 "Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
+
+#: mailing/models.py:90
+#, python-format
+msgid "Message from %(author)s"
+msgstr ""
 
 #: mailing/templates/mailing/_message_list.html:13
 msgid "No messages."
@@ -1190,19 +1219,6 @@ msgstr "Contacter :"
 #: proposals/templates/proposals/speaker_list.html:59
 msgid "link"
 msgstr "lien"
-
-#: proposals/templates/proposals/talk_decide.html:15
-msgid "Information for the proposer"
-msgstr "Information à destination de l’auteur de la proposition"
-
-#: proposals/templates/proposals/talk_decide.html:19
-msgid ""
-"If you want to send a message to the proposer, please enter it below. "
-"Remember to indicate which talk your message is reffering."
-msgstr ""
-"Si vous souhaitez envoyer un message à l’auteur de la proposition, saisissez-"
-"le ci-dessous. N’oubliez pas de spécifier à quelle proposition "
-"d’intervention votre message fait référence."
 
 #: proposals/templates/proposals/talk_detail.html:24
 msgid "Format"
