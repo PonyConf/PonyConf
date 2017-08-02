@@ -374,7 +374,7 @@ msgstr "Email de contact"
 
 #: cfp/models.py:30
 msgid "Reply email"
-msgstr ""
+msgstr "Adresse de réponse"
 
 #: cfp/models.py:31
 msgid "Staff members"
@@ -386,6 +386,8 @@ msgid ""
 "The reply email should be a formatable string accepting a token argument (e."
 "g. ponyconf+{token}@exemple.com)."
 msgstr ""
+"L’adresse de réponse doit être une chaine de texte formatable avec un "
+"argument « token » (e.g. ponyconf+{token}@exemple.com)."
 
 #: cfp/models.py:70
 msgid "Your Name"
