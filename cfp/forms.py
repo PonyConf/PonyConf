@@ -141,3 +141,28 @@ class CreateUserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class TrackForm(forms.ModelForm):
+    class Meta:
+        model = Track
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        self.conference = kwargs.pop('conference')
+        super().__init__(*args, **kwargs)
+
+    # we should manually check (site, name) uniqueness as the site is not part of the form
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if (not self.instance or self.instance.name != name) \
+                and Track.objects.filter(site=self.conference.site, name=name).exists():
+            raise self.instance.unique_error_message(self._meta.model, ['name'])
+        return name
+
+    def save(self, commit=True):
+        track = super().save(commit=False)
+        track.site = self.conference.site
+        if commit:
+            track.save()
+        return track

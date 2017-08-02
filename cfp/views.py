@@ -18,7 +18,7 @@ from .decorators import staff_required
 from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm
 
 
 def home(request, conference):
@@ -344,6 +344,35 @@ class TalkEdit(StaffRequiredMixin, OnSiteMixin, UpdateView):
             'tracks': Track.objects.filter(site=self.kwargs['conference'].site),
         })
         return kwargs
+
+
+class TrackMixin(OnSiteMixin):
+    model = Track
+
+
+class TrackList(StaffRequiredMixin, TrackMixin, ListView):
+    template_name = 'cfp/staff/track_list.html'
+
+
+class TrackFormMixin(TrackMixin):
+    template_name = 'cfp/staff/track_form.html'
+    form_class = TrackForm
+    success_url = reverse_lazy('track-list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.kwargs['conference'],
+        })
+        return kwargs
+
+
+class TrackCreate(StaffRequiredMixin, TrackFormMixin, CreateView):
+    pass
+
+
+class TrackUpdate(StaffRequiredMixin, TrackFormMixin, UpdateView):
+    pass
 
 
 @staff_required

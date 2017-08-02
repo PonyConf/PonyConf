@@ -145,14 +145,14 @@ class Track(PonyConfModel):
     class Meta:
         unique_together = ('site', 'name')
 
-    #def estimated_duration(self):
-    #    return sum([talk.estimated_duration for talk in self.talk_set.all()])
+    def estimated_duration(self):
+        return sum([talk.estimated_duration for talk in self.talk_set.all()])
 
     def __str__(self):
         return self.name
 
-    #def get_absolute_url(self):
-    #    return reverse('list-talks') + '?track=%s' % self.slug
+    def get_absolute_url(self):
+        return reverse('talk-list') + '?track=%s' % self.slug
 
 
 class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)

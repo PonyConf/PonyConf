@@ -18,6 +18,9 @@ urlpatterns = [
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/edit/$', views.TalkEdit.as_view(), name='talk-edit'),
     url(r'^staff/speakers/$', views.participant_list, name='participant-list'),
     url(r'^staff/speakers/(?P<participant_id>[\w\-]+)/$', views.participant_details, name='participant-details'),
+    url(r'^staff/tracks/$', views.TrackList.as_view(), name='track-list'),
+    url(r'^staff/tracks/add/$', views.TrackCreate.as_view(), name='track-add'),
+    url(r'^staff/tracks/(?P<slug>[-\w]+)/edit/$', views.TrackUpdate.as_view(), name='track-edit'),
     url(r'^staff/add-user/$', views.create_user, name='create-user'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
 

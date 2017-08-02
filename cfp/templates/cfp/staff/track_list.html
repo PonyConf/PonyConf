@@ -1,0 +1,35 @@
+{% extends 'cfp/staff/base.html' %}
+
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block trackstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Tracks" %}</h1>
+
+<p><a href="{% url 'track-add' %}" class="btn btn-success">{% trans "Add a track" %}</a><p>
+
+<div class="row">
+  {% for track in track_list %}
+  <div class="col-xs-6 col-sm-4">
+    <h2>{{ track }}</h2>
+    <p>{{ track.description }}</p>
+    {% if request|staff %}
+        {{ track.managers.count }} {% trans "manager" %}{{ track.managers.count|pluralize }}
+        |
+        <a href="{{ track.get_absolute_url }}">{{ track.talk_set.count }} {% trans "talk" %}{{ track.talk_set.count|pluralize }}</a>
+        |
+        {{ track.estimated_duration|duration_format }}
+        |
+        <a href="{% url 'track-edit' track.slug %}">{% bootstrap_icon "pencil" %}</a>
+    {% endif %}
+  </div>
+    {% cycle '' '<div class="clearfix visible-xs"></div>' %}
+    {% cycle '' '' '<div class="clearfix hidden-xs"></div>' %}
+  {% empty %}
+  <div class="col-xs-12"><em>{% trans "No tracks." %}</em></div>
+  {% endfor %}
+</div>
+
+{% endblock %}
