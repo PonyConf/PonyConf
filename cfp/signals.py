@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 from ponyconf.decorators import disable_for_loaddata
 from mailing.models import MessageThread, Message
@@ -20,6 +21,33 @@ def create_conversation(sender, instance, **kwargs):
         instance.conversation = MessageThread.objects.create()
 pre_save.connect(create_conversation, sender=Participant)
 pre_save.connect(create_conversation, sender=Talk)
+
+
+@receiver(pre_save, sender=Message, dispatch_uid="Set message author")
+def set_message_author(sender, instance, **kwargs):
+    message = instance
+    if message.author is None:
+        # Try users
+        try:
+            instance.author = User.objects.get(email=message.from_email)
+        except User.DoesNotExist:
+            pass
+        else:
+            return
+        # Try participants
+        try:
+            instance.author = Participant.objects.get(email=message.from_email)
+        except User.DoesNotExist:
+            pass
+        else:
+            return
+        # Try conferences
+        try:
+            instance.author = Conference.objects.get(contact_email=message.from_email)
+        except Conference.DoesNotExist:
+            pass
+        else:
+            return
 
 
 @receiver(post_save, sender=Message, dispatch_uid="Send message notifications")
@@ -41,7 +69,7 @@ def send_message_notification(sender, instance, **kwargs):
         reply_to = (conf.name, conf.reply_email)
     else:
         reply_to = None
-    sender = (conf.name, conf.contact_email)
+    sender = (message.author_display, conf.contact_email)
     staff_dests = [ (user.get_full_name(), user.email) for user in conf.staff.all() ]
     if hasattr(thread, 'participant'):
         conf = thread.participant.site.conference
@@ -49,18 +77,22 @@ def send_message_notification(sender, instance, **kwargs):
         participant_dests = [ (participant.name, participant.email) ]
         participant_subject = _('[%(prefix)s] Message from the staff') % {'prefix': conf.name}
         staff_subject = _('[%(prefix)s] Conversation with %(dest)s') % {'prefix': conf.name, 'dest': participant.name}
-        if message.author == conf.contact_email: # this is a talk notification message
+        if message.from_email == conf.contact_email: # this is a talk notification message
             # sent it only the participant
-            message.send_notification(subject=participant_subject, sender=sender, dests=participant_dests, reply_to=reply_to, message_id=message_id, reference=reference)
+            message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
+                                      reply_to=reply_to, message_id=message_id, reference=reference)
         else:
             # this is a message between the staff and the participant
-            message.send_notification(subject=staff_subject, sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference)
-            if message.author != thread.participant.email: # message from staff: sent it to the participant too
-                message.send_notification(subject=participant_subject, sender=sender, dests=participant_dests, reply_to=reply_to, message_id=message_id, reference=reference)
+            message.send_notification(subject=subject_prefix+staff_subject, sender=sender, dests=staff_dests,
+                                      reply_to=reply_to, message_id=message_id, reference=reference)
+            if message.from_email != thread.participant.email: # message from staff: sent it to the participant too
+                message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
+                                          reply_to=reply_to, message_id=message_id, reference=reference)
     elif hasattr(thread, 'talk'):
         conf = thread.talk.site.conference
         subject = _('[%(prefix)s] Talk: %(talk)s') % {'prefix': conf.name, 'talk': thread.talk.title}
-        message.send_notification(subject=subject, sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference)
+        message.send_notification(subject=subject_prefix+subject, sender=sender, dests=staff_dests,
+                                  reply_to=reply_to, message_id=message_id, reference=reference)
 
 
 # connected in apps.py

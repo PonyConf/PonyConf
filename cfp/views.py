@@ -87,7 +87,8 @@ Thanks!
 
         Message.objects.create(
             thread=participant.conversation,
-            author=conference.contact_email,
+            author=conference,
+            from_email=conference.contact_email,
             content=body,
         )
 
@@ -209,7 +210,8 @@ def talk_details(request, conference, talk_id):
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
-        message.author = request.user.email
+        message.author = request.user
+        message.from_email = request.user.email
         message.thread = talk.conversation
         message.save()
         messages.success(request, _('Message sent!'))
@@ -270,7 +272,8 @@ def participant_details(request, conference, participant_id):
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
-        message.author = request.user.email
+        message.author = request.user
+        message.from_email = request.user.email
         message.thread = participant.conversation
         message.save()
         messages.success(request, _('Message sent!'))

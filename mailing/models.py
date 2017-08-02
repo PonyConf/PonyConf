@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 import hashlib
 
@@ -31,7 +35,10 @@ class MessageThread(models.Model):
 class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     thread = models.ForeignKey(MessageThread)
-    author = models.EmailField(blank=True)
+    author_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    author_id = models.PositiveIntegerField(null=True, blank=True)
+    author = GenericForeignKey('author_type', 'author_id')
+    from_email = models.EmailField()
     content = models.TextField(blank=True)
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)
 
@@ -69,5 +76,15 @@ class Message(models.Model):
         connection = get_connection()
         connection.send_messages(messages)
 
+    @property
+    def author_display(self):
+        if self.author:
+            if type(self.author) == User:
+                return self.author.get_full_name()
+            else:
+                return str(self.author)
+        else:
+            return self.from_email
+
     def __str__(self):
-        return "Message from %s" % self.author
+        return _("Message from %(author)s") % {'author': self.author_display}

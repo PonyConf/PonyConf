@@ -118,4 +118,4 @@ def process_email(raw_email):
     if key != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
         raise InvalidKeyException
 
-    Message.objects.create(thread=thread, author=sender.email, content=content)
+    Message.objects.create(thread=thread, from_email=sender.email, content=content)
