@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 from django.contrib import messages
 from django.db.models import Q
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from django_select2.views import AutoResponseView
 
@@ -16,8 +17,8 @@ from mailing.forms import MessageForm
 from .decorators import staff_required
 from .mixins import StaffRequiredMixin
 from .utils import is_staff
-from .models import Participant, Talk, TalkCategory, Vote
-from .forms import TalkForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES
+from .models import Participant, Talk, TalkCategory, Vote, Track
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES
 
 
 def home(request, conference):
@@ -322,6 +323,27 @@ You can now:
     return render(request, 'cfp/staff/conference.html', {
         'form': form,
     })
+
+
+class OnSiteMixin:
+    def get_queryset(self):
+        return super().get_queryset().filter(site=self.kwargs['conference'].site)
+
+
+class TalkEdit(StaffRequiredMixin, OnSiteMixin, UpdateView):
+    model = Talk
+    slug_field = 'token'
+    slug_url_kwarg = 'talk_id'
+    form_class = TalkStaffForm
+    template_name = 'cfp/staff/talk_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'categories': TalkCategory.objects.filter(site=self.kwargs['conference'].site),
+            'tracks': Track.objects.filter(site=self.kwargs['conference'].site),
+        })
+        return kwargs
 
 
 @staff_required

@@ -38,6 +38,25 @@ class TalkForm(forms.ModelForm):
         fields = ('category', 'title', 'description','notes')
 
 
+class TalkStaffForm(TalkForm):
+    def __init__(self, *args, **kwargs):
+        tracks = kwargs.pop('tracks')
+        super().__init__(*args, **kwargs)
+        self.fields['track'].queryset = tracks
+
+    class Meta(TalkForm.Meta):
+        fields = ('category', 'track', 'title', 'description','notes')
+        labels = {
+            'category': _('Category'),
+            'title': _('Title'),
+            'description': _('Description'),
+            'notes': _('Notes'),
+        }
+        help_texts = {
+            'notes': _('Visible by speakers'),
+        }
+
+
 class TalkFilterForm(forms.Form):
     category = forms.MultipleChoiceField(
             label=_('Category'),

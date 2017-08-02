@@ -7,11 +7,7 @@
 
 <h1>{{ talk.title }}</h1>
 
-{% comment %}
-{% if edit_perm %}
-<a class="btn btn-success" href="{% url 'edit-talk' talk.slug %}">{% trans "Edit" %}</a><br />
-{% endif %}
-{% endcomment %}
+<p><a class="btn btn-success" href="{% url 'talk-edit' talk.token %}">{% trans "Edit" %}</a></p>
 
 <p>{% if talk.abstract %}{{ talk.abstract }}{% else %}<i>{% trans "No abstract provided." %}</i>{% endif %}</p>
 
@@ -138,7 +134,7 @@
 
 {% include 'mailing/_message_list.html' with messages=talk.conversation.message_set.all %}
 
-{% trans "Send a message – <em>this message will be received by the staff team only</em>" as message_form_title %}
+{% trans "Comment this talk – <em>this message will be received by the staff team only</em>" as message_form_title %}
 {% include 'mailing/_message_form.html' %}
 
 {% endblock %}

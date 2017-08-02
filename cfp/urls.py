@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/vote/(?P<score>[-+0-2]+)/$', views.talk_vote, name='talk-vote'),
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/accept/$', views.talk_decide, {'accept': True}, name='talk-accept'),
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/decline/$', views.talk_decide, {'accept': False}, name='talk-decline'),
+    url(r'^staff/talks/(?P<talk_id>[\w\-]+)/edit/$', views.TalkEdit.as_view(), name='talk-edit'),
     url(r'^staff/speakers/$', views.participant_list, name='participant-list'),
     url(r'^staff/speakers/(?P<participant_id>[\w\-]+)/$', views.participant_details, name='participant-details'),
     url(r'^staff/add-user/$', views.create_user, name='create-user'),
