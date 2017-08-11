@@ -30,6 +30,7 @@ class Conference(models.Model):
     contact_email = models.CharField(max_length=100, blank=True, verbose_name=_('Contact email'))
     reply_email = models.CharField(max_length=100, blank=True, verbose_name=_('Reply email'))
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
+    secure_domain = models.BooleanField(default=True, verbose_name=_('Secure domain (HTTPS)'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)

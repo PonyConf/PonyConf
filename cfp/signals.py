@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from ponyconf.decorators import disable_for_loaddata
 from mailing.models import MessageThread, Message
@@ -77,6 +78,8 @@ def send_message_notifications(sender, instance, **kwargs):
         participant_dests = [ (participant.name, participant.email) ]
         participant_subject = _('[%(prefix)s] Message from the staff') % {'prefix': conf.name}
         staff_subject = _('[%(prefix)s] Conversation with %(dest)s') % {'prefix': conf.name, 'dest': participant.name}
+        proto = 'https' if conf.secure_domain else 'http'
+        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('participant-details', args=[participant.token])
         if message.from_email == conf.contact_email: # this is a talk notification message
             # send it only to the participant
             message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
@@ -84,15 +87,17 @@ def send_message_notifications(sender, instance, **kwargs):
         else:
             # this is a message between the staff and the participant
             message.send_notification(subject=subject_prefix+staff_subject, sender=sender, dests=staff_dests,
-                                      reply_to=reply_to, message_id=message_id, reference=reference)
+                                      reply_to=reply_to, message_id=message_id, reference=reference, footer=footer)
             if message.from_email != thread.participant.email: # message from staff: sent it to the participant too
                 message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
                                           reply_to=reply_to, message_id=message_id, reference=reference)
     elif hasattr(thread, 'talk'):
         conf = thread.talk.site.conference
         subject = _('[%(prefix)s] Talk: %(talk)s') % {'prefix': conf.name, 'talk': thread.talk.title}
+        proto = 'https' if conf.secure_domain else 'http'
+        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('talk-details', args=[thread.talk.token])
         message.send_notification(subject=subject_prefix+subject, sender=sender, dests=staff_dests,
-                                  reply_to=reply_to, message_id=message_id, reference=reference)
+                                  reply_to=reply_to, message_id=message_id, reference=reference, footer=footer)
 
 
 # connected in apps.py

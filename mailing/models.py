@@ -45,7 +45,7 @@ class Message(models.Model):
     class Meta:
         ordering = ['created']
 
-    def send_notification(self, subject, sender, dests, reply_to=None, message_id=None, reference=None):
+    def send_notification(self, subject, sender, dests, reply_to=None, message_id=None, reference=None, footer=None):
         messages = []
         for dest_name, dest_email in dests:
             correspondent, created = MessageCorrespondent.objects.get_or_create(email=dest_email)
@@ -64,9 +64,12 @@ class Message(models.Model):
                 headers.update({
                     'References': message_id.format(id=reference),
                 })
+            body = self.content
+            if footer is not None:
+                body += footer
             messages.append(EmailMessage(
                 subject=subject,
-                body=self.content,
+                body=body,
                 from_email='%s <%s>' % sender,
                 to=['%s <%s>' % (dest_name, dest_email)],
                 reply_to=reply_to_list,
