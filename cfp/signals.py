@@ -51,7 +51,7 @@ def set_message_author(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Message, dispatch_uid="Send message notifications")
-def send_message_notification(sender, instance, **kwargs):
+def send_message_notifications(sender, instance, **kwargs):
     message = instance
     thread = message.thread
     first_message = thread.message_set.first()
@@ -78,7 +78,7 @@ def send_message_notification(sender, instance, **kwargs):
         participant_subject = _('[%(prefix)s] Message from the staff') % {'prefix': conf.name}
         staff_subject = _('[%(prefix)s] Conversation with %(dest)s') % {'prefix': conf.name, 'dest': participant.name}
         if message.from_email == conf.contact_email: # this is a talk notification message
-            # sent it only the participant
+            # send it only to the participant
             message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
                                       reply_to=reply_to, message_id=message_id, reference=reference)
         else:

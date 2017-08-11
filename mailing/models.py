@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 import hashlib
 
@@ -50,7 +50,6 @@ class Message(models.Model):
         for dest_name, dest_email in dests:
             correspondent, created = MessageCorrespondent.objects.get_or_create(email=dest_email)
             token = self.thread.token + correspondent.token + hexdigest_sha256(settings.SECRET_KEY, self.thread.token, correspondent.token)[:16]
-            sender_name, sender_email = sender
             if reply_to:
                 reply_to_name, reply_to_email = reply_to
                 reply_to_list = ['%s <%s>' % (reply_to_name, reply_to_email.format(token=token))]
@@ -68,7 +67,7 @@ class Message(models.Model):
             messages.append(EmailMessage(
                 subject=subject,
                 body=self.content,
-                from_email='%s <%s>' % (sender_name, sender_email),
+                from_email='%s <%s>' % sender,
                 to=['%s <%s>' % (dest_name, dest_email)],
                 reply_to=reply_to_list,
                 headers=headers,
@@ -79,7 +78,8 @@ class Message(models.Model):
     @property
     def author_display(self):
         if self.author:
-            if type(self.author) == User:
+            author_class = ContentType.objects.get_for_model(self.author).model_class()
+            if author_class == get_user_model():
                 return self.author.get_full_name()
             else:
                 return str(self.author)
