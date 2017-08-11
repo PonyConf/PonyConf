@@ -82,7 +82,7 @@ class Participant(PonyConfModel):
     email = models.EmailField()
 
     biography = models.TextField(verbose_name=_('Biography'))
-    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     twitter = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Twitter'))
     linkedin = models.CharField(max_length=100, blank=True, default='', verbose_name=_('LinkedIn'))
@@ -267,7 +267,7 @@ class Talk(PonyConfModel):
     #materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
     #                             help_text=_('You can use this field to share some materials related to your intervention.'))
 
-    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     conversation = models.OneToOneField(MessageThread)
 
