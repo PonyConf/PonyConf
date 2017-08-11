@@ -4,7 +4,8 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q, Avg, Case, When
+from django.db.models import Q, Sum, Avg, Case, When
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.translation import ugettext, ugettext_lazy as _
 
@@ -67,9 +68,9 @@ class ParticipantManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.annotate(
-            accepted_talk_count=models.Sum(models.Case(models.When(talk__accepted=True, then=1), default=0, output_field=models.IntegerField())),
-            pending_talk_count=models.Sum(models.Case(models.When(talk__accepted=None, then=1), default=0, output_field=models.IntegerField())),
-            refused_talk_count=models.Sum(models.Case(models.When(talk__accepted=False, then=1), default=0, output_field=models.IntegerField())),
+            accepted_talk_count=Sum(Case(When(talk__accepted=True, then=1), default=0, output_field=models.IntegerField())),
+            pending_talk_count=Sum(Case(When(talk__accepted=None, then=1), default=0, output_field=models.IntegerField())),
+            refused_talk_count=Sum(Case(When(talk__accepted=False, then=1), default=0, output_field=models.IntegerField())),
         )
         return qs
 
@@ -230,7 +231,7 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
 class TalkManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.annotate(score=Case(When(vote=None, then=0), default=Avg('vote__vote')))
+        qs = qs.annotate(score=Coalesce(Avg('vote__vote'), 0))
         return qs
 
 
