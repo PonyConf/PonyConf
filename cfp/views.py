@@ -259,7 +259,9 @@ def talk_decide(request, conference, talk_id, accept):
 
 @staff_required
 def participant_list(request, conference):
-    participants = Participant.objects.filter(site=conference.site)
+    participants = Participant.objects.filter(site=conference.site) \
+                                      .extra(select={'lower_name': 'lower(name)'}) \
+                                      .order_by('lower_name')
     return render(request, 'cfp/staff/participant_list.html', {
         'participant_list': participants,
     })
