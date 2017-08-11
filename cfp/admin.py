@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
 
 from ponyconf.admin import SiteAdminMixin
-from .models import Conference, Participant, Talk, TalkCategory, Track
+from .models import Conference, Participant, Talk, TalkCategory, Track, Vote
 
 
 class ConferenceAdmin(SiteAdminMixin, admin.ModelAdmin):
@@ -42,3 +42,4 @@ admin.site.register(Conference, ConferenceAdmin)
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(TalkCategory, TalkCategoryAdmin)
+admin.site.register(Vote)
