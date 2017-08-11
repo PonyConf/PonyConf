@@ -15,10 +15,10 @@ from functools import reduce
 from mailing.models import Message
 from mailing.forms import MessageForm
 from .decorators import staff_required
-from .mixins import StaffRequiredMixin
+from .mixins import StaffRequiredMixin, OnSiteMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm
 
 
 def home(request, conference):
@@ -282,6 +282,14 @@ def participant_details(request, conference, participant_id):
     })
 
 
+class ParticipantUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
+    model = Participant
+    slug_field = 'token'
+    slug_url_kwarg = 'participant_id'
+    form_class = ParticipantStaffForm
+    template_name = 'cfp/staff/participant_form.html'
+
+
 @staff_required
 def conference(request, conference):
     form = ConferenceForm(request.POST or None, instance=conference)
@@ -325,12 +333,7 @@ You can now:
     })
 
 
-class OnSiteMixin:
-    def get_queryset(self):
-        return super().get_queryset().filter(site=self.kwargs['conference'].site)
-
-
-class TalkEdit(StaffRequiredMixin, OnSiteMixin, UpdateView):
+class TalkUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
     model = Talk
     slug_field = 'token'
     slug_url_kwarg = 'talk_id'

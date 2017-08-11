@@ -7,6 +7,8 @@
 
 <h1>{{ participant }}</h1>
 
+<p><a class="btn btn-success" href="{% url 'participant-edit' participant.token %}">{% trans "Edit" %}</a></p>
+
 <h2>{% trans "Biography" %}</h2>
 <p>{{ participant.biography|linebreaksbr }}</p>
 

@@ -90,7 +90,14 @@ class TalkFilterForm(forms.Form):
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
 
 
-ParticipantForm = modelform_factory(Participant, fields=('name','email', 'biography'))
+ParticipantForm = modelform_factory(Participant, fields=('name', 'email', 'biography'))
+
+
+class ParticipantStaffForm(ParticipantForm):
+    class Meta(ParticipantForm.Meta):
+        labels = {
+            'name': _('Name'),
+        }
 
 
 class UsersWidget(ModelSelect2MultipleWidget):

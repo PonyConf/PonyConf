@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-11 21:21+0000\n"
+"POT-Creation-Date: 2017-08-11 22:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,19 +95,20 @@ msgid "Contact"
 msgstr "Contacter"
 
 #: accounts/templates/accounts/participant_details.html:15
+#: cfp/templates/cfp/staff/participant_details.html:10
 #: cfp/templates/cfp/staff/talk_details.html:10
 #: proposals/templates/proposals/talk_detail.html:16
 msgid "Edit"
 msgstr "Éditer"
 
 #: accounts/templates/accounts/participant_details.html:20 cfp/models.py:86
-#: cfp/templates/cfp/staff/participant_details.html:10
+#: cfp/templates/cfp/staff/participant_details.html:12
 msgid "Biography"
 msgstr "Biographie"
 
 #: accounts/templates/accounts/participant_details.html:27
 #: cfp/templates/cfp/staff/base.html:18
-#: cfp/templates/cfp/staff/participant_details.html:31
+#: cfp/templates/cfp/staff/participant_details.html:33
 #: cfp/templates/cfp/staff/talk_list.html:8
 #: proposals/templates/proposals/talk_list.html:9
 msgid "Talks"
@@ -174,7 +175,7 @@ msgid "Constraints"
 msgstr "Contraintes"
 
 #: accounts/templates/accounts/participant_details.html:71 cfp/forms.py:53
-#: cfp/models.py:100 cfp/templates/cfp/staff/participant_details.html:14
+#: cfp/models.py:100 cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:92 proposals/models.py:161
 #: proposals/templates/proposals/talk_detail.html:102
 msgid "Notes"
@@ -194,12 +195,10 @@ msgid "View conversation"
 msgstr "Afficher la discussion"
 
 #: accounts/templates/accounts/participant_list.html:31
-#: conversations/templates/conversations/correspondent_list.html:27
 msgid "Unsubscribe from the conversation"
 msgstr "Se désabonner de la discussion"
 
 #: accounts/templates/accounts/participant_list.html:35
-#: conversations/templates/conversations/correspondent_list.html:29
 msgid "Subscribe to the conversation"
 msgstr "S’abonner à la discussion"
 
@@ -312,7 +311,7 @@ msgstr "Catégorie"
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:52 cfp/models.py:156
+#: cfp/forms.py:52 cfp/models.py:159
 #: cfp/templates/cfp/staff/talk_details.html:71 proposals/models.py:54
 #: proposals/models.py:77 proposals/models.py:158
 #: proposals/templates/proposals/talk_detail.html:72 volunteers/models.py:14
@@ -330,7 +329,7 @@ msgstr "Visible par les orateurs"
 msgid "Status"
 msgstr "Statut"
 
-#: cfp/forms.py:74 cfp/models.py:258
+#: cfp/forms.py:74 cfp/models.py:261
 #: cfp/templates/cfp/staff/talk_details.html:85
 #: cfp/templates/cfp/staff/talk_list.html:41
 #: cfp/templates/cfp/staff/track_form.html:14 proposals/models.py:160
@@ -356,17 +355,23 @@ msgstr ""
 msgid "Not assigned"
 msgstr "Pas encore assignée."
 
-#: cfp/forms.py:109
+#: cfp/forms.py:99 cfp/models.py:157
+#: cfp/templates/cfp/staff/participant_list.html:49 proposals/models.py:52
+#: proposals/models.py:75 proposals/models.py:132 volunteers/models.py:12
+msgid "Name"
+msgstr "Nom"
+
+#: cfp/forms.py:116
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:129
+#: cfp/forms.py:136
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:134
+#: cfp/forms.py:141
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -419,25 +424,19 @@ msgstr "Votre Nom"
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
-#: cfp/models.py:154 cfp/templates/cfp/staff/participant_list.html:49
-#: proposals/models.py:52 proposals/models.py:75 proposals/models.py:132
-#: volunteers/models.py:12
-msgid "Name"
-msgstr "Nom"
-
-#: cfp/models.py:177 proposals/models.py:96
+#: cfp/models.py:180 proposals/models.py:96
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: cfp/models.py:178 proposals/models.py:97
+#: cfp/models.py:181 proposals/models.py:97
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: cfp/models.py:179 proposals/models.py:98
+#: cfp/models.py:182 proposals/models.py:98
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:253 cfp/templates/cfp/staff/base.html:19
+#: cfp/models.py:256 cfp/templates/cfp/staff/base.html:19
 #: cfp/templates/cfp/staff/participant_list.html:8
 #: cfp/templates/cfp/staff/talk_details.html:75
 #: cfp/templates/cfp/staff/talk_list.html:40 proposals/models.py:154
@@ -447,19 +446,19 @@ msgstr "Label dans le xml du programme"
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: cfp/models.py:254
+#: cfp/models.py:257
 msgid "Talk Title"
 msgstr "Titre de votre proposition:"
 
-#: cfp/models.py:257
+#: cfp/models.py:260
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:259
+#: cfp/models.py:262
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
-#: cfp/models.py:259
+#: cfp/models.py:262
 msgid ""
 "If you have any constraint or if you have anything that may help you to "
 "select your talk, like a video or slides of your talk, please write it down "
@@ -469,23 +468,23 @@ msgstr ""
 "votre proposition, comme une vidéo, des slides, n'hésitez pas à les ajouter "
 "ici."
 
-#: cfp/models.py:260
+#: cfp/models.py:263
 msgid "Talk Category"
 msgstr "Catégorie de proposition"
 
-#: cfp/models.py:261
+#: cfp/models.py:264
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: cfp/models.py:262
+#: cfp/models.py:265
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: cfp/models.py:263
+#: cfp/models.py:266
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: cfp/models.py:266 proposals/models.py:165
+#: cfp/models.py:269 proposals/models.py:165
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
@@ -568,52 +567,52 @@ msgstr "Veuillez sélectionner une catégorie."
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
-#: cfp/templates/cfp/staff/participant_details.html:18
+#: cfp/templates/cfp/staff/participant_details.html:20
 msgid "Informations"
 msgstr "Informations"
 
-#: cfp/templates/cfp/staff/participant_details.html:20
+#: cfp/templates/cfp/staff/participant_details.html:22
 msgid "E-mail:"
 msgstr "E-mail :"
 
-#: cfp/templates/cfp/staff/participant_details.html:21
+#: cfp/templates/cfp/staff/participant_details.html:23
 msgid "Twitter:"
 msgstr "Twitter :"
 
-#: cfp/templates/cfp/staff/participant_details.html:22
+#: cfp/templates/cfp/staff/participant_details.html:24
 msgid "LinkedIn:"
 msgstr "LinkedIn :"
 
-#: cfp/templates/cfp/staff/participant_details.html:23
+#: cfp/templates/cfp/staff/participant_details.html:25
 msgid "Github:"
 msgstr "Github :"
 
-#: cfp/templates/cfp/staff/participant_details.html:24
+#: cfp/templates/cfp/staff/participant_details.html:26
 msgid "Website:"
 msgstr "Website :"
 
-#: cfp/templates/cfp/staff/participant_details.html:25
+#: cfp/templates/cfp/staff/participant_details.html:27
 msgid "Facebook:"
 msgstr "Facebook :"
 
-#: cfp/templates/cfp/staff/participant_details.html:26
+#: cfp/templates/cfp/staff/participant_details.html:28
 msgid "Mastodon:"
 msgstr "Mastodon :"
 
-#: cfp/templates/cfp/staff/participant_details.html:27
+#: cfp/templates/cfp/staff/participant_details.html:29
 msgid "Phone number:"
 msgstr "Numéro de téléphone :"
 
-#: cfp/templates/cfp/staff/participant_details.html:28
+#: cfp/templates/cfp/staff/participant_details.html:30
 msgid "Language:"
 msgstr "Langue :"
 
-#: cfp/templates/cfp/staff/participant_details.html:38
+#: cfp/templates/cfp/staff/participant_details.html:40
 #: proposals/templates/proposals/_talk_list.html:8
 msgid "by"
 msgstr "par"
 
-#: cfp/templates/cfp/staff/participant_details.html:41
+#: cfp/templates/cfp/staff/participant_details.html:43
 #: cfp/templates/cfp/staff/talk_list.html:57
 #: proposals/templates/proposals/_talk_list.html:11
 #: proposals/templates/proposals/_talk_list.html:17
@@ -621,29 +620,32 @@ msgstr "par"
 msgid "and"
 msgstr "et"
 
-#: cfp/templates/cfp/staff/participant_details.html:44
+#: cfp/templates/cfp/staff/participant_details.html:46
 #: proposals/templates/proposals/_talk_list.html:14
 msgid "in"
 msgstr "dans la session"
 
-#: cfp/templates/cfp/staff/participant_details.html:50
+#: cfp/templates/cfp/staff/participant_details.html:52
 #: proposals/templates/proposals/_talk_list.html:23
 msgid "No talks"
 msgstr "Aucun exposé"
 
-#: cfp/templates/cfp/staff/participant_details.html:53
+#: cfp/templates/cfp/staff/participant_details.html:55
 #: cfp/templates/cfp/staff/talk_details.html:133
-#: conversations/templates/conversations/inbox.html:9
 msgid "Messaging"
 msgstr "Messagerie"
 
-#: cfp/templates/cfp/staff/participant_details.html:57
+#: cfp/templates/cfp/staff/participant_details.html:59
 msgid ""
 "Send a message – <em>this message will be received by this participant and "
 "all the staff team</em>"
 msgstr ""
 "Envoyer un message – <em>ce message sera reçu par le participant et l’équipe "
 "d’organisation</em>"
+
+#: cfp/templates/cfp/staff/participant_form.html:8
+msgid "Edit a speaker"
+msgstr "Éditer un orateur"
 
 #: cfp/templates/cfp/staff/participant_list.html:45
 #: cfp/templates/cfp/staff/talk_list.html:33
@@ -876,7 +878,7 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:218 cfp/views.py:278 conversations/views.py:40
+#: cfp/views.py:218 cfp/views.py:278
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
@@ -900,11 +902,11 @@ msgstr "L’exposé a été décliné."
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:298
+#: cfp/views.py:306
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:299
+#: cfp/views.py:307
 msgid ""
 "Hi {},\n"
 "\n"
@@ -928,45 +930,22 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:320
+#: cfp/views.py:328
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:384
+#: cfp/views.py:387
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
-
-#: conversations/templates/conversations/_message_form.html:4
-msgid "Send a message"
-msgstr "Envoyer un message"
-
-#: conversations/templates/conversations/_message_form.html:12
-#: mailing/templates/mailing/_message_form.html:13
-msgid "Send"
-msgstr "Envoyer"
-
-#: conversations/templates/conversations/conversation.html:9
-#, python-format
-msgid "Conversation with %(correspondent)s"
-msgstr "Conversation avec %(correspondent)s"
-
-#: conversations/templates/conversations/correspondent_list.html:9
-msgid "Correspondents"
-msgstr "Correspondants"
-
-#: conversations/templates/conversations/correspondent_list.html:10
-msgid "This is the list of participants that you follow."
-msgstr "Ceci est la liste des participants que vous suivez."
-
-#: conversations/templates/conversations/inbox.html:10
-msgid "You can use this page to communicate with the staff."
-msgstr ""
-"Vous pouvez utiliser cette page pour communiquer avec l’équipe organisatrice."
 
 #: mailing/models.py:93
 #, python-format
 msgid "Message from %(author)s"
 msgstr "Message de %(author)s"
+
+#: mailing/templates/mailing/_message_form.html:13
+msgid "Send"
+msgstr "Envoyer"
 
 #: mailing/templates/mailing/_message_list.html:13
 msgid "No messages."
@@ -1428,6 +1407,23 @@ msgstr "Bénévoles"
 #: volunteers/templates/volunteers/volunteer_list.html:25
 msgid "volunteer"
 msgstr "bénévole"
+
+#~ msgid "Send a message"
+#~ msgstr "Envoyer un message"
+
+#~ msgid "Conversation with %(correspondent)s"
+#~ msgstr "Conversation avec %(correspondent)s"
+
+#~ msgid "Correspondents"
+#~ msgstr "Correspondants"
+
+#~ msgid "This is the list of participants that you follow."
+#~ msgstr "Ceci est la liste des participants que vous suivez."
+
+#~ msgid "You can use this page to communicate with the staff."
+#~ msgstr ""
+#~ "Vous pouvez utiliser cette page pour communiquer avec l’équipe "
+#~ "organisatrice."
 
 #~ msgid "Your talk \"{}\" has been submitted for {}"
 #~ msgstr "Votre proposition \"{}\" a été transmise à {}"

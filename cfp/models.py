@@ -105,6 +105,9 @@ class Participant(PonyConfModel):
 
     objects = ParticipantManager()
 
+    def get_absolute_url(self):
+        return reverse('participant-details', kwargs={'participant_id': self.token})
+
     class Meta:
         # A User can participe only once to a Conference (= Site)
         unique_together = ('site', 'email')

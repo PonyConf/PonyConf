@@ -1,0 +1,13 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block speakerstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Edit a speaker" %}</h1>
+
+{% url 'participant-details' participant.token as cancel_url %}
+{% include '_form.html' %}
+
+{% endblock %}
