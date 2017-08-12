@@ -21,5 +21,5 @@ class OnSiteAdminMixin:
 
     def save_model(self, request, obj, form, change):
         if not change:
-            obj.site = get_current_site(request)
+            obj.site = request.conference.site
         super().save_model(request, obj, form, change)
