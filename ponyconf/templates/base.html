@@ -45,7 +45,7 @@
             {% endcomment %}
             <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;{% trans "Logout" %}</a></li>
             {% else %}
-            <li{% block logintab %}{% endblock %}><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Staff" %}</a></li>
+            <li{% block logintab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Staff" %}</a></li>
             {% endif %}
           </ul>
         </div>
