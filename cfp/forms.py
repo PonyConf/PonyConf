@@ -125,6 +125,35 @@ class ParticipantStaffForm(ParticipantForm):
         }
 
 
+class ParticipantFilterForm(forms.Form):
+    category = forms.MultipleChoiceField(
+            label=_('Category'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+    status = forms.MultipleChoiceField(
+            label=_('Status'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=STATUS_CHOICES,
+    )
+    track = forms.MultipleChoiceField(
+            label=_('Track'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
+
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        categories = TalkCategory.objects.filter(site=site)
+        self.fields['category'].choices = categories.values_list('pk', 'name')
+        tracks = Track.objects.filter(site=site)
+        self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
+
+
 class UsersWidget(ModelSelect2MultipleWidget):
     model = User
     search_fields = [ '%s__icontains' % field for field in UserAdmin.search_fields ]

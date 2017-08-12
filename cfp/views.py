@@ -18,8 +18,9 @@ from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Room
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, ParticipantForm, \
-                   ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
+                   ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
+                   ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
 
 
 def home(request):
@@ -137,10 +138,10 @@ def staff(request):
 
 @staff_required
 def talk_list(request):
-    show_filters = False
     talks = Talk.objects.filter(site=request.conference.site)
-    filter_form = TalkFilterForm(request.GET or None, site=request.conference.site)
     # Filtering
+    show_filters = False
+    filter_form = TalkFilterForm(request.GET or None, site=request.conference.site)
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['category']):
@@ -290,8 +291,34 @@ def participant_list(request):
     participants = Participant.objects.filter(site=request.conference.site) \
                                       .extra(select={'lower_name': 'lower(name)'}) \
                                       .order_by('lower_name')
+    # Filtering
+    show_filters = False
+    filter_form = ParticipantFilterForm(request.GET or None, site=request.conference.site)
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        talks = Talk.objects.filter(site=request.conference.site)
+        if len(data['category']):
+            show_filters = True
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(category__pk=pk) for pk in data['category']]))
+        if len(data['status']):
+            show_filters = True
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+        if len(data['track']):
+            show_filters = True
+            q = Q()
+            if 'none' in data['track']:
+                data['track'].remove('none')
+                q |= Q(track__isnull=True)
+            if len(data['track']):
+                q |= Q(track__slug__in=data['track'])
+            talks = talks.filter(q)
+        participants = participants.filter(talk__in=talks)
+    contact_link = 'mailto:' + ','.join([participant.email for participant in participants.all()])
     return render(request, 'cfp/staff/participant_list.html', {
+        'filter_form': filter_form,
         'participant_list': participants,
+        'show_filters': show_filters,
+        'contact_link': contact_link,
     })
 
 
