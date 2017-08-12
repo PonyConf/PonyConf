@@ -32,6 +32,14 @@ class MessageThread(models.Model):
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)
 
 
+class MessageManager(models.Manager):
+    def get_queyset(self):
+        qs = super().get_queryset()
+        # Does not work so well as prefetch_related is limited to one content type for generic foreign keys
+        qs = qs.prefetch_related('author')
+        return qs
+
+
 class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     thread = models.ForeignKey(MessageThread)
@@ -41,6 +49,8 @@ class Message(models.Model):
     from_email = models.EmailField()
     content = models.TextField(blank=True)
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)
+
+    objects = MessageManager()
 
     class Meta:
         ordering = ['created']
