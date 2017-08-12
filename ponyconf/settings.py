@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'cfp',
     'mailing',
     #'proposals',
-    #'conversations',
     #'planning',
     #'volunteers',
 

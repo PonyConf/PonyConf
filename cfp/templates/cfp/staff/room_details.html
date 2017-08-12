@@ -1,0 +1,48 @@
+{% extends 'cfp/staff/base.html' %}
+  
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block roomstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{{ room.name }}
+  <small>{{ room.label }}</small>
+</h1>
+
+<h2>{% trans "Scheduled talks" %}</h2>
+{% for talk in room.talks_by_date %}
+{% if forloop.first %}<ul>{% endif %}
+<li>
+  <a href="{{ talk.get_absolute_url }}"><strong>{{ talk }}</strong></a>
+  {% for participant in talk.speakers.all %}
+  {% if forloop.first %} &ndash; <em>{% endif %}
+      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+  {% if forloop.last %}</em>{% endif %}
+  {% endfor %}
+  &ndash; <span>{{ talk.start_date }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
+</li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<em>{% trans "No talks." %}</em>
+{% endfor %}
+
+<h3>{% trans "Unscheduled talks" %}</h3>
+{% for talk in room.unscheduled_talks %}
+{% if forloop.first %}<ul>{% endif %}
+<li>
+  <a href="{{ talk.get_absolute_url }}"><strong>{{ talk }}</strong></a>
+  {% for participant in talk.speakers.all %}
+  {% if forloop.first %} &ndash; <em>{% endif %}
+      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+  {% if forloop.last %}</em>{% endif %}
+  {% endfor %}
+</li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<em>{% trans "No talks." %}</em>
+{% endfor %}
+
+{% endblock %}

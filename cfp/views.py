@@ -17,8 +17,8 @@ from mailing.forms import MessageForm
 from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin
 from .utils import is_staff
-from .models import Participant, Talk, TalkCategory, Vote, Track
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm
+from .models import Participant, Talk, TalkCategory, Vote, Track, Room
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
 
 
 def home(request, conference):
@@ -147,6 +147,12 @@ def talk_list(request, conference):
         if len(data['status']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+        if data['room'] != None:
+            show_filters = True
+            talks = talks.filter(room__isnull=not data['room'])
+        if data['scheduled'] != None:
+            show_filters = True
+            talks = talks.filter(start_date__isnull=not data['scheduled'])
         if len(data['track']):
             show_filters = True
             q = Q()
@@ -377,6 +383,39 @@ class TrackCreate(StaffRequiredMixin, TrackFormMixin, CreateView):
 
 
 class TrackUpdate(StaffRequiredMixin, TrackFormMixin, UpdateView):
+    pass
+
+
+class RoomMixin(OnSiteMixin):
+    model = Room
+
+
+class RoomList(StaffRequiredMixin, RoomMixin, ListView):
+    template_name = 'cfp/staff/room_list.html'
+
+
+class RoomDetail(StaffRequiredMixin, RoomMixin, DetailView):
+    template_name = 'cfp/staff/room_details.html'
+
+
+class RoomFormMixin(RoomMixin):
+    template_name = 'cfp/staff/room_form.html'
+    form_class = RoomForm
+    success_url = reverse_lazy('room-list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.kwargs['conference'],
+        })
+        return kwargs
+
+
+class RoomCreate(StaffRequiredMixin, RoomFormMixin, CreateView):
+    pass
+
+
+class RoomUpdate(StaffRequiredMixin, RoomFormMixin, UpdateView):
     pass
 
 

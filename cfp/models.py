@@ -115,27 +115,6 @@ class Participant(PonyConfModel):
     def __str__(self):
         return str(self.name)
 
-    #def get_absolute_url(self):
-    #    return reverse('show-participant', kwargs={'username': self.user.username})
-
-    #def is_orga(self):
-    #    return self.orga
-
-    #def is_staff(self):
-    #    return self.is_orga() or self.topic_set.exists() or self.track_set.exists()
-
-    #@property
-    #def topic_set(self):
-    #    return self.user.topic_set.filter(site=self.site)
-
-    #@property
-    #def track_set(self):
-    #    return self.user.track_set.filter(site=self.site)
-
-    #@property
-    #def talk_set(self):
-    #    return self.user.talk_set.filter(site=self.site)
-
     @property
     def accepted_talk_set(self):
         return self.talk_set.filter(accepted=True)
@@ -145,9 +124,6 @@ class Participant(PonyConfModel):
     @property
     def refused_talk_set(self):
         return self.talk_set.filter(accepted=False)
-    #@property
-    #def not_refused_talk_set(self): # accepted + pending
-    #    return self.talk_set.exclude(accepted=False)
 
 
 class Track(PonyConfModel):
@@ -171,6 +147,37 @@ class Track(PonyConfModel):
 
     def get_absolute_url(self):
         return reverse('talk-list') + '?track=%s' % self.slug
+
+
+class Room(models.Model):
+
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    slug = AutoSlugField(populate_from='name')
+    name = models.CharField(max_length=256, blank=True, default="")
+    label = models.CharField(max_length=256, blank=True, default="")
+    capacity = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['site', 'name']
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('room-details', kwargs={'slug': self.slug})
+
+    @property
+    def talks(self):
+        return self.talk_set.exclude(accepted=False)
+
+    @property
+    def talks_by_date(self):
+        return self.talks.filter(start_date__isnull=False).exclude(duration=0, category__duration=0).order_by('start_date').all()
+
+    @property
+    def unscheduled_talks(self):
+        return self.talks.filter(Q(start_date__isnull=True) | Q(duration=0, category__duration=0)).all()
 
 
 class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
@@ -200,8 +207,8 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
     def __str__(self):
         return ugettext(self.name)
 
-    #def get_absolute_url(self):
-    #    return reverse('list-talks') + '?kind=%d' % self.pk
+    def get_absolute_url(self):
+        return reverse('talk-list') + '?category=%d' % self.pk
 
 
 #class Attendee(PonyConfModel):
@@ -252,7 +259,6 @@ class Talk(PonyConfModel):
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    #proposer = models.ForeignKey(User, related_name='+')
     speakers = models.ManyToManyField(Participant, verbose_name=_('Speakers'))
     title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
@@ -265,9 +271,9 @@ class Talk(PonyConfModel):
     video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA', max_length=10, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)
     accepted = models.NullBooleanField(default=None)
-    #start_date = models.DateTimeField(null=True, blank=True, default=None)
+    start_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Beginning date and time'))
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
-    #room = models.ForeignKey(Room, blank=True, null=True, default=None)
+    room = models.ForeignKey(Room, blank=True, null=True, default=None)
     plenary = models.BooleanField(default=False)
     #materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
     #                             help_text=_('You can use this field to share some materials related to your intervention.'))
@@ -287,7 +293,7 @@ class Talk(PonyConfModel):
         return self.title
 
     def get_speakers_str(self):
-        speakers = [str(Participant.objects.get(site=self.site, user=speaker)) for speaker in self.speakers.all()]
+        speakers = list(map(str, self.speakers.all()))
         if len(speakers) == 0:
             return 'superman'
         elif len(speakers) == 1:
@@ -309,13 +315,13 @@ class Talk(PonyConfModel):
         else:
             return None
 
-    #@property
-    #def dtstart(self):
-    #    return self.start_date.strftime('%Y%m%dT%H%M%SZ')
+    @property
+    def dtstart(self):
+        return self.start_date.strftime('%Y%m%dT%H%M%SZ')
 
-    #@property
-    #def dtend(self):
-    #    return self.end_date.strftime('%Y%m%dT%H%M%SZ')
+    @property
+    def dtend(self):
+        return self.end_date.strftime('%Y%m%dT%H%M%SZ')
 
     #@property
     #def materials_name(self):
@@ -337,5 +343,5 @@ class Vote(PonyConfModel):
     def __str__(self):
         return "%+i by %s for %s" % (self.vote, self.user, self.talk)
 
-    #def get_absolute_url(self):
-    #    return self.talk.get_absolute_url()
+    def get_absolute_url(self):
+        return self.talk.get_absolute_url()

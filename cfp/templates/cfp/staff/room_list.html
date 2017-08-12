@@ -1,0 +1,46 @@
+{% extends 'cfp/staff/base.html' %}
+
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block roomstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Rooms" %}</h1>
+
+<p><a href="{% url 'room-add' %}" class="btn btn-success">{% trans "Add a room" %}</a><p>
+
+<div class="row">
+  {% for room in room_list %}
+  <div class="col-xs-6 col-sm-4">
+    <h2>
+      <a href="{{ room.get_absolute_url }}">{{ room }}</a>
+    </h2>
+    {% if room.label %}<p>{{ room.label }}</p>{% endif %}
+    <p>
+    {{ room.capacity }} {% trans "place" %}{{ room.capacity|pluralize }}
+    |
+    <span{% if room.unscheduled_talks %} class="text-danger" data-toggle="tooltip" data-placement="bottom" title="{% trans "Some talks are not scheduled yet." %}"{% endif %}>
+    {{ room.talks.count }} {% trans "talk" %}{{ room.talks.count|pluralize }}
+    </span>
+    |
+    <a href="{% url 'room-edit' room.slug %}">{% bootstrap_icon "pencil" %}</a>
+    </p>
+  </div>
+    {% cycle '' '<div class="clearfix visible-xs"></div>' %}
+    {% cycle '' '' '<div class="clearfix hidden-xs"></div>' %}
+  {% empty %}
+  <div class="col-xs-12"><em>{% trans "No rooms." %}</em></div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock %}

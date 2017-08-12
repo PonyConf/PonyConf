@@ -9,7 +9,7 @@ from django.utils.crypto import get_random_string
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
-from .models import Participant, Talk, TalkCategory, Track, Conference
+from .models import Participant, Talk, TalkCategory, Track, Conference, Room
 
 
 STATUS_CHOICES = [
@@ -45,7 +45,7 @@ class TalkStaffForm(TalkForm):
         self.fields['track'].queryset = tracks
 
     class Meta(TalkForm.Meta):
-        fields = ('category', 'track', 'title', 'description','notes')
+        fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room',)
         labels = {
             'category': _('Category'),
             'title': _('Title'),
@@ -79,6 +79,14 @@ class TalkFilterForm(forms.Form):
     vote = forms.NullBooleanField(
             label=_('Vote'),
             help_text=_('Filter talks you already / not yet voted for'),
+    )
+    room = forms.NullBooleanField(
+            label=_('Room'),
+            help_text=_('Filter talks already / not yet affected to a room'),
+    )
+    scheduled = forms.NullBooleanField(
+            label=_('Scheduled'),
+            help_text=_('Filter talks already / not yet scheduled'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -150,11 +158,7 @@ class CreateUserForm(forms.ModelForm):
         return user
 
 
-class TrackForm(forms.ModelForm):
-    class Meta:
-        model = Track
-        fields = ['name', 'description']
-
+class OnSiteNamedModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.conference = kwargs.pop('conference')
         super().__init__(*args, **kwargs)
@@ -168,8 +172,20 @@ class TrackForm(forms.ModelForm):
         return name
 
     def save(self, commit=True):
-        track = super().save(commit=False)
-        track.site = self.conference.site
+        obj = super().save(commit=False)
+        obj.site = self.conference.site
         if commit:
-            track.save()
-        return track
+            obj.save()
+        return obj
+
+
+class TrackForm(OnSiteNamedModelForm):
+    class Meta:
+        model = Track
+        fields = ['name', 'description']
+
+
+class RoomForm(OnSiteNamedModelForm):
+    class Meta:
+        model = Room
+        fields = ['name', 'label', 'capacity']

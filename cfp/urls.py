@@ -22,6 +22,10 @@ urlpatterns = [
     url(r'^staff/tracks/$', views.TrackList.as_view(), name='track-list'),
     url(r'^staff/tracks/add/$', views.TrackCreate.as_view(), name='track-add'),
     url(r'^staff/tracks/(?P<slug>[-\w]+)/edit/$', views.TrackUpdate.as_view(), name='track-edit'),
+    url(r'^staff/rooms/$', views.RoomList.as_view(), name='room-list'),
+    url(r'^staff/rooms/add/$', views.RoomCreate.as_view(), name='room-add'),
+    url(r'^staff/rooms/(?P<slug>[-\w]+)/$', views.RoomDetail.as_view(), name='room-details'),
+    url(r'^staff/rooms/(?P<slug>[-\w]+)/edit/$', views.RoomUpdate.as_view(), name='room-edit'),
     url(r'^staff/add-user/$', views.create_user, name='create-user'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
 

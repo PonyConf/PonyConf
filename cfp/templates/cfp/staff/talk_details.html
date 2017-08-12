@@ -9,36 +9,30 @@
 
 <p><a class="btn btn-success" href="{% url 'talk-edit' talk.token %}">{% trans "Edit" %}</a></p>
 
-<p>{% if talk.abstract %}{{ talk.abstract }}{% else %}<i>{% trans "No abstract provided." %}</i>{% endif %}</p>
-
-{% comment %}
-{% if moderate_perm %}
+<h3>{% trans "Information" %}</h3>
 
 <dl class="dl-horizontal">
-    <dt>{% trans "Format" %}</dt>
-      <dd><a href="{{ talk.event.get_absolute_url }}">{{ talk.event }}</a></dd>
-    <dt>{% trans "Topics" %}</dt>
-      <dd>{% for topic in talk.topics.all %}
-      <a href="{{ topic.get_absolute_url }}">{{ topic }}</a>{% if not forloop.last %}, {% endif %}
-      {% empty %}
-      <i>{% trans "No topics." %}</i>
-      {% endfor %}</dd>
+    <dt>{% trans "Category" %}</dt>
+      <dd><a href="{{ talk.category.get_absolute_url }}">{{ talk.category }}</a></dd>
+
+    <dt>{% trans "Status" %}</dt>
+      <dd><span class="label label-{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}</span></dd>
 
     <dt>{% trans "Track" %}</dt>
       <dd>{% if talk.track %}
         <a href="{{ talk.track.get_absolute_url }}">{{ talk.track }}</a>
       {% else %}
-      <em>{% trans "No assigned yet." %}</em>
+      <em>{% trans "No assigned yet." context "session" %}</em>
       {% endif %}</dd>
 
-    <dt>Horaire</dt>
+    <dt>{% trans "Timeslot" %}</dt>
       <dd>{% if talk.start_date %}
           <span class="date">{{ talk.start_date|date:"l d b" }}</span>,
           <span class="time">{{ talk.start_date|date:"H:i" }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
           {% else %}<em>{% trans "not defined" %}</em>
           {% endif %}
       </dd>
-    <dt>Salle</dt>
+    <dt>{% trans "Room" %}</dt>
       <dd>{% if talk.room %}
         <a href="{{ talk.room.get_absolute_url }}">
           <span class="label label-info">{{ talk.room }}</span>
@@ -46,6 +40,7 @@
         {% else %}<em>{% trans "not defined" %}</em>
         {% endif %}
       </dd>
+    {% comment %}
     {% if talk.registration_required %}
     <dt>{% trans "Registrations" %}</dt>
       <dd>{% if talk.attendees_limit %}{{ talk.attendees.count }} / {{ talk.attendees_limit }}{% else %}{% trans "required but unlimited" %}{% endif %}</dd>
@@ -58,15 +53,9 @@
     <dt>{% trans "Video" %}</dt>
       <dd><a href="{{ talk.video }}">{% trans "download" %}</a></dd>
     {% endif %}
+    {% endcomment %}
 
 </dl>
-
-{% endif %}
-{% endcomment %}
-
-<h3>{% trans "Category" %}</h3>
-
-<p>{{ talk.category }}</p>
 
 <h3>{% trans "Description" %}</h3>
 
@@ -82,13 +71,6 @@
 <i>{% trans "No speakers." %}</i>
 {% endfor %}
 
-<h3>{% trans "Track" %}</h3>
-{% if talk.track %}
-<p>{{ talk.track }}</p>
-{% else %}
-<p><em>{% trans "No assigned yet." context "session" %}</em></p>
-{% endif %}
-
 <h3>{% trans "Notes" %}</h3>
 
 <p>{% if talk.notes %}{{ talk.notes|linebreaksbr }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
@@ -96,8 +78,6 @@
 <h2>{% trans "Moderation" %}</h2>
 
 <h3>{% trans "Status" %}</h3>
-
-<span class="label label-{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}</span><br />
 
 {% if talk.accepted == None %}
 <h3>{% trans "Vote" %}</h3>
