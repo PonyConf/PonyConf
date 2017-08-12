@@ -18,7 +18,8 @@ from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Room
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, ParticipantForm, \
+                   ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
 
 
 def home(request):
@@ -169,6 +170,25 @@ def talk_list(request):
                 talks = talks.filter(vote__user=request.user)
             else:
                 talks = talks.exclude(vote__user=request.user)
+    # Action
+    action_form = TalkActionForm(request.POST or None, talks=talks, site=request.conference.site)
+    if request.method == 'POST' and action_form.is_valid():
+        data = action_form.cleaned_data
+        for talk in data['talks']:
+            talk = Talk.objects.get(site=request.conference.site, token=talk)
+            if data['decision'] != None and data['decision'] != talk.accepted:
+                if data['decision']:
+                    note = _("The talk has been accepted.")
+                else:
+                    note = _("The talk has been declined.")
+                Message.objects.create(thread=talk.conversation, author=request.user, content=note)
+                talk.accepted = data['decision']
+            if data['track']:
+                talk.track = Track.objects.get(site=request.conference.site, slug=data['track'])
+            if data['room']:
+                talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
+            talk.save()
+        return redirect(request.get_full_path())
     # Sorting
     if request.GET.get('order') == 'desc':
         sort_reverse = True
@@ -207,6 +227,7 @@ def talk_list(request):
         'show_filters': show_filters,
         'talk_list': talks,
         'filter_form': filter_form,
+        'action_form': action_form,
         'sort_urls': sort_urls,
         'sort_glyphicons': sort_glyphicons,
     })
@@ -243,6 +264,8 @@ def talk_vote(request, talk_id, score):
 def talk_decide(request, talk_id, accept):
     talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
     if request.method == 'POST':
+        talk.accepted = accept
+        talk.save()
         # Does we need to send a notification to the proposer?
         m = request.POST.get('message', '').strip()
         if m:
@@ -254,8 +277,6 @@ def talk_decide(request, talk_id, accept):
         else:
             note = _("The talk has been declined.")
         Message.objects.create(thread=talk.conversation, author=request.user, content=note)
-        talk.accepted = accept
-        talk.save()
         messages.success(request, _('Decision taken in account'))
         return redirect(talk.get_absolute_url())
     return render(request, 'cfp/staff/talk_decide.html', {

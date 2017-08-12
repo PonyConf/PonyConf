@@ -31,11 +31,13 @@
     </div>
 </div>
 
+<form method="post">
+
 <table class="table table-bordered table-hover">
     <caption>{% trans "Total:" %} {{ talk_list|length }} {% trans "talk" %}{{ talk_list|length|pluralize }}</caption>
     <thead>
         <tr>
-            {% comment %}<th></th>{% endcomment %}
+            <th></th>
             <th class="text-center">{% trans "Title" %} <a href="?{{ sort_urls.title }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.title }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.category }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.category }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Speakers" %}</th>
@@ -48,7 +50,7 @@
     <tbody>
     {% endif %}
         <tr class="{{ talk.accepted|yesno:"success,danger,warning" }}">
-            {% comment %}<td><input type="checkbox" name="talks" value="{{ talk.slug }}"></td>{% endcomment %}
+            <td><input type="checkbox" name="talks" value="{{ talk.token }}"></td>
             <td><a href="{% url 'talk-details' talk.token %}">{{ talk.title }}</a></td>
             <td>{{ talk.category }}</td>
             <td>
@@ -74,5 +76,19 @@
     {% endif %}
     {% endfor %}
 </table>
+
+<div id="filter">
+    <div class="well">
+        <h4>{% trans "For selected talks:" %}</h4>
+        {% csrf_token %}
+        {% bootstrap_form_errors action_form %}
+        {% bootstrap_form action_form exclude="talks" %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+        {% endbuttons %}
+    </div>
+</div>
+
+</form>
 
 {% endblock %}
