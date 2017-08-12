@@ -10,4 +10,4 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 class OnSiteMixin:
     def get_queryset(self):
-        return super().get_queryset().filter(site=self.kwargs['conference'].site)
+        return super().get_queryset().filter(site=self.request.conference.site)

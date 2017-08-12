@@ -1,4 +1,6 @@
-from .utils import get_current_conf
+from django.contrib.sites.shortcuts import get_current_site
+
+from .models import Conference
 
 
 class ConferenceMiddleware:
@@ -9,6 +11,6 @@ class ConferenceMiddleware:
         return self.get_response(request)
 
     def process_view(self, request, view, view_args, view_kwargs):
-        if view.__module__ != 'cfp.views':
-            return
-        view_kwargs['conference'] = get_current_conf(request)
+        site = get_current_site(request)
+        conf = Conference.objects.select_related('site').prefetch_related('staff').get(site=site)
+        request.conference = conf

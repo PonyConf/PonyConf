@@ -21,15 +21,16 @@ from .models import Participant, Talk, TalkCategory, Vote, Track, Room
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, ParticipantForm, ParticipantStaffForm, ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
 
 
-def home(request, conference):
-    if conference.home:
+def home(request):
+    if request.conference.home:
         return render(request, 'cfp/home.html')
     else:
         return redirect(reverse('talk-proposal'))
 
 
-def talk_proposal(request, conference, talk_id=None, participant_id=None):
+def talk_proposal(request, talk_id=None, participant_id=None):
 
+    conference = request.conference
     site = conference.site
     if is_staff(request, request.user):
         categories = TalkCategory.objects.filter(site=site)
@@ -102,19 +103,19 @@ Thanks!
     })
 
 
-def talk_proposal_speaker_edit(request, conference, talk_id, participant_id=None):
+def talk_proposal_speaker_edit(request, talk_id, participant_id=None):
 
-    talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
     participant = None
 
     if participant_id:
-        participant = get_object_or_404(Participant, token=participant_id, site=conference.site)
+        participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
 
     participant_form = ParticipantForm(request.POST or None, instance=participant)
 
     if request.method == 'POST' and participant_form.is_valid():
 
-        participant, created = Participant.objects.get_or_create(email=participant_form.cleaned_data['email'], site=conference.site)
+        participant, created = Participant.objects.get_or_create(email=participant_form.cleaned_data['email'], site=request.conference.site)
         participant_form = ParticipantForm(request.POST, instance=participant)
         participant = participant_form.save()
         participant.save()
@@ -129,15 +130,15 @@ def talk_proposal_speaker_edit(request, conference, talk_id, participant_id=None
 
 
 @staff_required
-def staff(request, conference):
+def staff(request):
     return render(request, 'cfp/staff/base.html')
 
 
 @staff_required
-def talk_list(request, conference):
+def talk_list(request):
     show_filters = False
-    talks = Talk.objects.filter(site=conference.site)
-    filter_form = TalkFilterForm(request.GET or None, site=conference.site)
+    talks = Talk.objects.filter(site=request.conference.site)
+    filter_form = TalkFilterForm(request.GET or None, site=request.conference.site)
     # Filtering
     if filter_form.is_valid():
         data = filter_form.cleaned_data
@@ -201,7 +202,7 @@ def talk_list(request, conference):
             glyphicon = 'sort'
         sort_urls[c] = url.urlencode()
         sort_glyphicons[c] = glyphicon
-    talks = talks.prefetch_related('category', 'speakers')
+    talks = talks.prefetch_related('category', 'speakers', 'track')
     return render(request, 'cfp/staff/talk_list.html', {
         'show_filters': show_filters,
         'talk_list': talks,
@@ -212,8 +213,8 @@ def talk_list(request, conference):
 
 
 @staff_required
-def talk_details(request, conference, talk_id):
-    talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
+def talk_details(request, talk_id):
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
@@ -229,8 +230,8 @@ def talk_details(request, conference, talk_id):
 
 
 @staff_required
-def talk_vote(request, conference, talk_id, score):
-    talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
+def talk_vote(request, talk_id, score):
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
@@ -239,8 +240,8 @@ def talk_vote(request, conference, talk_id, score):
 
 
 @staff_required
-def talk_decide(request, conference, talk_id, accept):
-    talk = get_object_or_404(Talk, token=talk_id, site=conference.site)
+def talk_decide(request, talk_id, accept):
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
     if request.method == 'POST':
         # Does we need to send a notification to the proposer?
         m = request.POST.get('message', '').strip()
@@ -264,8 +265,8 @@ def talk_decide(request, conference, talk_id, accept):
 
 
 @staff_required
-def participant_list(request, conference):
-    participants = Participant.objects.filter(site=conference.site) \
+def participant_list(request):
+    participants = Participant.objects.filter(site=request.conference.site) \
                                       .extra(select={'lower_name': 'lower(name)'}) \
                                       .order_by('lower_name')
     return render(request, 'cfp/staff/participant_list.html', {
@@ -274,8 +275,8 @@ def participant_list(request, conference):
 
 
 @staff_required
-def participant_details(request, conference, participant_id):
-    participant = get_object_or_404(Participant, token=participant_id, site=conference.site)
+def participant_details(request, participant_id):
+    participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
@@ -299,19 +300,19 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
 
 
 @staff_required
-def conference(request, conference):
-    form = ConferenceForm(request.POST or None, instance=conference)
+def conference(request):
+    form = ConferenceForm(request.POST or None, instance=request.conference)
 
     if request.method == 'POST' and form.is_valid():
-        old_staff = set(conference.staff.all())
+        old_staff = set(request.conference.staff.all())
         new_conference = form.save()
         new_staff = set(new_conference.staff.all())
         added_staff = new_staff - old_staff
         protocol = 'https' if request.is_secure() else 'http'
-        base_url = protocol+'://'+conference.site.domain
+        base_url = protocol+'://'+request.conference.site.domain
         url_login = base_url + reverse('login')
         url_password_reset = base_url + reverse('password_reset')
-        msg_title = _('[{}] You have been added to the staff team').format(conference.name)
+        msg_title = _('[{}] You have been added to the staff team').format(request.conference.name)
         msg_body_template = _("""Hi {},
 
 You have been added to the staff team.
@@ -325,11 +326,11 @@ You can now:
 """)
         # TODO: send bulk emails
         for user in added_staff:
-            msg_body = msg_body_template.format(user.get_full_name(), url_login, url_password_reset, conference.name)
+            msg_body = msg_body_template.format(user.get_full_name(), url_login, url_password_reset, request.conference.name)
             send_mail(
                 msg_title,
                 msg_body,
-                conference.from_email(),
+                request.conference.from_email(),
                 [user.email],
                 fail_silently=False,
             )
@@ -351,8 +352,8 @@ class TalkUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
-            'categories': TalkCategory.objects.filter(site=self.kwargs['conference'].site),
-            'tracks': Track.objects.filter(site=self.kwargs['conference'].site),
+            'categories': TalkCategory.objects.filter(site=self.request.conference.site),
+            'tracks': Track.objects.filter(site=self.request.conference.site),
         })
         return kwargs
 
@@ -373,7 +374,7 @@ class TrackFormMixin(TrackMixin):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
-            'conference': self.kwargs['conference'],
+            'conference': self.request.conference,
         })
         return kwargs
 
@@ -406,7 +407,7 @@ class RoomFormMixin(RoomMixin):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
-            'conference': self.kwargs['conference'],
+            'conference': self.request.conference,
         })
         return kwargs
 
@@ -420,7 +421,7 @@ class RoomUpdate(StaffRequiredMixin, RoomFormMixin, UpdateView):
 
 
 @staff_required
-def create_user(request, conference):
+def create_user(request):
     form = CreateUserForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
