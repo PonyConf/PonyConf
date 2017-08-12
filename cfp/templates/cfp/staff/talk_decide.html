@@ -1,0 +1,25 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n %}
+
+{% block talkstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% if accept %}{% trans "Are you sure to accept this proposals?" %}{% else %}{% trans "Are you sure to decline this proposals?" %}{% endif %}</h1>
+
+<h3>{% trans "Information about the proposals" %}</h3>
+<b>{% trans "Title:" %}</b> {{ talk.title }}<br />
+<b>{% trans "Kind:" %}</b> {{ talk.category }}<br />
+
+<h3>{% trans "Information for the proposer" %}</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="message">{% trans "If you want to send a message to the proposer, please enter it below. Remember to indicate which talk your message is reffering." %}</label>
+        <textarea name="message" class="form-control" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-{% if accept %}success{% else %}danger{% endif %}">{% if accept %}{% trans "Accept the proposal" %}{% else %}{% trans "Decline the proposal" %}{% endif %}</button>
+    <a class="btn btn-default" href="{% url 'talk-details' talk.token %}">{% trans "Cancel" %}</a>
+</form>
+
+{% endblock %}

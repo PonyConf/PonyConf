@@ -1,0 +1,62 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n %}
+
+{% block speakerstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{{ participant }}</h1>
+
+<p><a class="btn btn-success" href="{% url 'participant-edit' participant.token %}">{% trans "Edit" %}</a></p>
+
+<h2>{% trans "Biography" %}</h2>
+<p>{{ participant.biography|linebreaksbr }}</p>
+
+{% if participant.notes %}
+<h2>{% trans "Notes" %}</h2>
+<p>{{ participant.notes|linebreaksbr }}</p>
+{% endif %}
+
+<h2>{% trans "Informations" %}</h2>
+<ul>
+    <li><b>{% trans "E-mail:" %}</b> <a href="mailto:{{ participant.email }}">{{ participant.email }}</a></li>
+    {% if participant.twitter %}<li><b>{% trans "Twitter:" %}</b> <a href="{{ participant.twitter }}">{{ participant.twitter }}</a></li>{% endif %}
+    {% if participant.linkedin %}<li><b>{% trans "LinkedIn:" %}</b> <a href="{{ participant.linkedin }}">{{ participant.linkedin }}</a></li>{% endif %}
+    {% if participant.github %}<li><b>{% trans "Github:" %}</b> <a href="{{ participant.github }}">{{ participant.github }}</a></li>{% endif %}
+    {% if participant.website %}<li><b>{% trans "Website:" %}</b> <a href="{{ participant.website }}">{{ participant.website }}</a></li>{% endif %}
+    {% if participant.facebook %}<li><b>{% trans "Facebook:" %}</b> <a href="{{ participant.facebook }}">{{ participant.facebook }}</a></li>{% endif %}
+    {% if participant.mastodon %}<li><b>{% trans "Mastodon:" %}</b> <a href="{{ participant.mastodon }}">{{ participant.mastodon }}</a></li>{% endif %}
+    {% if participant.phone_number %}<li><b>{% trans "Phone number:" %}</b> {{ participant.phone_number }}</li>{% endif %}
+    {% if participant.language %}<li><b>{% trans "Language:" %}</b> {{ participant.language }}</li>{% endif %}
+</ul>
+
+<h2>{% trans "Talks" %}</h2>
+{% regroup participant.talk_set.all by category as category_list %}
+{% for category in category_list %}
+<h3>{{ category.list.0.category }}</h3>
+<ul>{% for talk in category.list %}
+  <li>
+    <a href="{% url 'talk-details' talk.token %}">{{ talk }}</a>
+    <i>{% trans "by" %}</i>
+    {% for p in talk.speakers.all %}
+    {% if p == participant %}{{ p }}{% else %}<a href="{% url 'participant-details' p.token %}">{{ p }}</a>{% endif %}
+    {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+    {% endfor %}
+    {% if talk.track %}
+    <i>{% trans "in" %}</i>
+    {{ talk.track }}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% empty %}{% trans "No talks" %}
+{% endfor %}
+
+<h2>{% trans "Messaging" %}</h2>
+
+{% include 'mailing/_message_list.html' with messages=participant.conversation.message_set.all %}
+
+{% trans "Send a message – <em>this message will be received by this participant and all the staff team</em>" as message_form_title %}
+{% include 'mailing/_message_form.html' %}
+
+{% endblock %}

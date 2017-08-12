@@ -1,8 +1,0 @@
-<div class="panel panel-{% if message.author == message.conversation.participation.user %}info{% else %}default{% endif %}">
-  <div class="panel-heading">
-    {{ message.created }} | <a href="{% url 'show-participant' message.author.username %}">{{ message.author.profile }}</a>
-  </div>
-  <div class="panel-body">
-    {{ message.content|linebreaksbr }}
-  </div>
-</div>

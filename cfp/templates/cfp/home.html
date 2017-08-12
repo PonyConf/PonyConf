@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load ponyconf_tags i18n %}
+
+{% block hometab %} class="active"{% endblock %}
+
+{% block content %}
+
+{% markdown conference.home %}
+
+{% endblock %}

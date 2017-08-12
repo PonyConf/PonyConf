@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load ponyconf_tags i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    {% trans "Your proposition have been successfully submitted!" %}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+      <p>{% trans "Thanks for your proposal" %} {{ participant }} !</p>
+      <p>{% trans "You can at anytime:" %}
+      <ul>
+          <li>{% trans "Edit your talk:" %} <a href="{% url 'talk-proposal-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-edit' talk.token participant.token %}</a></li>
+      <li>{% trans "Add an additionnal speaker:" %} <a href="{% url 'talk-proposal-speaker-add' talk.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-add' talk.token %}</a></li>
+      <li>{% trans "Edit your profile:" %} <a href="{% url 'talk-proposal-speaker-edit' talk.token participant.token %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{ conference.site.domain }}{% url 'talk-proposal-speaker-edit' talk.token participant.token %}</a></li>
+      </ul>
+      </p>
+      <p>{% trans "An email has been sent to you with those URLs" %}</p>
+  </div>
+</div>
+{% endblock %}

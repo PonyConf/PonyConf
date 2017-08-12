@@ -13,6 +13,6 @@
   {% for url, class, text in buttons %}
   <a href="{% url url %}" class="btn btn-{{ class }}">{{ text }}</a>
   {% endfor %}
-  <a href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'home' %}{% endif %}" class="btn btn-default">{% trans "Cancel" %}</a>
+  <a href="{% if cancel_url %}{{ cancel_url }}{% elif request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'home' %}{% endif %}" class="btn btn-default">{% trans "Cancel" %}</a>
   {% endbuttons %}
 </form>

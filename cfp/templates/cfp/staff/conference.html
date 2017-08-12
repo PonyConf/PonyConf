@@ -1,0 +1,27 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block conferencetab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Conference" %}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <a href="{% url 'create-user' %}" class="btn btn-default">{% trans "Add a new user" %}</a>
+    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+</form>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'cfp/staff/base.html' %}
+{% load bootstrap3 i18n %}
+
+{% block talkstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{{ talk.title }}</h1>
+
+<p><a class="btn btn-success" href="{% url 'talk-edit' talk.token %}">{% trans "Edit" %}</a></p>
+
+<h3>{% trans "Information" %}</h3>
+
+<dl class="dl-horizontal">
+    <dt>{% trans "Category" %}</dt>
+      <dd><a href="{{ talk.category.get_absolute_url }}">{{ talk.category }}</a></dd>
+
+    <dt>{% trans "Status" %}</dt>
+      <dd><span class="label label-{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}</span></dd>
+
+    <dt>{% trans "Track" %}</dt>
+      <dd>{% if talk.track %}
+        <a href="{{ talk.track.get_absolute_url }}">{{ talk.track }}</a>
+      {% else %}
+      <em>{% trans "No assigned yet." context "session" %}</em>
+      {% endif %}</dd>
+
+    <dt>{% trans "Timeslot" %}</dt>
+      <dd>{% if talk.start_date %}
+          <span class="date">{{ talk.start_date|date:"l d b" }}</span>,
+          <span class="time">{{ talk.start_date|date:"H:i" }} &ndash; {% if talk.end_date %}{{ talk.end_date|date:"H:i" }}{% else %}?{% endif %}</span>
+          {% else %}<em>{% trans "not defined" %}</em>
+          {% endif %}
+      </dd>
+    <dt>{% trans "Room" %}</dt>
+      <dd>{% if talk.room %}
+        <a href="{{ talk.room.get_absolute_url }}">
+          <span class="label label-info">{{ talk.room }}</span>
+        </a>
+        {% else %}<em>{% trans "not defined" %}</em>
+        {% endif %}
+      </dd>
+    {% comment %}
+    {% if talk.registration_required %}
+    <dt>{% trans "Registrations" %}</dt>
+      <dd>{% if talk.attendees_limit %}{{ talk.attendees.count }} / {{ talk.attendees_limit }}{% else %}{% trans "required but unlimited" %}{% endif %}</dd>
+    {% endif %}
+    {% if talk.materials %}
+    <dt>{% trans "Materials" %}</dt>
+      <dd><a href="{{ talk.materials.url }}">{{ talk.materials_name }}</a></dd>
+    {% endif %}
+    {% if talk.video %}
+    <dt>{% trans "Video" %}</dt>
+      <dd><a href="{{ talk.video }}">{% trans "download" %}</a></dd>
+    {% endif %}
+    {% endcomment %}
+
+</dl>
+
+<h3>{% trans "Description" %}</h3>
+
+<p>{% if talk.description %}{{ talk.description|linebreaksbr }}{% else %}<i>{% trans "No description provided." %}</i>{% endif %}</p>
+
+<h3>{% trans "Speakers" %}</h3>
+
+{% for participant in talk.speakers.all %}
+{% if forloop.first %}<ul>{% endif %}
+    <li><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a></li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<i>{% trans "No speakers." %}</i>
+{% endfor %}
+
+<h3>{% trans "Notes" %}</h3>
+
+<p>{% if talk.notes %}{{ talk.notes|linebreaksbr }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
+
+<h2>{% trans "Moderation" %}</h2>
+
+<h3>{% trans "Status" %}</h3>
+
+{% if talk.accepted == None %}
+<h3>{% trans "Vote" %}</h3>
+<div class="btn-group" role="group" aria-label="vote">
+  <a class="btn {% if vote.vote == -2 %} active {% endif %}btn-danger"  href="{% url 'talk-vote' talk.token '-2' %}">-2</a>
+  <a class="btn {% if vote.vote == -1 %} active {% endif %}btn-warning" href="{% url 'talk-vote' talk.token '-1' %}">-1</a>
+  <a class="btn {% if vote.vote == 0 %}  active {% endif %}btn-default" href="{% url 'talk-vote' talk.token '0'  %}"> 0</a>
+  <a class="btn {% if vote.vote == 1 %}  active {% endif %}btn-info"    href="{% url 'talk-vote' talk.token '+1'  %}">+1</a>
+  <a class="btn {% if vote.vote == 2 %}  active {% endif %}btn-success" href="{% url 'talk-vote' talk.token '+2'  %}">+2</a>
+</div>
+<br /><br />
+<p>{{ talk.vote_set.count }} {% trans "vote" %}{{ talk.vote_set.count|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}</p>
+
+<a href="{% url 'talk-accept' talk.token %}" class="btn btn-success">Accept</a>
+<a href="{% url 'talk-decline' talk.token %}" class="btn btn-danger">Decline</a>
+{% endif %}
+
+{% comment %}
+{% if talk.registration_required %}
+<h3>{% trans "Attendees" %}</h3>
+
+{% for attendee in talk.attendees.all %}
+{% if forloop.first %}<ol>{% endif %}
+  <li><a href="mailto:{{ attendee.get_email }}">{{ attendee.get_name }}</a></li>
+{% if forloop.last %}</ol>{% endif %}
+{% empty %}
+<em>{% trans "No attendees yet." %}</em>
+{% endfor %}
+
+{% endif %}
+{% endcomment %}
+
+<h3>{% trans "Messaging" %}</h3>
+
+{% include 'mailing/_message_list.html' with messages=talk.conversation.message_set.all %}
+
+{% trans "Comment this talk – <em>this message will be received by the staff team only</em>" as message_form_title %}
+{% include 'mailing/_message_form.html' %}
+
+{% endblock %}

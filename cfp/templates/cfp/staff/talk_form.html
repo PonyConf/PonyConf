@@ -1,0 +1,13 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block talkstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Edit a talk" %}</h1>
+
+{% url 'talk-details' talk.token as cancel_url %}
+{% include '_form.html' %}
+
+{% endblock %}

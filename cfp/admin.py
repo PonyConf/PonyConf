@@ -1,0 +1,43 @@
+from django.contrib import admin
+from django.contrib.sites.models import Site
+
+from ponyconf.admin import SiteAdminMixin
+from .models import Conference, Participant, Talk, TalkCategory, Track, Vote
+
+
+class ConferenceAdmin(SiteAdminMixin, admin.ModelAdmin):
+    filter_horizontal = ('staff',)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class ParticipantAdmin(SiteAdminMixin, admin.ModelAdmin):
+    pass
+
+
+class TrackAdmin(SiteAdminMixin, admin.ModelAdmin):
+    pass
+
+
+class TalkCategoryAdmin(SiteAdminMixin, admin.ModelAdmin):
+    pass
+
+
+class TalkAdmin(SiteAdminMixin, admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['speakers'].queryset = Participant.objects.filter(site=request.conference.site)
+        form.base_fields['track'].queryset = Track.objects.filter(site=request.conference.site)
+        form.base_fields['category'].queryset = TalkCategory.objects.filter(site=request.conference.site)
+        return form
+
+
+admin.site.register(Conference, ConferenceAdmin)
+admin.site.register(Participant, ParticipantAdmin)
+admin.site.register(Talk, TalkAdmin)
+admin.site.register(TalkCategory, TalkCategoryAdmin)
+admin.site.register(Vote)

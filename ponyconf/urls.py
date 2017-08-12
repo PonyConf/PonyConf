@@ -15,15 +15,31 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = _('Email address')
+
+
+class EmailLoginView(LoginView):
+    authentication_form = EmailAuthenticationForm
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('accounts.urls')),
-    url(r'', include('proposals.urls')),
-    url(r'', include('planning.urls')),
-    url(r'^volunteers/', include('volunteers.urls')),
-    url(r'^conversations/', include('conversations.urls')),
-    url(r'^select2/', include('django_select2.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'accounts/login/', EmailLoginView.as_view()),
+    url(r'accounts/', include('django.contrib.auth.urls')),
+    url(r'^', include('cfp.urls')),
+]
+
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

@@ -37,19 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # our apps
-    'accounts',
+    #'accounts',
     'ponyconf',
-    'proposals',
-    'conversations',
-    'planning',
-    'volunteers',
+    'cfp',
+    'mailing',
+    #'planning',
+    #'volunteers',
 
     # external apps
     'djangobower',
     'bootstrap3',
-    'registration',
     'django_select2',
-    'avatar',
+    'crispy_forms',
 
     # build-in apps
     'django.contrib.admin',
@@ -60,7 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -70,6 +69,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'cfp.middleware.ConferenceMiddleware',
 ]
 
 ROOT_URLCONF = 'ponyconf.urls'
@@ -86,8 +87,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'ponyconf.context_processors.site',
-                'proposals.context_processors.conference',
+                #'ponyconf.context_processors.site',
+                'cfp.context_processors.conference',
             ],
         },
     },
@@ -204,9 +205,15 @@ BOOTSTRAP3 = {
 
 SELECT2_JS = 'select2/dist/js/select2.min.js'
 SELECT2_CSS = 'select2/dist/css/select2.min.css'
+SELECT2_I18N_PATH = 'select2/dist/js/i18n'
 
-AUTHENTICATION_BACKENDS = ['yeouia.backends.YummyEmailOrUsernameInsensitiveAuth']
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'ponyconf.backends.EmailBackend',
+]
 LOGOUT_REDIRECT_URL = 'home'
+
+CRISPY_TEMPLATE_PACK='bootstrap3'
 
 # django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -215,5 +222,17 @@ INCLUDE_REGISTER_URL = True
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'select2',
+    },
 }
+
+SELECT2_CACHE_BACKEND = 'select2'
+
+SERVER_EMAIL = 'ponyconf@example.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+
