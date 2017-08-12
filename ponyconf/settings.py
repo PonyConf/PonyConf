@@ -41,16 +41,13 @@ INSTALLED_APPS = [
     'ponyconf',
     'cfp',
     'mailing',
-    #'proposals',
     #'planning',
     #'volunteers',
 
     # external apps
     'djangobower',
     'bootstrap3',
-    #'registration',
     'django_select2',
-    #'avatar',
     'crispy_forms',
 
     # build-in apps
