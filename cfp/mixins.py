@@ -13,6 +13,15 @@ class OnSiteMixin:
         return super().get_queryset().filter(site=self.request.conference.site)
 
 
+class OnSiteFormMixin:
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.request.conference,
+        })
+        return kwargs
+
+
 class OnSiteAdminMixin:
     exclude = ('site',)
 

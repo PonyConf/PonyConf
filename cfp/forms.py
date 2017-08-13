@@ -38,11 +38,13 @@ class TalkForm(forms.ModelForm):
         fields = ('category', 'title', 'description','notes')
 
 
-class TalkStaffForm(TalkForm):
+class TalkStaffForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        tracks = kwargs.pop('tracks')
+        conference = kwargs.pop('conference')
         super().__init__(*args, **kwargs)
-        self.fields['track'].queryset = tracks
+        self.fields['category'].queryset = TalkCategory.objects.filter(site=conference.site)
+        self.fields['track'].queryset = Track.objects.filter(site=conference.site)
+        self.fields['room'].queryset = Room.objects.filter(site=conference.site)
 
     class Meta(TalkForm.Meta):
         fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room',)

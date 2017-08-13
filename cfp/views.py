@@ -15,7 +15,7 @@ from functools import reduce
 from mailing.models import Message
 from mailing.forms import MessageForm
 from .decorators import staff_required
-from .mixins import StaffRequiredMixin, OnSiteMixin
+from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Room
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
@@ -390,20 +390,12 @@ You can now:
     })
 
 
-class TalkUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
+class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
     model = Talk
     slug_field = 'token'
     slug_url_kwarg = 'talk_id'
     form_class = TalkStaffForm
     template_name = 'cfp/staff/talk_form.html'
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'categories': TalkCategory.objects.filter(site=self.request.conference.site),
-            'tracks': Track.objects.filter(site=self.request.conference.site),
-        })
-        return kwargs
 
 
 class TrackMixin(OnSiteMixin):
@@ -414,17 +406,10 @@ class TrackList(StaffRequiredMixin, TrackMixin, ListView):
     template_name = 'cfp/staff/track_list.html'
 
 
-class TrackFormMixin(TrackMixin):
+class TrackFormMixin(OnSiteFormMixin, TrackMixin):
     template_name = 'cfp/staff/track_form.html'
     form_class = TrackForm
     success_url = reverse_lazy('track-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'conference': self.request.conference,
-        })
-        return kwargs
 
 
 class TrackCreate(StaffRequiredMixin, TrackFormMixin, CreateView):
