@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^staff/rooms/(?P<slug>[-\w]+)/$', views.RoomDetail.as_view(), name='room-details'),
     url(r'^staff/rooms/(?P<slug>[-\w]+)/edit/$', views.RoomUpdate.as_view(), name='room-edit'),
     url(r'^staff/add-user/$', views.create_user, name='create-user'),
+    url(r'^staff/schedule/$', views.schedule, name='schedule'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]

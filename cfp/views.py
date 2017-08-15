@@ -14,6 +14,7 @@ from functools import reduce
 
 from mailing.models import Message
 from mailing.forms import MessageForm
+from .planning import Program
 from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
@@ -465,6 +466,20 @@ def create_user(request):
     return render(request, 'cfp/staff/create_user.html', {
         'form': form,
     })
+
+
+@staff_required
+def schedule(request):
+    program = Program(site=request.conference.site, pending=True, cache=False)
+    output = request.GET.get('format', 'html')
+    if output == 'html':
+        return render(request, 'cfp/staff/schedule.html', {'program': program.render('html')})
+    elif output == 'xml':
+        return HttpResponse(program.render('xml'), content_type="application/xml")
+    elif output == 'ics':
+        return HttpResponse(program.render('ics'), content_type="text/calendar")
+    else:
+        raise Http404("Format not available")
 
 
 class Select2View(StaffRequiredMixin, AutoResponseView):
