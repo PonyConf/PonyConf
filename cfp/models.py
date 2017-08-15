@@ -31,6 +31,7 @@ class Conference(models.Model):
     reply_email = models.CharField(max_length=100, blank=True, verbose_name=_('Reply email'))
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
     secure_domain = models.BooleanField(default=True, verbose_name=_('Secure domain (HTTPS)'))
+    schedule_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Schedule publishing date'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
@@ -47,6 +48,10 @@ class Conference(models.Model):
         return TalkCategory.objects.filter(site=self.site)\
                             .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
                             .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
+
+    @property
+    def schedule_available(self):
+        return self.schedule_publishing_date and self.schedule_publishing_date <= timezone.now()
 
     def from_email(self):
         return self.name+' <'+self.contact_email+'>'

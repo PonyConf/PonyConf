@@ -217,31 +217,31 @@ class Program:
                     for speaker in talk.speakers.all():
                         persons += '          <person id="%(person_id)s">%(person)s</person>\n' % {
                             'person_id': speaker.id,
-                            'person': str(speaker.profile),
+                            'person': str(speaker),
                         }
                     links = ''
                     registration = ''
-                    if talk.registration_required and self.conference.subscriptions_open:
-                        links += mark_safe("""
-                        <link tag="registration">%(link)s</link>""" % {
-                            'link': reverse('register-for-a-talk', args=[talk.slug]),
-                        })
-                        registration = """
-                      <attendees_max>%(max)s</attendees_max>
-                      <attendees_remain>%(remain)s</attendees_remain>""" % {
-                        'max': talk.attendees_limit,
-                        'remain': talk.remaining_attendees or 0,
-                      }
-                    if talk.materials:
-                        links += mark_safe("""
-                        <link tag="slides">%(link)s</link>""" % {
-                            'link': talk.materials.url,
-                        })
-                    if talk.video:
-                        links += mark_safe("""
-                        <link tag="video">%(link)s</link>""" % {
-                            'link': talk.video,
-                        })
+                    #if talk.registration_required and self.conference.subscriptions_open:
+                    #    links += mark_safe("""
+                    #    <link tag="registration">%(link)s</link>""" % {
+                    #        'link': reverse('register-for-a-talk', args=[talk.slug]),
+                    #    })
+                    #    registration = """
+                    #  <attendees_max>%(max)s</attendees_max>
+                    #  <attendees_remain>%(remain)s</attendees_remain>""" % {
+                    #    'max': talk.attendees_limit,
+                    #    'remain': talk.remaining_attendees or 0,
+                    #  }
+                    #if talk.materials:
+                    #    links += mark_safe("""
+                    #    <link tag="slides">%(link)s</link>""" % {
+                    #        'link': talk.materials.url,
+                    #    })
+                    #if talk.video:
+                    #    links += mark_safe("""
+                    #    <link tag="video">%(link)s</link>""" % {
+                    #        'link': talk.video,
+                    #    })
                     days_xml += """    <event id="%(id)s">
         <start>%(start)s</start>
         <duration>%(duration)s</duration>
@@ -252,7 +252,6 @@ class Program:
         <track>%(track)s</track>
         <type>%(type)s</type>
         <language/>
-        <abstract>%(abstract)s</abstract>
         <description>%(description)s</description>
         <persons>
 %(persons)s        </persons>
@@ -267,7 +266,6 @@ class Program:
                         'title': escape(talk.title),
                         'track': escape(talk.track or ''),
                         'type': escape(talk.category.label),
-                        'abstract': escape(talk.abstract),
                         'description': escape(talk.description),
                         'persons': persons,
                         'links': links,
@@ -320,7 +318,7 @@ DTEND:{talk.dtend}
 SUMMARY:{talk.title}
 LOCATION:{talk.room}
 STATUS: CONFIRMED
-DESCRIPTION:{talk.abstract}\n---\n\n{talk.description}
+DESCRIPTION:{talk.description}
 UID:{site.domain}/{talk.id}
 END:VEVENT
 """

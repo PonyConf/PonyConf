@@ -164,7 +164,7 @@ class UsersWidget(ModelSelect2MultipleWidget):
 class ConferenceForm(forms.ModelForm):
     class Meta:
         model = Conference
-        fields = ['name', 'home', 'venue', 'city', 'contact_email', 'reply_email', 'secure_domain', 'staff',]
+        fields = ['name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'reply_email', 'secure_domain', 'staff',]
         widgets = {
             'staff': UsersWidget(),
         }

@@ -16,7 +16,7 @@
       <li{% block speakerstab %}{% endblock %}><a href="{% url 'participant-list' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Speakers" %}</a></li>
       <li{% block trackstab %}{% endblock %}><a href="{% url 'track-list' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Tracks" %}</a></li>
       <li{% block roomstab %}{% endblock %}><a href="{% url 'room-list' %}"><span class="glyphicon glyphicon-tent"></span>&nbsp;{% trans "Rooms" %}</a></li>
-      <li{% block scheduletab %}{% endblock %}><a href="{% url 'schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a></li>
+      <li{% block scheduletab %}{% endblock %}><a href="{% url 'staff-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a></li>
       <li{% block conferencetab %}{% endblock %}><a href="{% url 'conference' %}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;{% trans "Conference" %}</a></li>
       {% if request.user.is_staff %}
       <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django-Admin</a></li>

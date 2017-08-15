@@ -7,6 +7,9 @@ from django.views.generic import FormView, TemplateView
 from django.contrib import messages
 from django.db.models import Q
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.http import HttpResponse, Http404
+from django.utils import timezone
+from django.core.exceptions import PermissionDenied
 
 from django_select2.views import AutoResponseView
 
@@ -468,18 +471,29 @@ def create_user(request):
     })
 
 
-@staff_required
-def schedule(request):
-    program = Program(site=request.conference.site, pending=True, cache=False)
-    output = request.GET.get('format', 'html')
-    if output == 'html':
-        return render(request, 'cfp/staff/schedule.html', {'program': program.render('html')})
-    elif output == 'xml':
+def schedule(request, program_format, pending, cache, template):
+    program = Program(site=request.conference.site, pending=pending, cache=cache)
+    if program_format is None:
+        return render(request, template, {'program': program.render('html')})
+    elif program_format == 'html':
+        return HttpResponse(program.render('html'))
+    elif program_format == 'xml':
         return HttpResponse(program.render('xml'), content_type="application/xml")
-    elif output == 'ics':
+    elif program_format == 'ics':
         return HttpResponse(program.render('ics'), content_type="text/calendar")
     else:
-        raise Http404("Format not available")
+        raise Http404(_("Format '%s' not available" % program_format))
+
+
+def public_schedule(request, program_format):
+    if not request.conference.schedule_available:
+        raise PermissionDenied
+    return schedule(request, program_format=program_format, pending=False, cache=True, template='cfp/schedule.html')
+
+
+@staff_required
+def staff_schedule(request, program_format):
+    return schedule(request, program_format=program_format, pending=True, cache=False, template='cfp/staff/schedule.html')
 
 
 class Select2View(StaffRequiredMixin, AutoResponseView):
