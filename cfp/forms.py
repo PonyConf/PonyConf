@@ -215,7 +215,7 @@ class OnSiteNamedModelForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         if (not self.instance or self.instance.name != name) \
-                and Track.objects.filter(site=self.conference.site, name=name).exists():
+                and self._meta.model.objects.filter(site=self.conference.site, name=name).exists():
             raise self.instance.unique_error_message(self._meta.model, ['name'])
         return name
 
