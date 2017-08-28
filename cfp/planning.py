@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from copy import deepcopy
 from collections import OrderedDict, namedtuple
 from itertools import islice
+from zlib import adler32
 
 from .models import Conference, Talk, Room
 
@@ -287,7 +288,7 @@ class Program:
 
     def render(self, output='html'):
         if self.cache:
-            cache_entry = 'program.%s.%s' % ('pending' if self.pending else 'final', output)
+            cache_entry = 'ponyconf-%d' % adler32('|'.join(map(str, [self.site.domain, output, self.pending])).encode('utf-8'))
             result = cache.get(cache_entry)
             if not result:
                 result = getattr(self, '_as_%s' % output)()
