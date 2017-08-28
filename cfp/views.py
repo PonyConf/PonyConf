@@ -486,7 +486,7 @@ def schedule(request, program_format, pending, cache, template):
 
 
 def public_schedule(request, program_format):
-    if not request.conference.schedule_available:
+    if not request.conference.schedule_available and not is_staff(request, request.user):
         raise PermissionDenied
     return schedule(request, program_format=program_format, pending=False, cache=True, template='cfp/schedule.html')
 
