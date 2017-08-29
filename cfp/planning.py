@@ -10,6 +10,7 @@ from copy import deepcopy
 from collections import OrderedDict, namedtuple
 from itertools import islice
 from zlib import adler32
+import xml.etree.ElementTree as ET
 
 from .models import Conference, Talk, Room
 
@@ -172,113 +173,80 @@ class Program:
     def _as_xml(self):
         if not self.initialized:
             self._lazy_init()
-        result = """<?xml version="1.0" encoding="UTF-8"?>
-<schedule>
-%(conference)s
-%(days)s
-</schedule>
-"""
+        schedule = ET.Element('schedule')
 
-        if not len(self.days):
-            return result % {'conference': '', 'days': ''}
+        #if not len(self.days):
+        #    return result % {'conference': '', 'days': ''}
 
-        conference_xml = """<conference>
-  <title>%(title)s</title>
-  <subtitle></subtitle>
-  <venue>%(venue)s</venue>
-  <city>%(city)s</city>
-  <start>%(start_date)s</start>
-  <end>%(end_date)s</end>
-  <days>%(days_count)s</days>
-  <day_change>09:00:00</day_change>
-  <timeslot_duration>00:05:00</timeslot_duration>
-</conference>
-""" % {
-            'title': self.site.name,
-            'venue': ', '.join(map(lambda x: x.strip(), self.conference.venue.split('\n'))),
-            'city': self.conference.city,
-            'start_date': sorted(self.days.keys())[0].strftime('%Y-%m-%d'),
-            'end_date': sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d'),
-            'days_count': len(self.days),
-        }
+        conference = ET.SubElement(schedule, 'conference')
+        elt = ET.SubElement(conference, 'title')
+        elt.text = self.site.name
+        elt = ET.SubElement(conference, 'venue')
+        elt.text = ', '.join(map(lambda x: x.strip(), self.conference.venue.split('\n')))
+        elt = ET.SubElement(conference, 'city')
+        elt.text = self.conference.city
+        elt = ET.SubElement(conference, 'start_date')
+        elt.text = sorted(self.days.keys())[0].strftime('%Y-%m-%d')
+        elt = ET.SubElement(conference, 'end_date')
+        elt.text = sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d')
+        elt = ET.SubElement(conference, 'days_count')
+        elt.text = str(len(self.days))
 
-        days_xml = ''
         for index, day in enumerate(sorted(self.days.keys())):
-            days_xml += '<day index="%(index)s" date="%(date)s">\n' % {
-                'index': index + 1,
-                'date': day.strftime('%Y-%m-%d'),
-            }
+            day_elt = ET.SubElement(schedule, 'day', index=str(index+1), date=day.strftime('%Y-%m-%d'))
             for room in self.rooms.all():
-                days_xml += '  <room name="%s">\n' % room.name
+                room_elt = ET.SubElement(day_elt, 'room', name=room.name)
                 for talk in self.talks.filter(room=room).order_by('start_date'):
                     if localtime(talk.start_date).date() != day:
                         continue
+                    talk_elt = ET.SubElement(day_elt, 'event', id=str(talk.id))
                     duration = talk.estimated_duration
-                    persons = ''
+                    persons_elt = ET.SubElement(talk_elt, 'persons')
                     for speaker in talk.speakers.all():
-                        persons += '          <person id="%(person_id)s">%(person)s</person>\n' % {
-                            'person_id': speaker.id,
-                            'person': str(speaker),
-                        }
-                    links = ''
-                    registration = ''
-                    #if talk.registration_required and self.conference.subscriptions_open:
-                    #    links += mark_safe("""
-                    #    <link tag="registration">%(link)s</link>""" % {
-                    #        'link': reverse('register-for-a-talk', args=[talk.slug]),
-                    #    })
-                    #    registration = """
-                    #  <attendees_max>%(max)s</attendees_max>
-                    #  <attendees_remain>%(remain)s</attendees_remain>""" % {
-                    #    'max': talk.attendees_limit,
-                    #    'remain': talk.remaining_attendees or 0,
-                    #  }
-                    #if talk.materials:
-                    #    links += mark_safe("""
-                    #    <link tag="slides">%(link)s</link>""" % {
-                    #        'link': talk.materials.url,
-                    #    })
-                    #if talk.video:
-                    #    links += mark_safe("""
-                    #    <link tag="video">%(link)s</link>""" % {
-                    #        'link': talk.video,
-                    #    })
-                    days_xml += """    <event id="%(id)s">
-        <start>%(start)s</start>
-        <duration>%(duration)s</duration>
-        <room>%(room)s</room>
-        <slug>%(slug)s</slug>
-        <title>%(title)s</title>
-        <subtitle/>
-        <track>%(track)s</track>
-        <type>%(type)s</type>
-        <language/>
-        <description>%(description)s</description>
-        <persons>
-%(persons)s        </persons>
-        <links>%(links)s
-        </links>%(registration)s
-      </event>\n""" % {
-                        'id': talk.id,
-                        'start': localtime(talk.start_date).strftime('%H:%M'),
-                        'duration': '%02d:%02d' % (talk.estimated_duration / 60, talk.estimated_duration % 60),
-                        'room': escape(room.name),
-                        'slug': escape(talk.slug),
-                        'title': escape(talk.title),
-                        'track': escape(talk.track or ''),
-                        'type': escape(talk.category.label),
-                        'description': escape(talk.description),
-                        'persons': persons,
-                        'links': links,
-                        'registration': registration,
-                    }
-                days_xml += '  </room>\n'
-            days_xml += '</day>\n'
+                        person_elt = ET.SubElement(talk_elt, 'person', id=str(speaker.id))
+                        person_elt.text = str(speaker)
+#                    #if talk.registration_required and self.conference.subscriptions_open:
+#                    #    links += mark_safe("""
+#                    #    <link tag="registration">%(link)s</link>""" % {
+#                    #        'link': reverse('register-for-a-talk', args=[talk.slug]),
+#                    #    })
+#                    #    registration = """
+#                    #  <attendees_max>%(max)s</attendees_max>
+#                    #  <attendees_remain>%(remain)s</attendees_remain>""" % {
+#                    #    'max': talk.attendees_limit,
+#                    #    'remain': talk.remaining_attendees or 0,
+#                    #  }
+#                    #if talk.materials:
+#                    #    links += mark_safe("""
+#                    #    <link tag="slides">%(link)s</link>""" % {
+#                    #        'link': talk.materials.url,
+#                    #    })
+#                    #if talk.video:
+#                    #    links += mark_safe("""
+#                    #    <link tag="video">%(link)s</link>""" % {
+#                    #        'link': talk.video,
+#                    #    })
+                    elt = ET.SubElement(talk_elt, 'start')
+                    elt.text = localtime(talk.start_date).strftime('%H:%M')
+                    elt = ET.SubElement(talk_elt, 'duration')
+                    elt.text = '%02d:%02d' % (talk.estimated_duration / 60, talk.estimated_duration % 60)
+                    elt = ET.SubElement(talk_elt, 'room')
+                    elt.text = room.name
+                    elt = ET.SubElement(talk_elt, 'slug')
+                    elt.text = talk.slug
+                    elt = ET.SubElement(talk_elt, 'title')
+                    elt.text = talk.title
+                    elt = ET.SubElement(talk_elt, 'subtitle')
+                    elt = ET.SubElement(talk_elt, 'track')
+                    elt.text = talk.track or ''
+                    elt = ET.SubElement(talk_elt, 'type')
+                    elt.text = talk.category.label
+                    elt = ET.SubElement(talk_elt, 'language')
+                    elt = ET.SubElement(talk_elt, 'description')
+                    elt.text = talk.description
+                    elt = ET.SubElement(talk_elt, 'links')
 
-        return result % {
-            'conference': '\n'.join(map(lambda x: '  ' + x, conference_xml.split('\n'))),
-            'days': '\n'.join(map(lambda x: '  ' + x, days_xml.split('\n'))),
-        }
+        return ET.tostring(schedule)
 
     def _as_ics(self):
         if not self.initialized:
