@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-15 18:57+0000\n"
-"PO-Revision-Date: 2017-08-15 21:06+0200\n"
+"POT-Creation-Date: 2017-08-29 23:11+0000\n"
+"PO-Revision-Date: 2017-08-30 01:14+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.0.3\n"
 
 #: cfp/forms.py:16
@@ -30,103 +30,108 @@ msgstr "Accepté"
 msgid "Declined"
 msgstr "Décliné"
 
-#: cfp/forms.py:52 cfp/forms.py:64 cfp/forms.py:132
+#: cfp/forms.py:49
+#, python-format
+msgid "Default duration: %(duration)d min"
+msgstr "Durée par défaut : %(duration)d min"
+
+#: cfp/forms.py:54 cfp/forms.py:66 cfp/forms.py:134
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
 
-#: cfp/forms.py:53 cfp/templates/cfp/staff/talk_list.html:39
+#: cfp/forms.py:55 cfp/templates/cfp/staff/talk_list.html:39
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:54 cfp/models.py:140
+#: cfp/forms.py:56 cfp/models.py:140
 #: cfp/templates/cfp/staff/talk_details.html:61 volunteers/models.py:14
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:55 cfp/models.py:105
+#: cfp/forms.py:57 cfp/models.py:105
 #: cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:75
 msgid "Notes"
 msgstr "Notes"
 
-#: cfp/forms.py:58
+#: cfp/forms.py:60
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:70 cfp/forms.py:138
+#: cfp/forms.py:72 cfp/forms.py:140
 #: cfp/templates/cfp/staff/talk_details.html:18
 #: cfp/templates/cfp/staff/talk_details.html:81
 #: cfp/templates/cfp/staff/talk_list.html:43
 msgid "Status"
 msgstr "Statut"
 
-#: cfp/forms.py:76 cfp/forms.py:144 cfp/models.py:272
+#: cfp/forms.py:78 cfp/forms.py:146 cfp/models.py:272
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:42
 #: cfp/templates/cfp/staff/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: cfp/forms.py:82 cfp/templates/cfp/staff/talk_details.html:84
+#: cfp/forms.py:84 cfp/templates/cfp/staff/talk_details.html:84
 msgid "Vote"
 msgstr "Vote"
 
-#: cfp/forms.py:83
+#: cfp/forms.py:85
 msgid "Filter talks you already / not yet voted for"
 msgstr ""
 "Filtrer les propositions pour lesquelles vous avez déjà voté / pas encore "
 "voté"
 
-#: cfp/forms.py:86 cfp/templates/cfp/staff/room_form.html:14
+#: cfp/forms.py:88 cfp/templates/cfp/staff/room_form.html:14
 #: cfp/templates/cfp/staff/talk_details.html:35
 msgid "Room"
 msgstr "Salle"
 
-#: cfp/forms.py:87
+#: cfp/forms.py:89
 msgid "Filter talks already / not yet affected to a room"
 msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 
-#: cfp/forms.py:90
+#: cfp/forms.py:92
 msgid "Scheduled"
 msgstr "Programmé"
 
-#: cfp/forms.py:91
+#: cfp/forms.py:93
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: cfp/forms.py:100 cfp/forms.py:156
+#: cfp/forms.py:102 cfp/forms.py:158
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
-#: cfp/forms.py:105
+#: cfp/forms.py:107
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: cfp/forms.py:106
+#: cfp/forms.py:108
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: cfp/forms.py:107
+#: cfp/forms.py:109
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:126 cfp/models.py:138
+#: cfp/forms.py:128 cfp/models.py:138
 #: cfp/templates/cfp/staff/participant_list.html:34 volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/forms.py:172
+#: cfp/forms.py:174
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:192
+#: cfp/forms.py:194
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:197
+#: cfp/forms.py:199
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -318,9 +323,8 @@ msgid "You can at anytime:"
 msgstr "Vous pouvez à tout moment :"
 
 #: cfp/templates/cfp/complete.html:19
-#, fuzzy
 msgid "Edit your talk:"
-msgstr "Éditer un exposé"
+msgstr "Modifiez votre exposé :"
 
 #: cfp/templates/cfp/complete.html:20
 msgid "Add an additionnal speaker:"
@@ -728,7 +732,6 @@ msgid "Message sent!"
 msgstr "Message envoyé !"
 
 #: cfp/views.py:264
-#, fuzzy
 msgid "Vote successfully created"
 msgstr "A voté !"
 
