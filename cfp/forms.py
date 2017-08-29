@@ -45,6 +45,8 @@ class TalkStaffForm(forms.ModelForm):
         self.fields['category'].queryset = TalkCategory.objects.filter(site=conference.site)
         self.fields['track'].queryset = Track.objects.filter(site=conference.site)
         self.fields['room'].queryset = Room.objects.filter(site=conference.site)
+        if self.instance and self.instance.category and self.instance.category.duration:
+            self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
     class Meta(TalkForm.Meta):
         fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room',)
