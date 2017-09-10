@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+PRODID:-//{{ site.domain }}//{{ site.name }}//FR
+X-WR-CALNAME:PonyConf
+X-WR-TIMEZONE:Europe/Paris
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+{% for talk in talks %}
+BEGIN:VEVENT
+DTSTAMP:{{ talk.dtstamp }}
+DTSTART:{{ talk.dtstart }}
+DTEND:{{ talk.dtend }}
+SUMMARY:{{ talk.title }}
+LOCATION:{{ talk.room }}
+STATUS:{% if talk.accepted %}CONFIRMED{% else %}TENTATIVE{% endif %}
+DESCRIPTION:{{ talk.description }}
+UID:{{ site.domain }}/{{ talk.id }}
+END:VEVENT{% endfor %}
+END:VCALENDAR
