@@ -328,6 +328,14 @@ class Talk(PonyConfModel):
     def dtend(self):
         return self.end_date.strftime('%Y%m%dT%H%M%SZ')
 
+    @property
+    def dtstamp(self):
+        return self.updated.strftime('%Y%m%dT%H%M%SZ')
+
+    @property
+    def status(self):
+        return 'CONFIRMED' if self.accepted else 'TENTATIVE'
+
     #@property
     #def materials_name(self):
     #    return basename(self.materials.name)

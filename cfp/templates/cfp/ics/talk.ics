@@ -1,9 +1,10 @@
 BEGIN:VEVENT
+DTSTAMP:{% talk.dtstamp %}
 DTSTART:{% talk.dtstart %}
 DTEND:{% talk.dtend %}
 SUMMARY:{% talk.title %}
 LOCATION:{% talk.room %}
-STATUS: CONFIRMED
+STATUS:{% talk.status %}
 DESCRIPTION:{% talk.description %}
 UID:{% site.domain %}/{talk.id %}
 END:VEVENT
