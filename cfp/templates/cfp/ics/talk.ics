@@ -1,0 +1,9 @@
+BEGIN:VEVENT
+DTSTART:{% talk.dtstart %}
+DTEND:{% talk.dtend %}
+SUMMARY:{% talk.title %}
+LOCATION:{% talk.room %}
+STATUS: CONFIRMED
+DESCRIPTION:{% talk.description %}
+UID:{% site.domain %}/{talk.id %}
+END:VEVENT

@@ -4,30 +4,26 @@
 #
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
--e git+git://github.com/Nim65s/django-YummyEmailOrUsernameInsensitiveAuth.git#egg=django-yeouia
 bleach==2.0.0
 chardet==3.0.4
-decorator==4.0.11         # via ipython
-django-appconf==1.0.2     # via django-avatar, django-select2
+decorator==4.1.2          # via ipython
+django-appconf==1.0.2     # via django-select2
 django-autoslug==1.9.3
-django-avatar==4.0.0
-django-bootstrap3==8.2.3
+django-bootstrap3==9.0.0
 django-bower==5.2.0
 django-colorful==1.2
+django-crispy-forms==1.6.1
 django-debug-toolbar==1.8
-django-extensions==1.8.1
-django-registration-redux==1.6
-django-select2==5.10.0
-django==1.11.3
+django-extensions==1.9.1
+django-select2==5.11.1
+django==1.11.5
 html5lib==0.999999999     # via bleach
 ipython==6.1.0
 jedi==0.10.2              # via ipython
-markdown==2.6.8
-olefile==0.44             # via pillow
+markdown==2.6.9
 pexpect==4.2.1            # via ipython
 pickleshare==0.7.4        # via ipython
-pillow==4.2.1             # via django-avatar
-prompt-toolkit==1.0.14    # via ipython
+prompt-toolkit==1.0.15    # via ipython
 pygments==2.2.0           # via ipython
 pytz==2017.2              # via django
 simplegeneric==0.8.1      # via ipython
@@ -36,6 +32,3 @@ sqlparse==0.2.3           # via django-debug-toolbar
 traitlets==4.3.2          # via ipython
 wcwidth==0.1.7            # via prompt-toolkit
 webencodings==0.5.1       # via html5lib
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools                # via html5lib, ipython

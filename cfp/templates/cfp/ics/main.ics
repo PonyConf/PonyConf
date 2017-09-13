@@ -1,0 +1,9 @@
+BEGIN:VCALENDAR
+PRODID:-//{% site.domain %}//{% site.name %}//FR
+X-WR-CALNAME:PonyConf
+X-WR-TIMEZONE:Europe/Paris
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+{% talks %}
+END:VCALENDAR
