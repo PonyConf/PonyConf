@@ -485,13 +485,13 @@ def schedule(request, program_format, pending, cache, template):
         response['Content-Disposition'] = 'attachment; filename="planning.ics"'
         ics = []
         for line in program.render('ics').split('\n'):
-            line = line.strip()
+            line = line.strip().replace('<br />', '')
             if len(line) < 50:
                 ics.append(line)
             else:  # https://icalendar.org/iCalendar-RFC-5545/3-1-content-lines.html
                 for i in range(ceil(len(line) / 50)):
                     ics.append((' ' if i > 0 else '') + line[i * 50:(i + 1) * 50])
-        response.write('\r\n'.join([line for line in ics if line]))
+        response.write('\r\n'.join([line for line in ics if line]).strip() + '\r\n')
         return response
     else:
         raise Http404(_("Format '%s' not available" % program_format))

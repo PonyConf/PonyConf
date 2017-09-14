@@ -13,7 +13,7 @@ DTEND:{{ talk.dtend }}
 SUMMARY:{{ talk.title }}
 LOCATION:{{ talk.room }}
 STATUS:{% if talk.accepted %}CONFIRMED{% else %}TENTATIVE{% endif %}
-DESCRIPTION:{{ talk.description }}
+DESCRIPTION:{{ talk.description|linebreaksbr }}
 UID:{{ site.domain }}/{{ talk.id }}
 END:VEVENT{% endfor %}
 END:VCALENDAR
