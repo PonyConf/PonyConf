@@ -320,18 +320,6 @@ class Talk(PonyConfModel):
         else:
             return None
 
-    @property
-    def dtstart(self):
-        return self.start_date.strftime('%Y%m%dT%H%M%SZ')
-
-    @property
-    def dtend(self):
-        return self.end_date.strftime('%Y%m%dT%H%M%SZ')
-
-    @property
-    def dtstamp(self):
-        return self.updated.strftime('%Y%m%dT%H%M%SZ')
-
     #@property
     #def materials_name(self):
     #    return basename(self.materials.name)

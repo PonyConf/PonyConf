@@ -5,6 +5,7 @@ from django.utils.timezone import localtime
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
+from django.conf import settings
 
 from datetime import datetime, timedelta
 from copy import deepcopy
@@ -12,6 +13,7 @@ from collections import OrderedDict, namedtuple
 from itertools import islice
 from zlib import adler32
 import xml.etree.ElementTree as ET
+from icalendar import Calendar as iCalendar, Event as iEvent
 
 from .models import Conference, Talk, Room
 
@@ -252,7 +254,27 @@ class Program:
     def _as_ics(self):
         if not self.initialized:
             self._lazy_init()
-        return get_template('cfp/planning.ics').render({'site': self.site, 'talks': self.talks})
+        cal = iCalendar()
+        cal.add('prodid', '-//PonyConf.io//PonyConf//FR')
+        cal.add('version', '2.0')
+        cal.add('x-wr-calname', self.conference.name)
+        cal.add('x-wr-timezone', settings.TIME_ZONE)
+        cal.add('calscale', 'GREGORIAN')
+        for talk in self.talks.all():
+            event = iEvent()
+            event.add('dtstart', talk.start_date)
+            if not talk.end_date:
+                continue
+            event.add('dtend', talk.end_date)
+            event.add('dtstamp', talk.updated)
+            event.add('summary', talk.title)
+            if talk.room:
+                event.add('location', talk.room)
+            event.add('status', 'CONFIRMED' if talk.accepted else 'TENTATIVE')
+            event.add('description', talk.description)
+            event.add('uid', '%s/%s' % (self.site.domain, talk.id))
+            cal.add_component(event)
+        return cal.to_ical()
 
     def render(self, output='html'):
         if self.cache:
