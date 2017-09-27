@@ -44,7 +44,8 @@
     {% if talk.registration_required %}
     <dt>{% trans "Registrations" %}</dt>
       <dd>{% if talk.attendees_limit %}{{ talk.attendees.count }} / {{ talk.attendees_limit }}{% else %}{% trans "required but unlimited" %}{% endif %}</dd>
-    {% endif %}
+    {% endif %
+    {% endcomment %}
     {% if talk.materials %}
     <dt>{% trans "Materials" %}</dt>
       <dd><a href="{{ talk.materials.url }}">{{ talk.materials_name }}</a></dd>
@@ -53,7 +54,6 @@
     <dt>{% trans "Video" %}</dt>
       <dd><a href="{{ talk.video }}">{% trans "download" %}</a></dd>
     {% endif %}
-    {% endcomment %}
 
 </dl>
 

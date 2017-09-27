@@ -28,7 +28,6 @@ class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         categories = kwargs.pop('categories')
         super().__init__(*args, **kwargs)
-        self.fields['materials'].required = False
         if categories.exists():
             self.fields['category'].queryset = categories
         else:
@@ -36,7 +35,7 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        fields = ('category', 'title', 'description','notes')
+        fields = ('category', 'title', 'description', 'notes')
 
 
 class TalkStaffForm(forms.ModelForm):
@@ -46,11 +45,12 @@ class TalkStaffForm(forms.ModelForm):
         self.fields['category'].queryset = TalkCategory.objects.filter(site=conference.site)
         self.fields['track'].queryset = Track.objects.filter(site=conference.site)
         self.fields['room'].queryset = Room.objects.filter(site=conference.site)
+        self.fields['materials'].required = False
         if self.instance and self.instance.category and self.instance.category.duration:
             self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
     class Meta(TalkForm.Meta):
-        fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room',)
+        fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room', 'materials', 'video',)
         labels = {
             'category': _('Category'),
             'title': _('Title'),

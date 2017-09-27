@@ -14,7 +14,7 @@ from colorful.fields import RGBColorField
 
 import uuid
 from datetime import timedelta
-from os.path import join
+from os.path import join, basename
 
 from ponyconf.utils import PonyConfModel
 from mailing.models import MessageThread
@@ -241,10 +241,6 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
 #        return self.get_name()
 
 
-#def talk_materials_destination(talk, filename):
-#    return join(talk.site.name, talk.slug, filename)
-
-
 class TalkManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -325,9 +321,9 @@ class Talk(PonyConfModel):
         else:
             return None
 
-    #@property
-    #def materials_name(self):
-    #    return basename(self.materials.name)
+    @property
+    def materials_name(self):
+        return basename(self.materials.name)
 
     class Meta:
         ordering = ('category__id', 'title',)

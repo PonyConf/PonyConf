@@ -10,7 +10,8 @@ register = template.Library()
 def staff(request):
     return is_staff(request, request.user)
 
-@register.filter('duration_format')
+
+@register.filter(name='duration_format')
 def duration_format(value):
     value = int(value)
     hours = int(value/60)

@@ -8,6 +8,6 @@
 <h1>{% trans "Edit a talk" %}</h1>
 
 {% url 'talk-details' talk.token as cancel_url %}
-{% include '_form.html' %}
+{% include '_form.html' with multipart=True %}
 
 {% endblock %}
