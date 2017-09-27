@@ -14,6 +14,7 @@ from colorful.fields import RGBColorField
 
 import uuid
 from datetime import timedelta
+from os.path import join
 
 from ponyconf.utils import PonyConfModel
 from mailing.models import MessageThread
@@ -250,6 +251,9 @@ class TalkManager(models.Manager):
         qs = qs.annotate(score=Coalesce(Avg('vote__vote'), 0))
         return qs
 
+def talks_materials_destination(talk, filename):
+    return join(talk.site.name, talk.slug, filename)
+
 
 class Talk(PonyConfModel):
 
@@ -280,8 +284,9 @@ class Talk(PonyConfModel):
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None)
     plenary = models.BooleanField(default=False)
-    #materials = models.FileField(null=True, upload_to=talk_materials_destination, verbose_name=_('Materials'),
-    #                             help_text=_('You can use this field to share some materials related to your intervention.'))
+    materials = models.FileField(null=True, upload_to=talks_materials_destination, verbose_name=_('Materials'),
+                                     help_text=_('You can use this field to share some materials related to your intervention.'))
+    video = models.URLField(max_length=1000, blank=True, default='', verbose_name='Video URL')
 
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-29 23:11+0000\n"
+"POT-Creation-Date: 2017-09-27 18:39+0000\n"
 "PO-Revision-Date: 2017-08-30 01:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -30,148 +30,164 @@ msgstr "Accepté"
 msgid "Declined"
 msgstr "Décliné"
 
-#: cfp/forms.py:49
+#: cfp/forms.py:50
 #, python-format
 msgid "Default duration: %(duration)d min"
 msgstr "Durée par défaut : %(duration)d min"
 
-#: cfp/forms.py:54 cfp/forms.py:66 cfp/forms.py:134
+#: cfp/forms.py:55 cfp/forms.py:67 cfp/forms.py:143
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
 
-#: cfp/forms.py:55 cfp/templates/cfp/staff/talk_list.html:39
+#: cfp/forms.py:56 cfp/templates/cfp/staff/talk_list.html:39
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:56 cfp/models.py:140
+#: cfp/forms.py:57 cfp/models.py:141
 #: cfp/templates/cfp/staff/talk_details.html:61 volunteers/models.py:14
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:57 cfp/models.py:105
+#: cfp/forms.py:58 cfp/models.py:106
 #: cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:75
 msgid "Notes"
 msgstr "Notes"
 
-#: cfp/forms.py:60
+#: cfp/forms.py:61
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:72 cfp/forms.py:140
+#: cfp/forms.py:73 cfp/forms.py:149
 #: cfp/templates/cfp/staff/talk_details.html:18
 #: cfp/templates/cfp/staff/talk_details.html:81
 #: cfp/templates/cfp/staff/talk_list.html:43
 msgid "Status"
 msgstr "Statut"
 
-#: cfp/forms.py:78 cfp/forms.py:146 cfp/models.py:272
+#: cfp/forms.py:79 cfp/forms.py:155 cfp/models.py:276
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:42
 #: cfp/templates/cfp/staff/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: cfp/forms.py:84 cfp/templates/cfp/staff/talk_details.html:84
+#: cfp/forms.py:85 cfp/templates/cfp/staff/talk_details.html:84
 msgid "Vote"
 msgstr "Vote"
 
-#: cfp/forms.py:85
+#: cfp/forms.py:86
 msgid "Filter talks you already / not yet voted for"
 msgstr ""
 "Filtrer les propositions pour lesquelles vous avez déjà voté / pas encore "
 "voté"
 
-#: cfp/forms.py:88 cfp/templates/cfp/staff/room_form.html:14
+#: cfp/forms.py:89 cfp/templates/cfp/staff/room_form.html:14
 #: cfp/templates/cfp/staff/talk_details.html:35
 msgid "Room"
 msgstr "Salle"
 
-#: cfp/forms.py:89
+#: cfp/forms.py:90
 msgid "Filter talks already / not yet affected to a room"
 msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 
-#: cfp/forms.py:92
+#: cfp/forms.py:93
 msgid "Scheduled"
 msgstr "Programmé"
 
-#: cfp/forms.py:93
+#: cfp/forms.py:94
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: cfp/forms.py:102 cfp/forms.py:158
+#: cfp/forms.py:97 cfp/models.py:287
+msgid "Materials"
+msgstr "Supports"
+
+#: cfp/forms.py:98
+msgid "Filter talks with / without materials"
+msgstr "Filtrer les exposés avec / sans supports"
+
+#: cfp/forms.py:101
+msgid "Video"
+msgstr "Vidéo"
+
+#: cfp/forms.py:102
+msgid "Filter talks with / without video"
+msgstr "Filtrer les exposés avec / sans vidéo"
+
+#: cfp/forms.py:111 cfp/forms.py:167
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
-#: cfp/forms.py:107
+#: cfp/forms.py:116
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: cfp/forms.py:108
+#: cfp/forms.py:117
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: cfp/forms.py:109
+#: cfp/forms.py:118
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:128 cfp/models.py:138
+#: cfp/forms.py:137 cfp/models.py:139
 #: cfp/templates/cfp/staff/participant_list.html:34 volunteers/models.py:12
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/forms.py:174
+#: cfp/forms.py:183
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:194
+#: cfp/forms.py:203
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:199
+#: cfp/forms.py:208
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
-#: cfp/models.py:26
+#: cfp/models.py:27
 msgid "Conference name"
 msgstr "Nom de la conférence"
 
-#: cfp/models.py:27
+#: cfp/models.py:28
 msgid "Homepage (markdown)"
 msgstr "Page d’accueil (markdown)"
 
-#: cfp/models.py:28
+#: cfp/models.py:29
 msgid "Venue information"
 msgstr "Informations sur le lieu"
 
-#: cfp/models.py:29
+#: cfp/models.py:30
 msgid "City"
 msgstr "Ville"
 
-#: cfp/models.py:30
+#: cfp/models.py:31
 msgid "Contact email"
 msgstr "Email de contact"
 
-#: cfp/models.py:31
+#: cfp/models.py:32
 msgid "Reply email"
 msgstr "Adresse de réponse"
 
-#: cfp/models.py:32
+#: cfp/models.py:33
 msgid "Staff members"
 msgstr "Membres du staff"
 
-#: cfp/models.py:33
+#: cfp/models.py:34
 msgid "Secure domain (HTTPS)"
 msgstr "Domaine sécurisé (HTTPS)"
 
-#: cfp/models.py:34
+#: cfp/models.py:35
 msgid "Schedule publishing date"
 msgstr "Date de publication du programme"
 
-#: cfp/models.py:66
+#: cfp/models.py:67
 #, python-brace-format
 msgid ""
 "The reply email should be a formatable string accepting a token argument (e."
@@ -180,79 +196,78 @@ msgstr ""
 "L’adresse de réponse doit être une chaine de texte formatable avec un "
 "argument « token » (e.g. ponyconf+{token}@exemple.com)."
 
-#: cfp/models.py:88
+#: cfp/models.py:89
 msgid "Your Name"
 msgstr "Votre Nom"
 
-#: cfp/models.py:91 cfp/templates/cfp/staff/participant_details.html:12
+#: cfp/models.py:92 cfp/templates/cfp/staff/participant_details.html:12
 msgid "Biography"
 msgstr "Biographie"
 
-#: cfp/models.py:94
+#: cfp/models.py:95
 msgid "Twitter"
 msgstr "Twitter"
 
-#: cfp/models.py:95
+#: cfp/models.py:96
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: cfp/models.py:96
+#: cfp/models.py:97
 msgid "Github"
 msgstr "Github"
 
-#: cfp/models.py:97
+#: cfp/models.py:98
 msgid "Website"
 msgstr "Site web"
 
-#: cfp/models.py:98
+#: cfp/models.py:99
 msgid "Facebook"
 msgstr "Facebook"
 
-#: cfp/models.py:99
+#: cfp/models.py:100
 msgid "Mastodon"
 msgstr "Mastodon"
 
-#: cfp/models.py:101
+#: cfp/models.py:102
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: cfp/models.py:105
+#: cfp/models.py:106
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
-#: cfp/models.py:192
+#: cfp/models.py:193
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: cfp/models.py:193
+#: cfp/models.py:194
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: cfp/models.py:194
+#: cfp/models.py:195
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:267 cfp/templates/cfp/staff/base.html:17
+#: cfp/models.py:271 cfp/templates/cfp/staff/base.html:17
 #: cfp/templates/cfp/staff/participant_list.html:8
 #: cfp/templates/cfp/staff/talk_details.html:65
 #: cfp/templates/cfp/staff/talk_list.html:41
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: cfp/models.py:268
+#: cfp/models.py:272
 msgid "Talk Title"
 msgstr "Titre de la proposition"
 
-#: cfp/models.py:271
+#: cfp/models.py:275
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:273
+#: cfp/models.py:277
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
-#: cfp/models.py:273
-#, fuzzy
+#: cfp/models.py:277
 msgid ""
 "If you have any constraint or if you have anything that may help you to "
 "select your talk, like a video or slides of your talk, please write it down "
@@ -262,29 +277,36 @@ msgstr ""
 "votre proposition, comme une vidéo, des slides, n'hésitez pas à les ajouter "
 "ici."
 
-#: cfp/models.py:274
+#: cfp/models.py:278
 msgid "Talk Category"
 msgstr "Catégorie de proposition"
 
-#: cfp/models.py:275
+#: cfp/models.py:279
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: cfp/models.py:276
+#: cfp/models.py:280
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: cfp/models.py:277
+#: cfp/models.py:281
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: cfp/models.py:279
+#: cfp/models.py:283
 msgid "Beginning date and time"
 msgstr "Date et heure de début"
 
-#: cfp/models.py:280
+#: cfp/models.py:284
 msgid "Duration (min)"
 msgstr "Durée (min)"
+
+#: cfp/models.py:288
+msgid ""
+"You can use this field to share some materials related to your intervention."
+msgstr ""
+"Vous pouvez utiliser ce champs pour partager les supports de votre "
+"intervention."
 
 #: cfp/signals.py:79
 #, python-format
@@ -679,7 +701,7 @@ msgstr "responsable"
 msgid "No tracks."
 msgstr "Aucune session."
 
-#: cfp/views.py:75
+#: cfp/views.py:76
 msgid ""
 "Hi {},\n"
 "\n"
@@ -719,35 +741,35 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:186 cfp/views.py:281
+#: cfp/views.py:196 cfp/views.py:291
 msgid "The talk has been accepted."
 msgstr "L’exposé a été accepté."
 
-#: cfp/views.py:188 cfp/views.py:283
+#: cfp/views.py:198 cfp/views.py:293
 msgid "The talk has been declined."
 msgstr "L’exposé a été décliné."
 
-#: cfp/views.py:251 cfp/views.py:339
+#: cfp/views.py:261 cfp/views.py:349
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
-#: cfp/views.py:264
+#: cfp/views.py:274
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: cfp/views.py:264
+#: cfp/views.py:274
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: cfp/views.py:285
+#: cfp/views.py:295
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:367
+#: cfp/views.py:377
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:368
+#: cfp/views.py:378
 msgid ""
 "Hi {},\n"
 "\n"
@@ -771,15 +793,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:389
+#: cfp/views.py:399
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:466
+#: cfp/views.py:476
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:485
+#: cfp/views.py:497
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
@@ -1051,12 +1073,6 @@ msgstr "Contacter"
 #~ msgstr ""
 #~ "Si vous souhaitez apporter des précisions à l'équipe d'organisation."
 
-#~ msgid "Filter talks with / without materials"
-#~ msgstr "Filtrer les exposés avec / sans supports"
-
-#~ msgid "Filter talks with / without video"
-#~ msgstr "Filtrer les exposés avec / sans vidéo"
-
 #~ msgid "Name or nickname"
 #~ msgstr "Nom ou pseudo"
 
@@ -1100,16 +1116,6 @@ msgstr "Contacter"
 
 #~ msgid "Max. number of attendees"
 #~ msgstr "Nombre maximum d’inscrits"
-
-#~ msgid "Materials"
-#~ msgstr "Supports"
-
-#~ msgid ""
-#~ "You can use this field to share some materials related to your "
-#~ "intervention."
-#~ msgstr ""
-#~ "Vous pouvez utiliser ce champs pour partager les supports de votre "
-#~ "intervention."
 
 #~ msgid "conference (short)"
 #~ msgstr "conférence (courte)"
@@ -1178,9 +1184,6 @@ msgstr "Contacter"
 
 #~ msgid "required but unlimited"
 #~ msgstr "requis mais non limité"
-
-#~ msgid "Video"
-#~ msgstr "Vidéo"
 
 #~ msgid "download"
 #~ msgstr "Télécharger"

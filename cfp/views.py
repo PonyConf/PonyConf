@@ -176,6 +176,15 @@ def talk_list(request):
                 talks = talks.filter(vote__user=request.user)
             else:
                 talks = talks.exclude(vote__user=request.user)
+        if data['materials'] != None:
+            show_filters = True
+            talks = talks.filter(materials__isnull=not data['materials'])
+        if data['video'] != None:
+            show_filters = True
+            if data['video']:
+                talks = talks.exclude(video__exact='')
+            else:
+                talks = talks.filter(video__exact='')
     # Action
     action_form = TalkActionForm(request.POST or None, talks=talks, site=request.conference.site)
     if request.method == 'POST' and action_form.is_valid():

@@ -28,6 +28,7 @@ class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         categories = kwargs.pop('categories')
         super().__init__(*args, **kwargs)
+        self.fields['materials'].required = False
         if categories.exists():
             self.fields['category'].queryset = categories
         else:
@@ -91,6 +92,14 @@ class TalkFilterForm(forms.Form):
     scheduled = forms.NullBooleanField(
             label=_('Scheduled'),
             help_text=_('Filter talks already / not yet scheduled'),
+    )
+    materials = forms.NullBooleanField(
+            label=_('Materials'),
+            help_text=_('Filter talks with / without materials'),
+    )
+    video = forms.NullBooleanField(
+            label=_('Video'),
+            help_text=_('Filter talks with / without video'),
     )
 
     def __init__(self, *args, **kwargs):
