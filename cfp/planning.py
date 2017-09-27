@@ -178,9 +178,6 @@ class Program:
             self._lazy_init()
         schedule = ET.Element('schedule')
 
-        #if not len(self.days):
-        #    return result % {'conference': '', 'days': ''}
-
         conference = ET.SubElement(schedule, 'conference')
         elt = ET.SubElement(conference, 'title')
         elt.text = self.site.name
@@ -219,16 +216,6 @@ class Program:
 #                    #    'max': talk.attendees_limit,
 #                    #    'remain': talk.remaining_attendees or 0,
 #                    #  }
-#                    #if talk.materials:
-#                    #    links += mark_safe("""
-#                    #    <link tag="slides">%(link)s</link>""" % {
-#                    #        'link': talk.materials.url,
-#                    #    })
-#                    #if talk.video:
-#                    #    links += mark_safe("""
-#                    #    <link tag="video">%(link)s</link>""" % {
-#                    #        'link': talk.video,
-#                    #    })
                     elt = ET.SubElement(talk_elt, 'start')
                     elt.text = localtime(talk.start_date).strftime('%H:%M')
                     elt = ET.SubElement(talk_elt, 'duration')
@@ -247,7 +234,13 @@ class Program:
                     elt = ET.SubElement(talk_elt, 'language')
                     elt = ET.SubElement(talk_elt, 'description')
                     elt.text = talk.description
-                    elt = ET.SubElement(talk_elt, 'links')
+                    links_elt = ET.SubElement(talk_elt, 'links')
+                    if talk.materials:
+                        elt = ET.SubElement(links_elt, 'link', tag='slides')
+                        elt.text = talk.materials.url
+                    if talk.video:
+                        elt = ET.SubElement(links_elt, 'link', tag='video')
+                        elt.text = talk.video
 
         return ET.tostring(schedule)
 
