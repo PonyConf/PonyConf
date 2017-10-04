@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import models
 
 import imaplib
 import ssl
@@ -111,12 +112,12 @@ def process_email(raw_email):
     token = m.group('token')
     key = token[64:]
     try:
-        thread = MessageThread.objects.get(token=token[:32])
-        sender = MessageCorrespondent.objects.get(token=token[32:64])
-    except models.DoesNotExist:
+        thread = MessageThread.objects.get(token__iexact=token[:32])
+        sender = MessageCorrespondent.objects.get(token__iexact=token[32:64])
+    except models.ObjectDoesNotExist:
         raise InvalidTokenException
 
-    if key != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
+    if key.lower() != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
         raise InvalidKeyException
 
     Message.objects.create(thread=thread, from_email=sender.email, content=content)
