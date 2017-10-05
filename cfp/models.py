@@ -22,8 +22,8 @@ from mailing.models import MessageThread
 
 
 class Conference(models.Model):
-
     site = models.OneToOneField(Site, on_delete=models.CASCADE)
+
     name = models.CharField(blank=True, max_length=100, verbose_name=_('Conference name'))
     home = models.TextField(blank=True, default="", verbose_name=_('Homepage (markdown)'))
     venue = models.TextField(blank=True, default="", verbose_name=_('Venue information'))
@@ -33,6 +33,8 @@ class Conference(models.Model):
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
     secure_domain = models.BooleanField(default=True, verbose_name=_('Secure domain (HTTPS)'))
     schedule_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Schedule publishing date'))
+    volunteers_opening_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment opening date'))
+    volunteers_closing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment closing date'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
@@ -42,6 +44,12 @@ class Conference(models.Model):
     #def cfp_is_open(self):
     #    events = Event.objects.filter(site=self.site)
     #    return any(map(lambda x: x.is_open(), events))
+
+    def volunteers_enrollment_is_open(self):
+        now = timezone.now()
+        opening = self.volunteers_opening_date
+        closing = self.volunteers_closing_date
+        return opening and opening < now and (not closing or closing > now)
 
     @property
     def opened_categories(self):
@@ -83,30 +91,22 @@ class ParticipantManager(models.Manager):
 
 
 class Participant(PonyConfModel):
-
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
     name = models.CharField(max_length=128, verbose_name=_('Your Name'))
     email = models.EmailField()
-
     biography = models.TextField(verbose_name=_('Biography'))
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
     twitter = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Twitter'))
     linkedin = models.CharField(max_length=100, blank=True, default='', verbose_name=_('LinkedIn'))
     github = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Github'))
     website = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Website'))
     facebook = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Facebook'))
     mastodon = models.CharField(max_length=100, blank=True, default='', verbose_name=_('Mastodon'))
-
     phone_number = models.CharField(max_length=64, blank=True, default='', verbose_name=_('Phone number'))
-
     language = models.CharField(max_length=10, blank=True)
-
-    notes = models.TextField(default='', blank=True, verbose_name=_("Notes"), help_text=_('This field is only visible by organizers.'))
-
+    notes = models.TextField(default='', blank=True, verbose_name=_("Notes"),
+                             help_text=_('This field is only visible by organizers.'))
     vip = models.BooleanField(default=False)
-
     conversation = models.OneToOneField(MessageThread)
 
     objects = ParticipantManager()
@@ -133,9 +133,7 @@ class Participant(PonyConfModel):
 
 
 class Track(PonyConfModel):
-
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
     name = models.CharField(max_length=128, verbose_name=_('Name'))
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
@@ -156,10 +154,9 @@ class Track(PonyConfModel):
 
 
 class Room(models.Model):
-
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    slug = AutoSlugField(populate_from='name')
     name = models.CharField(max_length=256, blank=True, default="")
+    slug = AutoSlugField(populate_from='name')
     label = models.CharField(max_length=256, blank=True, default="")
     capacity = models.IntegerField(default=0)
 
@@ -187,7 +184,6 @@ class Room(models.Model):
 
 
 class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
-
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Default duration (min)'))
@@ -252,7 +248,6 @@ def talks_materials_destination(talk, filename):
 
 
 class Talk(PonyConfModel):
-
     LICENCES = (
         ('CC-Zero CC-BY', 'CC-Zero CC-BY'),
         ('CC-BY-SA', 'CC-BY-SA'),
@@ -268,12 +263,17 @@ class Talk(PonyConfModel):
     title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
     #abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
-    description = models.TextField(verbose_name=_('Description of your talk'))
+    description = models.TextField(verbose_name=_('Description of your talk'),
+                                   help_text=_('This field is only visible by organizers.'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
-    notes = models.TextField(blank=True, verbose_name=_('Message to organizers'), help_text=_('If you have any constraint or if you have anything that may help you to select your talk, like a video or slides of your talk, please write it down here'))
+    notes = models.TextField(blank=True, verbose_name=_('Message to organizers'),
+                                   help_text=_('If you have any constraint or if you have anything that may '
+                                               'help you to select your talk, like a video or slides of your'
+                                               ' talk, please write it down here'))
     category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'))
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
-    video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA', max_length=10, verbose_name=_("Video licence"))
+    video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA',
+                                     max_length=10, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)
     accepted = models.NullBooleanField(default=None)
     start_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Beginning date and time'))
@@ -330,7 +330,6 @@ class Talk(PonyConfModel):
 
 
 class Vote(PonyConfModel):
-
     talk = models.ForeignKey(Talk)
     user = models.ForeignKey(User)
     vote = models.IntegerField(validators=[MinValueValidator(-2), MaxValueValidator(2)], default=0)
@@ -343,3 +342,41 @@ class Vote(PonyConfModel):
 
     def get_absolute_url(self):
         return self.talk.get_absolute_url()
+
+
+class Volunteer(PonyConfModel):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, verbose_name=_('Your Name'))
+    email = models.EmailField()
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    phone_number = models.CharField(max_length=64, blank=True, default='', verbose_name=_('Phone number'))
+    language = models.CharField(max_length=10, blank=True)
+    notes = models.TextField(default='', blank=True, verbose_name=_('Notes'),
+                             help_text=_('If you have some constraints, you can indicate them here.'))
+    conversation = models.OneToOneField(MessageThread)
+
+    def get_absolute_url(self):
+        return reverse('volunteer-details', kwargs={'volunteer_id': self.token})
+
+    class Meta:
+        # A volunteer can participe only once to a Conference (= Site)
+        unique_together = ('site', 'email')
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Activity(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, verbose_name=_('Name'))
+    slug = AutoSlugField(populate_from='name')
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    volunteers = models.ManyToManyField(Volunteer, blank=True, related_name='activities', verbose_name=_('Volunteer'))
+
+    class Meta:
+        unique_together = ('site', 'name')
+        verbose_name = _('Activity')
+        verbose_name_plural = _('Activities')
+
+    def __str__(self):
+        return self.name

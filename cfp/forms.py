@@ -9,7 +9,7 @@ from django.utils.crypto import get_random_string
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
-from .models import Participant, Talk, TalkCategory, Track, Conference, Room
+from .models import Participant, Talk, TalkCategory, Track, Conference, Room, Volunteer
 
 
 STATUS_CHOICES = [
@@ -175,7 +175,10 @@ class UsersWidget(ModelSelect2MultipleWidget):
 class ConferenceForm(forms.ModelForm):
     class Meta:
         model = Conference
-        fields = ['name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'reply_email', 'secure_domain', 'staff',]
+        fields = [
+            'name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date',
+            'volunteers_opening_date', 'volunteers_closing_date', 'reply_email', 'secure_domain', 'staff',
+        ]
         widgets = {
             'staff': UsersWidget(),
         }
@@ -248,3 +251,28 @@ class RoomForm(OnSiteNamedModelForm):
     class Meta:
         model = Room
         fields = ['name', 'label', 'capacity']
+
+
+class VolunteerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.conference = kwargs.pop('conference')
+        super().__init__(*args, **kwargs)
+
+    # we should manually check (site, email) uniqueness as the site is not part of the form
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if (not self.instance or self.instance.email != email) \
+                and self._meta.model.objects.filter(site=self.conference.site, email=email).exists():
+            raise self.instance.unique_error_message(self._meta.model, ['email'])
+        return email
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        obj.site = self.conference.site
+        if commit:
+            obj.save()
+        return obj
+
+    class Meta:
+        model = Volunteer
+        fields = ['name', 'email', 'phone_number', 'notes']

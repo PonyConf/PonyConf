@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 
 from ponyconf.decorators import disable_for_loaddata
 from mailing.models import MessageThread, Message
-from .models import Participant, Talk, Conference
+from .models import Participant, Talk, Conference, Volunteer
 
 
 @receiver(post_save, sender=Site, dispatch_uid="Create Conference for Site")
@@ -22,6 +22,7 @@ def create_conversation(sender, instance, **kwargs):
         instance.conversation = MessageThread.objects.create()
 pre_save.connect(create_conversation, sender=Participant)
 pre_save.connect(create_conversation, sender=Talk)
+pre_save.connect(create_conversation, sender=Volunteer)
 
 
 @receiver(pre_save, sender=Message, dispatch_uid="Set message author")

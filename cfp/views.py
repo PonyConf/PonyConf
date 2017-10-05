@@ -22,10 +22,11 @@ from .planning import Program
 from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
-from .models import Participant, Talk, TalkCategory, Vote, Track, Room
+from .models import Participant, Talk, TalkCategory, Vote, Track, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
-                   ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm
+                   ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm, \
+                   VolunteerForm
 
 
 def home(request):
@@ -33,6 +34,46 @@ def home(request):
         return render(request, 'cfp/home.html')
     else:
         return redirect(reverse('talk-proposal'))
+
+
+def volunteer_enrole(request):
+    if not request.conference.volunteers_enrollment_is_open():
+        raise PermissionDenied
+    form = VolunteerForm(request.POST or None, conference=request.conference)
+    if request.method == 'POST' and form.is_valid():
+        volunteer = form.save(commit=False)
+        volunteer.language = request.LANGUAGE_CODE
+        volunteer.save()
+        messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
+        return redirect(reverse('volunteer', kwargs=dict(volunteer_id=volunteer.token)))
+    return render(request, 'cfp/volunteer_enrole.html', {
+        'activities': Activity.objects.filter(site=request.conference.site),
+        'form': form,
+    })
+
+
+def volunteer(request, volunteer_id):
+    volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
+    return render(request, 'cfp/volunteer.html', {
+        'activities': Activity.objects.filter(site=request.conference.site),
+        'volunteer': volunteer,
+    })
+
+
+def volunteer_activity(request, volunteer_id, activity, join):
+    if not request.conference.volunteers_enrollment_is_open():
+        raise PermissionDenied
+    volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
+    activity = get_object_or_404(Activity, slug=activity, site=request.conference.site)
+    if join:
+        activity.volunteers.add(volunteer)
+        activity.save()
+        messages.success(request, _('Thank you for your participation!'))
+    else:
+        activity.volunteers.remove(volunteer)
+        activity.save()
+        messages.success(request, _('Okay, no problem!'))
+    return redirect(reverse('volunteer', kwargs=dict(volunteer_id=volunteer.token)))
 
 
 def talk_proposal(request, talk_id=None, participant_id=None):

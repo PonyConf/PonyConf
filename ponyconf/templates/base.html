@@ -24,6 +24,9 @@
             {% if conference.schedule_available %}
             <li{% block publicscheduletab %}{% endblock %}><a href="{% url 'public-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a></li>
             {% endif %}
+            {% if conference.volunteers_enrolement_is_open %}
+            <li{% block volunteerstab %}{% endblock %}><a href="{% url 'volunteer-enrole' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a></li>
+            {% endif %}
             {% comment %}
             {% if request.user.is_authenticated %}
             <li{% block exhibitortab %}{% endblock %}><a href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Exhibitor" %}</a></li>
