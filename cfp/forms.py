@@ -12,15 +12,26 @@ from django_select2.forms import ModelSelect2MultipleWidget
 from .models import Participant, Talk, TalkCategory, Track, Conference, Room, Volunteer
 
 
-STATUS_CHOICES = [
+ACCEPTATION_CHOICES = [
         ('pending', _('Pending decision')),
         ('accepted', _('Accepted')),
         ('declined', _('Declined')),
 ]
-STATUS_VALUES = [
+ACCEPTATION_VALUES = [
         ('pending', None),
         ('accepted', True),
         ('declined', False),
+]
+
+CONFIRMATION_CHOICES = [
+        ('waiting', _('Waiting')),
+        ('confirmed', _('Confirmed')),
+        ('desisted', _('Desisted')),
+]
+CONFIRMATION_VALUES = [
+        ('waiting', None),
+        ('confirmed', True),
+        ('desisted', False),
 ]
 
 
@@ -69,11 +80,17 @@ class TalkFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
-    status = forms.MultipleChoiceField(
-            label=_('Status'),
+    accepted = forms.MultipleChoiceField(
+            label=_('Accepted'),
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=STATUS_CHOICES,
+            choices=ACCEPTATION_CHOICES,
+    )
+    confirmed = forms.MultipleChoiceField(
+            label=_('Confirmed'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=CONFIRMATION_CHOICES,
     )
     track = forms.MultipleChoiceField(
             label=_('Track'),
@@ -145,11 +162,17 @@ class ParticipantFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
-    status = forms.MultipleChoiceField(
-            label=_('Status'),
+    accepted = forms.MultipleChoiceField(
+            label=_('Accepted'),
             required=False,
             widget=forms.CheckboxSelectMultiple,
-            choices=STATUS_CHOICES,
+            choices=ACCEPTATION_CHOICES,
+    )
+    confirmed = forms.MultipleChoiceField(
+            label=_('Confirmed'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=CONFIRMATION_CHOICES,
     )
     track = forms.MultipleChoiceField(
             label=_('Track'),

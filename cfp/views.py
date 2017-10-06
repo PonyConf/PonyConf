@@ -25,8 +25,8 @@ from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
-                   ConferenceForm, CreateUserForm, STATUS_VALUES, TrackForm, RoomForm, \
-                   VolunteerForm
+                   ConferenceForm, CreateUserForm, TrackForm, RoomForm, VolunteerForm, \
+                   ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
 
 def home(request):
@@ -177,6 +177,47 @@ def talk_proposal_speaker_edit(request, talk_id, participant_id=None):
     })
 
 
+def talk_acknowledgment(request, talk_id, confirm, participant_id=None):
+    # TODO: handle multiple speakers case
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    if participant_id:
+        participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
+    elif not is_staff(request, request.user):
+        raise PermissionDenied
+    else:
+        participant = None
+    if not talk.accepted:
+        raise PermissionDenied
+    if talk.confirmed != confirm:
+        talk.confirmed = confirm
+        talk.save()
+        if confirm:
+            confirmation_message= _('Your participation has been taken into account, thank you!')
+            if participant:
+                thread_note = _('Speaker %(speaker)s confirmed his/her participation.')
+            else:
+                thread_note = _('The talk have been confirmed.')
+        else:
+            confirmation_message = _('We have noted your unavailability.')
+            if participant:
+                thread_note = _('Speaker %(speaker)s CANCELLED his/her participation.')
+            else:
+                thread_note = _('The talk have been cancelled.')
+        if participant_id:
+            thread_note = thread_note % {'speaker': participant}
+        Message.objects.create(thread=talk.conversation, author=participant or request.user, content=thread_note)
+        messages.success(request, confirmation_message)
+    else:
+        if confirm:
+            messages.warning(request, _('You already confirmed your participation to this talk.'))
+        else:
+            messages.warning(request, _('You already cancelled your participation to this talk.'))
+    if participant:
+        return redirect(reverse('talk-proposal-edit', kwargs=dict(talk_id=talk_id, participant_id=participant_id)))
+    else:
+        return redirect(reverse('talk-details', kwargs=dict(talk_id=talk_id)))
+
+
 @staff_required
 def staff(request):
     return render(request, 'cfp/staff/base.html')
@@ -193,9 +234,13 @@ def talk_list(request):
         if len(data['category']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(category__pk=pk) for pk in data['category']]))
-        if len(data['status']):
+        if len(data['accepted']):
             show_filters = True
-            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(ACCEPTATION_VALUES)[status]) for status in data['accepted']]))
+        if len(data['confirmed']):
+            show_filters = True
+            talks = talks.filter(accepted=True)
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(confirmed=dict(CONFIRMATION_VALUES)[status]) for status in data['confirmed']]))
         if data['room'] != None:
             show_filters = True
             talks = talks.filter(room__isnull=not data['room'])
@@ -355,9 +400,13 @@ def participant_list(request):
         if len(data['category']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(category__pk=pk) for pk in data['category']]))
-        if len(data['status']):
+        if len(data['accepted']):
             show_filters = True
-            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(STATUS_VALUES)[status]) for status in data['status']]))
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(accepted=dict(ACCEPTATION_VALUES)[status]) for status in data['accepted']]))
+        if len(data['confirmed']):
+            show_filters = True
+            talks = talks.filter(accepted=True)
+            talks = talks.filter(reduce(lambda x, y: x | y, [Q(confirmed=dict(CONFIRMATION_VALUES)[status]) for status in data['confirmed']]))
         if len(data['track']):
             show_filters = True
             q = Q()

@@ -16,7 +16,7 @@
       <dd><a href="{{ talk.category.get_absolute_url }}">{{ talk.category }}</a></dd>
 
     <dt>{% trans "Status" %}</dt>
-      <dd><span class="label label-{{ talk.accepted|yesno:"success,danger,warning" }}">{{ talk.accepted|yesno:"Accepted,Declined,Pending decision" }}</span></dd>
+      <dd><span class="label label-{{ talk.get_status_color }}">{{ talk.get_status_str }}</span></dd>
 
     <dt>{% trans "Track" %}</dt>
       <dd>{% if talk.track %}

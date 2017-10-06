@@ -14,7 +14,8 @@
         <form class="form-horizontal" method="get">
             <div class="row">
                 <div class="col-md-6 col-xs-6">
-                    {% bootstrap_field filter_form.status layout="horizontal" %}
+                    {% bootstrap_field filter_form.accepted layout="horizontal" %}
+                    {% bootstrap_field filter_form.confirmed layout="horizontal" %}
                     {% bootstrap_field filter_form.category layout="horizontal" %}
                     {% bootstrap_field filter_form.vote layout="horizontal" %}
                     {% bootstrap_field filter_form.scheduled layout="horizontal" %}
@@ -49,7 +50,7 @@
     {% if forloop.first %}
     <tbody>
     {% endif %}
-        <tr class="{{ talk.accepted|yesno:"success,danger,warning" }}">
+        <tr class="{{ talk.get_status_color }}">
             <td><input type="checkbox" name="talks" value="{{ talk.token }}"></td>
             <td><a href="{% url 'talk-details' talk.token %}">{{ talk.title }}</a></td>
             <td>{{ talk.category }}</td>
@@ -62,13 +63,7 @@
             </td>
             <td>{{ talk.track|default:"–" }}</td>
             <td>
-                {% if talk.accepted == True %}
-                    {% trans "Accepted" %}
-                {% elif talk.accepted == False %}
-                    {% trans "Declined" %}
-                {% else %}
-                    {% blocktrans with score=talk.score|floatformat:1 %}Pending, score: {{ score }}{% endblocktrans %}
-                {% endif %}
+                {{ talk.get_status_str }}
             </td>
         </tr>
     {% if forloop.last%}

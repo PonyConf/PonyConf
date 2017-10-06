@@ -243,6 +243,7 @@ class TalkManager(models.Manager):
         qs = qs.annotate(score=Coalesce(Avg('vote__vote'), 0))
         return qs
 
+
 def talks_materials_destination(talk, filename):
     return join(talk.site.name, talk.slug, filename)
 
@@ -258,7 +259,6 @@ class Talk(PonyConfModel):
     )
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
     speakers = models.ManyToManyField(Participant, verbose_name=_('Speakers'))
     title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
@@ -276,6 +276,7 @@ class Talk(PonyConfModel):
                                      max_length=10, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)
     accepted = models.NullBooleanField(default=None)
+    confirmed = models.NullBooleanField(default=None)
     start_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Beginning date and time'))
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None)
@@ -283,14 +284,10 @@ class Talk(PonyConfModel):
     materials = models.FileField(null=True, upload_to=talks_materials_destination, verbose_name=_('Materials'),
                                      help_text=_('You can use this field to share some materials related to your intervention.'))
     video = models.URLField(max_length=1000, blank=True, default='', verbose_name='Video URL')
-
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
     conversation = models.OneToOneField(MessageThread)
 
-
     objects = TalkManager()
-
 
     class Meta:
         ordering = ('title',)
@@ -306,6 +303,32 @@ class Talk(PonyConfModel):
             return speakers[0]
         else:
             return ', '.join(speakers[:-1]) + ' & ' + str(speakers[-1])
+
+    def get_status_str(self):
+        if self.accepted is True:
+            if self.confirmed is True:
+                return _('Confirmed')
+            elif self.confirmed is False:
+                return _('Cancelled')
+            else:
+                return _('Waiting confirmation')
+        elif self.accepted is False:
+            return _('Refused')
+        else:
+            return _('Pending decision, score: %(score).1f') % {'score': self.score}
+
+    def get_status_color(self):
+        if self.accepted is True:
+            if self.confirmed is True:
+                return 'success'
+            elif self.confirmed is False:
+                return 'danger'
+            else:
+                return 'info'
+        elif self.accepted is False:
+            return 'muted'
+        else:
+            return 'warning'
 
     @property
     def estimated_duration(self):
