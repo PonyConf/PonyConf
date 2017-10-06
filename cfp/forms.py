@@ -26,7 +26,7 @@ ACCEPTATION_VALUES = [
 CONFIRMATION_CHOICES = [
         ('waiting', _('Waiting')),
         ('confirmed', _('Confirmed')),
-        ('desisted', _('Desisted')),
+        ('cancelled', _('Cancelled')),
 ]
 CONFIRMATION_VALUES = [
         ('waiting', None),
