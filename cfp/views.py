@@ -22,7 +22,7 @@ from .planning import Program
 from .decorators import staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
-from .models import Participant, Talk, TalkCategory, Vote, Track, Room, Volunteer, Activity
+from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
                    ConferenceForm, CreateUserForm, TrackForm, RoomForm, VolunteerForm, \
@@ -289,6 +289,8 @@ def talk_list(request):
                 talk.accepted = data['decision']
             if data['track']:
                 talk.track = Track.objects.get(site=request.conference.site, slug=data['track'])
+            if data['tag']:
+                talk.tags.add(Tag.objects.get(site=request.conference.site, slug=data['tag']))
             if data['room']:
                 talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
             talk.save()
