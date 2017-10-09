@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 
 from .mixins import OnSiteAdminMixin
-from .models import Conference, Participant, Talk, TalkCategory, Track, Vote, Volunteer, Activity
+from .models import Conference, Participant, Talk, TalkCategory, Track, \
+                    Vote, Volunteer, Activity, Tag
 
 
 class ConferenceAdmin(OnSiteAdminMixin, admin.ModelAdmin):
@@ -41,11 +42,7 @@ class VoteAdmin(admin.ModelAdmin):
         return super().get_queryset(request).filter(talk__site=request.conference.site)
 
 
-class VolunteerAdmin(OnSiteAdminMixin, admin.ModelAdmin):
-    pass
-
-
-class ActivityAdmin(OnSiteAdminMixin, admin.ModelAdmin):
+class OnSiteModelAdmin(OnSiteAdminMixin, admin.ModelAdmin):
     pass
 
 
@@ -54,5 +51,6 @@ admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(TalkCategory, TalkCategoryAdmin)
 admin.site.register(Vote, VoteAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Activity, ActivityAdmin)
+admin.site.register(Tag, OnSiteModelAdmin)
+admin.site.register(Volunteer, OnSiteModelAdmin)
+admin.site.register(Activity, OnSiteModelAdmin)

@@ -24,6 +24,7 @@
                     {% bootstrap_field filter_form.video layout="horizontal" %}
                 </div>
                 <div class="col-md-6 col-xs-6">
+                    {% bootstrap_field filter_form.tag layout="horizontal" %}
                     {% bootstrap_field filter_form.track layout="horizontal" %}
                 </div>
             </div>
@@ -43,6 +44,7 @@
             <th class="text-center">{% trans "Intervention kind" %} <a href="?{{ sort_urls.category }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.category }} pull-right"></span></a></th>
             <th class="text-center">{% trans "Speakers" %}</th>
             <th class="text-center">{% trans "Track" %}</th>
+            <th class="text-center">{% trans "Tags" %}</th>
             <th class="text-center">{% trans "Status" %} <a href="?{{ sort_urls.status }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.status }} pull-right"></span></a></th>
         </tr>
     </thead>
@@ -62,6 +64,7 @@
                 {% endfor %}
             </td>
             <td>{{ talk.track|default:"–" }}</td>
+            <td>{{ talk.get_tags_html }}</td>
             <td>
                 {{ talk.get_status_str }}
             </td>

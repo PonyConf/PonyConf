@@ -247,6 +247,9 @@ def talk_list(request):
         if data['scheduled'] != None:
             show_filters = True
             talks = talks.filter(start_date__isnull=not data['scheduled'])
+        if len(data['tag']):
+            show_filters = True
+            talks = talks.filter(tags__slug__in=data['tag'])
         if len(data['track']):
             show_filters = True
             q = Q()
@@ -323,7 +326,7 @@ def talk_list(request):
             glyphicon = 'sort'
         sort_urls[c] = url.urlencode()
         sort_glyphicons[c] = glyphicon
-    talks = talks.prefetch_related('category', 'speakers', 'track')
+    talks = talks.prefetch_related('category', 'speakers', 'track', 'tags')
     return render(request, 'cfp/staff/talk_list.html', {
         'show_filters': show_filters,
         'talk_list': talks,

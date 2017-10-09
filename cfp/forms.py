@@ -9,7 +9,7 @@ from django.utils.crypto import get_random_string
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
-from .models import Participant, Talk, TalkCategory, Track, Conference, Room, Volunteer
+from .models import Participant, Talk, TalkCategory, Track, Tag, Conference, Room, Volunteer
 
 
 ACCEPTATION_CHOICES = [
@@ -61,7 +61,10 @@ class TalkStaffForm(forms.ModelForm):
             self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
     class Meta(TalkForm.Meta):
-        fields = ('category', 'track', 'title', 'description', 'notes', 'start_date', 'duration', 'room', 'materials', 'video',)
+        fields = ('category', 'track', 'title', 'description', 'notes', 'tags', 'start_date', 'duration', 'room', 'materials', 'video',)
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple,
+        }
         labels = {
             'category': _('Category'),
             'title': _('Title'),
@@ -98,6 +101,12 @@ class TalkFilterForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=[],
     )
+    tag = forms.MultipleChoiceField(
+            label=_('Tag'),
+            required=False,
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+    )
     vote = forms.NullBooleanField(
             label=_('Vote'),
             help_text=_('Filter talks you already / not yet voted for'),
@@ -126,6 +135,7 @@ class TalkFilterForm(forms.Form):
         self.fields['category'].choices = categories.values_list('pk', 'name')
         tracks = Track.objects.filter(site=site)
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
+        self.fields['tag'].choices = Tag.objects.filter(site=site).values_list('slug', 'name')
 
 
 class TalkActionForm(forms.Form):

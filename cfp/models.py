@@ -8,6 +8,8 @@ from django.db.models import Q, Count, Avg, Case, When
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.html import escape, format_html
 
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
@@ -183,6 +185,39 @@ class Room(models.Model):
         return self.talks.filter(Q(start_date__isnull=True) | Q(duration=0, category__duration=0)).all()
 
 
+class Tag(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, verbose_name=_('Name'))
+    slug = AutoSlugField(populate_from='name')
+    color = RGBColorField(default='#ffffff', verbose_name=_("Color"))
+    inverted = models.BooleanField(default=False)
+
+    @property
+    def link(self):
+        return format_html('<a href="{url}?tag={tag}">{content}</a>', **{
+            'url': reverse('talk-list'),
+            'tag': self.slug,
+            'content': self.label,
+        })
+
+    @property
+    def label(self):
+        return format_html('<span class="label" style="{style}">{name}</span>', **{
+            'style': self.style,
+            'name': self.name,
+        })
+
+    @property
+    def style(self):
+        return mark_safe('background-color: {bg}; color: {fg}; vertical-align: middle;'.format(**{
+            'fg': '#fff' if self.inverted else '#000',
+            'bg': self.color,
+        }))
+
+    def __str__(self):
+        return self.name
+
+
 class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
@@ -266,6 +301,7 @@ class Talk(PonyConfModel):
     description = models.TextField(verbose_name=_('Description of your talk'),
                                    help_text=_('This field is only visible by organizers.'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
+    tags = models.ManyToManyField(Tag)
     notes = models.TextField(blank=True, verbose_name=_('Message to organizers'),
                                    help_text=_('If you have any constraint or if you have anything that may '
                                                'help you to select your talk, like a video or slides of your'
@@ -329,6 +365,9 @@ class Talk(PonyConfModel):
             return 'muted'
         else:
             return 'warning'
+
+    def get_tags_html(self):
+        return mark_safe(' '.join(map(lambda tag: tag.link, self.tags.all())))
 
     @property
     def estimated_duration(self):

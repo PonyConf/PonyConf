@@ -22,8 +22,11 @@
       <dd>{% if talk.track %}
         <a href="{{ talk.track.get_absolute_url }}">{{ talk.track }}</a>
       {% else %}
-      <em>{% trans "No assigned yet." context "session" %}</em>
+      <em>{% trans "not defined" context "session" %}</em>
       {% endif %}</dd>
+
+    <dt>{% trans "Tags" %}</dt>
+      <dd>{% if talk.tags.exist %}{{ talk.get_tags_html }}{% else %}<em>{% trans "none" context "tag" %}</em>{% endif %}</dd>
 
     <dt>{% trans "Timeslot" %}</dt>
       <dd>{% if talk.start_date %}
