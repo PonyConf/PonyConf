@@ -224,6 +224,11 @@ def staff(request):
 
 
 @staff_required
+def admin(request):
+    return render(request, 'cfp/admin/base.html')
+
+
+@staff_required
 def talk_list(request):
     talks = Talk.objects.filter(site=request.conference.site)
     # Filtering
@@ -494,7 +499,7 @@ You can now:
         messages.success(request, _('Modifications successfully saved.'))
         return redirect(reverse('conference'))
 
-    return render(request, 'cfp/staff/conference.html', {
+    return render(request, 'cfp/admin/conference.html', {
         'form': form,
     })
 

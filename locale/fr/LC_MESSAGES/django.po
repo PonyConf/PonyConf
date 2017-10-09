@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 17:54+0000\n"
-"PO-Revision-Date: 2017-10-09 19:54+0200\n"
+"POT-Creation-Date: 2017-10-09 18:30+0000\n"
+"PO-Revision-Date: 2017-10-09 20:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -274,7 +274,7 @@ msgstr "Couleur sur le programme"
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:297 cfp/templates/cfp/staff/base.html:17
+#: cfp/models.py:297 cfp/templates/cfp/staff/base.html:15
 #: cfp/templates/cfp/staff/participant_list.html:8
 #: cfp/templates/cfp/staff/talk_details.html:68
 #: cfp/templates/cfp/staff/talk_list.html:45
@@ -378,6 +378,26 @@ msgstr "[%(prefix)s] Conversation avec %(dest)s"
 msgid "[%(prefix)s] Talk: %(talk)s"
 msgstr "[%(prefix)s] Talk: %(talk)s"
 
+#: cfp/templates/cfp/admin/base.html:10
+#: cfp/templates/cfp/admin/conference.html:8
+msgid "Conference"
+msgstr "Conférence"
+
+#: cfp/templates/cfp/admin/base.html:19 cfp/templates/cfp/staff/base.html:24
+msgid "Please select a category."
+msgstr "Veuillez sélectionner une catégorie."
+
+#: cfp/templates/cfp/admin/conference.html:13
+#: cfp/templates/cfp/staff/create_user.html:8
+msgid "Add a new user"
+msgstr "Ajouter un nouvel utilisateur"
+
+#: cfp/templates/cfp/admin/conference.html:14 cfp/templates/cfp/propose.html:22
+#: cfp/templates/cfp/speaker.html:21
+#: cfp/templates/cfp/staff/create_user.html:13
+msgid "Save"
+msgstr "Envoyer"
+
 #: cfp/templates/cfp/closed.html:9 cfp/templates/cfp/propose.html:11
 #: cfp/templates/cfp/speaker.html:11
 msgid "Participate"
@@ -415,46 +435,26 @@ msgstr "Éditer votre profil :"
 msgid "An email has been sent to you with those URLs"
 msgstr "Un mail vous a été envoyé avec toutes les URLs"
 
-#: cfp/templates/cfp/propose.html:22 cfp/templates/cfp/speaker.html:21
-#: cfp/templates/cfp/staff/conference.html:14
-#: cfp/templates/cfp/staff/create_user.html:13
-msgid "Save"
-msgstr "Envoyer"
-
-#: cfp/templates/cfp/schedule.html:9 cfp/templates/cfp/staff/base.html:20
+#: cfp/templates/cfp/schedule.html:9 cfp/templates/cfp/staff/base.html:18
 #: cfp/templates/cfp/staff/schedule.html:9 ponyconf/templates/base.html:25
 msgid "Schedule"
 msgstr "Programme"
 
-#: cfp/templates/cfp/staff/base.html:16
+#: cfp/templates/cfp/staff/base.html:14
 #: cfp/templates/cfp/staff/participant_details.html:33
 #: cfp/templates/cfp/staff/talk_list.html:8
 msgid "Talks"
 msgstr "Exposés"
 
-#: cfp/templates/cfp/staff/base.html:18
+#: cfp/templates/cfp/staff/base.html:16
 #: cfp/templates/cfp/staff/track_list.html:9
 msgid "Tracks"
 msgstr "Sessions"
 
-#: cfp/templates/cfp/staff/base.html:19
+#: cfp/templates/cfp/staff/base.html:17
 #: cfp/templates/cfp/staff/room_list.html:9
 msgid "Rooms"
 msgstr "Salles"
-
-#: cfp/templates/cfp/staff/base.html:21
-#: cfp/templates/cfp/staff/conference.html:8
-msgid "Conference"
-msgstr "Conférence"
-
-#: cfp/templates/cfp/staff/base.html:29
-msgid "Please select a category."
-msgstr "Veuillez sélectionner une catégorie."
-
-#: cfp/templates/cfp/staff/conference.html:13
-#: cfp/templates/cfp/staff/create_user.html:8
-msgid "Add a new user"
-msgstr "Ajouter un nouvel utilisateur"
 
 #: cfp/templates/cfp/staff/create_user.html:14
 #: cfp/templates/cfp/staff/talk_decide.html:22 ponyconf/templates/_form.html:16
@@ -879,35 +879,35 @@ msgstr "Vous avez déjà confirmé votre participation à cet exposé."
 msgid "You already cancelled your participation to this talk."
 msgstr "Vous avez déjà annulé votre participation à cet exposé."
 
-#: cfp/views.py:285 cfp/views.py:382
+#: cfp/views.py:290 cfp/views.py:387
 msgid "The talk has been accepted."
 msgstr "L’exposé a été accepté."
 
-#: cfp/views.py:287 cfp/views.py:384
+#: cfp/views.py:292 cfp/views.py:389
 msgid "The talk has been declined."
 msgstr "L’exposé a été décliné."
 
-#: cfp/views.py:352 cfp/views.py:444
+#: cfp/views.py:357 cfp/views.py:449
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
-#: cfp/views.py:365
+#: cfp/views.py:370
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: cfp/views.py:365
+#: cfp/views.py:370
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: cfp/views.py:386
+#: cfp/views.py:391
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:472
+#: cfp/views.py:477
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:473
+#: cfp/views.py:478
 msgid ""
 "Hi {},\n"
 "\n"
@@ -931,15 +931,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:494
+#: cfp/views.py:499
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:571
+#: cfp/views.py:576
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:592
+#: cfp/views.py:597
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
@@ -981,15 +981,23 @@ msgstr "Appel à participation"
 msgid "Volunteers"
 msgstr "Bénévoles"
 
-#: ponyconf/templates/base.html:42 ponyconf/templates/base.html:53
-msgid "Staff"
-msgstr "Staff"
+#: ponyconf/templates/base.html:42
+msgid "Organisazion"
+msgstr "Organisation"
 
-#: ponyconf/templates/base.html:51
+#: ponyconf/templates/base.html:43
+msgid "Administration"
+msgstr "Administration"
+
+#: ponyconf/templates/base.html:52
 msgid "Logout"
 msgstr "Déconnection"
 
-#: ponyconf/templates/base.html:70
+#: ponyconf/templates/base.html:54
+msgid "Staff"
+msgstr "Staff"
+
+#: ponyconf/templates/base.html:71
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -1299,9 +1307,6 @@ msgstr "Adresse e-mail"
 
 #~ msgid "No assigned yet."
 #~ msgstr "Pas encore assigné."
-
-#~ msgid "Registrations"
-#~ msgstr "Inscriptions"
 
 #~ msgid "required but unlimited"
 #~ msgstr "requis mais non limité"

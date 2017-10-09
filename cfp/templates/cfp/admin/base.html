@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles i18n %}
+
+{% block admintab %} class="active"{% endblock %}
+
+{% block navbar %}
+    {{ block.super }}
+    <div class="container">
+      <ul class="nav nav-pills nav-justified subnav">
+        <li{% block conferencetab %}{% endblock %}><a href="{% url 'conference' %}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;{% trans "Conference" %}</a></li>
+        {% if request.user.is_staff %}
+        <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django-Admin</a></li>
+        {% endif %}
+      </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+{% trans "Please select a category." %}
+{% endblock %}

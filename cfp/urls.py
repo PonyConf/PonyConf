@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^volunteer/(?P<volunteer_id>[\w\-]+)/join/(?P<activity>[\w\-]+)/$', views.volunteer_activity, {'join': True}, name='volunteer-join'),
     url(r'^volunteer/(?P<volunteer_id>[\w\-]+)/quit/(?P<activity>[\w\-]+)/$', views.volunteer_activity, {'join': False}, name='volunteer-quit'),
     url(r'^staff/$', views.staff, name='staff'),
-    url(r'^staff/conference/$', views.conference, name='conference'),
     url(r'^staff/talks/$', views.talk_list, name='talk-list'),
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/$', views.talk_details, name='talk-details'),
     url(r'^staff/talks/(?P<talk_id>[\w\-]+)/vote/(?P<score>[-+0-2]+)/$', views.talk_vote, name='talk-vote'),
@@ -37,6 +36,8 @@ urlpatterns = [
     url(r'^staff/add-user/$', views.create_user, name='create-user'),
     url(r'^staff/schedule/((?P<program_format>[\w]+)/)?$', views.staff_schedule, name='staff-schedule'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
+    url(r'^admin/$', views.admin, name='admin'),
+    url(r'^admin/conference/$', views.conference, name='conference'),
     url(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]

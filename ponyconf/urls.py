@@ -32,7 +32,7 @@ class EmailLoginView(LoginView):
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/django/', admin.site.urls),
     url(r'accounts/login/', EmailLoginView.as_view()),
     url(r'accounts/', include('django.contrib.auth.urls')),
     url(r'^', include('cfp.urls')),

@@ -38,7 +38,8 @@
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request|staff %}
-            <li{% block stafftab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Staff" %}</a></li>
+            <li{% block stafftab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Organisazion" %}</a></li>
+            <li{% block admintab %}{% endblock %}><a href="{% url 'admin' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}</a></li>
             {% endif %}
             {% comment %}
             <li{% block talkstab %}{% endblock %}><a href="{% url 'talk-list' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Talks" %}</a></li>
