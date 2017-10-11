@@ -301,7 +301,7 @@ class Talk(PonyConfModel):
     description = models.TextField(verbose_name=_('Description of your talk'),
                                    help_text=_('This field is only visible by organizers.'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     notes = models.TextField(blank=True, verbose_name=_('Message to organizers'),
                                    help_text=_('If you have any constraint or if you have anything that may '
                                                'help you to select your talk, like a video or slides of your'
