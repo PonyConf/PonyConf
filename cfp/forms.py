@@ -39,10 +39,10 @@ class TalkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         categories = kwargs.pop('categories')
         super().__init__(*args, **kwargs)
-        if categories.exists():
-            self.fields['category'].queryset = categories
-        else:
+        if kwargs.get('instance', None):
             del self.fields['category']
+        else:
+            self.fields['category'].queryset = categories
 
     class Meta:
         model = Talk
