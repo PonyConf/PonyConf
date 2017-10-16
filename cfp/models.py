@@ -144,6 +144,7 @@ class Track(PonyConfModel):
 
     class Meta:
         unique_together = ('site', 'name')
+        ordering = ['name']
 
     def estimated_duration(self):
         return sum([talk.estimated_duration for talk in self.talk_set.all()])
