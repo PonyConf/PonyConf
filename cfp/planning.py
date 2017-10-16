@@ -228,7 +228,7 @@ class Program:
                     elt.text = talk.title
                     elt = ET.SubElement(talk_elt, 'subtitle')
                     elt = ET.SubElement(talk_elt, 'track')
-                    elt.text = talk.track or ''
+                    elt.text = str(talk.track) if talk.track else ''
                     elt = ET.SubElement(talk_elt, 'type')
                     elt.text = talk.category.label
                     elt = ET.SubElement(talk_elt, 'language')
