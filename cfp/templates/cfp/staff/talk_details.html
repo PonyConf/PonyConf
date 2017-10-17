@@ -26,7 +26,7 @@
       {% endif %}</dd>
 
     <dt>{% trans "Tags" %}</dt>
-      <dd>{% if talk.tags.exist %}{{ talk.get_tags_html }}{% else %}<em>{% trans "none" context "tag" %}</em>{% endif %}</dd>
+      <dd>{% if talk.tags.exists %}{{ talk.get_tags_html }}{% else %}<em>{% trans "none" context "tag" %}</em>{% endif %}</dd>
 
     <dt>{% trans "Timeslot" %}</dt>
       <dd>{% if talk.start_date %}
