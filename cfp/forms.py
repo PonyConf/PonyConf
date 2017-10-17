@@ -31,7 +31,7 @@ CONFIRMATION_CHOICES = [
 CONFIRMATION_VALUES = [
         ('waiting', None),
         ('confirmed', True),
-        ('desisted', False),
+        ('cancelled', False),
 ]
 
 
