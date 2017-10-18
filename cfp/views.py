@@ -600,7 +600,10 @@ def schedule(request, program_format, pending, cache, template):
 def public_schedule(request, program_format):
     if not request.conference.schedule_available and not is_staff(request, request.user):
         raise PermissionDenied
-    return schedule(request, program_format=program_format, pending=False, cache=True, template='cfp/schedule.html')
+    if request.conference.schedule_redirection_url and program_format is None:
+        return redirect(request.conference.schedule_redirection_url)
+    else:
+        return schedule(request, program_format=program_format, pending=False, cache=True, template='cfp/schedule.html')
 
 
 @staff_required

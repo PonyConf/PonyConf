@@ -212,7 +212,7 @@ class ConferenceForm(forms.ModelForm):
     class Meta:
         model = Conference
         fields = [
-            'name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date',
+            'name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'schedule_redirection_url',
             'volunteers_opening_date', 'volunteers_closing_date', 'reply_email', 'secure_domain', 'staff',
         ]
         widgets = {

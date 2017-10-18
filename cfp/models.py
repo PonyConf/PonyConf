@@ -35,6 +35,8 @@ class Conference(models.Model):
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
     secure_domain = models.BooleanField(default=True, verbose_name=_('Secure domain (HTTPS)'))
     schedule_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Schedule publishing date'))
+    schedule_redirection_url = models.URLField(blank=True, default='', verbose_name=_('Schedule redirection URL'),
+                                               help_text=_('If specified, schedule tab will redirect to this URL.'))
     volunteers_opening_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment opening date'))
     volunteers_closing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment closing date'))
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 18:30+0000\n"
-"PO-Revision-Date: 2017-10-09 20:31+0200\n"
+"POT-Creation-Date: 2017-10-18 18:15+0000\n"
+"PO-Revision-Date: 2017-10-18 20:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -34,11 +34,11 @@ msgstr "Décliné"
 msgid "Waiting"
 msgstr "En attente"
 
-#: cfp/forms.py:28 cfp/forms.py:93 cfp/forms.py:185 cfp/models.py:346
+#: cfp/forms.py:28 cfp/forms.py:93 cfp/forms.py:185 cfp/models.py:349
 msgid "Confirmed"
 msgstr "Confirmé"
 
-#: cfp/forms.py:29 cfp/models.py:348
+#: cfp/forms.py:29 cfp/models.py:351
 msgid "Cancelled"
 msgstr "Annulé"
 
@@ -56,12 +56,12 @@ msgstr "Catégorie"
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:71 cfp/models.py:141 cfp/models.py:435
+#: cfp/forms.py:71 cfp/models.py:143 cfp/models.py:438
 #: cfp/templates/cfp/staff/talk_details.html:64
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:72 cfp/models.py:109 cfp/models.py:416
+#: cfp/forms.py:72 cfp/models.py:111 cfp/models.py:419
 #: cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:78
 msgid "Notes"
@@ -71,7 +71,7 @@ msgstr "Notes"
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:99 cfp/forms.py:191 cfp/models.py:303
+#: cfp/forms.py:99 cfp/forms.py:191 cfp/models.py:306
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:46
 #: cfp/templates/cfp/staff/track_form.html:14
@@ -109,7 +109,7 @@ msgstr "Programmé"
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: cfp/forms.py:123 cfp/models.py:320
+#: cfp/forms.py:123 cfp/models.py:323
 #: cfp/templates/cfp/staff/talk_details.html:54
 msgid "Materials"
 msgstr "Supports"
@@ -146,7 +146,7 @@ msgstr "Ajouter une étiquette"
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:167 cfp/models.py:139 cfp/models.py:190 cfp/models.py:433
+#: cfp/forms.py:167 cfp/models.py:141 cfp/models.py:193 cfp/models.py:436
 #: cfp/templates/cfp/staff/participant_list.html:35
 msgid "Name"
 msgstr "Nom"
@@ -202,14 +202,22 @@ msgid "Schedule publishing date"
 msgstr "Date de publication du programme"
 
 #: cfp/models.py:38
+msgid "Schedule redirection URL"
+msgstr "URL de redirection du programme"
+
+#: cfp/models.py:39
+msgid "If specified, schedule tab will redirect to this URL."
+msgstr "Si spécifiée, l’onglet programme redirigera vers cette URL."
+
+#: cfp/models.py:40
 msgid "Volunteers enrollment opening date"
 msgstr "Date d’ouverture de l’appel à bénévole"
 
-#: cfp/models.py:39
+#: cfp/models.py:41
 msgid "Volunteers enrollment closing date"
 msgstr "Date de fermeture de l’appel à bénévole"
 
-#: cfp/models.py:77
+#: cfp/models.py:79
 #, python-brace-format
 msgid ""
 "The reply email should be a formatable string accepting a token argument (e."
@@ -218,82 +226,82 @@ msgstr ""
 "L’adresse de réponse doit être une chaine de texte formatable avec un "
 "argument « token » (e.g. ponyconf+{token}@exemple.com)."
 
-#: cfp/models.py:97 cfp/models.py:411
+#: cfp/models.py:99 cfp/models.py:414
 msgid "Your Name"
 msgstr "Votre Nom"
 
-#: cfp/models.py:99 cfp/templates/cfp/staff/participant_details.html:12
+#: cfp/models.py:101 cfp/templates/cfp/staff/participant_details.html:12
 msgid "Biography"
 msgstr "Biographie"
 
-#: cfp/models.py:101
+#: cfp/models.py:103
 msgid "Twitter"
 msgstr "Twitter"
 
-#: cfp/models.py:102
+#: cfp/models.py:104
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: cfp/models.py:103
+#: cfp/models.py:105
 msgid "Github"
 msgstr "Github"
 
-#: cfp/models.py:104
+#: cfp/models.py:106
 msgid "Website"
 msgstr "Site web"
 
-#: cfp/models.py:105
+#: cfp/models.py:107
 msgid "Facebook"
 msgstr "Facebook"
 
-#: cfp/models.py:106
+#: cfp/models.py:108
 msgid "Mastodon"
 msgstr "Mastodon"
 
-#: cfp/models.py:107 cfp/models.py:414
+#: cfp/models.py:109 cfp/models.py:417
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: cfp/models.py:110 cfp/models.py:302
+#: cfp/models.py:112 cfp/models.py:305
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
 
-#: cfp/models.py:192
+#: cfp/models.py:195
 msgid "Color"
 msgstr "Couleur"
 
-#: cfp/models.py:224
+#: cfp/models.py:227
 msgid "Default duration (min)"
 msgstr "Durée par défaut (min)"
 
-#: cfp/models.py:225
+#: cfp/models.py:228
 msgid "Color on program"
 msgstr "Couleur sur le programme"
 
-#: cfp/models.py:226
+#: cfp/models.py:229
 msgid "Label on program"
 msgstr "Label dans le xml du programme"
 
-#: cfp/models.py:297 cfp/templates/cfp/staff/base.html:15
+#: cfp/models.py:300 cfp/templates/cfp/staff/base.html:15
 #: cfp/templates/cfp/staff/participant_list.html:8
 #: cfp/templates/cfp/staff/talk_details.html:68
 #: cfp/templates/cfp/staff/talk_list.html:45
 msgid "Speakers"
 msgstr "Orateurs"
 
-#: cfp/models.py:298
+#: cfp/models.py:301
 msgid "Talk Title"
 msgstr "Titre de la proposition"
 
-#: cfp/models.py:301
+#: cfp/models.py:304
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:305
+#: cfp/models.py:308
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
-#: cfp/models.py:306
+#: cfp/models.py:309
 msgid ""
 "If you have any constraint or if you have anything that may help you to "
 "select your talk, like a video or slides of your talk, please write it down "
@@ -303,63 +311,63 @@ msgstr ""
 "votre proposition, comme une vidéo, des slides, n'hésitez pas à les ajouter "
 "ici."
 
-#: cfp/models.py:309
+#: cfp/models.py:312
 msgid "Talk Category"
 msgstr "Catégorie de proposition"
 
-#: cfp/models.py:310
+#: cfp/models.py:313
 msgid "I'm ok to be recorded on video"
 msgstr "J’accepte d’être enregistré en vidéo"
 
-#: cfp/models.py:312
+#: cfp/models.py:315
 msgid "Video licence"
 msgstr "Licence vidéo"
 
-#: cfp/models.py:313
+#: cfp/models.py:316
 msgid "I need sound"
 msgstr "J’ai besoin de son"
 
-#: cfp/models.py:316
+#: cfp/models.py:319
 msgid "Beginning date and time"
 msgstr "Date et heure de début"
 
-#: cfp/models.py:317
+#: cfp/models.py:320
 msgid "Duration (min)"
 msgstr "Durée (min)"
 
-#: cfp/models.py:321
+#: cfp/models.py:324
 msgid ""
 "You can use this field to share some materials related to your intervention."
 msgstr ""
 "Vous pouvez utiliser ce champs pour partager les supports de votre "
 "intervention."
 
-#: cfp/models.py:350
+#: cfp/models.py:353
 msgid "Waiting confirmation"
 msgstr "En attente de confirmation"
 
-#: cfp/models.py:352
+#: cfp/models.py:355
 msgid "Refused"
 msgstr "Refusé"
 
-#: cfp/models.py:354
+#: cfp/models.py:357
 #, python-format
 msgid "Pending decision, score: %(score).1f"
 msgstr "En cours, score : %(score).1f"
 
-#: cfp/models.py:417
+#: cfp/models.py:420
 msgid "If you have some constraints, you can indicate them here."
 msgstr "Si vous avez des contraintes, vous pouvez les indiquer ici."
 
-#: cfp/models.py:436
+#: cfp/models.py:439
 msgid "Volunteer"
 msgstr "Bénévole"
 
-#: cfp/models.py:440
+#: cfp/models.py:443
 msgid "Activity"
 msgstr "Activité"
 
-#: cfp/models.py:441
+#: cfp/models.py:444
 msgid "Activities"
 msgstr "Activités"
 
@@ -1024,6 +1032,9 @@ msgstr "Changement de mot de passe"
 #: ponyconf/urls.py:27
 msgid "Email address"
 msgstr "Adresse e-mail"
+
+#~ msgid "External schedule URL"
+#~ msgstr "URL programme externe"
 
 #~ msgid "Apply a tag"
 #~ msgstr "Ajouter une étiquette"
