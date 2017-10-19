@@ -347,6 +347,10 @@ def talk_list(request):
 @staff_required
 def talk_details(request, talk_id):
     talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    try:
+        vote = talk.vote_set.get(user=request.user).vote
+    except Vote.DoesNotExist:
+        vote = None
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
@@ -358,6 +362,7 @@ def talk_details(request, talk_id):
         return redirect(reverse('talk-details', args=[talk.token]))
     return render(request, 'cfp/staff/talk_details.html', {
         'talk': talk,
+        'vote': vote,
     })
 
 

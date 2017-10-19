@@ -85,11 +85,11 @@
 {% if talk.accepted == None %}
 <h3>{% trans "Vote" %}</h3>
 <div class="btn-group" role="group" aria-label="vote">
-  <a class="btn {% if vote.vote == -2 %} active {% endif %}btn-danger"  href="{% url 'talk-vote' talk.token '-2' %}">-2</a>
-  <a class="btn {% if vote.vote == -1 %} active {% endif %}btn-warning" href="{% url 'talk-vote' talk.token '-1' %}">-1</a>
-  <a class="btn {% if vote.vote == 0 %}  active {% endif %}btn-default" href="{% url 'talk-vote' talk.token '0'  %}"> 0</a>
-  <a class="btn {% if vote.vote == 1 %}  active {% endif %}btn-info"    href="{% url 'talk-vote' talk.token '+1'  %}">+1</a>
-  <a class="btn {% if vote.vote == 2 %}  active {% endif %}btn-success" href="{% url 'talk-vote' talk.token '+2'  %}">+2</a>
+  <a class="btn {% if vote == -2 %} active {% endif %}btn-danger"  href="{% url 'talk-vote' talk.token '-2' %}">-2</a>
+  <a class="btn {% if vote == -1 %} active {% endif %}btn-warning" href="{% url 'talk-vote' talk.token '-1' %}">-1</a>
+  <a class="btn {% if vote == 0 %}  active {% endif %}btn-default" href="{% url 'talk-vote' talk.token '0'  %}"> 0</a>
+  <a class="btn {% if vote == 1 %}  active {% endif %}btn-info"    href="{% url 'talk-vote' talk.token '+1'  %}">+1</a>
+  <a class="btn {% if vote == 2 %}  active {% endif %}btn-success" href="{% url 'talk-vote' talk.token '+2'  %}">+2</a>
 </div>
 <br /><br />
 <p>{{ talk.vote_set.count }} {% trans "vote" %}{{ talk.vote_set.count|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}</p>
