@@ -9,7 +9,8 @@ from django.utils.crypto import get_random_string
 
 from django_select2.forms import ModelSelect2MultipleWidget
 
-from .models import Participant, Talk, TalkCategory, Track, Tag, Conference, Room, Volunteer
+from .models import Participant, Talk, TalkCategory, Track, Tag, \
+                    Conference, Room, Volunteer, Activity
 
 
 ACCEPTATION_CHOICES = [
@@ -33,6 +34,20 @@ CONFIRMATION_VALUES = [
         ('confirmed', True),
         ('cancelled', False),
 ]
+
+
+class VolunteerFilterForm(forms.Form):
+    activity = forms.MultipleChoiceField(
+               required=False,
+               widget=forms.CheckboxSelectMultiple,
+               choices=[],
+   )
+
+    def __init__(self, *args, **kwargs):
+        site = kwargs.pop('site')
+        super().__init__(*args, **kwargs)
+        activities = Activity.objects.filter(site=site)
+        self.fields['activity'].choices = activities.values_list('slug', 'name')
 
 
 class TalkForm(forms.ModelForm):

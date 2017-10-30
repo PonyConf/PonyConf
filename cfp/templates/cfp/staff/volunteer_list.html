@@ -1,0 +1,73 @@
+{% extends 'cfp/staff/base.html' %}
+
+{% load bootstrap3 i18n %}
+
+{% block volunteerstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Volunteers" %}</h1>
+
+<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a>
+
+<br /><br />
+
+<div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
+    <div class="well">
+        <form class="form-horizontal" method="get">
+            {% bootstrap_form filter_form %}
+            <input type="submit" class="btn btn-success" value="{% trans "Filter" %}">
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <caption>{% trans "Total:" %} {{ volunteer_list|length }} {% trans "volunteer" %}{{ volunteer_list|length|pluralize }}
+    </caption>
+    <thead>
+        <tr>
+            <th class="text-center">{% trans "Name" %}</th>
+            <th class="text-center">{% trans "Email" %}</th>
+            <th class="text-center">{% trans "Activities" %}</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td colspan="7">{% trans "Contact:" %} <a href="{{ contact_link }}">{% trans "link" %}</a></td>
+        </tr>
+    </tfoot>
+    {% for volunteer in volunteer_list %}
+    {% if forloop.first %}
+    <tbody>
+    {% endif %}
+        <tr>
+            <td>{{ volunteer.name }}</td>
+            <td>{{ volunteer.email }}</td>
+            <td>
+                {% for activity in volunteer.activities.all %}
+                <span class="badge">{{ activity }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+    {% if forloop.last %}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% endblock %}
+
+{% block js_end %}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+
+    var anchor = window.location.hash.replace("#", "");
+    if (anchor == "filter") {
+        $("#filter").collapse('show');
+    }
+});
+</script>
+{% endblock %}

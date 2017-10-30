@@ -25,7 +25,8 @@ from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
-                   ConferenceForm, CreateUserForm, TrackForm, RoomForm, VolunteerForm, \
+                   ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
+                   VolunteerForm, VolunteerFilterForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
 
@@ -76,8 +77,28 @@ def volunteer_activity(request, volunteer_id, activity, join):
     return redirect(reverse('volunteer', kwargs=dict(volunteer_id=volunteer.token)))
 
 
-def talk_proposal(request, talk_id=None, participant_id=None):
+@staff_required
+def volunteer_list(request):
+    site = request.conference.site
+    show_filters = False
+    filter_form = VolunteerFilterForm(request.GET or None, site=site)
+    # Filtering
+    volunteers = Volunteer.objects.filter(site=site, activities__isnull=False).order_by('pk').distinct()
+    if filter_form.is_valid():
+        data = filter_form.cleaned_data
+        if len(data['activity']):
+            show_filters = True
+            volunteers = volunteers.filter(activities__slug__in=data['activity'])
+    contact_link = 'mailto:' + ','.join([volunteer.email for volunteer in volunteers.all()])
+    return render(request, 'cfp/staff/volunteer_list.html', {
+        'volunteer_list': volunteers,
+        'filter_form': filter_form,
+        'show_filters': show_filters,
+        'contact_link': contact_link,
+    })
 
+
+def talk_proposal(request, talk_id=None, participant_id=None):
     conference = request.conference
     site = conference.site
     if is_staff(request, request.user):

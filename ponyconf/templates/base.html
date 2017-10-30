@@ -17,16 +17,18 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            {% if conference.home %}
-            <li{% block hometab %}{% endblock %}><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a></li>
-            {% endif %}
-            <li{% block proposetab %}{% endblock %}><a href="{% url 'talk-proposal' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a></li>
-            {% if conference.schedule_available %}
-            <li{% block publicscheduletab %}{% endblock %}><a href="{% url 'public-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a></li>
-            {% endif %}
-            {% if conference.volunteers_enrolement_is_open %}
-            <li{% block volunteerstab %}{% endblock %}><a href="{% url 'volunteer-enrole' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a></li>
-            {% endif %}
+            {% if conference.home %}<li{% block hometab %}{% endblock %}>
+                <a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a>
+            </li>{% endif %}
+            <li{% block proposetab %}{% endblock %}>
+                <a href="{% url 'talk-proposal' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a>
+            </li>
+            {% if conference.schedule_available %}<li{% block publicscheduletab %}{% endblock %}>
+                <a href="{% url 'public-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a>
+            </li>{% endif %}
+            {% if conference.volunteers_enrollment_is_open %}<li{% block volunteerstab %}{% endblock %}>
+                <a href="{% url 'volunteer-enrole' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a>
+            </li>{% endif %}
             {% comment %}
             {% if request.user.is_authenticated %}
             <li{% block exhibitortab %}{% endblock %}><a href="{% url 'participate-as-speaker' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Exhibitor" %}</a></li>

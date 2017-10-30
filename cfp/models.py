@@ -43,12 +43,6 @@ class Conference(models.Model):
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
 
-    #subscriptions_open = models.BooleanField(default=False) # workshop subscription
-
-    #def cfp_is_open(self):
-    #    events = Event.objects.filter(site=self.site)
-    #    return any(map(lambda x: x.is_open(), events))
-
     def volunteers_enrollment_is_open(self):
         now = timezone.now()
         opening = self.volunteers_opening_date
