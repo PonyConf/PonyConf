@@ -28,6 +28,7 @@
         <tr>
             <th class="text-center">{% trans "Name" %}</th>
             <th class="text-center">{% trans "Email" %}</th>
+            <th class="text-center">{% trans "Phone" %}</th>
             <th class="text-center">{% trans "Activities" %}</th>
         </tr>
     </thead>
@@ -43,6 +44,7 @@
         <tr>
             <td>{{ volunteer.name }}</td>
             <td>{{ volunteer.email }}</td>
+            <td>{{ volunteer.phone_number }}</td>
             <td>
                 {% for activity in volunteer.activities.all %}
                 <span class="badge">{{ activity }}</span>

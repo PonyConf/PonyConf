@@ -7,9 +7,6 @@
     {{ block.super }}
     <div class="container">
       <ul class="nav nav-pills nav-justified subnav">
-        {% comment %}
-        <li{% block volunteerstab %}{% endblock %}><a href="{% url 'list-volunteers' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a></li>
-        {% endcomment %}
         <li{% block talkstab %}{% endblock %}><a href="{% url 'talk-list' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Talks" %}</a></li>
         <li{% block speakerstab %}{% endblock %}><a href="{% url 'participant-list' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Speakers" %}</a></li>
         <li{% block volunteerstab %}{% endblock %}><a href="{% url 'volunteer-list' %}"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;{% trans "Volunteers" %}</a></li>
