@@ -11,6 +11,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
 
 from django_select2.views import AutoResponseView
 
@@ -45,15 +46,41 @@ def volunteer_enrole(request):
         volunteer = form.save(commit=False)
         volunteer.language = request.LANGUAGE_CODE
         volunteer.save()
+        volunteer_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain + volunteer.get_absolute_url()
+        body = _("""Hi {},
+
+Thank your for your help in the organization of the conference {}!
+
+You can update your availability at anytime:
+
+    {}
+
+Thanks!
+
+{}
+
+""").format(volunteer.name, request.conference.name, volunteer_url, request.conference.name)
+        #Message.objects.create(
+        #    thread=volunteer.conversation,
+        #    author=request.conference,
+        #    from_email=request.conference.contact_email,
+        #    content=body,
+        #)
+        send_mail(
+            subject=_('Thank you for your help!'),
+            message=body,
+            from_email='%s <%s>' % (request.conference.name, request.conference.contact_email),
+            recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
+        )
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
-        return redirect(reverse('volunteer', kwargs=dict(volunteer_id=volunteer.token)))
+        return redirect(reverse('volunteer-home', kwargs=dict(volunteer_id=volunteer.token)))
     return render(request, 'cfp/volunteer_enrole.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'form': form,
     })
 
 
-def volunteer(request, volunteer_id):
+def volunteer_home(request, volunteer_id):
     volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
     return render(request, 'cfp/volunteer.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
@@ -61,7 +88,7 @@ def volunteer(request, volunteer_id):
     })
 
 
-def volunteer_activity(request, volunteer_id, activity, join):
+def volunteer_update_activity(request, volunteer_id, activity, join):
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
     volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
@@ -74,7 +101,7 @@ def volunteer_activity(request, volunteer_id, activity, join):
         activity.volunteers.remove(volunteer)
         activity.save()
         messages.success(request, _('Okay, no problem!'))
-    return redirect(reverse('volunteer', kwargs=dict(volunteer_id=volunteer.token)))
+    return redirect(reverse('volunteer-home', kwargs=dict(volunteer_id=volunteer.token)))
 
 
 @staff_required
@@ -96,6 +123,11 @@ def volunteer_list(request):
         'show_filters': show_filters,
         'contact_link': contact_link,
     })
+
+
+@staff_required
+def volunteer_details(request, volunteer_id):
+    pass
 
 
 def talk_proposal(request, talk_id=None, participant_id=None):

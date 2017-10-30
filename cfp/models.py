@@ -415,7 +415,7 @@ class Volunteer(PonyConfModel):
     conversation = models.OneToOneField(MessageThread)
 
     def get_absolute_url(self):
-        return reverse('volunteer-details', kwargs={'volunteer_id': self.token})
+        return reverse('volunteer-home', kwargs={'volunteer_id': self.token})
 
     class Meta:
         # A volunteer can participe only once to a Conference (= Site)
