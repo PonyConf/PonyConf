@@ -406,9 +406,10 @@ class Vote(PonyConfModel):
 class Volunteer(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=128, verbose_name=_('Your Name'))
-    email = models.EmailField()
+    email = models.EmailField(verbose_name=_('Email'))
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     phone_number = models.CharField(max_length=64, blank=True, default='', verbose_name=_('Phone number'))
+    sms_prefered = models.BooleanField(default=False, verbose_name=_('SMS prefered'))
     language = models.CharField(max_length=10, blank=True)
     notes = models.TextField(default='', blank=True, verbose_name=_('Notes'),
                              help_text=_('If you have some constraints, you can indicate them here.'))

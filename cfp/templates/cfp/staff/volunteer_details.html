@@ -12,7 +12,7 @@
     <dd><a href="mailto:{{ volunteer.email }}">{{ volunteer.email }}</a></dd>
   {% if volunteer.phone_number %}
   <dt>{% trans "Phone number" %}</dt>
-    <dd><a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a></dd>
+    <dd><a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a>{% if volunteer.sms_prefered %} (SMS){% endif %}</dd>
   {% endif %}
 </dl>
 

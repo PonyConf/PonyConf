@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 14:15+0000\n"
-"PO-Revision-Date: 2017-11-03 15:16+0100\n"
+"POT-Creation-Date: 2017-11-03 18:42+0000\n"
+"PO-Revision-Date: 2017-11-03 19:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -42,7 +42,7 @@ msgstr "Confirmé"
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: cfp/forms.py:41 cfp/models.py:437
+#: cfp/forms.py:41 cfp/models.py:438
 msgid "Activity"
 msgstr "Activité"
 
@@ -65,12 +65,12 @@ msgstr "Catégorie"
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:87 cfp/models.py:137 cfp/models.py:432
+#: cfp/forms.py:87 cfp/models.py:137 cfp/models.py:433
 #: cfp/templates/cfp/staff/talk_details.html:64
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:88 cfp/models.py:105 cfp/models.py:413
+#: cfp/forms.py:88 cfp/models.py:105 cfp/models.py:414
 #: cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:78
 #: cfp/templates/cfp/staff/volunteer_details.html:20
@@ -156,7 +156,7 @@ msgstr "Ajouter une étiquette"
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:183 cfp/models.py:135 cfp/models.py:187 cfp/models.py:430
+#: cfp/forms.py:183 cfp/models.py:135 cfp/models.py:187 cfp/models.py:431
 #: cfp/templates/cfp/staff/participant_list.html:35
 #: cfp/templates/cfp/staff/volunteer_list.html:29
 msgid "Name"
@@ -367,15 +367,24 @@ msgstr "Refusé"
 msgid "Pending decision, score: %(score).1f"
 msgstr "En cours, score : %(score).1f"
 
-#: cfp/models.py:414
+#: cfp/models.py:409 cfp/templates/cfp/staff/volunteer_details.html:11
+#: cfp/templates/cfp/staff/volunteer_list.html:30
+msgid "Email"
+msgstr "E-mail"
+
+#: cfp/models.py:412
+msgid "SMS prefered"
+msgstr "SMS préférés"
+
+#: cfp/models.py:415
 msgid "If you have some constraints, you can indicate them here."
 msgstr "Si vous avez des contraintes, vous pouvez les indiquer ici."
 
-#: cfp/models.py:433 cfp/templates/cfp/staff/volunteer_details.html:8
+#: cfp/models.py:434 cfp/templates/cfp/staff/volunteer_details.html:8
 msgid "Volunteer"
 msgstr "Bénévole"
 
-#: cfp/models.py:438 cfp/templates/cfp/staff/volunteer_details.html:25
+#: cfp/models.py:439 cfp/templates/cfp/staff/volunteer_details.html:25
 #: cfp/templates/cfp/staff/volunteer_list.html:32
 msgid "Activities"
 msgstr "Activités"
@@ -810,11 +819,6 @@ msgstr "responsable"
 #: cfp/templates/cfp/staff/track_list.html:31
 msgid "No tracks."
 msgstr "Aucune session."
-
-#: cfp/templates/cfp/staff/volunteer_details.html:11
-#: cfp/templates/cfp/staff/volunteer_list.html:30
-msgid "Email"
-msgstr "E-mail"
 
 #: cfp/templates/cfp/staff/volunteer_details.html:29
 msgid "The volunteer applied for following activities:"
