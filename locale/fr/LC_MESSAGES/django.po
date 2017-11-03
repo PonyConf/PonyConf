@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 13:39+0000\n"
-"PO-Revision-Date: 2017-11-03 14:42+0100\n"
+"POT-Creation-Date: 2017-11-03 14:15+0000\n"
+"PO-Revision-Date: 2017-11-03 15:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Pending decision"
 msgstr "Décision en attente"
 
-#: cfp/forms.py:18 cfp/forms.py:102 cfp/forms.py:194
+#: cfp/forms.py:18 cfp/forms.py:103 cfp/forms.py:195
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -34,7 +34,7 @@ msgstr "Décliné"
 msgid "Waiting"
 msgstr "En attente"
 
-#: cfp/forms.py:29 cfp/forms.py:108 cfp/forms.py:200 cfp/models.py:343
+#: cfp/forms.py:29 cfp/forms.py:109 cfp/forms.py:201 cfp/models.py:343
 msgid "Confirmed"
 msgstr "Confirmé"
 
@@ -42,133 +42,137 @@ msgstr "Confirmé"
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: cfp/forms.py:50
+#: cfp/forms.py:41 cfp/models.py:437
+msgid "Activity"
+msgstr "Activité"
+
+#: cfp/forms.py:51
 msgctxt "activity"
 msgid "None"
 msgstr "Aucune"
 
-#: cfp/forms.py:76
+#: cfp/forms.py:77
 #, python-format
 msgid "Default duration: %(duration)d min"
 msgstr "Durée par défaut : %(duration)d min"
 
-#: cfp/forms.py:84 cfp/forms.py:96 cfp/forms.py:188
+#: cfp/forms.py:85 cfp/forms.py:97 cfp/forms.py:189
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
 
-#: cfp/forms.py:85 cfp/templates/cfp/staff/talk_list.html:43
+#: cfp/forms.py:86 cfp/templates/cfp/staff/talk_list.html:43
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:86 cfp/models.py:137 cfp/models.py:432
+#: cfp/forms.py:87 cfp/models.py:137 cfp/models.py:432
 #: cfp/templates/cfp/staff/talk_details.html:64
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:87 cfp/models.py:105 cfp/models.py:413
+#: cfp/forms.py:88 cfp/models.py:105 cfp/models.py:413
 #: cfp/templates/cfp/staff/participant_details.html:16
 #: cfp/templates/cfp/staff/talk_details.html:78
 #: cfp/templates/cfp/staff/volunteer_details.html:20
 msgid "Notes"
 msgstr "Notes"
 
-#: cfp/forms.py:90
+#: cfp/forms.py:91
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:114 cfp/forms.py:206 cfp/models.py:300
+#: cfp/forms.py:115 cfp/forms.py:207 cfp/models.py:300
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:46
 #: cfp/templates/cfp/staff/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: cfp/forms.py:120
+#: cfp/forms.py:121
 msgid "Tag"
 msgstr "Étiquette"
 
-#: cfp/forms.py:126 cfp/templates/cfp/staff/talk_details.html:83
+#: cfp/forms.py:127 cfp/templates/cfp/staff/talk_details.html:83
 msgid "Vote"
 msgstr "Vote"
 
-#: cfp/forms.py:127
+#: cfp/forms.py:128
 msgid "Filter talks you already / not yet voted for"
 msgstr ""
 "Filtrer les propositions pour lesquelles vous avez déjà voté / pas encore "
 "voté"
 
-#: cfp/forms.py:130 cfp/templates/cfp/staff/room_form.html:14
+#: cfp/forms.py:131 cfp/templates/cfp/staff/room_form.html:14
 #: cfp/templates/cfp/staff/talk_details.html:38
 msgid "Room"
 msgstr "Salle"
 
-#: cfp/forms.py:131
+#: cfp/forms.py:132
 msgid "Filter talks already / not yet affected to a room"
 msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 
-#: cfp/forms.py:134
+#: cfp/forms.py:135
 msgid "Scheduled"
 msgstr "Programmé"
 
-#: cfp/forms.py:135
+#: cfp/forms.py:136
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: cfp/forms.py:138 cfp/models.py:317
+#: cfp/forms.py:139 cfp/models.py:317
 #: cfp/templates/cfp/staff/talk_details.html:54
 msgid "Materials"
 msgstr "Supports"
 
-#: cfp/forms.py:139
+#: cfp/forms.py:140
 msgid "Filter talks with / without materials"
 msgstr "Filtrer les exposés avec / sans supports"
 
-#: cfp/forms.py:142 cfp/templates/cfp/staff/talk_details.html:58
+#: cfp/forms.py:143 cfp/templates/cfp/staff/talk_details.html:58
 msgid "Video"
 msgstr "Vidéo"
 
-#: cfp/forms.py:143
+#: cfp/forms.py:144
 msgid "Filter talks with / without video"
 msgstr "Filtrer les exposés avec / sans vidéo"
 
-#: cfp/forms.py:152 cfp/forms.py:218
+#: cfp/forms.py:153 cfp/forms.py:219
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
-#: cfp/forms.py:158
+#: cfp/forms.py:159
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: cfp/forms.py:159
+#: cfp/forms.py:160
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: cfp/forms.py:160
+#: cfp/forms.py:161
 msgid "Add a tag"
 msgstr "Ajouter une étiquette"
 
-#: cfp/forms.py:161
+#: cfp/forms.py:162
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:182 cfp/models.py:135 cfp/models.py:187 cfp/models.py:430
+#: cfp/forms.py:183 cfp/models.py:135 cfp/models.py:187 cfp/models.py:430
 #: cfp/templates/cfp/staff/participant_list.html:35
 #: cfp/templates/cfp/staff/volunteer_list.html:29
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/forms.py:237
+#: cfp/forms.py:238
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:257
+#: cfp/forms.py:258
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:262
+#: cfp/forms.py:263
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -370,10 +374,6 @@ msgstr "Si vous avez des contraintes, vous pouvez les indiquer ici."
 #: cfp/models.py:433 cfp/templates/cfp/staff/volunteer_details.html:8
 msgid "Volunteer"
 msgstr "Bénévole"
-
-#: cfp/models.py:437
-msgid "Activity"
-msgstr "Activité"
 
 #: cfp/models.py:438 cfp/templates/cfp/staff/volunteer_details.html:25
 #: cfp/templates/cfp/staff/volunteer_list.html:32
@@ -831,6 +831,10 @@ msgstr "bénévole"
 #: cfp/templates/cfp/staff/volunteer_list.html:31
 msgid "Phone"
 msgstr "Téléphone"
+
+#: cfp/templates/cfp/staff/volunteer_list.html:47
+msgid "The volunteer made a few remarks to the staff."
+msgstr "Le bénévole a fait quelques remarques au staff."
 
 #: cfp/templates/cfp/volunteer.html:9 cfp/templates/cfp/volunteer_enrole.html:9
 msgid "Become a volunteers!"

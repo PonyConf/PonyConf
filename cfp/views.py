@@ -110,7 +110,7 @@ def volunteer_list(request):
     show_filters = False
     filter_form = VolunteerFilterForm(request.GET or None, site=site)
     # Filtering
-    volunteers = Volunteer.objects.filter(site=site).order_by('pk').distinct()
+    volunteers = Volunteer.objects.filter(site=site).order_by('pk').distinct().prefetch_related('activities')
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['activity']):

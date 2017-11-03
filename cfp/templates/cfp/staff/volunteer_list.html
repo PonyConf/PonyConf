@@ -42,7 +42,10 @@
     <tbody>
     {% endif %}
         <tr>
-            <td><a href="{% url 'volunteer-details' volunteer.pk %}">{{ volunteer.name }}</a></td>
+            <td>
+                <a href="{% url 'volunteer-details' volunteer.pk %}">{{ volunteer.name }}</a>
+                {% if volunteer.notes %}<span class="glyphicon glyphicon-envelope pull-right" data-toggle="tooltip" data-placement="bottom" title="{% trans "The volunteer made a few remarks to the staff." %}"></span>{% endif %}
+            </td>
             <td>{{ volunteer.email }}</td>
             <td>{{ volunteer.phone_number }}</td>
             <td>
