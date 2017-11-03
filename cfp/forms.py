@@ -3,7 +3,7 @@ from django.forms.models import modelform_factory
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UsernameField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from django.template.defaultfilters import slugify
 from django.utils.crypto import get_random_string
 
@@ -38,6 +38,7 @@ CONFIRMATION_VALUES = [
 
 class VolunteerFilterForm(forms.Form):
     activity = forms.MultipleChoiceField(
+               label=_('Activity'),
                required=False,
                widget=forms.CheckboxSelectMultiple,
                choices=[],
@@ -47,7 +48,7 @@ class VolunteerFilterForm(forms.Form):
         site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
         activities = Activity.objects.filter(site=site)
-        self.fields['activity'].choices = activities.values_list('slug', 'name')
+        self.fields['activity'].choices = [('none', pgettext_lazy('activity', 'None'))] + list(activities.values_list('slug', 'name'))
 
 
 class TalkForm(forms.ModelForm):

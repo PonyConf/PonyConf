@@ -110,12 +110,18 @@ def volunteer_list(request):
     show_filters = False
     filter_form = VolunteerFilterForm(request.GET or None, site=site)
     # Filtering
-    volunteers = Volunteer.objects.filter(site=site, activities__isnull=False).order_by('pk').distinct()
+    volunteers = Volunteer.objects.filter(site=site).order_by('pk').distinct()
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['activity']):
             show_filters = True
-            volunteers = volunteers.filter(activities__slug__in=data['activity'])
+            q = Q()
+            if 'none' in data['activity']:
+                data['activity'].remove('none')
+                q |= Q(activities__isnull=True)
+            if len(data['activity']):
+                q |= Q(activities__slug__in=data['activity'])
+            volunteers = volunteers.filter(q)
     contact_link = 'mailto:' + ','.join([volunteer.email for volunteer in volunteers.all()])
     return render(request, 'cfp/staff/volunteer_list.html', {
         'volunteer_list': volunteers,
@@ -127,7 +133,10 @@ def volunteer_list(request):
 
 @staff_required
 def volunteer_details(request, volunteer_id):
-    pass
+    volunteer = get_object_or_404(Volunteer, site=request.conference.site, pk=volunteer_id)
+    return render(request, 'cfp/staff/volunteer_details.html', {
+        'volunteer': volunteer,
+    })
 
 
 def talk_proposal(request, talk_id=None, participant_id=None):

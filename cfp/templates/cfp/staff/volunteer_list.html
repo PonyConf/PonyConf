@@ -2,7 +2,7 @@
 
 {% load bootstrap3 i18n %}
 
-{% block volunteerstab %} class="active"{% endblock %}
+{% block volunteersstafftab %} class="active"{% endblock %}
 
 {% block content %}
 
@@ -42,7 +42,7 @@
     <tbody>
     {% endif %}
         <tr>
-            <td>{{ volunteer.name }}</td>
+            <td><a href="{% url 'volunteer-details' volunteer.pk %}">{{ volunteer.name }}</a></td>
             <td>{{ volunteer.email }}</td>
             <td>{{ volunteer.phone_number }}</td>
             <td>

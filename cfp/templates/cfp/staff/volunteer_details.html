@@ -1,0 +1,52 @@
+{% extends 'cfp/staff/base.html' %}
+{% load bootstrap3 i18n %}
+
+{% block volunteersstafftab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Volunteer" %} <b>{{ volunteer.name }}</b></h1>
+
+<dl class="dl-horizontal">
+  <dt>{% trans "Email" %}</dt>
+    <dd><a href="mailto:{{ volunteer.email }}">{{ volunteer.email }}</a></dd>
+  {% if volunteer.phone_number %}
+  <dt>{% trans "Phone number" %}</dt>
+    <dd><a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a></dd>
+  {% endif %}
+</dl>
+
+{% if volunteer.notes %}
+<h3>{% trans "Notes" %}</h3>
+
+<p>{{ volunteer.notes|linebreaksbr }}</p>
+{% endif %}
+
+<h3>{% trans "Activities" %}</h3>
+
+{% for activity in volunteer.activities.all %}
+{% if forloop.first %}
+{% trans "The volunteer applied for following activities:" %}
+<ul>
+{% endif %}
+    <li>
+        {{ activity.name }}
+    </li>
+{% if forloop.last %}
+</ul>
+{% endif %}
+{% empty %}
+{% trans "The volunteer does not applied for any activities." %}
+{% endfor %}
+
+
+{% comment %}
+<h3>{% trans "Messaging" %}</h3>
+
+{% include 'mailing/_message_list.html' with messages=talk.conversation.message_set.all %}
+
+{% trans "Comment this talk – <em>this message will be received by the staff team only</em>" as message_form_title %}
+{% include 'mailing/_message_form.html' %}
+{% endcomment %}
+
+{% endblock %}
