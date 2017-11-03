@@ -104,7 +104,7 @@ class Participant(PonyConfModel):
     language = models.CharField(max_length=10, blank=True)
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"),
                              help_text=_('This field is only visible by organizers.'))
-    vip = models.BooleanField(default=False)
+    vip = models.BooleanField(default=False, verbose_name=_('Invited speaker'))
     conversation = models.OneToOneField(MessageThread)
 
     objects = ParticipantManager()

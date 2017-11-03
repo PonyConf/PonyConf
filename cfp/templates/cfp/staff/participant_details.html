@@ -5,7 +5,10 @@
 
 {% block content %}
 
-<h1>{{ participant }}</h1>
+<h1>
+    {{ participant }}
+    {% if participant.vip %}<span class="badge">{% trans "VIP" %}</span>{% endif %}
+</h1>
 
 <p><a class="btn btn-success" href="{% url 'participant-edit' participant.token %}">{% trans "Edit" %}</a></p>
 
@@ -19,6 +22,7 @@
 
 <h2>{% trans "Informations" %}</h2>
 <ul>
+    {% if participant.vip %}<li><b>{% trans "Invited speaker" %}</b></li>{% endif %}
     <li><b>{% trans "E-mail:" %}</b> <a href="mailto:{{ participant.email }}">{{ participant.email }}</a></li>
     {% if participant.twitter %}<li><b>{% trans "Twitter:" %}</b> <a href="{{ participant.twitter }}">{{ participant.twitter }}</a></li>{% endif %}
     {% if participant.linkedin %}<li><b>{% trans "LinkedIn:" %}</b> <a href="{{ participant.linkedin }}">{{ participant.linkedin }}</a></li>{% endif %}

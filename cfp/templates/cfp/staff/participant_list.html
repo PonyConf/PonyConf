@@ -47,7 +47,10 @@
     <tbody>
     {% endif %}
         <tr>
-            <td><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a></td>
+            <td>
+                <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+                {% if participant.vip %}<span class="badge pull-right">VIP</span>{% endif %}
+            </td>
             <td>
                 <span class="text-success">{% blocktrans count accepted=participant.accepted_talk_count %}accepted: {{ accepted }}{% plural %}accepted: {{ accepted }}{% endblocktrans %}</span>
                 —

@@ -179,6 +179,7 @@ ParticipantForm = modelform_factory(Participant, fields=('name', 'email', 'biogr
 
 class ParticipantStaffForm(ParticipantForm):
     class Meta(ParticipantForm.Meta):
+        fields = ('name', 'vip', 'email', 'biography')
         labels = {
             'name': _('Name'),
         }

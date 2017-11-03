@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 18:42+0000\n"
-"PO-Revision-Date: 2017-11-03 19:43+0100\n"
+"POT-Creation-Date: 2017-11-03 19:20+0000\n"
+"PO-Revision-Date: 2017-11-03 20:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Pending decision"
 msgstr "Décision en attente"
 
-#: cfp/forms.py:18 cfp/forms.py:103 cfp/forms.py:195
+#: cfp/forms.py:18 cfp/forms.py:103 cfp/forms.py:196
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -34,7 +34,7 @@ msgstr "Décliné"
 msgid "Waiting"
 msgstr "En attente"
 
-#: cfp/forms.py:29 cfp/forms.py:109 cfp/forms.py:201 cfp/models.py:343
+#: cfp/forms.py:29 cfp/forms.py:109 cfp/forms.py:202 cfp/models.py:343
 msgid "Confirmed"
 msgstr "Confirmé"
 
@@ -56,7 +56,7 @@ msgstr "Aucune"
 msgid "Default duration: %(duration)d min"
 msgstr "Durée par défaut : %(duration)d min"
 
-#: cfp/forms.py:85 cfp/forms.py:97 cfp/forms.py:189
+#: cfp/forms.py:85 cfp/forms.py:97 cfp/forms.py:190
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
@@ -81,7 +81,7 @@ msgstr "Notes"
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:115 cfp/forms.py:207 cfp/models.py:300
+#: cfp/forms.py:115 cfp/forms.py:208 cfp/models.py:300
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:46
 #: cfp/templates/cfp/staff/track_form.html:14
@@ -136,7 +136,7 @@ msgstr "Vidéo"
 msgid "Filter talks with / without video"
 msgstr "Filtrer les exposés avec / sans vidéo"
 
-#: cfp/forms.py:153 cfp/forms.py:219
+#: cfp/forms.py:153 cfp/forms.py:220
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
@@ -156,23 +156,23 @@ msgstr "Ajouter une étiquette"
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:183 cfp/models.py:135 cfp/models.py:187 cfp/models.py:431
+#: cfp/forms.py:184 cfp/models.py:135 cfp/models.py:187 cfp/models.py:431
 #: cfp/templates/cfp/staff/participant_list.html:35
 #: cfp/templates/cfp/staff/volunteer_list.html:29
 msgid "Name"
 msgstr "Nom"
 
-#: cfp/forms.py:238
+#: cfp/forms.py:239
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:258
+#: cfp/forms.py:259
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:263
+#: cfp/forms.py:264
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -277,6 +277,10 @@ msgstr "Numéro de téléphone"
 #: cfp/models.py:106 cfp/models.py:299
 msgid "This field is only visible by organizers."
 msgstr "Ce champs est uniquement visible par les organisateurs."
+
+#: cfp/models.py:107
+msgid "Invited speaker"
+msgstr "Orateur invité"
 
 #: cfp/models.py:189
 msgid "Color"

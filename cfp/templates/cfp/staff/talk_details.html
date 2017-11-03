@@ -68,7 +68,7 @@
 
 {% for participant in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
-    <li><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a></li>
+    <li><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>{% if participant.vip %} <span class="badge">VIP</span>{% endif %}</li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <i>{% trans "No speakers." %}</i>
