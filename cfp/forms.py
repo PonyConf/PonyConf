@@ -36,6 +36,27 @@ CONFIRMATION_VALUES = [
 ]
 
 
+class OnSiteNamedModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.conference = kwargs.pop('conference')
+        super().__init__(*args, **kwargs)
+
+    # we should manually check (site, name) uniqueness as the site is not part of the form
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if (not self.instance or self.instance.name != name) \
+                and self._meta.model.objects.filter(site=self.conference.site, name=name).exists():
+            raise self.instance.unique_error_message(self._meta.model, ['name'])
+        return name
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        obj.site = self.conference.site
+        if commit:
+            obj.save()
+        return obj
+
+
 class VolunteerFilterForm(forms.Form):
     activity = forms.MultipleChoiceField(
                label=_('Activity'),
@@ -174,15 +195,29 @@ class TalkActionForm(forms.Form):
         self.fields['room'].choices = [(None, "---------")] + list(rooms.values_list('slug', 'name'))
 
 
-ParticipantForm = modelform_factory(Participant, fields=('name', 'email', 'biography'))
+class ParticipantForm(OnSiteNamedModelForm):
+    def __init__(self, *args, **kwargs):
+        social = kwargs.pop('social', True)
+        super().__init__(*args, **kwargs)
+        if not social:
+            for field in ['twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']:
+                self.fields.pop(field)
+
+    class Meta:
+        model = Participant
+        fields = ['name', 'email', 'biography', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if (not self.instance or self.instance.email != email) \
+                and self._meta.model.objects.filter(site=self.conference.site, email=email).exists():
+            raise self.instance.unique_error_message(self._meta.model, ['email'])
+        return email
 
 
 class ParticipantStaffForm(ParticipantForm):
     class Meta(ParticipantForm.Meta):
-        fields = ('name', 'vip', 'email', 'biography')
-        labels = {
-            'name': _('Name'),
-        }
+        fields = ['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.Meta.fields[3:]
 
 
 class ParticipantFilterForm(forms.Form):
@@ -218,6 +253,10 @@ class ParticipantFilterForm(forms.Form):
         self.fields['category'].choices = categories.values_list('pk', 'name')
         tracks = Track.objects.filter(site=site)
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
+
+
+class MailForm(forms.Form):
+    email = forms.EmailField(required=True, label=_('Email'))
 
 
 class UsersWidget(ModelSelect2MultipleWidget):
@@ -271,27 +310,6 @@ class CreateUserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-
-class OnSiteNamedModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.conference = kwargs.pop('conference')
-        super().__init__(*args, **kwargs)
-
-    # we should manually check (site, name) uniqueness as the site is not part of the form
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        if (not self.instance or self.instance.name != name) \
-                and self._meta.model.objects.filter(site=self.conference.site, name=name).exists():
-            raise self.instance.unique_error_message(self._meta.model, ['name'])
-        return name
-
-    def save(self, commit=True):
-        obj = super().save(commit=False)
-        obj.site = self.conference.site
-        if commit:
-            obj.save()
-        return obj
 
 
 class TrackForm(OnSiteNamedModelForm):

@@ -17,3 +17,8 @@ def duration_format(value):
     hours = int(value/60)
     minutes = value%60
     return '%d h %02d' % (hours, minutes)
+
+
+@register.filter
+def exclude(queryset, excluded):
+    return queryset.exclude(pk=excluded.pk)

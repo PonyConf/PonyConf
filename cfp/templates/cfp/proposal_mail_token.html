@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% load ponyconf_tags i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>
+    {% trans "Access an existing profile" %}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
+      {% csrf_token %}
+      <div class="form-group">
+        {% blocktrans %}To receive a email with a link to access your profile, please enter your email below.{% endblocktrans %}
+      </div>
+      {{ form|crispy }}
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

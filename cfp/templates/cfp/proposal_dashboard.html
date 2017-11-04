@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n crispy_forms_tags cfp_tags %}
+
+{% load ponyconf_tags i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    {% blocktrans with name=speaker.name %}Welcome <b>{{ name }}</b>!{% endblocktrans %}
+    <a href="{% url 'proposal-profile-edit' speaker_token=speaker.token %}" class="btn btn-success pull-right">
+      <span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans "Edit your profile" %}
+    </a>
+  </h1>
+</div>
+
+<h3>{% trans "Your informations" %}</h3>
+
+<p>
+  <ul>
+    <li><b>{% trans "E-mail:" %}</b> <a href="mailto:{{ speaker.email }}">{{ speaker.email }}</a></li>
+    {% if speaker.twitter %}<li><b>{% trans "Twitter:" %}</b> <a href="{{ speaker.twitter }}">{{ speaker.twitter }}</a></li>{% endif %}
+    {% if speaker.linkedin %}<li><b>{% trans "LinkedIn:" %}</b> <a href="{{ speaker.linkedin }}">{{ speaker.linkedin }}</a></li>{% endif %}
+    {% if speaker.github %}<li><b>{% trans "Github:" %}</b> <a href="{{ speaker.github }}">{{ speaker.github }}</a></li>{% endif %}
+    {% if speaker.website %}<li><b>{% trans "Website:" %}</b> <a href="{{ speaker.website }}">{{ speaker.website }}</a></li>{% endif %}
+    {% if speaker.facebook %}<li><b>{% trans "Facebook:" %}</b> <a href="{{ speaker.facebook }}">{{ speaker.facebook }}</a></li>{% endif %}
+    {% if speaker.mastodon %}<li><b>{% trans "Mastodon:" %}</b> <a href="{{ speaker.mastodon }}">{{ speaker.mastodon }}</a></li>{% endif %}
+    {% if speaker.phone_number %}<li><b>{% trans "Phone number:" %}</b> {{ speaker.phone_number }}</li>{% endif %}
+  </ul>
+</p>
+
+<h3>{% trans "Biography" %}</h3>
+
+<p>
+  {% if speaker.biography %}
+  {{ speaker.biography|linebreaksbr }}
+  {% else %}
+  <i>{% trans "No biography." %}</i>
+  {% endif %}
+</p>
+
+<h3>{% trans "Your proposals" %}</h3>
+
+<p>
+  {% for talk in talks %}
+  {% if forloop.first %}
+  <ul>
+  {% endif %}
+    <li>
+      <a href="{% url 'proposal-talk-details' speaker_token=speaker.token talk_id=talk.pk %}"><b>{{ talk }}</b></a>
+      {% for spkr in talk.speakers|exclude:speaker %}
+        {% if forloop.first %}{% trans "with" %}{% endif %}
+        {{ spkr }}
+        {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
+      {% endfor %}
+      {% if conference.disclosed_acceptances and talk.accepted %}
+      {% if talk.confirmed is None %}
+      <span class="label label-info">{% trans "you must confirm you participation" %}</span>
+      {% elif talk.confirmed %}
+      <span class="label label-success">{% trans "accepted" %}</span>
+      {% else %}
+      <span class="label label-danger">{% trans "cancelled" %}</span>
+      {% endif %}
+      {% endif %}
+    </li>
+  {% if forloop.last %}
+  </ul>
+  {% endif %}
+  {% empty %}
+  <i>{% trans "No proposals." %}</i>
+  {% endfor %}
+</p>
+<p>
+  <a href="{% url 'proposal-talk-add' speaker_token=speaker.token %}" class="btn btn-primary">{% trans "New proposal" %}</a>
+</p>
+{% endblock %}

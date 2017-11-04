@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% load ponyconf_tags i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    {{ talk.title }}
+    <div class="pull-right">
+      <a href="{% url 'proposal-dashboard' speaker_token=speaker.token %}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;{% trans "My profile" %}
+      </a>
+      <a href="{% url 'proposal-talk-add' speaker_token=speaker.token %}" class="btn btn-info">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans "New proposal" %}
+      </a>
+      <a href="{% url 'proposal-talk-edit' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans "Edit this proposal" %}
+      </a>
+    </div>
+  </h1>
+</div>
+
+<h3>{% trans "Status" %}</h3>
+
+{% if not conference.disclosed_acceptances or talk.accepted is None %}
+<p>{% trans "Reviewing in progress, we will keep you informed by mail." %}</p>
+{% elif talk.accepted %}
+<p class="text-success">{% trans "Accepted!" %}</p>
+{% if talk.confirmed is None %}
+<p>
+  {% trans "Please confirm your participation:" %}
+  <a href="{% url 'proposal-talk-confirm' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-success">{% trans "I will be there!" %}</a>
+  <a href="{% url 'proposal-talk-desist' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-danger">{% trans "Sorry, couldn't make it :-(" %}</a>
+</p>
+{% elif talk.confirmed %}
+<p><a href="{% url 'proposal-talk-desist' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-danger">
+  {% trans "Sorry, I have to cancel." %}
+</a></p>
+{% else %}
+<p><a href="{% url 'proposal-talk-confirm' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-success">
+  {% trans "Good news, I finally could be there!" %}
+</a></p>
+{% endif %}
+{% else %}
+<p>{% trans "Sorry, refused :-(" %}</p>
+{% endif %}
+
+<h3>{% trans "Speakers" %}</h3>
+
+<p>
+  {% for spkr in talk.speakers.all %}
+  {% if forloop.first %}<ul>{% endif %}
+      <li>
+        <a href="{% url 'proposal-speaker-edit' speaker_token=speaker.token talk_id=talk.pk co_speaker_id=spkr.pk %}">{{ spkr }}</a>
+        {% if spkr.pk == speaker.pk %} ({% trans "you!" %}){% endif %}
+      </li>
+  {% if forloop.last %}</ul>{% endif %}
+  {% endfor %}
+  <a href="{% url 'proposal-speaker-add' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-sm btn-success">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans "Add a co-speaker" %}
+  </a>
+</p>
+
+<h3>{% trans "Description" %}</h3>
+
+<p>
+  {% if talk.description %}
+    {{ talk.description|linebreaksbr }}
+  {% else %}
+    <i>{% trans "No description provided." %}</i>
+  {% endif %}
+</p>
+
+<h3>{% trans "Message to organizers" %}</h3>
+
+<p>
+  {% if talk.notes %}
+    {{ talk.notes|linebreaksbr }}
+  {% else %}
+    <i>{% trans "No description provided." %}</i>
+  {% endif %}
+</p>
+{% endblock %}

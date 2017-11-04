@@ -20,14 +20,14 @@ from functools import reduce
 from mailing.models import Message
 from mailing.forms import MessageForm
 from .planning import Program
-from .decorators import staff_required
+from .decorators import speaker_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
                    ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
-                   VolunteerForm, VolunteerFilterForm, \
+                   VolunteerForm, VolunteerFilterForm, MailForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
 
@@ -35,7 +35,7 @@ def home(request):
     if request.conference.home:
         return render(request, 'cfp/home.html')
     else:
-        return redirect(reverse('talk-proposal'))
+        return redirect(reverse('proposal-home'))
 
 
 def volunteer_enrole(request):
@@ -139,43 +139,25 @@ def volunteer_details(request, volunteer_id):
     })
 
 
-def talk_proposal(request, talk_id=None, participant_id=None):
-    conference = request.conference
-    site = conference.site
+def proposal_home(request):
     if is_staff(request, request.user):
-        categories = TalkCategory.objects.filter(site=site)
+        categories = TalkCategory.objects.filter(site=request.conference.site)
     else:
-        categories = conference.opened_categories
-    talk = None
-    participant = None
-
-    if talk_id and participant_id:
-        talk = get_object_or_404(Talk, token=talk_id, site=site)
-        participant = get_object_or_404(Participant, token=participant_id, site=site)
-    elif not categories.exists():
-        return render(request, 'cfp/closed.html')
-
-    participant_form = ParticipantForm(request.POST or None, instance=participant)
-    talk_form = TalkForm(request.POST or None, categories=categories, instance=talk)
-
-    if request.method == 'POST' and talk_form.is_valid() and participant_form.is_valid():
+        categories = request.conference.opened_categories
+    speaker_form = ParticipantForm(request.POST or None, conference=request.conference, social=False)
+    talk_form = TalkForm(request.POST or None, categories=categories)
+    if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):
+        speaker = speaker_form.save(commit=False)
+        speaker.site = request.conference.site
+        speaker.save()
         talk = talk_form.save(commit=False)
-        talk.site = site
-
-        participant, created = Participant.objects.get_or_create(email=participant_form.cleaned_data['email'], site=site)
-        participant_form = ParticipantForm(request.POST, instance=participant)
-        participant = participant_form.save()
-        participant.language = request.LANGUAGE_CODE
-        participant.save()
-
+        talk.site = request.conference.site
         talk.save()
-        talk.speakers.add(participant)
-
-        protocol = 'https' if request.is_secure() else 'http'
-        base_url = protocol+'://'+site.domain
-        url_talk_proposal_edit = base_url + reverse('talk-proposal-edit', args=[talk.token, participant.token])
-        url_talk_proposal_speaker_add = base_url + reverse('talk-proposal-speaker-add', args=[talk.token])
-        url_talk_proposal_speaker_edit = base_url + reverse('talk-proposal-speaker-edit', args=[talk.token, participant.token])
+        talk.speakers.add(speaker)
+        base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+        url_dashboard = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token))
+        url_talk_details = base_url + reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk))
+        url_speaker_add = base_url + reverse('proposal-speaker-add', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk))
         body = _("""Hi {},
 
 Your talk has been submitted for {}.
@@ -185,9 +167,9 @@ Title: {}
 Description: {}
 
 You can at anytime:
-- edit your talk: {}
+- review and edit your profile: {}
+- review and edit your talk: {}
 - add a new co-speaker: {}
-- edit your profile: {}
 
 If you have any question, your can answer to this email.
 
@@ -195,89 +177,232 @@ Thanks!
 
 {}
 
-""").format(participant.name, conference.name, talk.title, talk.description, url_talk_proposal_edit, url_talk_proposal_speaker_add, url_talk_proposal_speaker_edit, conference.name)
-
+""").format(
+            speaker.name, request.conference.name,talk.title, talk.description,
+            url_dashboard, url_talk_details, url_speaker_add,
+            request.conference.name,
+        )
         Message.objects.create(
-            thread=participant.conversation,
-            author=conference,
-            from_email=conference.contact_email,
+            thread=speaker.conversation,
+            author=request.conference,
+            from_email=request.conference.contact_email,
             content=body,
         )
-
-        return render(request, 'cfp/complete.html', {'talk': talk, 'participant': participant})
-
-    return render(request, 'cfp/propose.html', {
-        'participant_form': participant_form,
-        'site': site,
+        messages.success(request, _('You proposition have been successfully submitted!'))
+        return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+    return render(request, 'cfp/proposal_home.html', {
+        'speaker_form': speaker_form,
         'talk_form': talk_form,
     })
 
 
-def talk_proposal_speaker_edit(request, talk_id, participant_id=None):
+def proposal_mail_token(request):
+    form = MailForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            speaker = Participant.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
+        except Participant.DoesNotExist:
+            messages.error(request, _('Sorry, we do not know this email.'))
+        else:
 
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
-    participant = None
+            base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+            dashboard_url = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token))
+            body = _("""Hi {},
 
-    if participant_id:
-        participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
+Someone, probably you, ask to access your profile.
+You can edit your talks or add new ones following this url:
 
-    participant_form = ParticipantForm(request.POST or None, instance=participant)
+  {}
 
-    if request.method == 'POST' and participant_form.is_valid():
+If you have any question, your can answer to this email.
 
-        participant, created = Participant.objects.get_or_create(email=participant_form.cleaned_data['email'], site=request.conference.site)
-        participant_form = ParticipantForm(request.POST, instance=participant)
-        participant = participant_form.save()
-        participant.save()
+Sincerely,
 
-        talk.speakers.add(participant)
+{}
 
-        return render(request,'cfp/complete.html', {'talk': talk, 'participant': participant})
-
-    return render(request, 'cfp/speaker.html', {
-        'participant_form': participant_form,
+""").format(speaker.name, dashboard_url, request.conference.name)
+            Message.objects.create(
+                thread=speaker.conversation,
+                author=request.conference,
+                from_email=request.conference.contact_email,
+                content=body,
+            )
+            messages.success(request, _('A email have been sent with a link to access to your profil.'))
+            return redirect(reverse('proposal-mail-token'))
+    return render(request, 'cfp/proposal_mail_token.html', {
+        'form': form,
     })
 
 
-def talk_acknowledgment(request, talk_id, confirm, participant_id=None):
-    # TODO: handle multiple speakers case
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
-    if participant_id:
-        participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
-    elif not is_staff(request, request.user):
-        raise PermissionDenied
+@speaker_required
+def proposal_dashboard(request, speaker):
+    return render(request, 'cfp/proposal_dashboard.html', {
+        'speaker': speaker,
+        'talks': speaker.talk_set.all(),
+    })
+
+
+@speaker_required
+def proposal_talk_details(request, speaker, talk_id):
+    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    return render(request, 'cfp/proposal_talk_details.html', {
+        'speaker': speaker,
+        'talk': talk,
+    })
+
+
+@speaker_required
+def proposal_talk_edit(request, speaker, talk_id=None):
+    if talk_id:
+        talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
     else:
-        participant = None
-    if not talk.accepted:
-        raise PermissionDenied
-    if talk.confirmed != confirm:
-        talk.confirmed = confirm
+        talk = None
+    if is_staff(request, request.user):
+        categories = TalkCategory.objects.filter(site=request.conference.site)
+    else:
+        categories = request.conference.opened_categories
+    form = TalkForm(request.POST or None, categories=categories, instance=talk)
+    if request.method == 'POST' and form.is_valid():
+        talk = form.save(commit=False)
+        talk.site = request.conference.site
         talk.save()
-        if confirm:
-            confirmation_message= _('Your participation has been taken into account, thank you!')
-            if participant:
-                thread_note = _('Speaker %(speaker)s confirmed his/her participation.')
-            else:
-                thread_note = _('The talk have been confirmed.')
+        talk.speakers.add(speaker)
+        if talk_id:
+            messages.success(request, _('Changes saved.'))
         else:
-            confirmation_message = _('We have noted your unavailability.')
-            if participant:
-                thread_note = _('Speaker %(speaker)s CANCELLED his/her participation.')
-            else:
-                thread_note = _('The talk have been cancelled.')
-        if participant_id:
-            thread_note = thread_note % {'speaker': participant}
-        Message.objects.create(thread=talk.conversation, author=participant or request.user, content=thread_note)
-        messages.success(request, confirmation_message)
-    else:
+            # TODO: it could be great to receive the proposition by mail
+            # but this is not crucial as the speaker already have a link in its mailbox
+            messages.success(request, _('You proposition have been successfully submitted!'))
+        return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+    return render(request, 'cfp/proposal_talk_form.html', {
+        'speaker': speaker,
+        'talk': talk,
+        'form': form,
+    })
+
+
+@speaker_required
+def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
+    # TODO: handle multiple speakers case
+    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    if not request.conference.disclosed_acceptances or not talk.accepted:
+        raise PermissionDenied
+    if talk.confirmed == confirm:
         if confirm:
             messages.warning(request, _('You already confirmed your participation to this talk.'))
         else:
             messages.warning(request, _('You already cancelled your participation to this talk.'))
-    if participant:
-        return redirect(reverse('talk-proposal-edit', kwargs=dict(talk_id=talk_id, participant_id=participant_id)))
     else:
-        return redirect(reverse('talk-details', kwargs=dict(talk_id=talk_id)))
+        talk.confirmed = confirm
+        talk.save()
+        if confirm:
+            confirmation_message= _('Your participation has been taken into account, thank you!')
+            thread_note = _('Speaker %(speaker)s confirmed his/her participation.' % {'speaker': speaker})
+        else:
+            confirmation_message = _('We have noted your unavailability.')
+            thread_note = _('Speaker %(speaker)s CANCELLED his/her participation.' % {'speaker': speaker})
+        Message.objects.create(thread=talk.conversation, author=speaker, content=thread_note)
+        messages.success(request, confirmation_message)
+    return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+
+
+# FIXME his this view really useful?
+#@speaker_required
+#def proposal_speaker_details(request, speaker, talk_id, co_speaker_id):
+#    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+#    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk_set__pk=talk.pk, pk=co_speaker_id)
+#    return render(request, 'cfp/proposal_speaker_details.html', {
+#        'speaker': speaker,
+#        'talk': talk,
+#        'co_speaker': co_speaker,
+#    })
+
+
+@speaker_required
+def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
+    if talk_id:
+        talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+        if co_speaker_id:
+            co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
+        else:
+            co_speaker = None
+    else:
+        talk = None
+        co_speaker = None
+    form = ParticipantForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
+    if request.method == 'POST' and form.is_valid():
+        # TODO: Allow to add a co-speaker which already exists.
+        # This should be automatically allowed if the speaker already have a talk in common with the co-speaker.
+        # Otherwise, we should send an speaker request to the other user OR allow the other user to join the talk with his token.
+        # This last requirements in planned for v3.
+        edited_speaker = form.save()
+        if talk:
+            talk.speakers.add(edited_speaker)
+            #return redirect(reverse('proposal-speaker-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+            return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+        else:
+            return redirect(reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token)))
+    return render(request, 'cfp/proposal_speaker_form.html', {
+        'speaker': speaker,
+        'talk': talk,
+        'co_speaker': co_speaker,
+        'form': form,
+    })
+
+
+@speaker_required
+def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
+    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk_set__pk=talk.pk, pk=co_speaker_id)
+    return redirect(reverse('proposal-speaker-details', kwargs=dict()))
+
+
+# BACKWARD COMPATIBILITY
+def talk_proposal(request, talk_id=None, participant_id=None):
+    if talk_id and participant_id:
+        talk = get_object_or_404(Talk, token=talk_id, site=site)
+        speaker = get_object_or_404(Participant, token=participant_id, site=site)
+        return render(reverse('proposal-talk-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+    else:
+        return render(reverse('proposal-home'))
+
+
+# BACKWARD COMPATIBILITY
+def talk_proposal_speaker_edit(request, talk_id, participant_id=None):
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    speaker = talk.speakers.first() # no other choice here…
+    if participant_id:
+        co_speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
+        return redirect(reverse('proposal-speaker-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk, co_speaker_id=co_speaker.pk)))
+    else:
+        return redirect(reverse('proposal-speaker-add', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+
+
+# TODO: add @staff_required decorator when dropping old links support
+def talk_acknowledgment(request, talk_id, confirm, participant_id=None):
+    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    if participant_id:
+        speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
+        if confirm:
+            return redirect(reverse('proposal-talk-confirm', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+        else:
+            return redirect(reverse('proposal-talk-desist', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+    elif not is_staff(request, request.user):
+        raise PermissionDenied
+    if not talk.accepted or talk.confirmed == confirm:
+        raise PermissionDenied
+    # TODO: handle multiple speakers case
+    talk.confirmed = confirm
+    talk.save()
+    if confirm:
+        confirmation_message= _('The speaker confirmation have been noted.')
+        thread_note = _('The talk have been confirmed.')
+    else:
+        confirmation_message = _('The speaker unavailability have been noted.')
+        thread_note = _('The talk have been cancelled.')
+    Message.objects.create(thread=talk.conversation, author=request.user, content=thread_note)
+    messages.success(request, confirmation_message)
+    return redirect(reverse('talk-details', kwargs=dict(talk_id=talk_id)))
 
 
 @staff_required
@@ -529,7 +654,7 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
 
 
 @staff_required
-def conference(request):
+def conference_edit(request):
     form = ConferenceForm(request.POST or None, instance=request.conference)
 
     if request.method == 'POST' and form.is_valid():
