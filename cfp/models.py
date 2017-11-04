@@ -115,8 +115,11 @@ class Participant(PonyConfModel):
 
     objects = ParticipantManager()
 
-    def get_absolute_url(self):
-        return reverse('proposal-dashboard', kwargs={'speaker_token': self.token})
+    def get_secret_url(self, full=False):
+        url = reverse('proposal-dashboard', kwargs={'speaker_token': self.token})
+        if full:
+            url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
+        return url
 
     class Meta:
         # A User can participe only once to a Conference (= Site)

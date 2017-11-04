@@ -32,6 +32,7 @@
     {% if participant.mastodon %}<li><b>{% trans "Mastodon:" %}</b> <a href="{{ participant.mastodon }}">{{ participant.mastodon }}</a></li>{% endif %}
     {% if participant.phone_number %}<li><b>{% trans "Phone number:" %}</b> {{ participant.phone_number }}</li>{% endif %}
     {% if participant.language %}<li><b>{% trans "Language:" %}</b> {{ participant.language }}</li>{% endif %}
+    <li><b>{% trans "Secret link:" %}</b> <a href="{{ participant.get_secret_url }}">{{ participant.token }}</a></li>
 </ul>
 
 <h2>{% trans "Talks" %}</h2>

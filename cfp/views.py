@@ -46,7 +46,6 @@ def volunteer_enrole(request):
         volunteer = form.save(commit=False)
         volunteer.language = request.LANGUAGE_CODE
         volunteer.save()
-        volunteer_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain + volunteer.get_absolute_url()
         body = _("""Hi {},
 
 Thank your for your help in the organization of the conference {}!
@@ -59,7 +58,7 @@ Thanks!
 
 {}
 
-""").format(volunteer.name, request.conference.name, volunteer_url, request.conference.name)
+""").format(volunteer.name, request.conference.name, volunteer.get_secret_url(full=True), request.conference.name)
         #Message.objects.create(
         #    thread=volunteer.conversation,
         #    author=request.conference,
