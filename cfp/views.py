@@ -319,21 +319,15 @@ def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
 
 @speaker_required
 def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
+    talk, co_speaker, co_speaker_candidates = None, None, None
     if talk_id:
         talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
         if co_speaker_id:
             co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
         else:
-            co_speaker = None
-    else:
-        talk = None
-        co_speaker = None
+            co_speaker_candidates = speaker.co_speaker_set.exclude(pk__in=talk.speakers.values_list('pk'))
     form = ParticipantForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
     if request.method == 'POST' and form.is_valid():
-        # TODO: Allow to add a co-speaker which already exists.
-        # This should be automatically allowed if the speaker already have a talk in common with the co-speaker.
-        # Otherwise, we should send an speaker request to the other user OR allow the other user to join the talk with his token.
-        # This last requirements in planned for v3.
         edited_speaker = form.save()
         if talk:
             talk.speakers.add(edited_speaker)
@@ -345,15 +339,31 @@ def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
         'speaker': speaker,
         'talk': talk,
         'co_speaker': co_speaker,
+        'co_speaker_candidates': co_speaker_candidates,
         'form': form,
     })
 
 
 @speaker_required
+def proposal_speaker_add(request, speaker, talk_id, speaker_id):
+    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    co_speaker = get_object_or_404(Participant, pk__in=speaker.co_speaker_set.values_list('pk'))
+    talk.speakers.add(co_speaker)
+    messages.success(request, _('Co-speaker successfully added to the talk.'))
+    return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk_id)))
+
+
+# TODO: ask for confirmation (with POST request needed)
+@speaker_required
 def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
     talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk_set__pk=talk.pk, pk=co_speaker_id)
-    return redirect(reverse('proposal-speaker-details', kwargs=dict()))
+    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
+    # prevent speaker from removing his/her self
+    if co_speaker.pk == speaker.pk:
+        raise PermissionDenied
+    talk.speakers.remove(co_speaker)
+    messages.success(request, _('Co-speaker successfully removed from the talk.'))
+    return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk_id)))
 
 
 # BACKWARD COMPATIBILITY

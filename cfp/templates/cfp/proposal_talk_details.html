@@ -55,7 +55,13 @@
   {% if forloop.first %}<ul>{% endif %}
       <li>
         <a href="{% url 'proposal-speaker-edit' speaker_token=speaker.token talk_id=talk.pk co_speaker_id=spkr.pk %}">{{ spkr }}</a>
-        {% if spkr.pk == speaker.pk %} ({% trans "you!" %}){% endif %}
+        {% if spkr.pk == speaker.pk %}
+        ({% trans "you!" %})
+        {% else %}
+        <a href="{% url 'proposal-speaker-remove' speaker_token=speaker.token talk_id=talk.pk co_speaker_id=spkr.pk %}" class="btn btn-xs btn-danger">
+          <span class=" glyphicon glyphicon-remove"></span>&nbsp;{% trans "remove" %}
+        </a>
+        {% endif %}
       </li>
   {% if forloop.last %}</ul>{% endif %}
   {% endfor %}

@@ -30,13 +30,23 @@
 
 <div class="row">
   <div class="col-md-12">
-<form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
+    {% if co_speaker_candidates %}
+    <div class="col-md-8 col-md-offset-2 alert alert-info">
+      {% trans "You may want to add one of the following speakers:" %}
+      {% for spkr in co_speaker_candidates %}
+        {% if forloop.first %}<ul>{% endif %}
+          <li><a href="{% url 'proposal-speaker-add-existing' speaker_token=speaker.token talk_id=talk.pk speaker_id=spkr.pk %}">{{ spkr }}</a></li>
+        {% if forloop.last %}</ul>{% endif %}
+      {% endfor %}
     </div>
-</form>
+    {% endif %}
+    <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}

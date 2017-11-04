@@ -130,6 +130,10 @@ class Participant(PonyConfModel):
         return str(self.name)
 
     @property
+    def co_speaker_set(self):
+        return Participant.objects.filter(site=self.site, talk__in=self.talk_set.values_list('pk')).exclude(pk=self.pk).order_by('name').distinct()
+
+    @property
     def accepted_talk_set(self):
         return self.talk_set.filter(accepted=True)
     @property
