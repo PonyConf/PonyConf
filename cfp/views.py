@@ -361,7 +361,7 @@ def talk_proposal(request, talk_id=None, participant_id=None):
     if talk_id and participant_id:
         talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
         speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
-        return render(reverse('proposal-talk-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+        return redirect(reverse('proposal-talk-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
     else:
         return render(reverse('proposal-home'))
 
