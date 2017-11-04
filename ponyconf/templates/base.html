@@ -21,7 +21,7 @@
                 <a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans "Home" %}</a>
             </li>{% endif %}
             <li{% block proposetab %}{% endblock %}>
-                <a href="{% url 'talk-proposal' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a>
+                <a href="{% url 'proposal-home' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Call for participation" %}</a>
             </li>
             {% if conference.schedule_available %}<li{% block publicscheduletab %}{% endblock %}>
                 <a href="{% url 'public-schedule' %}"><span class="glyphicon glyphicon-calendar"></span>&nbsp;{% trans "Schedule" %}</a>

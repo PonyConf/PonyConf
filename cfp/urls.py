@@ -4,12 +4,28 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    url(r'^cfp/$', views.talk_proposal, name='talk-proposal'),
+# v1.1
+    url(r'^cfp/$', views.proposal_home, name='proposal-home'),
+    url(r'^cfp/token/$', views.proposal_mail_token, name='proposal-mail-token'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/$', views.proposal_dashboard, name='proposal-dashboard'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/profile/$', views.proposal_speaker_edit, name='proposal-profile-edit'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/add/$', views.proposal_talk_edit, name='proposal-talk-add'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/$', views.proposal_talk_details, name='proposal-talk-details'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/edit/$', views.proposal_talk_edit, name='proposal-talk-edit'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/speaker/add/$', views.proposal_speaker_edit, name='proposal-speaker-add'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/speaker/add/(?P<speaker_id>[0-9]+)/$', views.proposal_speaker_add, name='proposal-speaker-add-existing'),
+    #url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/speaker/(?P<co_speaker_id>[0-9]+)/$', views.proposal_speaker_details, name='proposal-speaker-details'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/speaker/(?P<co_speaker_id>[0-9]+)/edit/$', views.proposal_speaker_edit, name='proposal-speaker-edit'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/speaker/(?P<co_speaker_id>[0-9]+)/remove/$', views.proposal_speaker_remove, name='proposal-speaker-remove'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/confirm/$', views.proposal_talk_acknowledgment, {'confirm': True}, name='proposal-talk-confirm'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/talk/(?P<talk_id>[0-9]+)/desist/$', views.proposal_talk_acknowledgment, {'confirm': False}, name='proposal-talk-desist'),
+# Backward compatibility
     url(r'^cfp/(?P<talk_id>[\w\-]+)/speaker/add/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-add'),
     url(r'^cfp/(?P<talk_id>[\w\-]+)/speaker/(?P<participant_id>[\w\-]+)/$', views.talk_proposal_speaker_edit, name='talk-proposal-speaker-edit'),
     url(r'^cfp/(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/$', views.talk_proposal, name='talk-proposal-edit'),
     url(r'^cfp/(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/confirm/$', views.talk_acknowledgment, {'confirm': True}, name='talk-confirm'),
     url(r'^cfp/(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/desist/$', views.talk_acknowledgment, {'confirm': False}, name='talk-desist'),
+# End backward compatibility
     url(r'^volunteer/$', views.volunteer_enrole, name='volunteer-enrole'),
     url(r'^volunteer/(?P<volunteer_id>[\w\-]+)/$', views.volunteer_home, name='volunteer-home'),
     url(r'^volunteer/(?P<volunteer_id>[\w\-]+)/join/(?P<activity>[\w\-]+)/$', views.volunteer_update_activity, {'join': True}, name='volunteer-join'),
@@ -41,7 +57,7 @@ urlpatterns = [
     url(r'^staff/schedule/((?P<program_format>[\w]+)/)?$', views.staff_schedule, name='staff-schedule'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
     url(r'^admin/$', views.admin, name='admin'),
-    url(r'^admin/conference/$', views.conference, name='conference'),
+    url(r'^admin/conference/$', views.conference_edit, name='conference'),
     url(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]

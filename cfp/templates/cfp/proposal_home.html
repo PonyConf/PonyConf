@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% load ponyconf_tags i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>
+    {% trans "Participate" %}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-8 col-md-offset-2 alert alert-info">
+      <span class="glyphicon glyphicon-exclamation-sign"></span>
+      {% url 'proposal-mail-token' as mail_token_url %}
+      {% blocktrans %}If you already have submitted a talk and you want to edit it or submit another one, please click <a href="{{ mail_token_url }}">here</a>.{% endblocktrans %}
+    </div>
+    <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
+      {% csrf_token %}
+      {{ speaker_form|crispy }}
+      {{ talk_form|crispy }}
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

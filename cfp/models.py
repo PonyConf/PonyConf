@@ -34,6 +34,7 @@ class Conference(models.Model):
     reply_email = models.CharField(max_length=100, blank=True, verbose_name=_('Reply email'))
     staff = models.ManyToManyField(User, blank=True, verbose_name=_('Staff members'))
     secure_domain = models.BooleanField(default=True, verbose_name=_('Secure domain (HTTPS)'))
+    acceptances_disclosure_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Acceptances disclosure date'))
     schedule_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Schedule publishing date'))
     schedule_redirection_url = models.URLField(blank=True, default='', verbose_name=_('Schedule redirection URL'),
                                                help_text=_('If specified, schedule tab will redirect to this URL.'))
@@ -55,6 +56,11 @@ class Conference(models.Model):
         return TalkCategory.objects.filter(site=self.site)\
                             .filter(Q(opening_date__isnull=True) | Q(opening_date__lte=now))\
                             .filter(Q(closing_date__isnull=True) | Q(closing_date__gte=now))
+
+    @property
+    def disclosed_acceptances(self):
+        # acceptances are automatically disclosed if the schedule is published
+        return self.acceptances_disclosure_date and self.acceptances_disclosure_date <= timezone.now() or self.schedule_available
 
     @property
     def schedule_available(self):
@@ -90,7 +96,7 @@ class ParticipantManager(models.Manager):
 
 class Participant(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128, verbose_name=_('Your Name'))
+    name = models.CharField(max_length=128, verbose_name=_('Name'))
     email = models.EmailField()
     biography = models.TextField(verbose_name=_('Biography'))
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -109,15 +115,23 @@ class Participant(PonyConfModel):
 
     objects = ParticipantManager()
 
-    def get_absolute_url(self):
-        return reverse('participant-details', kwargs={'participant_id': self.token})
+    def get_secret_url(self, full=False):
+        url = reverse('proposal-dashboard', kwargs={'speaker_token': self.token})
+        if full:
+            url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
+        return url
 
     class Meta:
         # A User can participe only once to a Conference (= Site)
+        unique_together = ('site', 'name')
         unique_together = ('site', 'email')
 
     def __str__(self):
         return str(self.name)
+
+    @property
+    def co_speaker_set(self):
+        return Participant.objects.filter(site=self.site, talk__in=self.talk_set.values_list('pk')).exclude(pk=self.pk).order_by('name').distinct()
 
     @property
     def accepted_talk_set(self):
