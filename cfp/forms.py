@@ -196,12 +196,17 @@ class TalkActionForm(forms.Form):
 
 
 class ParticipantForm(OnSiteNamedModelForm):
+    notify = forms.BooleanField(initial=True, required=False, label=_('Notify by mail?'))
+
     def __init__(self, *args, **kwargs):
         social = kwargs.pop('social', True)
+        ask_notify = kwargs.pop('ask_notify', False)
         super().__init__(*args, **kwargs)
         if not social:
             for field in ['twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']:
                 self.fields.pop(field)
+        if not ask_notify:
+            self.fields.pop('notify')
 
     class Meta:
         model = Participant

@@ -326,11 +326,52 @@ def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
             co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
         else:
             co_speaker_candidates = speaker.co_speaker_set.exclude(pk__in=talk.speakers.values_list('pk'))
-    form = ParticipantForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
+    form = ParticipantForm(request.POST or None, conference=request.conference,
+                instance=co_speaker if talk else speaker, ask_notify=talk and not co_speaker)
     if request.method == 'POST' and form.is_valid():
         edited_speaker = form.save()
         if talk:
             talk.speakers.add(edited_speaker)
+            if co_speaker_id:
+                messages.success(request, _('Changes saved.'))
+            else:
+                if form.cleaned_data['notify']:
+                    base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+                    url_dashboard = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=edited_speaker.token))
+                    url_talk_details = base_url + reverse('proposal-talk-details', kwargs=dict(speaker_token=edited_speaker.token, talk_id=talk.pk))
+                    url_speaker_add = base_url + reverse('proposal-speaker-add', kwargs=dict(speaker_token=edited_speaker.token, talk_id=talk.pk))
+                    body = _("""Hi {},
+
+{} add you as a co-speaker for the conference {}.
+
+Here is a summary of the talk:
+Title: {}
+Description: {}
+
+You can at anytime:
+- review and edit your profile: {}
+- review and edit the talk: {}
+- add another co-speaker: {}
+
+If you have any question, your can answer to this email.
+
+Thanks!
+
+{}
+
+""").format(
+                        edited_speaker.name, speaker.name, request.conference.name,
+                        talk.title, talk.description,
+                        url_dashboard, url_talk_details, url_speaker_add,
+                        request.conference.name,
+                    )
+                    Message.objects.create(
+                        thread=edited_speaker.conversation,
+                        author=request.conference,
+                        from_email=request.conference.contact_email,
+                        content=body,
+                    )
+                messages.success(request, _('Co-speaker successfully added to the talk.'))
             #return redirect(reverse('proposal-speaker-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
             return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
         else:
