@@ -143,6 +143,8 @@ def proposal_home(request):
         categories = TalkCategory.objects.filter(site=request.conference.site)
     else:
         categories = request.conference.opened_categories
+    if not categories.exists():
+        return render(request, 'cfp/closed.html')
     speaker_form = ParticipantForm(request.POST or None, conference=request.conference, social=False)
     talk_form = TalkForm(request.POST or None, categories=categories)
     if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):

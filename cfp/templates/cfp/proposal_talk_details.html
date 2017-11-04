@@ -13,9 +13,11 @@
       <a href="{% url 'proposal-dashboard' speaker_token=speaker.token %}" class="btn btn-primary">
         <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;{% trans "My profile" %}
       </a>
+      {% if conference.opened_categories.exists %}
       <a href="{% url 'proposal-talk-add' speaker_token=speaker.token %}" class="btn btn-info">
         <span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans "New proposal" %}
       </a>
+      {% endif %}
       <a href="{% url 'proposal-talk-edit' speaker_token=speaker.token talk_id=talk.pk %}" class="btn btn-success">
         <span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans "Edit this proposal" %}
       </a>

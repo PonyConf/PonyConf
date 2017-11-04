@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block proposetab %} class="active"{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    {% trans "Participate" %}
+  </h1>
+</div>
+
+<h2>{% trans "Sorry, the Call for Participation is closed!" %}</h2>
+
+{% url 'proposal-mail-token' as mail_token_url %}
+<p>{% blocktrans %}If you already have submitted a talk and you want to edit it, please click <a href="{{ mail_token_url }}">here</a>.{% endblocktrans %}</p>
+
+{% endblock %}

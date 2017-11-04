@@ -71,7 +71,9 @@
   <i>{% trans "No proposals." %}</i>
   {% endfor %}
 </p>
+{% if conference.opened_categories.exists %}
 <p>
   <a href="{% url 'proposal-talk-add' speaker_token=speaker.token %}" class="btn btn-primary">{% trans "New proposal" %}</a>
 </p>
+{% endif %}
 {% endblock %}
