@@ -342,12 +342,15 @@ def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
         else:
             co_speaker_candidates = speaker.co_speaker_set.exclude(pk__in=talk.speakers.values_list('pk'))
     EditSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'email', 'biography'] + ParticipantForm.SOCIAL_FIELDS)
+    all_forms = []
     speaker_form = EditSpeakerForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
+    all_forms.append(speaker_form)
     if talk and not co_speaker_id:
         notify_form = NotifyForm(request.POST or None)
+        all_forms.append(notify_form)
     else:
         notify_form = None
-    if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, notify_form])):
+    if request.method == 'POST' and all(map(lambda f: f.is_valid(), all_forms)):
         edited_speaker = speaker_form.save()
         if talk:
             talk.speakers.add(edited_speaker)
