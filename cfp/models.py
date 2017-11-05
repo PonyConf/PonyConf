@@ -436,6 +436,12 @@ class Volunteer(PonyConfModel):
     def get_absolute_url(self):
         return reverse('volunteer-home', kwargs={'volunteer_id': self.token})
 
+    def get_secret_url(self, full=False):
+        url = reverse('volunteer-home', kwargs={'volunteer_id': self.token})
+        if full:
+            url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
+        return url
+
     class Meta:
         # A volunteer can participe only once to a Conference (= Site)
         unique_together = ('site', 'email')
