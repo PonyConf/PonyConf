@@ -11,9 +11,12 @@ from cfp.models import Participant
 def speaker_required(view_func):
     def wrapped_view(request, **kwargs):
         speaker_token = kwargs.pop('speaker_token')
-        # TODO v3: if no speaker token is provided, we should check for a logged user, and if so,
-        # we should check if his/her participating at current conference
-        speaker = get_object_or_404(Participant, site=request.conference.site, token=speaker_token)
+        if speaker_token:
+            speaker = get_object_or_404(Participant, site=request.conference.site, token=speaker_token)
+        elif request.user.is_authenticated():
+            speaker = get_object_or_404(Participant, site=request.conference.site, email=request.user.email)
+        else:
+            raise PermissionDenied
         kwargs['speaker'] = speaker
         return view_func(request, **kwargs)
     return wraps(view_func)(wrapped_view)

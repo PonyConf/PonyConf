@@ -195,22 +195,12 @@ class TalkActionForm(forms.Form):
         self.fields['room'].choices = [(None, "---------")] + list(rooms.values_list('slug', 'name'))
 
 
-class ParticipantForm(OnSiteNamedModelForm):
+class NotifyForm(forms.Form):
     notify = forms.BooleanField(initial=True, required=False, label=_('Notify by mail?'))
 
-    def __init__(self, *args, **kwargs):
-        social = kwargs.pop('social', True)
-        ask_notify = kwargs.pop('ask_notify', False)
-        super().__init__(*args, **kwargs)
-        if not social:
-            for field in ['twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']:
-                self.fields.pop(field)
-        if not ask_notify:
-            self.fields.pop('notify')
 
-    class Meta:
-        model = Participant
-        fields = ['name', 'email', 'biography', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']
+class ParticipantForm(OnSiteNamedModelForm):
+    SOCIAL_FIELDS = ['twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon']
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -218,11 +208,6 @@ class ParticipantForm(OnSiteNamedModelForm):
                 and self._meta.model.objects.filter(site=self.conference.site, email=email).exists():
             raise self.instance.unique_error_message(self._meta.model, ['email'])
         return email
-
-
-class ParticipantStaffForm(ParticipantForm):
-    class Meta(ParticipantForm.Meta):
-        fields = ['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.Meta.fields[3:]
 
 
 class ParticipantFilterForm(forms.Form):

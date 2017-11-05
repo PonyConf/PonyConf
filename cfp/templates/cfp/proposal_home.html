@@ -15,11 +15,13 @@
 
 <div class="row">
   <div class="col-md-12">
+    {% if not request.user.is_authenticated %}
     <div class="col-md-8 col-md-offset-2 alert alert-info">
       <span class="glyphicon glyphicon-exclamation-sign"></span>
       {% url 'proposal-mail-token' as mail_token_url %}
       {% blocktrans %}If you already have submitted a talk and you want to edit it or submit another one, please click <a href="{{ mail_token_url }}">here</a>.{% endblocktrans %}
     </div>
+    {% endif %}
     <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
       {% csrf_token %}
       {{ speaker_form|crispy }}

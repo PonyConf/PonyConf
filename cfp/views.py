@@ -12,6 +12,7 @@ from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.forms import modelform_factory
 
 from django_select2.views import AutoResponseView
 
@@ -25,7 +26,7 @@ from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
-                   ParticipantForm, ParticipantStaffForm, ParticipantFilterForm, \
+                   ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
                    VolunteerForm, VolunteerFilterForm, MailForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
@@ -139,17 +140,29 @@ def volunteer_details(request, volunteer_id):
 
 
 def proposal_home(request):
-    if is_staff(request, request.user):
-        categories = TalkCategory.objects.filter(site=request.conference.site)
-    else:
-        categories = request.conference.opened_categories
+    categories = request.conference.opened_categories
     if not categories.exists():
         return render(request, 'cfp/closed.html')
-    speaker_form = ParticipantForm(request.POST or None, conference=request.conference, social=False)
+    if request.user.is_authenticated():
+        if Participant.objects.filter(site=request.conference.site, email=request.user.email).exists():
+            return redirect(reverse('proposal-dashboard'))
+        else:
+            NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'biography'])
+            if request.POST:
+                data = request.POST
+            else:
+                # TODO: import biography from User profile
+                data = dict(name=request.user.get_full_name())
+    else:
+        NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'email', 'biography'])
+        data = request.POST or None
+    speaker_form = NewSpeakerForm(data, conference=request.conference)
     talk_form = TalkForm(request.POST or None, categories=categories)
     if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):
         speaker = speaker_form.save(commit=False)
         speaker.site = request.conference.site
+        if request.user.is_authenticated():
+            speaker.email = request.user.email
         speaker.save()
         talk = talk_form.save(commit=False)
         talk.site = request.conference.site
@@ -328,16 +341,20 @@ def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
             co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
         else:
             co_speaker_candidates = speaker.co_speaker_set.exclude(pk__in=talk.speakers.values_list('pk'))
-    form = ParticipantForm(request.POST or None, conference=request.conference,
-                instance=co_speaker if talk else speaker, ask_notify=talk and not co_speaker)
-    if request.method == 'POST' and form.is_valid():
-        edited_speaker = form.save()
+    EditSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'email', 'biography'] + ParticipantForm.SOCIAL_FIELDS)
+    speaker_form = EditSpeakerForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
+    if talk and not co_speaker_id:
+        notify_form = NotifyForm(request.POST or None)
+    else:
+        notify_form = None
+    if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, notify_form])):
+        edited_speaker = speaker_form.save()
         if talk:
             talk.speakers.add(edited_speaker)
             if co_speaker_id:
                 messages.success(request, _('Changes saved.'))
             else:
-                if form.cleaned_data['notify']:
+                if notify_form.cleaned_data['notify']:
                     base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
                     url_dashboard = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=edited_speaker.token))
                     url_talk_details = base_url + reverse('proposal-talk-details', kwargs=dict(speaker_token=edited_speaker.token, talk_id=talk.pk))
@@ -383,7 +400,8 @@ Thanks!
         'talk': talk,
         'co_speaker': co_speaker,
         'co_speaker_candidates': co_speaker_candidates,
-        'form': form,
+        'speaker_form': speaker_form,
+        'notify_form': notify_form,
     })
 
 
@@ -697,12 +715,19 @@ def participant_details(request, participant_id):
     })
 
 
-class ParticipantUpdate(StaffRequiredMixin, OnSiteMixin, UpdateView):
+class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
     model = Participant
     slug_field = 'token'
     slug_url_kwarg = 'participant_id'
-    form_class = ParticipantStaffForm
+    #form_class = ParticipantStaffForm
     template_name = 'cfp/staff/participant_form.html'
+
+    def get_form_class(self):
+        return modelform_factory(
+                    self.model,
+                    form=ParticipantForm,
+                    fields=['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
+        )
 
 
 @staff_required

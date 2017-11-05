@@ -115,6 +115,10 @@ class Participant(PonyConfModel):
 
     objects = ParticipantManager()
 
+
+    def get_absolute_url(self):
+        return reverse('participant-details', kwargs=dict(participant_id=self.token))
+
     def get_secret_url(self, full=False):
         url = reverse('proposal-dashboard', kwargs={'speaker_token': self.token})
         if full:

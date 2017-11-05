@@ -42,7 +42,8 @@
     {% endif %}
     <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
       {% csrf_token %}
-      {{ form|crispy }}
+      {{ speaker_form|crispy }}
+      {% if notify_form %}{{ notify_form|crispy }}{% endif %}
       <div class="col-md-12 text-center">
         <button type="submit" class="btn btn-primary text-center">{% trans "Save" %} <i class="fa fa-check"></i></button>
       </div>
