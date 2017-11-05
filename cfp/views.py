@@ -848,7 +848,7 @@ def create_user(request):
         messages.success(request, _('User created successfully.'))
         return redirect(reverse('create-user'))
 
-    return render(request, 'cfp/staff/create_user.html', {
+    return render(request, 'cfp/admin/create_user.html', {
         'form': form,
     })
 
