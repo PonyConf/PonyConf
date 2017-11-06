@@ -216,6 +216,10 @@ class Program:
 #                    #    'max': talk.attendees_limit,
 #                    #    'remain': talk.remaining_attendees or 0,
 #                    #  }
+                    tags_elt = ET.SubElement(talk_elt, 'tags')
+                    for tag in talk.tags.filter(public=True):
+                        tag_elt = ET.SubElement(tags_elt, 'tag', slug=str(tag.slug))
+                        tag_elt.text = tag.name
                     elt = ET.SubElement(talk_elt, 'start')
                     elt.text = localtime(talk.start_date).strftime('%H:%M')
                     elt = ET.SubElement(talk_elt, 'duration')

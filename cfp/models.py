@@ -205,6 +205,7 @@ class Tag(models.Model):
     slug = AutoSlugField(populate_from='name')
     color = RGBColorField(default='#ffffff', verbose_name=_("Color"))
     inverted = models.BooleanField(default=False)
+    public = models.BooleanField(default=False, verbose_name=_('Show the tag on the program'))
 
     @property
     def link(self):
