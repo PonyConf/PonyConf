@@ -4,9 +4,11 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils import timezone
 
-from datetime import timedelta
+from datetime import datetime, timedelta
+from xml.etree import ElementTree as ET
+import pytz
 
-from .models import Conference, Volunteer, Activity
+from .models import *
 
 
 class VolunteersTests(TestCase):
@@ -62,3 +64,28 @@ class VolunteersTests(TestCase):
                              reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
         self.assertRedirects(self.client.get(reverse('volunteer-quit', kwargs=dict(volunteer_token=v.token, activity=a.slug))),
                              reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
+
+
+class ScheduleTest(TestCase):
+    def setUp(self):
+        site = Site.objects.first()
+        conf = Conference.objects.get(site=site)
+        u = User.objects.create_user('user', email='user@example.org', password='user', is_superuser=True)
+        room = Room.objects.create(site=site, name='S01')
+        category = TalkCategory.objects.create(site=site, name='Conference', label='conference')
+        participant = Participant.objects.create(site=site, name='User', email='user@example.org')
+        t1 = Tag.objects.create(site=site, name='Private tag', public=False)
+        t2 = Tag.objects.create(site=site, name='Public tag', public=True)
+        start_date = datetime(year=2000, month=1, day=1, hour=10, tzinfo=pytz.timezone('Europe/Paris'))
+        talk = Talk.objects.create(site=site, title='Talk', description='A talk.', category=category, room=room, start_date=start_date, duration=60, accepted=True)
+        talk.speakers.add(participant)
+        talk.tags.add(t1)
+        talk.tags.add(t2)
+
+    def test_xml(self):
+        self.assertEqual(self.client.get(reverse('staff-schedule') + 'xml/').status_code, 302)
+        self.client.login(username='user', password='user')
+        response = self.client.get(reverse('staff-schedule') + 'xml/')
+        self.assertContains(response, 'Public tag')
+        self.assertNotContains(response, 'Private tag')
+        ET.fromstring(response.content)
