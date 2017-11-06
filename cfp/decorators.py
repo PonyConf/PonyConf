@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from functools import wraps
 
 from cfp.utils import is_staff
-from cfp.models import Participant
+from cfp.models import Participant, Volunteer
 
 
 def speaker_required(view_func):
@@ -18,6 +18,20 @@ def speaker_required(view_func):
         else:
             raise PermissionDenied
         kwargs['speaker'] = speaker
+        return view_func(request, **kwargs)
+    return wraps(view_func)(wrapped_view)
+
+
+def volunteer_required(view_func):
+    def wrapped_view(request, **kwargs):
+        volunteer_token = kwargs.pop('volunteer_token')
+        if volunteer_token:
+            volunteer = get_object_or_404(Volunteer, site=request.conference.site, token=volunteer_token)
+        elif request.user.is_authenticated():
+            volunteer = get_object_or_404(Volunteer, site=request.conference.site, email=request.user.email)
+        else:
+            raise PermissionDenied
+        kwargs['volunteer'] = volunteer
         return view_func(request, **kwargs)
     return wraps(view_func)(wrapped_view)
 

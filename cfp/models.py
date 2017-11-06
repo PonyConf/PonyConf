@@ -115,7 +115,6 @@ class Participant(PonyConfModel):
 
     objects = ParticipantManager()
 
-
     def get_absolute_url(self):
         return reverse('participant-details', kwargs=dict(participant_id=self.token))
 
@@ -434,10 +433,10 @@ class Volunteer(PonyConfModel):
     conversation = models.OneToOneField(MessageThread)
 
     def get_absolute_url(self):
-        return reverse('volunteer-home', kwargs={'volunteer_id': self.token})
+        return reverse('volunteer-details', kwargs=dict(volunteer_id=self.pk))
 
     def get_secret_url(self, full=False):
-        url = reverse('volunteer-home', kwargs={'volunteer_id': self.token})
+        url = reverse('volunteer-home', kwargs=dict(volunteer_token=self.token))
         if full:
             url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
         return url

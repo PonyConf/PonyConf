@@ -21,7 +21,7 @@ from functools import reduce
 from mailing.models import Message
 from mailing.forms import MessageForm
 from .planning import Program
-from .decorators import speaker_required, staff_required
+from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
@@ -73,25 +73,23 @@ Thanks!
             recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
         )
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
-        return redirect(reverse('volunteer-home', kwargs=dict(volunteer_id=volunteer.token)))
+        return redirect(reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token)))
     return render(request, 'cfp/volunteer_enrole.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'form': form,
     })
 
 
-def volunteer_home(request, volunteer_id):
-    volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
+@volunteer_required
+def volunteer_home(request, volunteer):
     return render(request, 'cfp/volunteer.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'volunteer': volunteer,
     })
 
 
-def volunteer_update_activity(request, volunteer_id, activity, join):
-    if not request.conference.volunteers_enrollment_is_open():
-        raise PermissionDenied
-    volunteer = get_object_or_404(Volunteer, token=volunteer_id, site=request.conference.site)
+@volunteer_required
+def volunteer_update_activity(request, volunteer, activity, join):
     activity = get_object_or_404(Activity, slug=activity, site=request.conference.site)
     if join:
         activity.volunteers.add(volunteer)
@@ -101,7 +99,7 @@ def volunteer_update_activity(request, volunteer_id, activity, join):
         activity.volunteers.remove(volunteer)
         activity.save()
         messages.success(request, _('Okay, no problem!'))
-    return redirect(reverse('volunteer-home', kwargs=dict(volunteer_id=volunteer.token)))
+    return redirect(reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token)))
 
 
 @staff_required

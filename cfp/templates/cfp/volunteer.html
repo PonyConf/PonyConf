@@ -16,9 +16,9 @@
       <p>{{ activity.description }}</p>
       <p>
         {% if volunteer not in activity.volunteers.all %}
-        <a class="btn btn-primary" href="{% url 'volunteer-join' volunteer_id=volunteer.token activity=activity.slug %}">{% trans "I will be happy to help on that!" %}</a>
+        <a class="btn btn-primary" href="{% url 'volunteer-join' volunteer_token=volunteer.token activity=activity.slug %}">{% trans "I will be happy to help on that!" %}</a>
         {% else %}
-        <a class="btn btn-danger" href="{% url 'volunteer-quit' volunteer_id=volunteer.token activity=activity.slug %}">{% trans "Sorry, I have a setback" %}</a>
+        <a class="btn btn-danger" href="{% url 'volunteer-quit' volunteer_token=volunteer.token activity=activity.slug %}">{% trans "Sorry, I have a setback" %}</a>
         {% endif %}
       </p>
     </p>
