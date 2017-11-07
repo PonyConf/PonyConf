@@ -65,6 +65,9 @@ urlpatterns = [
     url(r'^staff/tags/$', views.TagList.as_view(), name='tag-list'),
     url(r'^staff/tags/add/$', views.TagCreate.as_view(), name='tag-add'),
     url(r'^staff/tags/(?P<slug>[-\w]+)/edit/$', views.TagUpdate.as_view(), name='tag-edit'),
+    url(r'^staff/activities/$', views.ActivityList.as_view(), name='activity-list'),
+    url(r'^staff/activities/add/$', views.ActivityCreate.as_view(), name='activity-add'),
+    url(r'^staff/activities/(?P<slug>[-\w]+)/edit/$', views.ActivityUpdate.as_view(), name='activity-edit'),
     url(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]

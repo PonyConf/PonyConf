@@ -29,7 +29,7 @@ from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
                    VolunteerForm, VolunteerFilterForm, MailForm, \
-                   TagForm, TalkCategoryForm, \
+                   TagForm, TalkCategoryForm, ActivityForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
 
@@ -893,6 +893,35 @@ class TagCreate(StaffRequiredMixin, TagFormMixin, CreateView):
 
 
 class TagUpdate(StaffRequiredMixin, TagFormMixin, UpdateView):
+    pass
+
+
+class ActivityMixin(OnSiteMixin):
+    model = Activity
+
+
+class ActivityList(StaffRequiredMixin, ActivityMixin, ListView):
+    template_name = 'cfp/admin/activity_list.html'
+
+
+class ActivityFormMixin(ActivityMixin):
+    template_name = 'cfp/admin/activity_form.html'
+    form_class = ActivityForm
+    success_url = reverse_lazy('activity-list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.request.conference,
+        })
+        return kwargs
+
+
+class ActivityCreate(StaffRequiredMixin, ActivityFormMixin, CreateView):
+    pass
+
+
+class ActivityUpdate(StaffRequiredMixin, ActivityFormMixin, UpdateView):
     pass
 
 

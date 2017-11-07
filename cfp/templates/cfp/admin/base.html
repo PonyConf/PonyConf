@@ -7,9 +7,10 @@
     {{ block.super }}
     <div class="container">
       <ul class="nav nav-pills nav-justified subnav">
-        <li{% block conferencetab %}{% endblock %}><a href="{% url 'conference' %}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;{% trans "Conference" %}</a></li>
-        <li{% block categoriestab %}{% endblock %}><a href="{% url 'category-list' %}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;{% trans "Categories" %}</a></li>
-        <li{% block tagstab %}{% endblock %}><a href="{% url 'tag-list' %}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;{% trans "Tags" %}</a></li>
+        <li{% block conferencetab %}{% endblock %}><a href="{% url 'conference' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Conference" %}</a></li>
+        <li{% block categoriestab %}{% endblock %}><a href="{% url 'category-list' %}"><span class="glyphicon glyphicon-inbox"></span>&nbsp;{% trans "Categories" %}</a></li>
+        <li{% block tagstab %}{% endblock %}><a href="{% url 'tag-list' %}"><span class="glyphicon glyphicon-tags"></span>&nbsp;{% trans "Tags" %}</a></li>
+        <li{% block activitiestab %}{% endblock %}><a href="{% url 'activity-list' %}"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;{% trans "Activities" %}</a></li>
         {% if request.user.is_staff %}
         <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Django-Admin</a></li>
         {% endif %}

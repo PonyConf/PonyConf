@@ -1,0 +1,26 @@
+{% extends 'cfp/admin/base.html' %}
+
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block activitiestab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Activities" %}</h1>
+
+<p><a href="{% url 'activity-add' %}" class="btn btn-success">{% trans "Add an activity" %}</a><p>
+
+<ul class="list-group">
+  {% for activity in activity_list %}
+  <div class="list-group-item">
+    <a href="{{ activity.get_filter_url }}" class="btn btn-primary">{{ activity.name }}</a>
+    <a href="{% url 'activity-edit' activity.slug %}" class="btn btn-success pull-right">{% bootstrap_icon "pencil" %} {% trans "Edit" %}</a>
+  </div>
+  {% empty %}
+  <li class="list-group-item">
+    <i>{% trans "No activites." %}</li>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-07 22:57+0000\n"
-"PO-Revision-Date: 2017-11-07 23:58+0100\n"
+"POT-Creation-Date: 2017-11-07 23:13+0000\n"
+"PO-Revision-Date: 2017-11-08 00:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -402,7 +402,9 @@ msgstr "Si vous avez des contraintes, vous pouvez les indiquer ici."
 msgid "Volunteer"
 msgstr "Bénévole"
 
-#: cfp/models.py:471 cfp/templates/cfp/staff/volunteer_details.html:27
+#: cfp/models.py:471 cfp/templates/cfp/admin/activity_list.html:9
+#: cfp/templates/cfp/admin/base.html:13
+#: cfp/templates/cfp/staff/volunteer_details.html:27
 #: cfp/templates/cfp/staff/volunteer_list.html:32
 msgid "Activities"
 msgstr "Activités"
@@ -422,6 +424,30 @@ msgstr "[%(prefix)s] Conversation avec %(dest)s"
 msgid "[%(prefix)s] Talk: %(talk)s"
 msgstr "[%(prefix)s] Talk: %(talk)s"
 
+#: cfp/templates/cfp/admin/activity_form.html:16
+msgid "Edit activity"
+msgstr "Édition d’une activité"
+
+#: cfp/templates/cfp/admin/activity_form.html:18
+msgid "New activity"
+msgstr "Nouvelle activité"
+
+#: cfp/templates/cfp/admin/activity_list.html:11
+msgid "Add an activity"
+msgstr "Ajouter une activité"
+
+#: cfp/templates/cfp/admin/activity_list.html:17
+#: cfp/templates/cfp/admin/category_list.html:17
+#: cfp/templates/cfp/admin/tag_list.html:17
+#: cfp/templates/cfp/staff/participant_details.html:13
+#: cfp/templates/cfp/staff/talk_details.html:10
+msgid "Edit"
+msgstr "Éditer"
+
+#: cfp/templates/cfp/admin/activity_list.html:21
+msgid "No activites."
+msgstr "Aucune activité."
+
 #: cfp/templates/cfp/admin/base.html:10
 #: cfp/templates/cfp/admin/conference.html:8
 msgid "Conference"
@@ -438,7 +464,7 @@ msgstr "Catégories"
 msgid "Tags"
 msgstr "Étiquettes"
 
-#: cfp/templates/cfp/admin/base.html:21 cfp/templates/cfp/staff/base.html:21
+#: cfp/templates/cfp/admin/base.html:22 cfp/templates/cfp/staff/base.html:21
 msgid "Please select a category."
 msgstr "Veuillez sélectionner une catégorie."
 
@@ -453,13 +479,6 @@ msgstr "Nouvelle catégorie"
 #: cfp/templates/cfp/admin/category_list.html:11
 msgid "Add a category"
 msgstr "Ajouter une catégorie"
-
-#: cfp/templates/cfp/admin/category_list.html:17
-#: cfp/templates/cfp/admin/tag_list.html:17
-#: cfp/templates/cfp/staff/participant_details.html:13
-#: cfp/templates/cfp/staff/talk_details.html:10
-msgid "Edit"
-msgstr "Éditer"
 
 #: cfp/templates/cfp/admin/category_list.html:21
 msgid "No categories."
@@ -1339,11 +1358,11 @@ msgstr ""
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:905
+#: cfp/views.py:934
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:926
+#: cfp/views.py:955
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"

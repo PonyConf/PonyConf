@@ -470,5 +470,11 @@ class Activity(models.Model):
         verbose_name = _('Activity')
         verbose_name_plural = _('Activities')
 
+    def get_absolute_url(self):
+        return reverse('activity-list')
+
+    def get_filter_url(self):
+        return reverse('volunteer-list') + '?activity=' + self.slug
+
     def __str__(self):
         return self.name

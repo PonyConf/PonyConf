@@ -326,6 +326,12 @@ class TagForm(OnSiteNamedModelForm):
         fields = ['name', 'color', 'inverted', 'public']
 
 
+class ActivityForm(OnSiteNamedModelForm):
+    class Meta:
+        model = Activity
+        fields = ['name', 'description']
+
+
 class VolunteerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.conference = kwargs.pop('conference')
