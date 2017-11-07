@@ -44,7 +44,7 @@
         <tr>
             <td>
                 <a href="{% url 'volunteer-details' volunteer.pk %}">{{ volunteer.name }}</a>
-                {% if volunteer.notes %}<span class="glyphicon glyphicon-envelope pull-right" data-toggle="tooltip" data-placement="bottom" title="{% trans "The volunteer made a few remarks to the staff." %}"></span>{% endif %}
+                {% if volunteer.notes %}<span class="glyphicon glyphicon-envelope pull-right" data-toggle="tooltip" data-placement="bottom" data-html="true" title="{{ volunteer.notes|linebreaksbr }}"></span>{% endif %}
             </td>
             <td><a href="mailto:{{ volunteer.email }}">{{ volunteer.email }}</a></td>
             <td><a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a>{% if volunteer.sms_prefered %} (SMS){% endif %}</td>
@@ -65,14 +65,13 @@
 {% block js_end %}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-
     var anchor = window.location.hash.replace("#", "");
     if (anchor == "filter") {
         $("#filter").collapse('show');
     }
 });
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 {% endblock %}

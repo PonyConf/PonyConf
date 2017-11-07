@@ -7,8 +7,8 @@ urlpatterns = [
 # v1.1
     url(r'^cfp/$', views.proposal_home, name='proposal-home'),
     url(r'^cfp/token/$', views.proposal_mail_token, name='proposal-mail-token'),
-    url(r'^cfp/(?P<speaker_token>[\w\-]+)/$', views.proposal_dashboard), # backward compatibility
     url(r'^cfp/(?:(?P<speaker_token>[\w\-]+)/)?dashboard/$', views.proposal_dashboard, name='proposal-dashboard'),
+    url(r'^cfp/(?P<speaker_token>[\w\-]+)/$', views.proposal_dashboard), # backward compatibility
     url(r'^cfp/(?:(?P<speaker_token>[\w\-]+)/)?profile/$', views.proposal_speaker_edit, name='proposal-profile-edit'),
     url(r'^cfp/(?:(?P<speaker_token>[\w\-]+)/)?talk/add/$', views.proposal_talk_edit, name='proposal-talk-add'),
     url(r'^cfp/(?:(?P<speaker_token>[\w\-]+)/)?talk/(?P<talk_id>[0-9]+)/$', views.proposal_talk_details, name='proposal-talk-details'),
