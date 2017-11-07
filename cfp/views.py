@@ -29,6 +29,7 @@ from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
                    VolunteerForm, VolunteerFilterForm, MailForm, \
+                   TagForm, TalkCategoryForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
 
@@ -834,6 +835,64 @@ class RoomCreate(StaffRequiredMixin, RoomFormMixin, CreateView):
 
 
 class RoomUpdate(StaffRequiredMixin, RoomFormMixin, UpdateView):
+    pass
+
+
+class TalkCategoryMixin(OnSiteMixin):
+    model = TalkCategory
+
+
+class TalkCategoryList(StaffRequiredMixin, TalkCategoryMixin, ListView):
+    template_name = 'cfp/admin/category_list.html'
+
+
+class TalkCategoryFormMixin(TalkCategoryMixin):
+    template_name = 'cfp/admin/category_form.html'
+    form_class = TalkCategoryForm
+    success_url = reverse_lazy('category-list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.request.conference,
+        })
+        return kwargs
+
+
+class TalkCategoryCreate(StaffRequiredMixin, TalkCategoryFormMixin, CreateView):
+    pass
+
+
+class TalkCategoryUpdate(StaffRequiredMixin, TalkCategoryFormMixin, UpdateView):
+    pass
+
+
+class TagMixin(OnSiteMixin):
+    model = Tag
+
+
+class TagList(StaffRequiredMixin, TagMixin, ListView):
+    template_name = 'cfp/admin/tag_list.html'
+
+
+class TagFormMixin(TagMixin):
+    template_name = 'cfp/admin/tag_form.html'
+    form_class = TagForm
+    success_url = reverse_lazy('tag-list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'conference': self.request.conference,
+        })
+        return kwargs
+
+
+class TagCreate(StaffRequiredMixin, TagFormMixin, CreateView):
+    pass
+
+
+class TagUpdate(StaffRequiredMixin, TagFormMixin, UpdateView):
     pass
 
 

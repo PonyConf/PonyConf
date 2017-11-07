@@ -207,11 +207,16 @@ class Tag(models.Model):
     inverted = models.BooleanField(default=False)
     public = models.BooleanField(default=False, verbose_name=_('Show the tag on the program'))
 
+    def get_absolute_url(self):
+        return reverse('tag-list')
+
+    def get_filter_url(self):
+        return reverse('talk-list') + '?tag=' + self.slug
+
     @property
     def link(self):
-        return format_html('<a href="{url}?tag={tag}">{content}</a>', **{
-            'url': reverse('talk-list'),
-            'tag': self.slug,
+        return format_html('<a href="{url}">{content}</a>', **{
+            'url': self.get_filter_url(),
             'content': self.label,
         })
 
@@ -260,6 +265,9 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
         return ugettext(self.name)
 
     def get_absolute_url(self):
+        return reverse('category-list')
+
+    def get_filter_url(self):
         return reverse('talk-list') + '?category=%d' % self.pk
 
 

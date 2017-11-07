@@ -308,10 +308,22 @@ class TrackForm(OnSiteNamedModelForm):
         fields = ['name', 'description']
 
 
+class TalkCategoryForm(OnSiteNamedModelForm):
+    class Meta:
+        model = TalkCategory
+        fields = ['name', 'duration', 'color', 'label', 'opening_date', 'closing_date']
+
+
 class RoomForm(OnSiteNamedModelForm):
     class Meta:
         model = Room
         fields = ['name', 'label', 'capacity']
+
+
+class TagForm(OnSiteNamedModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name', 'color', 'inverted', 'public']
 
 
 class VolunteerForm(forms.ModelForm):

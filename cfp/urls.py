@@ -59,6 +59,12 @@ urlpatterns = [
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
     url(r'^admin/$', views.admin, name='admin'),
     url(r'^admin/conference/$', views.conference_edit, name='conference'),
+    url(r'^staff/categories/$', views.TalkCategoryList.as_view(), name='category-list'),
+    url(r'^staff/categories/add/$', views.TalkCategoryCreate.as_view(), name='category-add'),
+    url(r'^staff/categories/(?P<pk>[0-9]+)/edit/$', views.TalkCategoryUpdate.as_view(), name='category-edit'),
+    url(r'^staff/tags/$', views.TagList.as_view(), name='tag-list'),
+    url(r'^staff/tags/add/$', views.TagCreate.as_view(), name='tag-add'),
+    url(r'^staff/tags/(?P<slug>[-\w]+)/edit/$', views.TagUpdate.as_view(), name='tag-edit'),
     url(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
     #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]
