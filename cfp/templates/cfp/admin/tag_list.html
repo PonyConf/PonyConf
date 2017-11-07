@@ -1,0 +1,26 @@
+{% extends 'cfp/admin/base.html' %}
+
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block tagstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Tags" %}</h1>
+
+<p><a href="{% url 'tag-add' %}" class="btn btn-success">{% trans "Add a tag" %}</a><p>
+
+<ul class="list-group">
+  {% for tag in tag_list %}
+  <div class="list-group-item">
+    <a href="{{ tag.get_filter_url }}" class="btn" style="{{ tag.style }}">{{ tag.name }}</a>
+    <a href="{% url 'tag-edit' tag.slug %}" class="btn btn-success pull-right">{% bootstrap_icon "pencil" %} {% trans "Edit" %}</a>
+  </div>
+  {% empty %}
+  <li class="list-group-item">
+    <i>{% trans "No tags." %}</li>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

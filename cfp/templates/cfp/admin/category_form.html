@@ -1,0 +1,33 @@
+{% extends 'cfp/admin/base.html' %}
+
+{% load bootstrap3 i18n %}
+
+{% block categoriestab %} class="active"{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}
+
+{% block content %}
+
+<h1>
+  {% if tag %}
+    {% trans "Edit category" %}
+  {% else %}
+    {% trans "New category" %}
+  {% endif %}
+</h1>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+{% include "_form.html" %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock %}

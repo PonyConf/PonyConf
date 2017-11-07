@@ -1,0 +1,26 @@
+{% extends 'cfp/admin/base.html' %}
+
+{% load bootstrap3 cfp_tags i18n %}
+
+{% block categoriestab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Categories" %}</h1>
+
+<p><a href="{% url 'category-add' %}" class="btn btn-success">{% trans "Add a category" %}</a><p>
+
+<ul class="list-group">
+  {% for category in talkcategory_list %}
+  <div class="list-group-item">
+    <a href="{{ category.get_filter_url }}" class="btn btn-primary">{{ category.name }}</a>
+    <a href="{% url 'category-edit' category.pk %}" class="btn btn-success pull-right">{% bootstrap_icon "pencil" %} {% trans "Edit" %}</a>
+  </div>
+  {% empty %}
+  <li class="list-group-item">
+    <i>{% trans "No categories." %}</li>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
