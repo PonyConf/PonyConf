@@ -39,7 +39,11 @@
     </thead>
     <tfoot>
         <tr>
-            <td colspan="7">{% trans "Contact:" %} <a href="{{ contact_link }}">{% trans "link" %}</a></td>
+            <td colspan="7">
+              <a href="{{ contact_link }}">{% trans "contact by email" %}</a>
+              |
+              <a href="{{ csv_link }}">{% trans "download as csv" %}</a>
+            </td>
         </tr>
     </tfoot>
     {% for participant in participant_list %}

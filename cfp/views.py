@@ -17,6 +17,7 @@ from django.forms import modelform_factory
 from django_select2.views import AutoResponseView
 
 from functools import reduce
+import csv
 
 from mailing.models import Message
 from mailing.forms import MessageForm
@@ -106,9 +107,9 @@ def volunteer_update_activity(request, volunteer, activity, join):
 @staff_required
 def volunteer_list(request):
     site = request.conference.site
-    show_filters = False
     filter_form = VolunteerFilterForm(request.GET or None, site=site)
     # Filtering
+    show_filters = False
     volunteers = Volunteer.objects.filter(site=site).order_by('pk').distinct().prefetch_related('activities')
     if filter_form.is_valid():
         data = filter_form.cleaned_data
@@ -121,13 +122,25 @@ def volunteer_list(request):
             if len(data['activity']):
                 q |= Q(activities__slug__in=data['activity'])
             volunteers = volunteers.filter(q)
-    contact_link = 'mailto:' + ','.join([volunteer.email for volunteer in volunteers.all()])
-    return render(request, 'cfp/staff/volunteer_list.html', {
-        'volunteer_list': volunteers,
-        'filter_form': filter_form,
-        'show_filters': show_filters,
-        'contact_link': contact_link,
-    })
+    if request.GET.get('format') == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="volunteers.csv"'
+        writer = csv.writer(response)
+        for volunteer in volunteers:
+            writer.writerow(volunteer.get_csv_row())
+        return response
+    else:
+        contact_link = 'mailto:' + ','.join([volunteer.email for volunteer in volunteers.all()])
+        csv_query_dict = request.GET.copy()
+        csv_query_dict['format'] = 'csv'
+        csv_link = '?' + csv_query_dict.urlencode()
+        return render(request, 'cfp/staff/volunteer_list.html', {
+            'volunteer_list': volunteers,
+            'filter_form': filter_form,
+            'show_filters': show_filters,
+            'contact_link': contact_link,
+            'csv_link': csv_link,
+        })
 
 
 @staff_required
@@ -538,6 +551,16 @@ def talk_list(request):
                 talks = talks.exclude(video__exact='')
             else:
                 talks = talks.filter(video__exact='')
+    talks = talks.prefetch_related('category', 'speakers', 'track', 'tags')
+
+    if request.GET.get('format') == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="talks.csv"'
+        writer = csv.writer(response)
+        for talk in talks:
+            writer.writerow(talk.get_csv_row())
+        return response
+
     # Action
     action_form = TalkActionForm(request.POST or None, talks=talks, site=request.conference.site)
     if request.method == 'POST' and action_form.is_valid():
@@ -592,7 +615,9 @@ def talk_list(request):
             glyphicon = 'sort'
         sort_urls[c] = url.urlencode()
         sort_glyphicons[c] = glyphicon
-    talks = talks.prefetch_related('category', 'speakers', 'track', 'tags')
+    csv_query_dict = request.GET.copy()
+    csv_query_dict['format'] = 'csv'
+    csv_link = '?' + csv_query_dict.urlencode()
     return render(request, 'cfp/staff/talk_list.html', {
         'show_filters': show_filters,
         'talk_list': talks,
@@ -600,6 +625,7 @@ def talk_list(request):
         'action_form': action_form,
         'sort_urls': sort_urls,
         'sort_glyphicons': sort_glyphicons,
+        'csv_link': csv_link,
     })
 
 
@@ -691,13 +717,25 @@ def participant_list(request):
                 q |= Q(track__slug__in=data['track'])
             talks = talks.filter(q)
         participants = participants.filter(talk__in=talks)
-    contact_link = 'mailto:' + ','.join([participant.email for participant in participants.all()])
-    return render(request, 'cfp/staff/participant_list.html', {
-        'filter_form': filter_form,
-        'participant_list': participants,
-        'show_filters': show_filters,
-        'contact_link': contact_link,
-    })
+    if request.GET.get('format') == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="participants.csv"'
+        writer = csv.writer(response)
+        for participant in participants:
+            writer.writerow(participant.get_csv_row())
+        return response
+    else:
+        contact_link = 'mailto:' + ','.join([participant.email for participant in participants.all()])
+        csv_query_dict = request.GET.copy()
+        csv_query_dict['format'] = 'csv'
+        csv_link = '?' + csv_query_dict.urlencode()
+        return render(request, 'cfp/staff/participant_list.html', {
+            'filter_form': filter_form,
+            'participant_list': participants,
+            'show_filters': show_filters,
+            'contact_link': contact_link,
+            'csv_link': csv_link,
+        })
 
 
 @staff_required

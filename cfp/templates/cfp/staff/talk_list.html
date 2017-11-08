@@ -48,6 +48,13 @@
             <th class="text-center">{% trans "Status" %} <a href="?{{ sort_urls.status }}"><span class="glyphicon glyphicon-{{ sort_glyphicons.status }} pull-right"></span></a></th>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="7">
+              <a href="{{ csv_link }}">{% trans "download as csv" %}</a>
+            </td>
+        </tr>
+    </tfoot>
     {% for talk in talk_list %}
     {% if forloop.first %}
     <tbody>

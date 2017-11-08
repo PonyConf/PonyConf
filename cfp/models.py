@@ -13,6 +13,7 @@ from django.utils.html import escape, format_html
 
 from autoslug import AutoSlugField
 from colorful.fields import RGBColorField
+from functools import partial
 
 import uuid
 from datetime import timedelta
@@ -123,6 +124,9 @@ class Participant(PonyConfModel):
         if full:
             url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
         return url
+
+    def get_csv_row(self):
+        return map(partial(getattr, self), ['pk', 'name', 'email', 'biography', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon', 'phone_number', 'notes'])
 
     class Meta:
         # A User can participe only once to a Conference (= Site)
@@ -392,6 +396,26 @@ class Talk(PonyConfModel):
     def get_tags_html(self):
         return mark_safe(' '.join(map(lambda tag: tag.link, self.tags.all())))
 
+    def get_csv_row(self):
+        return [
+            self.pk,
+            self.title,
+            self.description,
+            self.category,
+            self.track,
+            [speaker.pk for speaker in self.speakers.all()],
+            [speaker.name for speaker in self.speakers.all()],
+            [tag.name for tag in self.tags.all()],
+            1 if self.videotaped else 0,
+            self.video_licence,
+            1 if self.sound else 0,
+            self.estimated_duration,
+            self.room,
+            1 if self.plenary else 0,
+            self.materials,
+            self.video,
+        ]
+
     @property
     def estimated_duration(self):
         return self.duration or self.category.duration
@@ -449,6 +473,16 @@ class Volunteer(PonyConfModel):
         if full:
             url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
         return url
+
+    def get_csv_row(self):
+        return [
+            self.pk,
+            self.name,
+            self.email,
+            self.phone_number,
+            1 if self.sms_prefered else 0,
+            self.notes,
+        ]
 
     class Meta:
         # A volunteer can participe only once to a Conference (= Site)
