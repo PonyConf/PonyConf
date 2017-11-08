@@ -50,7 +50,7 @@
             <td><a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a>{% if volunteer.sms_prefered %} (SMS){% endif %}</td>
             <td>
                 {% for activity in volunteer.activities.all %}
-                <span class="badge">{{ activity }}</span>
+                <a href="{{ activity.get_filter_url }}"><span class="badge">{{ activity }}</span></a>
                 {% endfor %}
             </td>
         </tr>
