@@ -5,9 +5,16 @@
 
 {% block content %}
 
-<h1>{% trans "Edit a talk" %}</h1>
+<h1>
+  {% if talk %}
+  {% trans "Edit a talk" %}
+  {% url 'talk-details' talk.token as cancel_url %}
+  {% else %}
+  {% trans "Add a talk" %}
+  {% url 'participant-details' participant.token as cancel_url %}
+  {% endif %}
+</h1>
 
-{% url 'talk-details' talk.token as cancel_url %}
 {% include '_form.html' with multipart=True %}
 
 {% endblock %}

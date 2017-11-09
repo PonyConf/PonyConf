@@ -54,8 +54,12 @@
   </li>
   {% endfor %}
 </ul>
-{% empty %}{% trans "No talks" %}
+{% empty %}
+<p>{% trans "No talks" %}</p>
 {% endfor %}
+<p>
+  <a class="btn btn-success" href="{% url 'participant-add-talk' participant.pk %}">{% trans "Add a talk" %}</a>
+</p>
 
 <h2>{% trans "Messaging" %}</h2>
 

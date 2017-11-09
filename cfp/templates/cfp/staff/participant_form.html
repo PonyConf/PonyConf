@@ -5,7 +5,13 @@
 
 {% block content %}
 
-<h1>{% trans "Edit a speaker" %}</h1>
+<h1>
+  {% if participant %}
+  {% trans "Edit a speaker" %}
+  {% else %}
+  {% trans "Add a speaker" %}
+  {% endif %}
+</h1>
 
 {% url 'participant-details' participant.token as cancel_url %}
 {% include '_form.html' %}

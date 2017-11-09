@@ -7,7 +7,14 @@
 
 <h1>{% trans "Speakers" %}</h1>
 
-<p><a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a></p>
+<p>
+  <a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">
+    {% bootstrap_icon "filter" %}&nbsp;{% trans "Show filtering options…" %}
+  </a>
+  <a class="btn btn-success" role="button" href="{% url 'participant-add' %}">
+    {% bootstrap_icon "plus" %}&nbsp;{% trans "Add a speaker" %}
+  </a>
+</p>
 
 <div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
     <div class="well">

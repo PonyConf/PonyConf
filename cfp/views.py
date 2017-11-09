@@ -755,6 +755,21 @@ def participant_details(request, participant_id):
     })
 
 
+class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
+    model = Participant
+    slug_field = 'token'
+    slug_url_kwarg = 'participant_id'
+    #form_class = ParticipantStaffForm
+    template_name = 'cfp/staff/participant_form.html'
+
+    def get_form_class(self):
+        return modelform_factory(
+                    self.model,
+                    form=ParticipantForm,
+                    fields=['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
+        )
+
+
 class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
     model = Participant
     slug_field = 'token'
@@ -768,6 +783,20 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
                     form=ParticipantForm,
                     fields=['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
         )
+
+
+@staff_required
+def participant_add_talk(request, participant_id):
+    participant = get_object_or_404(Participant, site=request.conference.site, pk=participant_id)
+    form = TalkForm(request.POST or None, categories=TalkCategory.objects.filter(site=request.conference.site))
+    if request.method == 'POST' and form.is_valid():
+        talk = form.save()
+        talk.speakers.add(participant)
+        return redirect(reverse('talk-details', kwargs=dict(talk_id=talk.token)))
+    return render(request, 'cfp/staff/talk_form.html', {
+        'form': form,
+        'participant': participant,
+    })
 
 
 @staff_required
