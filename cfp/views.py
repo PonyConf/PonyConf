@@ -790,7 +790,9 @@ def participant_add_talk(request, participant_id):
     participant = get_object_or_404(Participant, site=request.conference.site, pk=participant_id)
     form = TalkForm(request.POST or None, categories=TalkCategory.objects.filter(site=request.conference.site))
     if request.method == 'POST' and form.is_valid():
-        talk = form.save()
+        talk = form.save(commit=False)
+        talk.site = request.conference.site
+        talk.save()
         talk.speakers.add(participant)
         return redirect(reverse('talk-details', kwargs=dict(talk_id=talk.token)))
     return render(request, 'cfp/staff/talk_form.html', {
