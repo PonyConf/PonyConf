@@ -766,7 +766,7 @@ class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
         return modelform_factory(
                     self.model,
                     form=ParticipantForm,
-                    fields=['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
+                    fields=['name', 'vip', 'email', 'phone_number', 'biography', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
         )
 
 
@@ -781,7 +781,7 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
         return modelform_factory(
                     self.model,
                     form=ParticipantForm,
-                    fields=['name', 'vip', 'email', 'phone_number', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
+                    fields=['name', 'vip', 'email', 'phone_number', 'biography', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
         )
 
 
