@@ -180,7 +180,7 @@ class Program:
 
         conference = ET.SubElement(schedule, 'conference')
         elt = ET.SubElement(conference, 'title')
-        elt.text = self.site.name
+        elt.text = self.conference.name
         elt = ET.SubElement(conference, 'venue')
         elt.text = ', '.join(map(lambda x: x.strip(), self.conference.venue.split('\n')))
         elt = ET.SubElement(conference, 'city')
