@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-11 17:45+0000\n"
-"PO-Revision-Date: 2017-11-11 18:46+0100\n"
+"POT-Creation-Date: 2017-11-14 23:02+0000\n"
+"PO-Revision-Date: 2017-11-15 00:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Pending decision"
 msgstr "Décision en attente"
 
-#: cfp/forms.py:18 cfp/forms.py:124 cfp/forms.py:221
+#: cfp/forms.py:18 cfp/forms.py:125 cfp/forms.py:222
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -34,7 +34,7 @@ msgstr "Décliné"
 msgid "Waiting"
 msgstr "En attente"
 
-#: cfp/forms.py:29 cfp/forms.py:130 cfp/forms.py:227 cfp/models.py:373
+#: cfp/forms.py:29 cfp/forms.py:131 cfp/forms.py:228 cfp/models.py:373
 msgid "Confirmed"
 msgstr "Confirmé"
 
@@ -51,132 +51,134 @@ msgctxt "activity"
 msgid "None"
 msgstr "Aucune"
 
-#: cfp/forms.py:98
+#: cfp/forms.py:99
 #, python-format
 msgid "Default duration: %(duration)d min"
 msgstr "Durée par défaut : %(duration)d min"
 
-#: cfp/forms.py:106 cfp/forms.py:118 cfp/forms.py:215
+#: cfp/forms.py:107 cfp/forms.py:119 cfp/forms.py:216
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
 
-#: cfp/forms.py:107 cfp/templates/cfp/staff/talk_list.html:43
+#: cfp/forms.py:108 cfp/templates/cfp/staff/talk_list.html:43
 msgid "Title"
 msgstr "Titre"
 
-#: cfp/forms.py:108 cfp/models.py:158 cfp/models.py:499
+#: cfp/forms.py:109 cfp/models.py:158 cfp/models.py:499
 #: cfp/templates/cfp/proposal_talk_details.html:75
 #: cfp/templates/cfp/staff/talk_details.html:64
 msgid "Description"
 msgstr "Description"
 
-#: cfp/forms.py:109 cfp/models.py:112 cfp/models.py:464
+#: cfp/forms.py:110 cfp/models.py:112 cfp/models.py:464
 #: cfp/templates/cfp/staff/participant_details.html:19
 #: cfp/templates/cfp/staff/talk_details.html:78
 #: cfp/templates/cfp/staff/volunteer_details.html:22
 msgid "Notes"
 msgstr "Notes"
 
-#: cfp/forms.py:112
+#: cfp/forms.py:113
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:136 cfp/forms.py:233 cfp/models.py:330
+#: cfp/forms.py:137 cfp/forms.py:234 cfp/models.py:330
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:46
 #: cfp/templates/cfp/staff/track_form.html:14
 msgid "Track"
 msgstr "Session"
 
-#: cfp/forms.py:142
+#: cfp/forms.py:143
 msgid "Tag"
 msgstr "Étiquette"
 
-#: cfp/forms.py:148 cfp/templates/cfp/staff/talk_details.html:83
+#: cfp/forms.py:149 cfp/templates/cfp/staff/talk_details.html:83
 msgid "Vote"
 msgstr "Vote"
 
-#: cfp/forms.py:149
+#: cfp/forms.py:150
 msgid "Filter talks you already / not yet voted for"
 msgstr ""
 "Filtrer les propositions pour lesquelles vous avez déjà voté / pas encore "
 "voté"
 
-#: cfp/forms.py:152 cfp/templates/cfp/staff/room_form.html:14
+#: cfp/forms.py:153 cfp/templates/cfp/staff/room_form.html:14
 #: cfp/templates/cfp/staff/talk_details.html:38
 msgid "Room"
 msgstr "Salle"
 
-#: cfp/forms.py:153
+#: cfp/forms.py:154
 msgid "Filter talks already / not yet affected to a room"
 msgstr "Filtrer les exposés déjà / pas encore affectées à une salle"
 
-#: cfp/forms.py:156
+#: cfp/forms.py:157
 msgid "Scheduled"
 msgstr "Programmé"
 
-#: cfp/forms.py:157
+#: cfp/forms.py:158
 msgid "Filter talks already / not yet scheduled"
 msgstr "Filtrer les exposés déjà / pas encore planifiées"
 
-#: cfp/forms.py:160 cfp/models.py:347
+#: cfp/forms.py:161 cfp/models.py:347
+#: cfp/templates/cfp/proposal_talk_details.html:89
 #: cfp/templates/cfp/staff/talk_details.html:54
 msgid "Materials"
 msgstr "Supports"
 
-#: cfp/forms.py:161
+#: cfp/forms.py:162
 msgid "Filter talks with / without materials"
 msgstr "Filtrer les exposés avec / sans supports"
 
-#: cfp/forms.py:164 cfp/templates/cfp/staff/talk_details.html:58
+#: cfp/forms.py:165 cfp/templates/cfp/proposal_talk_details.html:93
+#: cfp/templates/cfp/staff/talk_details.html:58
 msgid "Video"
 msgstr "Vidéo"
 
-#: cfp/forms.py:165
+#: cfp/forms.py:166
 msgid "Filter talks with / without video"
 msgstr "Filtrer les exposés avec / sans vidéo"
 
-#: cfp/forms.py:174 cfp/forms.py:245
+#: cfp/forms.py:175 cfp/forms.py:246
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
-#: cfp/forms.py:180
+#: cfp/forms.py:181
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: cfp/forms.py:181
+#: cfp/forms.py:182
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: cfp/forms.py:182 cfp/templates/cfp/admin/tag_list.html:11
+#: cfp/forms.py:183 cfp/templates/cfp/admin/tag_list.html:11
 msgid "Add a tag"
 msgstr "Ajouter une étiquette"
 
-#: cfp/forms.py:183
+#: cfp/forms.py:184
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:199
+#: cfp/forms.py:200
 msgid "Notify by mail?"
 msgstr "Notifier par e-mail ?"
 
-#: cfp/forms.py:249 cfp/models.py:459
+#: cfp/forms.py:250 cfp/models.py:459
 #: cfp/templates/cfp/staff/volunteer_list.html:30
 msgid "Email"
 msgstr "E-mail"
 
-#: cfp/forms.py:268
+#: cfp/forms.py:269
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:288
+#: cfp/forms.py:289
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:293
+#: cfp/forms.py:294
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -328,7 +330,7 @@ msgstr "Titre de la proposition"
 msgid "Description of your talk"
 msgstr "Description de votre proposition"
 
-#: cfp/models.py:332 cfp/templates/cfp/proposal_talk_details.html:85
+#: cfp/models.py:332 cfp/templates/cfp/proposal_talk_details.html:99
 msgid "Message to organizers"
 msgstr "Message aux organisateurs"
 
@@ -722,10 +724,19 @@ msgid "remove"
 msgstr "supprimer"
 
 #: cfp/templates/cfp/proposal_talk_details.html:81
-#: cfp/templates/cfp/proposal_talk_details.html:91
+#: cfp/templates/cfp/proposal_talk_details.html:105
 #: cfp/templates/cfp/staff/talk_details.html:66
 msgid "No description provided."
 msgstr "Aucune description fournie."
+
+#: cfp/templates/cfp/proposal_talk_details.html:86
+msgid "Materials and video"
+msgstr "Supports et vidéo"
+
+#: cfp/templates/cfp/proposal_talk_details.html:94
+#: cfp/templates/cfp/staff/talk_details.html:59
+msgid "download"
+msgstr "télécharger"
 
 #: cfp/templates/cfp/proposal_talk_form.html:14
 msgid "Submit a proposal"
@@ -970,10 +981,6 @@ msgstr "Créneau"
 #: cfp/templates/cfp/staff/talk_details.html:43
 msgid "not defined"
 msgstr "non défini"
-
-#: cfp/templates/cfp/staff/talk_details.html:59
-msgid "download"
-msgstr "télécharger"
 
 #: cfp/templates/cfp/staff/talk_details.html:75
 msgid "No speakers."

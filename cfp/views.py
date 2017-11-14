@@ -287,7 +287,7 @@ def proposal_talk_edit(request, speaker, talk_id=None):
         categories = TalkCategory.objects.filter(site=request.conference.site)
     else:
         categories = request.conference.opened_categories
-    form = TalkForm(request.POST or None, categories=categories, instance=talk)
+    form = TalkForm(request.POST or None, request.FILES or None, categories=categories, instance=talk)
     if request.method == 'POST' and form.is_valid():
         talk = form.save(commit=False)
         talk.site = request.conference.site

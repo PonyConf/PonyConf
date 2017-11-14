@@ -82,6 +82,20 @@
   {% endif %}
 </p>
 
+{% if talk.materials or talk.video %}
+<h3>{% trans "Materials and video" %}</h3>
+<dl class="dl-horizontal">
+  {% if talk.materials %}
+  <dt>{% trans "Materials" %}</dt>
+    <dd><a href="{{ talk.materials.url }}">{{ talk.materials_name }}</a></dd>
+  {% endif %}
+  {% if talk.video %}
+  <dt>{% trans "Video" %}</dt>
+    <dd><a href="{{ talk.video }}">{% trans "download" %}</a></dd>
+  {% endif %}
+</dl>
+{% endif %}
+
 <h3>{% trans "Message to organizers" %}</h3>
 
 <p>

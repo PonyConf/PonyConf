@@ -80,10 +80,12 @@ class TalkForm(forms.ModelForm):
             del self.fields['category']
         else:
             self.fields['category'].queryset = categories
+        if self.instance and self.instance.accepted is not True:
+            del self.fields['materials']
 
     class Meta:
         model = Talk
-        fields = ('category', 'title', 'description', 'notes')
+        fields = ('category', 'title', 'description', 'notes', 'materials',)
 
 
 class TalkStaffForm(forms.ModelForm):
@@ -93,7 +95,6 @@ class TalkStaffForm(forms.ModelForm):
         self.fields['category'].queryset = TalkCategory.objects.filter(site=conference.site)
         self.fields['track'].queryset = Track.objects.filter(site=conference.site)
         self.fields['room'].queryset = Room.objects.filter(site=conference.site)
-        self.fields['materials'].required = False
         if self.instance and self.instance.category and self.instance.category.duration:
             self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
