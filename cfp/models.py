@@ -389,7 +389,7 @@ class Talk(PonyConfModel):
             else:
                 return 'info'
         elif self.accepted is False:
-            return 'muted'
+            return 'default'
         else:
             return 'warning'
 
