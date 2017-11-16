@@ -142,6 +142,8 @@ class Program:
                         continue
                     options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.category.color)
                     cellcontent = escape(str(event.talk)) + '<br><em>' + escape(event.talk.get_speakers_str()) + '</em>'
+                    for tag in event.talk.tags.filter(staff=True):
+                        cellcontent += '<br>' + tag.label
                 elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
                     colspan += 1
                     continue

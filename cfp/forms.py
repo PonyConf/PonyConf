@@ -324,7 +324,7 @@ class RoomForm(OnSiteNamedModelForm):
 class TagForm(OnSiteNamedModelForm):
     class Meta:
         model = Tag
-        fields = ['name', 'color', 'inverted', 'public']
+        fields = ['name', 'color', 'inverted', 'public', 'staff']
 
 
 class ActivityForm(OnSiteNamedModelForm):
