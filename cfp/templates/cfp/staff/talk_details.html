@@ -68,7 +68,11 @@
 
 {% for participant in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
-    <li><a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>{% if participant.vip %} <span class="badge">VIP</span>{% endif %}</li>
+    <li>
+      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      {% if participant.vip %} <span class="badge">VIP</span>{% endif %}
+      <a href="{% url 'talk-speaker-remove' participant_id=participant.pk talk_id=talk.pk %}" class="btn btn-xs btn-danger"><span class=" glyphicon glyphicon-remove"></span>&nbsp;{% trans "remove" %}</a>
+    </li>
 {% if forloop.last %}</ul>{% endif %}
 {% empty %}
 <i>{% trans "No speakers." %}</i>

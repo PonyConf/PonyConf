@@ -735,6 +735,20 @@ def talk_decide(request, talk_id, accept):
     })
 
 
+# @staff_required  TODO WIP
+# def talk_speaker_add(request, talk_id, participant_id=None):
+    # talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+
+
+@staff_required
+def talk_speaker_del(request, talk_id, participant_id):
+    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
+    participant = get_object_or_404(Participant, pk=participant_id, site=request.conference.site)
+    talk.speakers.remove(participant)
+    messages.success(request, _('Speaker removed from this talk'))
+    return redirect(talk.get_absolute_url())
+
+
 @staff_required
 def participant_list(request):
     participants = Participant.objects.filter(site=request.conference.site) \
