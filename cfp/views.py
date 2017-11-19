@@ -2,6 +2,7 @@ from math import ceil
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
@@ -92,6 +93,41 @@ Thanks!
         return redirect(reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token)))
     return render(request, 'cfp/volunteer_enrole.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
+        'form': form,
+    })
+
+
+def volunteer_mail_token(request):
+    form = MailForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            volunteer = Volunteer.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
+        except Volunteer.DoesNotExist:
+            messages.error(request, _('Sorry, we do not know this email.'))
+        else:
+
+            base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+            url = base_url + reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token))
+            body = render_to_string('cfp/mails/volunteer_send_token.txt', {
+                'volunteer': volunteer,
+                'url': url,
+                'conf': request.conference
+            })
+            #Message.objects.create(
+            #    thread=volunteer.conversation,
+            #    author=request.conference,
+            #    from_email=request.conference.contact_email,
+            #    content=body,
+            #)
+            send_mail(
+                subject=_('Thank you for your help!'),
+                message=body,
+                from_email='%s <%s>' % (request.conference.name, request.conference.contact_email),
+                recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
+            )
+            messages.success(request, _('A email have been sent with a link to access to your profil.'))
+            return redirect(reverse('volunteer-mail-token'))
+    return render(request, 'cfp/volunteer_mail_token.html', {
         'form': form,
     })
 

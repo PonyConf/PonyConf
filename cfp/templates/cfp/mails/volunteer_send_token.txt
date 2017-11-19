@@ -1,0 +1,13 @@
+{% load i18n %}{% blocktrans with name=volunteer.name footer=conf.name %}Hi {{ name }},
+
+Someone, probably you, asked to access your volunteer profile.
+You can update your availabilities or edit your profile following this url:
+
+  {{ url }}
+
+If you have any question, your can answer to this email.
+
+Sincerely,
+
+{{ footer }}
+{% endblocktrans %}

@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^cfp/(?P<talk_id>[\w\-]+)/(?P<participant_id>[\w\-]+)/desist/$', views.talk_acknowledgment, {'confirm': False}, name='talk-desist'),
 # End backward compatibility
     url(r'^volunteer/enrole/$', views.volunteer_enrole, name='volunteer-enrole'),
+    url(r'^volunteer/token/$', views.volunteer_mail_token, name='volunteer-mail-token'),
     url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?$', views.volunteer_home, name='volunteer-home'),
     url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?join/(?P<activity>[\w\-]+)/$', views.volunteer_update_activity, {'join': True}, name='volunteer-join'),
     url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?quit/(?P<activity>[\w\-]+)/$', views.volunteer_update_activity, {'join': False}, name='volunteer-quit'),
