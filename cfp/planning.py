@@ -1,7 +1,7 @@
 from django.db.models import Q, Prefetch
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
-from django.utils.timezone import localtime
+from django.utils.timezone import localtime, now
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
@@ -22,10 +22,13 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 
 
 class Program:
-    def __init__(self, site, pending=False, cache=True):
+    def __init__(self, site, pending=False, cache=None):
         self.site = site
         self.pending = pending
-        self.cache = cache
+        if cache is None:
+            self.cache = not settings.DEBUG
+        else:
+            self.cache = cache
         self.initialized = False
 
     def _lazy_init(self):
@@ -254,7 +257,7 @@ class Program:
 
         return ET.tostring(schedule)
 
-    def _as_ics(self):
+    def _as_ics(self, citymeo=False):
         if not self.initialized:
             self._lazy_init()
         cal = iCalendar()
@@ -263,7 +266,13 @@ class Program:
         cal.add('x-wr-calname', self.conference.name)
         cal.add('x-wr-timezone', settings.TIME_ZONE)
         cal.add('calscale', 'GREGORIAN')
-        for talk in self.talks.all():
+        talks = self.talks
+        if citymeo and talks.exists():
+            talks = talks.filter(start_date__gte=now()-timedelta(minutes=5))
+            if talks.exists():
+                limit = talks.first().start_date.replace(hour=23, minute=59, second=59)
+                talks = talks.filter(start_date__lte=limit)
+        for talk in talks:
             event = iEvent()
             event.add('dtstart', talk.start_date)
             if not talk.end_date:
@@ -274,21 +283,22 @@ class Program:
             if talk.room:
                 event.add('location', talk.room)
             event.add('status', 'CONFIRMED' if talk.accepted else 'TENTATIVE')
-            event.add('description', talk.description)
+            if not citymeo:
+                event.add('description', talk.description)
             event.add('uid', '%s/%s' % (self.site.domain, talk.id))
             cal.add_component(event)
         return cal.to_ical()
 
-    def render(self, output='html'):
+    def render(self, output='html', **kwargs):
         if self.cache:
-            cache_entry = 'ponyconf-%d' % adler32('|'.join(map(str, [self.site.domain, output, self.pending])).encode('utf-8'))
+            cache_entry = 'ponyconf-%d' % adler32('|'.join(map(str, [self.site.domain, output, self.pending] + list(kwargs.values()))).encode('utf-8'))
             result = cache.get(cache_entry)
             if not result:
-                result = getattr(self, '_as_%s' % output)()
+                result = getattr(self, '_as_%s' % output)(**kwargs)
                 cache.set(cache_entry, result, 3 * 60 * 60) # 3H
             return mark_safe(result)
         else:
-            return mark_safe(getattr(self, '_as_%s' % output)())
+            return mark_safe(getattr(self, '_as_%s' % output)(**kwargs))
 
     def __str__(self):
         return self.render()

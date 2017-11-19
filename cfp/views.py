@@ -1021,7 +1021,7 @@ def create_user(request):
     })
 
 
-def schedule(request, program_format, pending, cache, template):
+def schedule(request, program_format, pending, template, cache=None):
     program = Program(site=request.conference.site, pending=pending, cache=cache)
     if program_format is None:
         return render(request, template, {'program': program.render('html')})
@@ -1029,8 +1029,8 @@ def schedule(request, program_format, pending, cache, template):
         return HttpResponse(program.render('html'))
     elif program_format == 'xml':
         return HttpResponse(program.render('xml'), content_type="application/xml")
-    elif program_format == 'ics':
-        response = HttpResponse(program.render('ics'), content_type='text/calendar')
+    elif program_format in ['ics', 'citymeo']:
+        response = HttpResponse(program.render('ics', citymeo=bool(program_format == 'citymeo')), content_type='text/calendar')
         response['Content-Disposition'] = 'attachment; filename="planning.ics"'
         return response
     else:
@@ -1043,12 +1043,12 @@ def public_schedule(request, program_format):
     if request.conference.schedule_redirection_url and program_format is None:
         return redirect(request.conference.schedule_redirection_url)
     else:
-        return schedule(request, program_format=program_format, pending=False, cache=True, template='cfp/schedule.html')
+        return schedule(request, program_format=program_format, pending=False, template='cfp/schedule.html')
 
 
 @staff_required
 def staff_schedule(request, program_format):
-    return schedule(request, program_format=program_format, pending=True, cache=False, template='cfp/staff/schedule.html')
+    return schedule(request, program_format=program_format, pending=True, template='cfp/staff/schedule.html', cache=False)
 
 
 class Select2View(StaffRequiredMixin, AutoResponseView):
