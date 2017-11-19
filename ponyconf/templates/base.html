@@ -43,12 +43,7 @@
             <li{% block stafftab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Organisation" %}</a></li>
             <li{% block admintab %}{% endblock %}><a href="{% url 'admin' %}"><span class="glyphicon glyphicon-cog"></span>&nbsp;{% trans "Administration" %}</a></li>
             {% endif %}
-            {% comment %}
-            <li{% block talkstab %}{% endblock %}><a href="{% url 'talk-list' %}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;{% trans "Talks" %}</a></li>
-            <li{% block speakerstab %}{% endblock %}><a href="{% url 'participant-list' %}"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;{% trans "Speakers" %}</a></li>
-            <li{% block inboxtab %}{% endblock %}><a href="{% url 'inbox' %}"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Inbox</a></li>
             <li{% block profiletab %}{% endblock %}><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans "Profile" %}</a></li>
-            {% endcomment %}
             <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;{% trans "Logout" %}</a></li>
             {% else %}
             <li{% block logintab %}{% endblock %}><a href="{% url 'staff' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{% trans "Staff" %}</a></li>

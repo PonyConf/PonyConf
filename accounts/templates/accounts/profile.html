@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 i18n %}
+
+{% block profiletab %} class="active"{% endblock %}
+
+
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>{% trans "Profile" %}</h3>
+  </div>
+  <div class="panel-body">
+    <form action="" method="post" class="form-horizontal">
+      {% csrf_token %}
+      {% for form in forms %}
+      {% bootstrap_form form layout="horizontal" %}
+      {% endfor %}
+      {% buttons layout="horizontal" %}
+      <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+      {% for url, class, text in buttons %}
+      <a href="{% url url %}" class="btn btn-{{ class }}">{{ text }}</a>
+      {% endfor %}
+      <a href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'home' %}{% endif %}" class="btn btn-default">{% trans "Cancel" %}</a>
+      {% endbuttons %}
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{% for form in forms %}{{ form.media.css }}{% endfor %}
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{% for form in forms %}{{ form.media.js }}{% endfor %}
+{% endblock %}

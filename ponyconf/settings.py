@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # our apps
-    #'accounts',
     'ponyconf',
+    'accounts',
     'cfp',
     'mailing',
     #'planning',

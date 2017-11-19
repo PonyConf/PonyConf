@@ -49,9 +49,10 @@ def volunteer_enrole(request):
         if Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
             return redirect(reverse('volunteer-home'))
         elif not request.POST:
-            # TODO: import biography, phone number and sms_prefered from User profile
             initial.update({
                 'name': request.user.get_full_name(),
+                'phone_number': request.user.profile.phone_number,
+                'sms_prefered': request.user.profile.sms_prefered,
             })
     form = VolunteerForm(request.POST or None, initial=initial, conference=request.conference)
     if request.user.is_authenticated():
@@ -174,9 +175,9 @@ def proposal_home(request):
         if Participant.objects.filter(site=request.conference.site, email=request.user.email).exists():
             return redirect(reverse('proposal-dashboard'))
         elif not request.POST:
-            # TODO: import biography from User profile
             initial.update({
                 'name': request.user.get_full_name(),
+                'biography': request.user.profile.biography,
             })
         fields.remove('email')
     NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=fields)
