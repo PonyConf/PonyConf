@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.utils.timezone import localtime
@@ -15,7 +15,7 @@ from zlib import adler32
 import xml.etree.ElementTree as ET
 from icalendar import Calendar as iCalendar, Event as iEvent
 
-from .models import Conference, Talk, Room
+from .models import Conference, Talk, Room, Tag
 
 
 Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
@@ -33,7 +33,11 @@ class Program:
         self.talks = Talk.objects.\
                             exclude(category__label__exact='').\
                             filter(site=self.site, room__isnull=False, start_date__isnull=False).\
-                            filter(Q(duration__gt=0) | Q(category__duration__gt=0))
+                            filter(Q(duration__gt=0) | Q(category__duration__gt=0)).\
+                            prefetch_related(
+                                Prefetch('tags', queryset=Tag.objects.filter(staff=True), to_attr='staff_tags'),
+                                'category', 'speakers', 'track', 'tags', 'room',
+                            )
 
         if self.pending:
             self.talks = self.talks.exclude(accepted=False)
@@ -142,7 +146,7 @@ class Program:
                         continue
                     options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.category.color)
                     cellcontent = escape(str(event.talk)) + '<br><em>' + escape(event.talk.get_speakers_str()) + '</em>'
-                    for tag in event.talk.tags.filter(staff=True):
+                    for tag in event.talk.staff_tags:
                         cellcontent += '<br>' + tag.label
                 elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
                     colspan += 1
