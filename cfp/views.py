@@ -168,20 +168,19 @@ def proposal_home(request):
     categories = request.conference.opened_categories
     if not categories.exists():
         return render(request, 'cfp/closed.html')
+    initial = {}
+    fields = ['name', 'email', 'biography']
     if request.user.is_authenticated():
         if Participant.objects.filter(site=request.conference.site, email=request.user.email).exists():
             return redirect(reverse('proposal-dashboard'))
-        else:
-            NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'biography'])
-            if request.POST:
-                data = request.POST
-            else:
-                # TODO: import biography from User profile
-                data = dict(name=request.user.get_full_name())
-    else:
-        NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'email', 'biography'])
-        data = request.POST or None
-    speaker_form = NewSpeakerForm(data, conference=request.conference)
+        elif not request.POST:
+            # TODO: import biography from User profile
+            initial.update({
+                'name': request.user.get_full_name(),
+            })
+        fields.remove('email')
+    NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=fields)
+    speaker_form = NewSpeakerForm(request.POST or None, initial=initial, conference=request.conference)
     talk_form = TalkForm(request.POST or None, categories=categories)
     if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):
         speaker = speaker_form.save(commit=False)
