@@ -44,10 +44,23 @@ def home(request):
 def volunteer_enrole(request):
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
-    form = VolunteerForm(request.POST or None, conference=request.conference)
+    initial = {}
+    if request.user.is_authenticated():
+        if Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
+            return redirect(reverse('volunteer-home'))
+        elif not request.POST:
+            # TODO: import biography, phone number and sms_prefered from User profile
+            initial.update({
+                'name': request.user.get_full_name(),
+            })
+    form = VolunteerForm(request.POST or None, initial=initial, conference=request.conference)
+    if request.user.is_authenticated():
+        form.fields.pop('email')
     if request.method == 'POST' and form.is_valid():
         volunteer = form.save(commit=False)
         volunteer.language = request.LANGUAGE_CODE
+        if request.user.is_authenticated():
+            volunteer.email = request.user.email
         volunteer.save()
         body = _("""Hi {},
 
