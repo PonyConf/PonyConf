@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-19 22:31+0000\n"
-"PO-Revision-Date: 2017-11-19 23:36+0100\n"
+"POT-Creation-Date: 2017-11-19 22:55+0000\n"
+"PO-Revision-Date: 2017-11-19 23:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -153,7 +153,7 @@ msgstr "Description"
 
 #: cfp/forms.py:110 cfp/models.py:112 cfp/models.py:465
 #: cfp/templates/cfp/staff/participant_details.html:19
-#: cfp/templates/cfp/staff/talk_details.html:78
+#: cfp/templates/cfp/staff/talk_details.html:82
 #: cfp/templates/cfp/staff/volunteer_details.html:22
 msgid "Notes"
 msgstr "Notes"
@@ -173,7 +173,7 @@ msgstr "Session"
 msgid "Tag"
 msgstr "Étiquette"
 
-#: cfp/forms.py:149 cfp/templates/cfp/staff/talk_details.html:83
+#: cfp/forms.py:149 cfp/templates/cfp/staff/talk_details.html:87
 msgid "Vote"
 msgstr "Vote"
 
@@ -578,35 +578,6 @@ msgstr ""
 "Si vous avez déjà soumis une proposition et que vous souhaitez l’éditer, "
 "cliquez <a href=\"%(mail_token_url)s\">ici</a>."
 
-#: cfp/templates/cfp/mails/speaker_send_token.txt:1
-msgid ""
-"Hi {},\n"
-"\n"
-"Someone, probably you, ask to access your profile.\n"
-"You can edit your talks or add new ones following this url:\n"
-"\n"
-"  {}\n"
-"\n"
-"If you have any question, your can answer to this email.\n"
-"\n"
-"Sincerely,\n"
-"\n"
-"{}\n"
-msgstr ""
-"Bonjour {},\n"
-"\n"
-"Quelqu’un, sans doute vous, a demandé à accéder à votre profil.\n"
-"Vous pouvez modifier vos propositions ou en soumettre de nouvelles à l’url "
-"suivante :\n"
-"\n"
-"  {}\n"
-"\n"
-"Si vous avez une question, vous pouvez répondre à ce mail.\n"
-"\n"
-"Sincèrement,\n"
-"\n"
-"{}\n"
-
 #: cfp/templates/cfp/mails/volunteer_send_token.txt:1
 #, python-format
 msgid ""
@@ -826,6 +797,7 @@ msgid "you!"
 msgstr "vous !"
 
 #: cfp/templates/cfp/proposal_talk_details.html:64
+#: cfp/templates/cfp/staff/talk_details.html:75
 msgid "remove"
 msgstr "supprimer"
 
@@ -914,7 +886,7 @@ msgid "Add a talk"
 msgstr "Ajouter un exposé"
 
 #: cfp/templates/cfp/staff/participant_details.html:64
-#: cfp/templates/cfp/staff/talk_details.html:120
+#: cfp/templates/cfp/staff/talk_details.html:124
 msgid "Messaging"
 msgstr "Messagerie"
 
@@ -1088,43 +1060,43 @@ msgstr "Créneau"
 msgid "not defined"
 msgstr "non défini"
 
-#: cfp/templates/cfp/staff/talk_details.html:75
+#: cfp/templates/cfp/staff/talk_details.html:79
 msgid "No speakers."
 msgstr "Aucun orateur."
 
-#: cfp/templates/cfp/staff/talk_details.html:80
+#: cfp/templates/cfp/staff/talk_details.html:84
 msgid "No notes."
 msgstr "Aucune note."
 
-#: cfp/templates/cfp/staff/talk_details.html:94
+#: cfp/templates/cfp/staff/talk_details.html:98
 msgid "vote"
 msgstr "vote"
 
-#: cfp/templates/cfp/staff/talk_details.html:94
+#: cfp/templates/cfp/staff/talk_details.html:98
 msgid "average:"
 msgstr "moyenne :"
 
-#: cfp/templates/cfp/staff/talk_details.html:96
+#: cfp/templates/cfp/staff/talk_details.html:100
 msgid "Accept"
 msgstr "Accepter"
 
-#: cfp/templates/cfp/staff/talk_details.html:97
+#: cfp/templates/cfp/staff/talk_details.html:101
 msgid "Decline"
 msgstr "Décliner"
 
-#: cfp/templates/cfp/staff/talk_details.html:99
+#: cfp/templates/cfp/staff/talk_details.html:103
 msgid "Speaker confirmation"
 msgstr "Confirmation de l’orateur"
 
-#: cfp/templates/cfp/staff/talk_details.html:101
+#: cfp/templates/cfp/staff/talk_details.html:105
 msgid "The speaker confirmed"
 msgstr "L’orateur a confirmé."
 
-#: cfp/templates/cfp/staff/talk_details.html:102
+#: cfp/templates/cfp/staff/talk_details.html:106
 msgid "The speaker cancelled"
 msgstr "L’orateur a annulé."
 
-#: cfp/templates/cfp/staff/talk_details.html:124
+#: cfp/templates/cfp/staff/talk_details.html:128
 msgid ""
 "Comment this talk – <em>this message will be received by the staff team "
 "only</em>"
@@ -1445,7 +1417,7 @@ msgstr "L’exposé a été accepté."
 msgid "The talk has been declined."
 msgstr "L’exposé a été décliné."
 
-#: cfp/views.py:695 cfp/views.py:800
+#: cfp/views.py:695 cfp/views.py:814
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
@@ -1461,11 +1433,15 @@ msgstr "Vote mis à jour"
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:866
+#: cfp/views.py:748
+msgid "Speaker removed from this talk"
+msgstr "Intervenant supprimé de l’exposé avec succès"
+
+#: cfp/views.py:880
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:867
+#: cfp/views.py:881
 msgid ""
 "Hi {},\n"
 "\n"
@@ -1489,15 +1465,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:888
+#: cfp/views.py:902
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:1052
+#: cfp/views.py:1066
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:1073
+#: cfp/views.py:1087
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
@@ -1570,6 +1546,34 @@ msgstr "Mot de passe oublié ?"
 #: ponyconf/templates/registration/password_change_form.html:9
 msgid "Password Change"
 msgstr "Changement de mot de passe"
+
+#~ msgid ""
+#~ "Hi {},\n"
+#~ "\n"
+#~ "Someone, probably you, ask to access your profile.\n"
+#~ "You can edit your talks or add new ones following this url:\n"
+#~ "\n"
+#~ "  {}\n"
+#~ "\n"
+#~ "If you have any question, your can answer to this email.\n"
+#~ "\n"
+#~ "Sincerely,\n"
+#~ "\n"
+#~ "{}\n"
+#~ msgstr ""
+#~ "Bonjour {},\n"
+#~ "\n"
+#~ "Quelqu’un, sans doute vous, a demandé à accéder à votre profil.\n"
+#~ "Vous pouvez modifier vos propositions ou en soumettre de nouvelles à "
+#~ "l’url suivante :\n"
+#~ "\n"
+#~ "  {}\n"
+#~ "\n"
+#~ "Si vous avez une question, vous pouvez répondre à ce mail.\n"
+#~ "\n"
+#~ "Sincèrement,\n"
+#~ "\n"
+#~ "{}\n"
 
 #~ msgid "Contact:"
 #~ msgstr "Contacter :"

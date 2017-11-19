@@ -22,3 +22,12 @@ pip install -U -r requirements.txt
 ./manage.py runserver
 ./manage.py createsuperuser
 ```
+
+HowTo update translations
+-------------------------
+
+```bash
+./manage.py makemessages
+poedit locale/fr/LC_MESSAGES/django.po
+./manage.py compilemessages
+```
