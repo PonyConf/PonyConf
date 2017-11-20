@@ -43,18 +43,17 @@ def home(request):
 
 
 def volunteer_enrole(request):
+    if request.user.is_authenticated() and Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
+        return redirect(reverse('volunteer-home'))
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
     initial = {}
-    if request.user.is_authenticated():
-        if Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
-            return redirect(reverse('volunteer-home'))
-        elif not request.POST:
-            initial.update({
-                'name': request.user.get_full_name(),
-                'phone_number': request.user.profile.phone_number,
-                'sms_prefered': request.user.profile.sms_prefered,
-            })
+    if request.user.is_authenticated() and not request.POST:
+        initial.update({
+            'name': request.user.get_full_name(),
+            'phone_number': request.user.profile.phone_number,
+            'sms_prefered': request.user.profile.sms_prefered,
+        })
     form = VolunteerForm(request.POST or None, initial=initial, conference=request.conference)
     if request.user.is_authenticated():
         form.fields.pop('email')
