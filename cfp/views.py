@@ -331,10 +331,7 @@ def proposal_talk_edit(request, speaker, talk_id=None):
         talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
     else:
         talk = None
-    if is_staff(request, request.user):
-        categories = TalkCategory.objects.filter(site=request.conference.site)
-    else:
-        categories = request.conference.opened_categories
+    categories = request.conference.opened_categories
     form = TalkForm(request.POST or None, request.FILES or None, categories=categories, instance=talk)
     if request.method == 'POST' and form.is_valid():
         talk = form.save(commit=False)
