@@ -325,15 +325,15 @@ class Talk(PonyConfModel):
     speakers = models.ManyToManyField(Participant, verbose_name=_('Speakers'))
     title = models.CharField(max_length=128, verbose_name=_('Talk Title'))
     slug = AutoSlugField(populate_from='title', unique=True)
-    #abstract = models.CharField(max_length=255, blank=True, verbose_name=_('Abstract'))
     description = models.TextField(verbose_name=_('Description of your talk'),
-                                   help_text=_('This field is only visible by organizers.'))
+                                   help_text=_('This description will be visible on the program.'))
     track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
     tags = models.ManyToManyField(Tag, blank=True)
     notes = models.TextField(blank=True, verbose_name=_('Message to organizers'),
                                    help_text=_('If you have any constraint or if you have anything that may '
                                                'help you to select your talk, like a video or slides of your'
-                                               ' talk, please write it down here'))
+                                               ' talk, please write it down here. This field will only be '
+                                               'visible by organizers.'))
     category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'))
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA',
