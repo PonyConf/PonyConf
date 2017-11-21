@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-19 22:55+0000\n"
-"PO-Revision-Date: 2017-11-19 23:59+0100\n"
+"PO-Revision-Date: 2017-11-21 11:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -335,7 +335,7 @@ msgstr "Nom"
 
 #: cfp/models.py:113 cfp/models.py:330
 msgid "This field is only visible by organizers."
-msgstr "Ce champs est uniquement visible par les organisateurs."
+msgstr "Ce champ est uniquement visible par les organisateurs."
 
 #: cfp/models.py:114 cfp/templates/cfp/staff/participant_details.html:25
 msgid "Invited speaker"
@@ -423,7 +423,7 @@ msgstr "Durée (min)"
 msgid ""
 "You can use this field to share some materials related to your intervention."
 msgstr ""
-"Vous pouvez utiliser ce champs pour partager les supports de votre "
+"Vous pouvez utiliser ce champ pour partager les supports de votre "
 "intervention."
 
 #: cfp/models.py:378
