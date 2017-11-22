@@ -468,7 +468,7 @@ Thanks!
 @speaker_required
 def proposal_speaker_add(request, speaker, talk_id, speaker_id):
     talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-    co_speaker = get_object_or_404(Participant, pk__in=speaker.co_speaker_set.values_list('pk'))
+    co_speaker = get_object_or_404(Participant, pk__in=speaker.co_speaker_set.values_list('pk'), pk=speaker_id)
     talk.speakers.add(co_speaker)
     messages.success(request, _('Co-speaker successfully added to the talk.'))
     return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk_id)))

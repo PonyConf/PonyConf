@@ -61,7 +61,7 @@ class Conference(models.Model):
     @property
     def disclosed_acceptances(self):
         # acceptances are automatically disclosed if the schedule is published
-        return self.acceptances_disclosure_date and self.acceptances_disclosure_date <= timezone.now() or self.schedule_available
+        return (self.acceptances_disclosure_date and self.acceptances_disclosure_date <= timezone.now()) or self.schedule_available
 
     @property
     def schedule_available(self):
