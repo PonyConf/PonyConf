@@ -175,10 +175,10 @@ class Track(PonyConfModel):
 
 class Room(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, blank=True, default="")
+    name = models.CharField(max_length=256, blank=True, default='', verbose_name=_('Name'))
     slug = AutoSlugField(populate_from='name')
-    label = models.CharField(max_length=256, blank=True, default="")
-    capacity = models.IntegerField(default=0)
+    label = models.CharField(max_length=256, blank=True, default='', verbose_name=_('Label'))
+    capacity = models.IntegerField(default=0, verbose_name=_('Capacity'))
 
     class Meta:
         unique_together = ['site', 'name']

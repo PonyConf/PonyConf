@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-21 21:30+0000\n"
-"PO-Revision-Date: 2017-11-21 22:31+0100\n"
+"POT-Creation-Date: 2017-11-22 22:10+0000\n"
+"PO-Revision-Date: 2017-11-22 23:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -327,8 +327,8 @@ msgstr ""
 "L’adresse de réponse doit être une chaine de texte formatable avec un "
 "argument « token » (e.g. ponyconf+{token}@exemple.com)."
 
-#: cfp/models.py:100 cfp/models.py:156 cfp/models.py:208 cfp/models.py:498
-#: cfp/templates/cfp/staff/participant_list.html:42
+#: cfp/models.py:100 cfp/models.py:156 cfp/models.py:178 cfp/models.py:208
+#: cfp/models.py:498 cfp/templates/cfp/staff/participant_list.html:42
 #: cfp/templates/cfp/staff/volunteer_list.html:29
 msgid "Name"
 msgstr "Nom"
@@ -340,6 +340,14 @@ msgstr "Ce champ est uniquement visible par les organisateurs."
 #: cfp/models.py:114 cfp/templates/cfp/staff/participant_details.html:25
 msgid "Invited speaker"
 msgstr "Orateur invité"
+
+#: cfp/models.py:180
+msgid "Label"
+msgstr "Étiquette"
+
+#: cfp/models.py:181
+msgid "Capacity"
+msgstr "Capacité"
 
 #: cfp/models.py:210
 msgid "Color"
@@ -1442,39 +1450,39 @@ msgstr "L’indisponibilité de l’intervenant a été notée."
 msgid "The talk have been cancelled."
 msgstr "L’exposé a été annulé."
 
-#: cfp/views.py:617 cfp/views.py:722
+#: cfp/views.py:621 cfp/views.py:726
 msgid "The talk has been accepted."
 msgstr "L’exposé a été accepté."
 
-#: cfp/views.py:619 cfp/views.py:724
+#: cfp/views.py:623 cfp/views.py:728
 msgid "The talk has been declined."
 msgstr "L’exposé a été décliné."
 
-#: cfp/views.py:691 cfp/views.py:810
+#: cfp/views.py:695 cfp/views.py:814
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
-#: cfp/views.py:705
+#: cfp/views.py:709
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: cfp/views.py:705
+#: cfp/views.py:709
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: cfp/views.py:726
+#: cfp/views.py:730
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:744
+#: cfp/views.py:748
 msgid "Speaker removed from this talk"
 msgstr "Intervenant supprimé de l’exposé avec succès"
 
-#: cfp/views.py:876
+#: cfp/views.py:880
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:877
+#: cfp/views.py:881
 msgid ""
 "Hi {},\n"
 "\n"
@@ -1498,15 +1506,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:898
+#: cfp/views.py:902
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:1062
+#: cfp/views.py:1066
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:1083
+#: cfp/views.py:1087
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
