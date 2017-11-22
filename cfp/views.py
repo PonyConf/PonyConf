@@ -589,7 +589,11 @@ def talk_list(request):
                 talks = talks.exclude(vote__user=request.user)
         if data['materials'] != None:
             show_filters = True
-            talks = talks.filter(materials__isnull=not data['materials'])
+            materials_filter = Q(materials__isnull=False) & ~Q(materials__exact='')
+            if data['materials']:
+                talks = talks.filter(materials_filter)
+            else:
+                talks = talks.filter(~materials_filter)
         if data['video'] != None:
             show_filters = True
             if data['video']:
