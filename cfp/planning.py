@@ -35,6 +35,7 @@ class Program:
         self.conference = Conference.objects.get(site=self.site)
         self.talks = Talk.objects.\
                             exclude(category__label__exact='').\
+                            exclude(confirmed=False).\
                             filter(site=self.site, room__isnull=False, start_date__isnull=False).\
                             filter(Q(duration__gt=0) | Q(category__duration__gt=0)).\
                             prefetch_related(
