@@ -51,12 +51,12 @@ class VolunteersTests(TestCase):
         response = self.client.post(reverse('volunteer-enrole'), {'name': 'B', 'email': 'b@example.org'})
         self.assertEqual(Volunteer.objects.count(), n+1)
         v = Volunteer.objects.get(name='B')
-        self.assertRedirects(response, reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)),
+        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)),
                              status_code=302, target_status_code=200)
 
     def test_enrole_logged_in(self):
         self.client.login(username='a', password='a')
-        self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-home'))
+        self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-dashboard'))
         self.client.login(username='b', password='b')
         self.assertEqual(self.client.get(reverse('volunteer-enrole')).status_code, 403)
         conf = Conference.objects.first()
@@ -76,13 +76,13 @@ class VolunteersTests(TestCase):
         response = self.client.post(reverse('volunteer-enrole'), {'name': 'B'})
         self.assertEqual(Volunteer.objects.count(), n+1)
         v = Volunteer.objects.get(name='B')
-        self.assertRedirects(response, reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)),
+        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)),
                              status_code=302, target_status_code=200)
-        self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-home'))
+        self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-dashboard'))
 
     def test_home(self):
         v = Volunteer.objects.get(name='A')
-        self.assertEqual(self.client.get(reverse('volunteer-home', kwargs=dict(volunteer_token=v.token))).status_code, 200)
+        self.assertEqual(self.client.get(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token))).status_code, 200)
 
     def test_update_activity(self):
         v = Volunteer.objects.get(name='A')
@@ -92,9 +92,9 @@ class VolunteersTests(TestCase):
         conf.volunteers_opening_date = timezone.now() - timedelta(hours=1)
         conf.save()
         self.assertRedirects(self.client.get(reverse('volunteer-join', kwargs=dict(volunteer_token=v.token, activity=a.slug))),
-                             reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
+                             reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
         self.assertRedirects(self.client.get(reverse('volunteer-quit', kwargs=dict(volunteer_token=v.token, activity=a.slug))),
-                             reverse('volunteer-home', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
+                             reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
 
     def test_volunteer_mail_token(self):
         v = Volunteer.objects.get(name='A')

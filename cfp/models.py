@@ -470,7 +470,7 @@ class Volunteer(PonyConfModel):
         return reverse('volunteer-details', kwargs=dict(volunteer_id=self.pk))
 
     def get_secret_url(self, full=False):
-        url = reverse('volunteer-home', kwargs=dict(volunteer_token=self.token))
+        url = reverse('volunteer-dashboard', kwargs=dict(volunteer_token=self.token))
         if full:
             url = ('https' if self.site.conference.secure_domain else 'http') + '://' + self.site.domain + url
         return url

@@ -29,7 +29,7 @@ urlpatterns = [
 # End backward compatibility
     url(r'^volunteer/enrole/$', views.volunteer_enrole, name='volunteer-enrole'),
     url(r'^volunteer/token/$', views.volunteer_mail_token, name='volunteer-mail-token'),
-    url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?$', views.volunteer_home, name='volunteer-home'),
+    url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?$', views.volunteer_dashboard, name='volunteer-dashboard'),
     url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?join/(?P<activity>[\w\-]+)/$', views.volunteer_update_activity, {'join': True}, name='volunteer-join'),
     url(r'^volunteer/(?:(?P<volunteer_token>[\w\-]+)/)?quit/(?P<activity>[\w\-]+)/$', views.volunteer_update_activity, {'join': False}, name='volunteer-quit'),
     #url(r'^talk/(?P<talk_id>[\w\-]+)/$', views.talk_show, name='show-talk'),

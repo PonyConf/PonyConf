@@ -44,7 +44,7 @@ def home(request):
 
 def volunteer_enrole(request):
     if request.user.is_authenticated() and Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
-        return redirect(reverse('volunteer-home'))
+        return redirect(reverse('volunteer-dashboard'))
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
     initial = {}
@@ -89,7 +89,7 @@ Thanks!
             recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
         )
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
-        return redirect(reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token)))
+        return redirect(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token)))
     return render(request, 'cfp/volunteer_enrole.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'form': form,
@@ -106,7 +106,7 @@ def volunteer_mail_token(request):
         else:
 
             base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
-            url = base_url + reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token))
+            url = base_url + reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token))
             body = render_to_string('cfp/mails/volunteer_send_token.txt', {
                 'volunteer': volunteer,
                 'url': url,
@@ -132,7 +132,7 @@ def volunteer_mail_token(request):
 
 
 @volunteer_required
-def volunteer_home(request, volunteer):
+def volunteer_dashboard(request, volunteer):
     return render(request, 'cfp/volunteer.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'volunteer': volunteer,
@@ -150,7 +150,7 @@ def volunteer_update_activity(request, volunteer, activity, join):
         activity.volunteers.remove(volunteer)
         activity.save()
         messages.success(request, _('Okay, no problem!'))
-    return redirect(reverse('volunteer-home', kwargs=dict(volunteer_token=volunteer.token)))
+    return redirect(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token)))
 
 
 @staff_required
