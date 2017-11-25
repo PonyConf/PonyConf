@@ -1,4 +1,3 @@
-from math import ceil
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
@@ -29,7 +28,7 @@ from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
-                   ConferenceForm, CreateUserForm, TrackForm, RoomForm, \
+                   ConferenceForm, HomepageForm, CreateUserForm, TrackForm, RoomForm, \
                    VolunteerForm, VolunteerFilterForm, MailForm, \
                    TagForm, TalkCategoryForm, ActivityForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
@@ -832,7 +831,6 @@ def participant_add_talk(request, participant_id):
 @staff_required
 def conference_edit(request):
     form = ConferenceForm(request.POST or None, instance=request.conference)
-
     if request.method == 'POST' and form.is_valid():
         old_staff = set(request.conference.staff.all())
         new_conference = form.save()
@@ -865,9 +863,20 @@ You can now:
                 fail_silently=False,
             )
         messages.success(request, _('Modifications successfully saved.'))
-        return redirect(reverse('conference'))
-
+        return redirect(reverse('conference-edit'))
     return render(request, 'cfp/admin/conference.html', {
+        'form': form,
+    })
+
+
+@staff_required
+def homepage_edit(request):
+    form = HomepageForm(request.POST or None, instance=request.conference)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, _('Modifications successfully saved.'))
+        return redirect(reverse('homepage-edit'))
+    return render(request, 'cfp/admin/homepage.html', {
         'form': form,
     })
 

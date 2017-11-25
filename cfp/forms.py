@@ -259,7 +259,7 @@ class ConferenceForm(forms.ModelForm):
     class Meta:
         model = Conference
         fields = [
-            'name', 'home', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'schedule_redirection_url',
+            'name', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'schedule_redirection_url',
             'volunteers_opening_date', 'volunteers_closing_date', 'reply_email', 'secure_domain', 'staff',
         ]
         widgets = {
@@ -268,6 +268,12 @@ class ConferenceForm(forms.ModelForm):
         help_texts = {
             'staff': _('New staff members will be informed of their new position by e-mail.'),
         }
+
+
+class HomepageForm(forms.ModelForm):
+    class Meta:
+        model = Conference
+        fields = ['home']
 
 
 class CreateUserForm(forms.ModelForm):

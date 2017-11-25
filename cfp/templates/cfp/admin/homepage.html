@@ -1,0 +1,54 @@
+{% extends 'cfp/admin/base.html' %}
+{% load bootstrap3 i18n static %}
+
+{% block homepagetab %} class="active"{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Home page" %}</h1>
+
+<!--<div class="panel panel-default">
+  <div class="panel-heading">
+    <b>Truc</b>
+  </div>
+  <div class=-->
+
+<div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#editor" aria-controls="editor" role="tab" data-toggle="tab">{% trans "Editor" %}</a></li>
+    <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">{% trans "Preview" %}</a></li>
+    <li><a href="https://daringfireball.net/projects/markdown/syntax" target="blank" role="tab">{% trans "Syntax" %}</a></li>
+  </ul>
+</div>
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" style="padding-bottom: 20px;" id="editor">
+      <textarea style="width: 100%; min-height: 220px;" id="markdown-content" name="home">{{ form.home.value|default_if_none:"" }}</textarea>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="preview">
+      <div style="width: 100%; min-height: 220px;" class="well" id="markdown-preview"></div>
+    </div>
+  </div>
+  {% buttons %}
+    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+  {% endbuttons %}
+</form>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+<script type="text/javascript">
+var markdown_preview_url = "{% url 'markdown-preview' %}";
+</script>
+<script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/markdown-preview.js' %}"></script>
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}

@@ -55,7 +55,8 @@ urlpatterns = [
     url(r'^staff/schedule/((?P<program_format>[\w]+)/)?$', views.staff_schedule, name='staff-schedule'),
     url(r'^staff/select2/$', views.Select2View.as_view(), name='django_select2-json'),
     url(r'^admin/$', views.admin, name='admin'),
-    url(r'^admin/conference/$', views.conference_edit, name='conference'),
+    url(r'^admin/conference/$', views.conference_edit, name='conference-edit'),
+    url(r'^admin/homepage/$', views.homepage_edit, name='homepage-edit'),
     url(r'^admin/categories/$', views.TalkCategoryList.as_view(), name='category-list'),
     url(r'^admin/categories/add/$', views.TalkCategoryCreate.as_view(), name='category-add'),
     url(r'^admin/categories/(?P<pk>[0-9]+)/edit/$', views.TalkCategoryUpdate.as_view(), name='category-edit'),
@@ -66,5 +67,4 @@ urlpatterns = [
     url(r'^admin/activities/add/$', views.ActivityCreate.as_view(), name='activity-add'),
     url(r'^admin/activities/(?P<slug>[-\w]+)/edit/$', views.ActivityUpdate.as_view(), name='activity-edit'),
     url(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
-    #url(r'^markdown/$', views.markdown_preview, name='markdown'),
 ]

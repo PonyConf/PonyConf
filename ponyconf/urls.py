@@ -17,8 +17,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 
+from . import views
+
 
 urlpatterns = [
+    url(r'^markdown/$', views.markdown_preview, name='markdown-preview'),
     url(r'^admin/django/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^', include('cfp.urls')),
