@@ -487,38 +487,9 @@ def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
     return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk_id)))
 
 
-# BACKWARD COMPATIBILITY
-def talk_proposal(request, talk_id=None, participant_id=None):
-    if talk_id and participant_id:
-        talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
-        speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
-        return redirect(reverse('proposal-talk-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
-    else:
-        return render(reverse('proposal-home'))
-
-
-# BACKWARD COMPATIBILITY
-def talk_proposal_speaker_edit(request, talk_id, participant_id=None):
+@staff_required
+def talk_acknowledgment(request, talk_id, confirm):
     talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
-    if participant_id:
-        speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
-        return redirect(reverse('proposal-profile-edit', kwargs=dict(speaker_token=speaker.token)))
-    else:
-        speaker = talk.speakers.first() # no other choice here…
-        return redirect(reverse('proposal-speaker-add', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
-
-
-# TODO: add @staff_required decorator when dropping old links support
-def talk_acknowledgment(request, talk_id, confirm, participant_id=None):
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
-    if participant_id:
-        speaker = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
-        if confirm:
-            return redirect(reverse('proposal-talk-confirm', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
-        else:
-            return redirect(reverse('proposal-talk-desist', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
-    elif not is_staff(request, request.user):
-        raise PermissionDenied
     if not talk.accepted or talk.confirmed == confirm:
         raise PermissionDenied
     # TODO: handle multiple speakers case
