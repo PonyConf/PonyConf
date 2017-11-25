@@ -10,7 +10,7 @@
     {% if participant.vip %}<span class="badge">{% trans "VIP" %}</span>{% endif %}
 </h1>
 
-<p><a class="btn btn-success" href="{% url 'participant-edit' participant.token %}">{% trans "Edit" %}</a></p>
+<p><a class="btn btn-success" href="{% url 'participant-edit' participant.pk %}">{% trans "Edit" %}</a></p>
 
 <h2>{% trans "Biography" %}</h2>
 <p>{{ participant.biography|linebreaksbr }}</p>
@@ -41,10 +41,10 @@
 <h3>{{ category.list.0.category }}</h3>
 <ul>{% for talk in category.list %}
   <li>
-    <a href="{% url 'talk-details' talk.token %}">{{ talk }}</a>
+    <a href="{% url 'talk-details' talk.pk %}">{{ talk }}</a>
     <i>{% trans "by" %}</i>
     {% for p in talk.speakers.all %}
-    {% if p == participant %}{{ p }}{% else %}<a href="{% url 'participant-details' p.token %}">{{ p }}</a>{% endif %}
+    {% if p == participant %}{{ p }}{% else %}<a href="{% url 'participant-details' p.pk %}">{{ p }}</a>{% endif %}
     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
     {% endfor %}
     {% if talk.track %}

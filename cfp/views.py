@@ -89,7 +89,7 @@ Thanks!
             recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
         )
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
-        return redirect(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token)))
+        return redirect(reverse('volunteer-dashboard', kwargs={'volunteer_token': volunteer.token}))
     return render(request, 'cfp/volunteer_enrole.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'form': form,
@@ -489,7 +489,7 @@ def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
 
 @staff_required
 def talk_acknowledgment(request, talk_id, confirm):
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
     if not talk.accepted or talk.confirmed == confirm:
         raise PermissionDenied
     # TODO: handle multiple speakers case
@@ -585,8 +585,8 @@ def talk_list(request):
     action_form = TalkActionForm(request.POST or None, talks=talks, site=request.conference.site)
     if request.method == 'POST' and action_form.is_valid():
         data = action_form.cleaned_data
-        for talk in data['talks']:
-            talk = Talk.objects.get(site=request.conference.site, token=talk)
+        for talk_id in data['talks']:
+            talk = Talk.objects.get(site=request.conference.site, pk=talk_id)
             if data['decision'] != None and data['decision'] != talk.accepted:
                 if data['decision']:
                     note = _("The talk has been accepted.")
@@ -651,7 +651,7 @@ def talk_list(request):
 
 @staff_required
 def talk_details(request, talk_id):
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
     try:
         vote = talk.vote_set.get(user=request.user).vote
     except Vote.DoesNotExist:
@@ -664,7 +664,7 @@ def talk_details(request, talk_id):
         message.thread = talk.conversation
         message.save()
         messages.success(request, _('Message sent!'))
-        return redirect(reverse('talk-details', args=[talk.token]))
+        return redirect(reverse('talk-details', args=[talk.pk]))
     return render(request, 'cfp/staff/talk_details.html', {
         'talk': talk,
         'vote': vote,
@@ -673,7 +673,7 @@ def talk_details(request, talk_id):
 
 @staff_required
 def talk_vote(request, talk_id, score):
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
@@ -683,7 +683,7 @@ def talk_vote(request, talk_id, score):
 
 @staff_required
 def talk_decide(request, talk_id, accept):
-    talk = get_object_or_404(Talk, token=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
     if request.method == 'POST':
         talk.accepted = accept
         talk.save()
@@ -774,7 +774,7 @@ def participant_list(request):
 
 @staff_required
 def participant_details(request, participant_id):
-    participant = get_object_or_404(Participant, token=participant_id, site=request.conference.site)
+    participant = get_object_or_404(Participant, pk=participant_id, site=request.conference.site)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
@@ -783,7 +783,7 @@ def participant_details(request, participant_id):
         message.thread = participant.conversation
         message.save()
         messages.success(request, _('Message sent!'))
-        return redirect(reverse('participant-details', args=[participant.token]))
+        return redirect(reverse('participant-details', args=[participant.pk]))
     return render(request, 'cfp/staff/participant_details.html', {
         'participant': participant,
     })
@@ -791,9 +791,6 @@ def participant_details(request, participant_id):
 
 class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
     model = Participant
-    slug_field = 'token'
-    slug_url_kwarg = 'participant_id'
-    #form_class = ParticipantStaffForm
     template_name = 'cfp/staff/participant_form.html'
 
     def get_form_class(self):
@@ -806,9 +803,6 @@ class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
 
 class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
     model = Participant
-    slug_field = 'token'
-    slug_url_kwarg = 'participant_id'
-    #form_class = ParticipantStaffForm
     template_name = 'cfp/staff/participant_form.html'
 
     def get_form_class(self):
@@ -828,7 +822,7 @@ def participant_add_talk(request, participant_id):
         talk.site = request.conference.site
         talk.save()
         talk.speakers.add(participant)
-        return redirect(reverse('talk-details', kwargs=dict(talk_id=talk.token)))
+        return redirect(reverse('talk-details', kwargs={'talk_id': talk.pk}))
     return render(request, 'cfp/staff/talk_form.html', {
         'form': form,
         'participant': participant,
@@ -880,8 +874,6 @@ You can now:
 
 class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
     model = Talk
-    slug_field = 'token'
-    slug_url_kwarg = 'talk_id'
     form_class = TalkStaffForm
     template_name = 'cfp/staff/talk_form.html'
 

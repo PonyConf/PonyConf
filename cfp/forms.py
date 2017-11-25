@@ -187,7 +187,7 @@ class TalkActionForm(forms.Form):
         site = kwargs.pop('site')
         talks = kwargs.pop('talks')
         super().__init__(*args, **kwargs)
-        self.fields['talks'].choices = [(talk.token, None) for talk in talks.all()]
+        self.fields['talks'].choices = [(talk.pk, None) for talk in talks.all()]
         tracks = Track.objects.filter(site=site)
         self.fields['track'].choices = [(None, "---------")] + list(tracks.values_list('slug', 'name'))
         tags = Tag.objects.filter(site=site)

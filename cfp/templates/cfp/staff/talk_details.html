@@ -7,7 +7,7 @@
 
 <h1>{{ talk.title }}</h1>
 
-<p><a class="btn btn-success" href="{% url 'talk-edit' talk.token %}">{% trans "Edit" %}</a></p>
+<p><a class="btn btn-success" href="{% url 'talk-edit' talk.pk %}">{% trans "Edit" %}</a></p>
 
 <h3>{% trans "Information" %}</h3>
 
@@ -69,7 +69,7 @@
 {% for participant in talk.speakers.all %}
 {% if forloop.first %}<ul>{% endif %}
     <li>
-      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
       {% if participant.vip %} <span class="badge">VIP</span>{% endif %}
       <a href="{% url 'talk-speaker-remove' participant_id=participant.pk talk_id=talk.pk %}" class="btn btn-xs btn-danger"><span class=" glyphicon glyphicon-remove"></span>&nbsp;{% trans "remove" %}</a>
     </li>
@@ -87,22 +87,22 @@
 
 <p>
 <div class="btn-group" role="group" aria-label="vote">
-  <a class="btn {% if vote == -2 %} active {% endif %}btn-danger"  href="{% url 'talk-vote' talk.token '-2' %}">-2</a>
-  <a class="btn {% if vote == -1 %} active {% endif %}btn-warning" href="{% url 'talk-vote' talk.token '-1' %}">-1</a>
-  <a class="btn {% if vote == 0 %}  active {% endif %}btn-default" href="{% url 'talk-vote' talk.token '0'  %}"> 0</a>
-  <a class="btn {% if vote == 1 %}  active {% endif %}btn-info"    href="{% url 'talk-vote' talk.token '+1'  %}">+1</a>
-  <a class="btn {% if vote == 2 %}  active {% endif %}btn-success" href="{% url 'talk-vote' talk.token '+2'  %}">+2</a>
+  <a class="btn {% if vote == -2 %} active {% endif %}btn-danger"  href="{% url 'talk-vote' talk.pk '-2' %}">-2</a>
+  <a class="btn {% if vote == -1 %} active {% endif %}btn-warning" href="{% url 'talk-vote' talk.pk '-1' %}">-1</a>
+  <a class="btn {% if vote == 0 %}  active {% endif %}btn-default" href="{% url 'talk-vote' talk.pk '0'  %}"> 0</a>
+  <a class="btn {% if vote == 1 %}  active {% endif %}btn-info"    href="{% url 'talk-vote' talk.pk '+1'  %}">+1</a>
+  <a class="btn {% if vote == 2 %}  active {% endif %}btn-success" href="{% url 'talk-vote' talk.pk '+2'  %}">+2</a>
 </div>
 </p>
 <p>{{ talk.vote_set.count }} {% trans "vote" %}{{ talk.vote_set.count|pluralize }}, {% trans "average:" %} {{ talk.score|floatformat:1 }}</p>
 
-<a href="{% url 'talk-accept' talk.token %}" class="btn btn-success">{% trans "Accept" %}</a>
-<a href="{% url 'talk-decline' talk.token %}" class="btn btn-danger">{% trans "Decline" %}</a>
+<a href="{% url 'talk-accept' talk.pk %}" class="btn btn-success">{% trans "Accept" %}</a>
+<a href="{% url 'talk-decline' talk.pk %}" class="btn btn-danger">{% trans "Decline" %}</a>
 {% elif talk.accepted == True and talk.confirmed == None %}
 <h3>{% trans "Speaker confirmation" %}</h3>
 
-<a href="{% url 'talk-confirm-by-staff' talk.token %}" class="btn btn-success">{% trans "The speaker confirmed" %}</a>
-<a href="{% url 'talk-desist-by-staff' talk.token %}" class="btn btn-danger">{% trans "The speaker cancelled" %}</a>
+<a href="{% url 'talk-confirm-by-staff' talk.pk %}" class="btn btn-success">{% trans "The speaker confirmed" %}</a>
+<a href="{% url 'talk-desist-by-staff' talk.pk %}" class="btn btn-danger">{% trans "The speaker cancelled" %}</a>
 {% endif %}
 
 {% comment %}

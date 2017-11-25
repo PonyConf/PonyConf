@@ -51,7 +51,7 @@ class VolunteersTests(TestCase):
         response = self.client.post(reverse('volunteer-enrole'), {'name': 'B', 'email': 'b@example.org'})
         self.assertEqual(Volunteer.objects.count(), n+1)
         v = Volunteer.objects.get(name='B')
-        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)),
+        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token}),
                              status_code=302, target_status_code=200)
 
     def test_enrole_logged_in(self):
@@ -76,25 +76,25 @@ class VolunteersTests(TestCase):
         response = self.client.post(reverse('volunteer-enrole'), {'name': 'B'})
         self.assertEqual(Volunteer.objects.count(), n+1)
         v = Volunteer.objects.get(name='B')
-        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)),
+        self.assertRedirects(response, reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token}),
                              status_code=302, target_status_code=200)
         self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-dashboard'))
 
     def test_home(self):
         v = Volunteer.objects.get(name='A')
-        self.assertEqual(self.client.get(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token))).status_code, 200)
+        self.assertEqual(self.client.get(reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token})).status_code, 200)
 
     def test_update_activity(self):
         v = Volunteer.objects.get(name='A')
         a = Activity.objects.get(name='Everythings')
-        self.assertEqual(self.client.get(reverse('volunteer-join', kwargs=dict(volunteer_token=v.token, activity=a.pk))).status_code, 404)
+        self.assertEqual(self.client.get(reverse('volunteer-join', kwargs={'volunteer_token': v.token, 'activity': a.pk})).status_code, 404)
         conf = Conference.objects.first()
         conf.volunteers_opening_date = timezone.now() - timedelta(hours=1)
         conf.save()
-        self.assertRedirects(self.client.get(reverse('volunteer-join', kwargs=dict(volunteer_token=v.token, activity=a.slug))),
-                             reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
-        self.assertRedirects(self.client.get(reverse('volunteer-quit', kwargs=dict(volunteer_token=v.token, activity=a.slug))),
-                             reverse('volunteer-dashboard', kwargs=dict(volunteer_token=v.token)), status_code=302, target_status_code=200)
+        self.assertRedirects(self.client.get(reverse('volunteer-join', kwargs={'volunteer_token': v.token, 'activity': a.slug})),
+                             reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token}), status_code=302, target_status_code=200)
+        self.assertRedirects(self.client.get(reverse('volunteer-quit', kwargs={'volunteer_token': v.token, 'activity': a.slug})),
+                             reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token}), status_code=302, target_status_code=200)
 
     def test_volunteer_mail_token(self):
         v = Volunteer.objects.get(name='A')
@@ -418,7 +418,7 @@ class StaffTest(TestCase):
     def test_speaker_details(self):
         speaker1 = Participant.objects.get(name='Speaker 1')
         speaker2 = Participant.objects.get(name='Speaker 2')
-        url = reverse('participant-details', kwargs={'participant_id': speaker1.token})
+        url = reverse('participant-details', kwargs={'participant_id': speaker1.pk})
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
@@ -431,7 +431,7 @@ class StaffTest(TestCase):
 
     def test_speaker_edit(self):
         speaker = Participant.objects.get(name='Speaker 1')
-        url = reverse('participant-edit', kwargs={'participant_id': speaker.token})
+        url = reverse('participant-edit', kwargs={'participant_id': speaker.pk})
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
@@ -440,7 +440,7 @@ class StaffTest(TestCase):
             'name': 'New name',
             'email': 'new-mail@example.org',
             'biography': 'New bio',
-        }), reverse('participant-details', kwargs={'participant_id': speaker.token}))
+        }), reverse('participant-details', kwargs={'participant_id': speaker.pk}))
         speaker = Participant.objects.get(pk=speaker.pk)
         self.assertEquals(speaker.name, 'New name')
         self.assertEquals(speaker.email, 'new-mail@example.org')
@@ -467,7 +467,7 @@ class StaffTest(TestCase):
 
     def test_talk_details(self):
         talk = Talk.objects.get(title='Talk 1')
-        url = reverse('talk-details', kwargs=dict(talk_id=talk.token))
+        url = reverse('talk-details', kwargs=dict(talk_id=talk.pk))
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
@@ -483,7 +483,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertRedirects(response, reverse('talk-details', kwargs={'talk_id': talk.token}))
+        self.assertRedirects(response, reverse('talk-details', kwargs={'talk_id': talk.pk}))
         talk = Talk.objects.get(title='Talk 1')
         self.assertEquals(talk.speakers.count() + 1, count)
         self.assertFalse(to_remove in talk.speakers.all())

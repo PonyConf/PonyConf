@@ -17,7 +17,7 @@
   <a href="{{ talk.get_absolute_url }}"><strong>{{ talk }}</strong></a>
   {% for participant in talk.speakers.all %}
   {% if forloop.first %} &ndash; <em>{% endif %}
-      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
       {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
   {% if forloop.last %}</em>{% endif %}
   {% endfor %}
@@ -35,7 +35,7 @@
   <a href="{{ talk.get_absolute_url }}"><strong>{{ talk }}</strong></a>
   {% for participant in talk.speakers.all %}
   {% if forloop.first %} &ndash; <em>{% endif %}
-      <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+      <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
       {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
   {% if forloop.last %}</em>{% endif %}
   {% endfor %}

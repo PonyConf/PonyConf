@@ -59,7 +59,7 @@
     {% endif %}
         <tr>
             <td>
-                <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+                <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
                 {% if participant.vip %}<span class="badge pull-right">VIP</span>{% endif %}
             </td>
             <td>

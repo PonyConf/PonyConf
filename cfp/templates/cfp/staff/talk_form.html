@@ -8,10 +8,10 @@
 <h1>
   {% if talk %}
   {% trans "Edit a talk" %}
-  {% url 'talk-details' talk.token as cancel_url %}
+  {% url 'talk-details' talk.pk as cancel_url %}
   {% else %}
   {% trans "Add a talk" %}
-  {% url 'participant-details' participant.token as cancel_url %}
+  {% url 'participant-details' participant.pk as cancel_url %}
   {% endif %}
 </h1>
 

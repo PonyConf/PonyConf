@@ -60,12 +60,12 @@
     <tbody>
     {% endif %}
         <tr class="{{ talk.get_status_color }}">
-            <td><input type="checkbox" name="talks" value="{{ talk.token }}"></td>
-            <td><a href="{% url 'talk-details' talk.token %}">{{ talk.title }}</a></td>
+            <td><input type="checkbox" name="talks" value="{{ talk.pk }}"></td>
+            <td><a href="{% url 'talk-details' talk.pk %}">{{ talk.title }}</a></td>
             <td>{{ talk.category }}</td>
             <td>
                 {% for participant in talk.speakers.all %}
-                    <a href="{% url 'participant-details' participant.token %}">{{ participant }}</a>
+                    <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
                     {% if forloop.revcounter == 2 %} {% trans "and" %} {% elif not forloop.last %}, {% endif %}
                     {% empty %}–
                 {% endfor %}

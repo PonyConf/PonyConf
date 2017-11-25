@@ -19,7 +19,7 @@
         <textarea name="message" class="form-control" rows="5"></textarea>
     </div>
     <button type="submit" class="btn btn-{% if accept %}success{% else %}danger{% endif %}">{% if accept %}{% trans "Accept the proposal" %}{% else %}{% trans "Decline the proposal" %}{% endif %}</button>
-    <a class="btn btn-default" href="{% url 'talk-details' talk.token %}">{% trans "Cancel" %}</a>
+    <a class="btn btn-default" href="{% url 'talk-details' talk.pk %}">{% trans "Cancel" %}</a>
 </form>
 
 {% endblock %}
