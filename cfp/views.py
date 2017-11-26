@@ -803,6 +803,8 @@ class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
 class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
     model = Participant
     template_name = 'cfp/staff/participant_form.html'
+    slug_field = 'pk'
+    slug_url_kwarg = 'participant_id'
 
     def get_form_class(self):
         return modelform_factory(
@@ -885,6 +887,8 @@ class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
     model = Talk
     form_class = TalkStaffForm
     template_name = 'cfp/staff/talk_form.html'
+    slug_field = 'pk'
+    slug_url_kwarg = 'talk_id'
 
 
 class TrackMixin(OnSiteMixin):

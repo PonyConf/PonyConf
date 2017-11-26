@@ -229,7 +229,7 @@ class ProposalTest(TestCase):
     def test_proposal_talk_edit(self):
         speaker = Participant.objects.get(name='Speaker 1')
         talk = Talk.objects.get(title='Talk 1')
-        url = reverse('proposal-talk-edit', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk))
+        url = reverse('proposal-talk-edit', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertRedirects(self.client.post(url, {
@@ -522,7 +522,7 @@ class StaffTest(TestCase):
 
     def test_conference(self):
         conf = Conference.objects.get(name='PonyConf')
-        url = reverse('conference')
+        url = reverse('conference-edit')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)

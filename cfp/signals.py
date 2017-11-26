@@ -80,7 +80,7 @@ def send_message_notifications(sender, instance, **kwargs):
         participant_subject = _('[%(prefix)s] Message from the staff') % {'prefix': conf.name}
         staff_subject = _('[%(prefix)s] Conversation with %(dest)s') % {'prefix': conf.name, 'dest': participant.name}
         proto = 'https' if conf.secure_domain else 'http'
-        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('participant-details', args=[participant.token])
+        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('participant-details', args=[participant.pk])
         if message.from_email == conf.contact_email: # this is a talk notification message
             # send it only to the participant
             message.send_notification(subject=subject_prefix+participant_subject, sender=sender, dests=participant_dests,
@@ -96,7 +96,7 @@ def send_message_notifications(sender, instance, **kwargs):
         conf = thread.talk.site.conference
         subject = _('[%(prefix)s] Talk: %(talk)s') % {'prefix': conf.name, 'talk': thread.talk.title}
         proto = 'https' if conf.secure_domain else 'http'
-        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('talk-details', args=[thread.talk.token])
+        footer = '\n\n--\n%s://' % proto + conf.site.domain + reverse('talk-details', args=[thread.talk.pk])
         message.send_notification(subject=subject_prefix+subject, sender=sender, dests=staff_dests,
                                   reply_to=reply_to, message_id=message_id, reference=reference, footer=footer)
 
