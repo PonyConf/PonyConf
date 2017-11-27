@@ -78,6 +78,10 @@
 <i>{% trans "No speakers." %}</i>
 {% endfor %}
 
+{% block talk_actions %}
+<br />
+<a href="{% url 'talk-speaker-add' talk_id=talk.pk %}" class="btn btn-xs btn-success">{% trans "Add a speaker" %}</a>
+
 <h3>{% trans "Notes" %}</h3>
 
 <p>{% if talk.notes %}{{ talk.notes|linebreaksbr }}{% else %}<i>{% trans "No notes." %}</i>{% endif %}</p>
@@ -127,4 +131,5 @@
 {% trans "Comment this talk – <em>this message will be received by the staff team only</em>" as message_form_title %}
 {% include 'mailing/_message_form.html' %}
 
+{% endblock %}
 {% endblock %}

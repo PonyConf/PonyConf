@@ -362,3 +362,18 @@ class VolunteerForm(forms.ModelForm):
     class Meta:
         model = Volunteer
         fields = ['name', 'email', 'phone_number', 'sms_prefered', 'notes']
+
+
+class ParticipantWidget(ModelSelect2MultipleWidget):
+    model = Participant
+    search_fields = [ '%s__icontains' % field for field in ['name', 'email', 'twitter', 'linkedin', 'github',
+                                                            'website', 'facebook', 'mastodon', 'phone_number' ]]
+
+
+class TalkSpeakerForm(forms.ModelForm):
+    class Meta:
+        model = Talk
+        fields = ['speakers']
+        widgets = {
+            'speakers': ParticipantWidget(),
+        }
