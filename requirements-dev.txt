@@ -4,31 +4,37 @@
 #
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
-bleach==2.0.0
+bleach==2.1.1
 chardet==3.0.4
-decorator==4.1.2          # via ipython
+decorator==4.1.2          # via ipython, traitlets
 django-appconf==1.0.2     # via django-select2
 django-autoslug==1.9.3
-django-bootstrap3==9.0.0
+django-bootstrap3==9.1.0
 django-bower==5.2.0
 django-colorful==1.2
-django-crispy-forms==1.6.1
-django-debug-toolbar==1.8
-django-extensions==1.9.1
+django-crispy-forms==1.7.0
+django-debug-toolbar==1.9.1
+django-extensions==1.9.7
 django-select2==5.11.1
-django==1.11.5
-html5lib==0.999999999     # via bleach
-ipython==6.1.0
-jedi==0.10.2              # via ipython
+django==1.11.7
+html5lib==1.0b10          # via bleach
+icalendar==4.0.0
+ipython-genutils==0.2.0   # via traitlets
+ipython==6.2.1
+jedi==0.11.0              # via ipython
 markdown==2.6.9
-pexpect==4.2.1            # via ipython
+parso==0.1.0              # via jedi
+pexpect==4.3.0            # via ipython
 pickleshare==0.7.4        # via ipython
 prompt-toolkit==1.0.15    # via ipython
+ptyprocess==0.5.2         # via pexpect
 pygments==2.2.0           # via ipython
-pytz==2017.2              # via django
+python-dateutil==2.6.1    # via icalendar
+pytz==2017.3              # via django, icalendar
 simplegeneric==0.8.1      # via ipython
-six==1.10.0               # via bleach, django-bower, django-extensions, html5lib, prompt-toolkit
-sqlparse==0.2.3           # via django-debug-toolbar
+six==1.11.0               # via bleach, django-bower, django-extensions, html5lib, prompt-toolkit, python-dateutil, traitlets
+sqlparse==0.2.4           # via django-debug-toolbar
 traitlets==4.3.2          # via ipython
+typing==3.6.2             # via django-extensions
 wcwidth==0.1.7            # via prompt-toolkit
 webencodings==0.5.1       # via html5lib

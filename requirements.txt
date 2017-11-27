@@ -4,20 +4,20 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-bleach==2.0.0
+bleach==2.1.1
 chardet==3.0.4
 django-appconf==1.0.2     # via django-select2
 django-autoslug==1.9.3
-django-bootstrap3==9.0.0
+django-bootstrap3==9.1.0
 django-bower==5.2.0
 django-colorful==1.2
-django-crispy-forms==1.6.1
+django-crispy-forms==1.7.0
 django-select2==5.11.1
-django==1.11.5
-html5lib==0.999999999     # via bleach
-icalendar==3.11.7
+django==1.11.7
+html5lib==1.0b10          # via bleach
+icalendar==4.0.0
 markdown==2.6.9
 python-dateutil==2.6.1    # via icalendar
-pytz==2017.2              # via django, icalendar
-six==1.10.0               # via bleach, django-bower, html5lib, python-dateutil
+pytz==2017.3              # via django, icalendar
+six==1.11.0               # via bleach, django-bower, html5lib, python-dateutil
 webencodings==0.5.1       # via html5lib

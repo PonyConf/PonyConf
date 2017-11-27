@@ -4,7 +4,7 @@ django-autoslug
 django-bootstrap3
 django-bower
 django-crispy-forms
-django-select2
+django-select2<6
 django-colorful
 
 markdown
