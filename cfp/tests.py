@@ -308,6 +308,48 @@ class ProposalTest(TestCase):
         response = self.client.post(reverse('proposal-mail-token'), {'email': p.email})
         self.assertRedirects(response, reverse('proposal-mail-token'))
 
+    def test_talk_acknowledgment(self):
+        conf = Conference.objects.get(name='PonyConf')
+        speaker1 = Participant.objects.get(name='Speaker 1')
+        speaker3 = Participant.objects.get(name='Speaker 3')
+        talk = Talk.objects.get(title='Talk 1')
+        talk_url = reverse('proposal-talk-details', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
+        confirm_url = reverse('proposal-talk-confirm', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
+        desist_url = reverse('proposal-talk-desist', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
+        conf.acceptances_disclosure_date = timezone.now() - timedelta(hours=1)
+        conf.save()
+        self.assertTrue(conf.disclosed_acceptances)
+        talk.accepted = None
+        talk.save()
+        for url in [confirm_url, desist_url]:
+            self.assertEquals(self.client.get(url).status_code, 403)
+        talk.accepted = False
+        talk.save()
+        for url in [confirm_url, desist_url]:
+            self.assertEquals(self.client.get(url).status_code, 403)
+        talk.accepted = True
+        talk.save()
+        conf.save()
+        self.assertRedirects(self.client.get(confirm_url), talk_url)
+        self.assertRedirects(self.client.get(confirm_url), talk_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.confirmed)
+        self.assertRedirects(self.client.get(desist_url), talk_url)
+        self.assertRedirects(self.client.get(desist_url), talk_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertFalse(talk.confirmed)
+        conf.acceptances_disclosure_date = timezone.now() + timedelta(hours=1)
+        conf.save()
+        self.assertFalse(conf.disclosed_acceptances)
+        talk.confirmed = None
+        talk.save()
+        self.assertTrue(self.client.get(confirm_url).status_code, 403)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.confirmed is None)
+        self.assertTrue(self.client.get(desist_url).status_code, 403)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.confirmed is None)
+
 
 class StaffTest(TestCase):
     def setUp(self):
@@ -488,38 +530,6 @@ class StaffTest(TestCase):
         self.assertEquals(talk.speakers.count() + 1, count)
         self.assertFalse(to_remove in talk.speakers.all())
 
-    def test_talk_acknowledgment(self):
-        conf = Conference.objects.get(name='PonyConf')
-        speaker1 = Participant.objects.get(name='Speaker 1')
-        speaker3 = Participant.objects.get(name='Speaker 3')
-        talk = Talk.objects.get(title='Talk 1')
-        talk_url = reverse('proposal-talk-details', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
-        confirm_url = reverse('proposal-talk-confirm', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
-        desist_url = reverse('proposal-talk-desist', kwargs={'speaker_token': speaker1.token, 'talk_id': talk.pk})
-        conf.acceptances_disclosure_date = timezone.now() - timedelta(hours=1)
-        conf.save()
-        self.assertTrue(conf.disclosed_acceptances)
-        talk.accepted = None
-        talk.save()
-        for url in [confirm_url, desist_url]:
-            self.assertEquals(self.client.get(url).status_code, 403)
-        talk.accepted = False
-        talk.save()
-        for url in [confirm_url, desist_url]:
-            self.assertEquals(self.client.get(url).status_code, 403)
-        talk.accepted = True
-        talk.save()
-        self.assertRedirects(self.client.get(confirm_url), talk_url)
-        talk = Talk.objects.get(pk=talk.pk)
-        self.assertTrue(talk.confirmed)
-        self.assertRedirects(self.client.get(desist_url), talk_url)
-        talk = Talk.objects.get(pk=talk.pk)
-        self.assertFalse(talk.confirmed)
-        conf.acceptances_disclosure_date = None
-        conf.save()
-        for url in [confirm_url, desist_url]:
-            self.assertEquals(self.client.get(url).status_code, 403)
-
     def test_conference(self):
         conf = Conference.objects.get(name='PonyConf')
         url = reverse('conference-edit')
@@ -569,6 +579,63 @@ class StaffTest(TestCase):
         conf.schedule_publishing_date = timezone.now() + timedelta(hours=1)
         conf.save()
         self.assertFalse(conf.disclosed_acceptances)
+
+    def test_talk_decide(self):
+        talk = Talk.objects.get(title='Talk 1')
+        talk.accepted = None
+        talk.save()
+        details_url = reverse('talk-details', kwargs={'talk_id': talk.pk})
+        accept_url = reverse('talk-accept', kwargs={'talk_id': talk.pk})
+        decline_url = reverse('talk-decline', kwargs={'talk_id': talk.pk})
+        self.assertRedirects(self.client.get(accept_url), reverse('login') + '?next=' + accept_url)
+        self.assertRedirects(self.client.get(decline_url), reverse('login') + '?next=' + decline_url)
+        self.client.login(username='admin', password='admin')
+        self.assertEquals(self.client.get(accept_url).status_code, 200)
+        self.assertRedirects(self.client.post(accept_url), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.accepted)
+        talk.accepted = None
+        talk.save()
+        self.assertRedirects(self.client.post(accept_url, {'message': 'Ok'}), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.accepted)
+        self.assertEquals(self.client.get(decline_url).status_code, 200)
+        self.assertRedirects(self.client.post(decline_url), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertFalse(talk.accepted)
+        talk.accepted = None
+        talk.save()
+        self.assertRedirects(self.client.post(decline_url, {'message': 'Not ok'}), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertFalse(talk.accepted)
+
+    def test_talk_acknowledgment(self):
+        talk = Talk.objects.get(title='Talk 1')
+        talk.accepted = None
+        talk.confirmed = None
+        talk.save()
+        details_url = reverse('talk-details', kwargs={'talk_id': talk.pk})
+        confirm_url = reverse('talk-confirm-by-staff', kwargs={'talk_id': talk.pk})
+        desist_url = reverse('talk-desist-by-staff', kwargs={'talk_id': talk.pk})
+        self.assertRedirects(self.client.get(confirm_url), reverse('login') + '?next=' + confirm_url)
+        self.assertRedirects(self.client.get(desist_url), reverse('login') + '?next=' + desist_url)
+        self.client.login(username='admin', password='admin')
+        self.assertEquals(self.client.get(confirm_url).status_code, 403)
+        self.assertEquals(self.client.get(desist_url).status_code, 403)
+        talk.accepted = False
+        talk.save()
+        self.assertEquals(self.client.get(confirm_url).status_code, 403)
+        self.assertEquals(self.client.get(desist_url).status_code, 403)
+        talk.accepted = True
+        talk.save()
+        self.assertRedirects(self.client.get(confirm_url), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertTrue(talk.confirmed)
+        self.assertEquals(self.client.get(confirm_url).status_code, 403)
+        self.assertRedirects(self.client.get(desist_url), details_url)
+        talk = Talk.objects.get(pk=talk.pk)
+        self.assertFalse(talk.confirmed)
+        self.assertEquals(self.client.get(desist_url).status_code, 403)
 
     def test_category_list(self):
         url = reverse('category-list')

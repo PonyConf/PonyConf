@@ -373,7 +373,7 @@ def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
             thread_note = _('Speaker %(speaker)s CANCELLED his/her participation.' % {'speaker': speaker})
         Message.objects.create(thread=talk.conversation, author=speaker, content=thread_note)
         messages.success(request, confirmation_message)
-    return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
+    return redirect(reverse('proposal-talk-details', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}))
 
 
 # FIXME his this view really useful?
@@ -489,7 +489,7 @@ def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
 @staff_required
 def talk_acknowledgment(request, talk_id, confirm):
     talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
-    if not talk.accepted or talk.confirmed == confirm:
+    if talk.accepted is not True or talk.confirmed == confirm:
         raise PermissionDenied
     # TODO: handle multiple speakers case
     talk.confirmed = confirm
