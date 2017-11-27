@@ -359,6 +359,8 @@ class StaffTest(TestCase):
         conf = Conference.objects.get(site=site)
         conf.name = 'PonyConf'
         conf.save()
+        room1 = Room.objects.create(site=site, name='Room 1')
+        room2 = Room.objects.create(site=site, name='Room 2')
         category_conf = TalkCategory.objects.create(site=site, name='Conference', label='conference')
         category_ws = TalkCategory.objects.create(site=site, name='Workshop', label='workshop')
         speaker1 = Participant.objects.create(site=site, name='Speaker 1', email='1@example.org')
@@ -579,6 +581,31 @@ class StaffTest(TestCase):
         conf.schedule_publishing_date = timezone.now() + timedelta(hours=1)
         conf.save()
         self.assertFalse(conf.disclosed_acceptances)
+
+    def test_conference_videos_available(self):
+        conf = Conference.objects.get(name='PonyConf')
+        talk = Talk.objects.get(title='Talk 1')
+        talk.room = Room.objects.filter(site=conf.site).first()
+        talk.start_date = timezone.now()
+        talk.duration = 60
+        talk.accepted = True
+        talk.video = 'this-is-a-video-location'
+        talk.save()
+        xml_url = reverse('public-schedule') + 'xml/'
+        conf.schedule_publishing_date = timezone.now() - timedelta(hours=1)
+        conf.video_publishing_date = None
+        conf.save()
+        self.assertContains(self.client.get(xml_url), 'Talk 1')
+        self.assertFalse(conf.videos_available)
+        self.assertNotContains(self.client.get(xml_url), talk.video)
+        conf.video_publishing_date = timezone.now() + timedelta(hours=1)
+        conf.save()
+        self.assertFalse(conf.videos_available)
+        self.assertNotContains(self.client.get(xml_url), talk.video)
+        conf.video_publishing_date = timezone.now() - timedelta(hours=1)
+        conf.save()
+        self.assertTrue(conf.videos_available)
+        self.assertContains(self.client.get(xml_url), talk.video)
 
     def test_talk_decide(self):
         talk = Talk.objects.get(title='Talk 1')

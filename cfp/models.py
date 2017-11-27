@@ -41,6 +41,7 @@ class Conference(models.Model):
                                                help_text=_('If specified, schedule tab will redirect to this URL.'))
     volunteers_opening_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment opening date'))
     volunteers_closing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment closing date'))
+    video_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Video publishing date'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
@@ -66,6 +67,10 @@ class Conference(models.Model):
     @property
     def schedule_available(self):
         return self.schedule_publishing_date and self.schedule_publishing_date <= timezone.now()
+
+    @property
+    def videos_available(self):
+        return self.video_publishing_date and self.video_publishing_date <= timezone.now()
 
     def from_email(self):
         return self.name+' <'+self.contact_email+'>'

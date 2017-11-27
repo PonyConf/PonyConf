@@ -195,12 +195,13 @@ class Program:
         elt.text = ', '.join(map(lambda x: x.strip(), self.conference.venue.split('\n')))
         elt = ET.SubElement(conference, 'city')
         elt.text = self.conference.city
-        elt = ET.SubElement(conference, 'start_date')
-        elt.text = sorted(self.days.keys())[0].strftime('%Y-%m-%d')
-        elt = ET.SubElement(conference, 'end_date')
-        elt.text = sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d')
-        elt = ET.SubElement(conference, 'days_count')
-        elt.text = str(len(self.days))
+        if self.days:
+            elt = ET.SubElement(conference, 'start_date')
+            elt.text = sorted(self.days.keys())[0].strftime('%Y-%m-%d')
+            elt = ET.SubElement(conference, 'end_date')
+            elt.text = sorted(self.days.keys(), reverse=True)[0].strftime('%Y-%m-%d')
+            elt = ET.SubElement(conference, 'days_count')
+            elt.text = str(len(self.days))
 
         for index, day in enumerate(sorted(self.days.keys())):
             day_elt = ET.SubElement(schedule, 'day', index=str(index+1), date=day.strftime('%Y-%m-%d'))
@@ -252,7 +253,7 @@ class Program:
                     if talk.materials:
                         elt = ET.SubElement(links_elt, 'link', tag='slides')
                         elt.text = talk.materials.url
-                    if talk.video:
+                    if talk.video and self.conference.videos_available:
                         elt = ET.SubElement(links_elt, 'link', tag='video')
                         elt.text = talk.video
 

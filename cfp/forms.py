@@ -260,7 +260,7 @@ class ConferenceForm(forms.ModelForm):
         model = Conference
         fields = [
             'name', 'venue', 'city', 'contact_email', 'schedule_publishing_date', 'schedule_redirection_url',
-            'volunteers_opening_date', 'volunteers_closing_date', 'reply_email', 'secure_domain', 'staff',
+            'volunteers_opening_date', 'volunteers_closing_date', 'video_publishing_date', 'reply_email', 'secure_domain', 'staff',
         ]
         widgets = {
             'staff': UsersWidget(),
