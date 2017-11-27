@@ -293,7 +293,7 @@ class ProposalTest(TestCase):
         speaker = Participant.objects.get(name='Speaker 1')
         co_speaker = Participant.objects.get(name='Speaker 2')
         talk = Talk.objects.get(title='Talk 1')
-        self.assertEqual(self.client.get(reverse('proposal-speaker-remove', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk, co_speaker_id=speaker.pk))).status_code, 403) 
+        self.assertEqual(self.client.get(reverse('proposal-speaker-remove', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk, co_speaker_id=speaker.pk))).status_code, 403)
         self.assertRedirects(
                 self.client.get(reverse('proposal-speaker-remove', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk, co_speaker_id=co_speaker.pk))),
                 reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)),
@@ -586,23 +586,26 @@ class StaffTest(TestCase):
         conf = Conference.objects.get(name='PonyConf')
         talk = Talk.objects.get(title='Talk 1')
         talk.room = Room.objects.filter(site=conf.site).first()
-        talk.start_date = timezone.now()
+        now = timezone.now()
+        if now.hour > 22:
+            now -= timedelta(hours=1)
+        talk.start_date = now
         talk.duration = 60
         talk.accepted = True
         talk.video = 'this-is-a-video-location'
         talk.save()
         xml_url = reverse('public-schedule') + 'xml/'
-        conf.schedule_publishing_date = timezone.now() - timedelta(hours=1)
+        conf.schedule_publishing_date = now - timedelta(hours=1)
         conf.video_publishing_date = None
         conf.save()
         self.assertContains(self.client.get(xml_url), 'Talk 1')
         self.assertFalse(conf.videos_available)
         self.assertNotContains(self.client.get(xml_url), talk.video)
-        conf.video_publishing_date = timezone.now() + timedelta(hours=1)
+        conf.video_publishing_date = now + timedelta(hours=2)
         conf.save()
         self.assertFalse(conf.videos_available)
         self.assertNotContains(self.client.get(xml_url), talk.video)
-        conf.video_publishing_date = timezone.now() - timedelta(hours=1)
+        conf.video_publishing_date = now - timedelta(hours=1)
         conf.save()
         self.assertTrue(conf.videos_available)
         self.assertContains(self.client.get(xml_url), talk.video)
