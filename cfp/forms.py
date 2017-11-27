@@ -364,16 +364,8 @@ class VolunteerForm(forms.ModelForm):
         fields = ['name', 'email', 'phone_number', 'sms_prefered', 'notes']
 
 
-class ParticipantWidget(ModelSelect2MultipleWidget):
-    model = Participant
-    search_fields = [ '%s__icontains' % field for field in ['name', 'email', 'twitter', 'linkedin', 'github',
-                                                            'website', 'facebook', 'mastodon', 'phone_number' ]]
-
-
-class TalkSpeakerForm(forms.ModelForm):
-    class Meta:
-        model = Talk
-        fields = ['speakers']
-        widgets = {
-            'speakers': ParticipantWidget(),
-        }
+def get_talk_speaker_form_class(site):
+    fields = ['name', 'email', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon', 'phone_number']
+    widget = ModelSelect2MultipleWidget(model=Participant, queryset=Participant.objects.filter(site=site),
+                                        search_fields=['%s__icontains' % field for field in fields])
+    return modelform_factory(Talk, fields=['speakers'], widgets={'speakers': widget})

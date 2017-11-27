@@ -26,7 +26,7 @@ from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, TalkSpeakerForm, \
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, get_talk_speaker_form_class, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, HomepageForm, CreateUserForm, TrackForm, RoomForm, \
                    VolunteerForm, VolunteerFilterForm, MailForm, \
@@ -708,7 +708,7 @@ def talk_decide(request, talk_id, accept):
 @staff_required
 def talk_speaker_add(request, talk_id):
     talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
-    form = TalkSpeakerForm(request.POST or None, instance=talk)
+    form = get_talk_speaker_form_class(site=talk.site)(request.POST or None, instance=talk)
     if request.method == 'POST' and form.is_valid():
         form.save()
         messages.success(request, _('Decision taken in account'))
