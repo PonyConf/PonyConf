@@ -10,7 +10,12 @@
     {% if participant.vip %}<span class="badge">{% trans "VIP" %}</span>{% endif %}
 </h1>
 
-<p><a class="btn btn-success" href="{% url 'participant-edit' participant.pk %}">{% trans "Edit" %}</a></p>
+<p>
+<a class="btn btn-success" href="{% url 'participant-edit' participant.pk %}">{% trans "Edit" %}</a>
+{% if not participant.talk_set.exists %} -
+<a class="btn btn-danger" href="{% url 'participant-remove' participant.pk %}" >{% trans "Remove" %}</a>
+{% endif %}
+</p>
 
 <h2>{% trans "Biography" %}</h2>
 <p>{{ participant.biography|linebreaksbr }}</p>

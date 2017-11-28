@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^staff/speakers/(?P<participant_id>[0-9]+)/$', views.participant_details, name='participant-details'),
     url(r'^staff/speakers/(?P<participant_id>[0-9]+)/add-talk/$', views.participant_add_talk, name='participant-add-talk'),
     url(r'^staff/speakers/(?P<participant_id>[0-9]+)/edit/$', views.ParticipantUpdate.as_view(), name='participant-edit'),
+    url(r'^staff/speakers/(?P<participant_id>[0-9]+)/remove/$', views.ParticipantRemove.as_view(), name='participant-remove'),
     url(r'^staff/tracks/$', views.TrackList.as_view(), name='track-list'),
     url(r'^staff/tracks/add/$', views.TrackCreate.as_view(), name='track-add'),
     url(r'^staff/tracks/(?P<slug>[-\w]+)/edit/$', views.TrackUpdate.as_view(), name='track-edit'),

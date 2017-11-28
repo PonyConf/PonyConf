@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags i18n %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <form method="POST" class="form-horizontal col-md-8 col-md-offset-2">
+      {% csrf_token %}
+      <div class="form-group">
+        {% blocktrans %}Are you really sure that you want to delete a speaker ?{% endblocktrans %}
+      </div>
+      {{ form|crispy }}
+      <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-warning text-center">{% trans "Yes, Delete" %}</button>
+        <a href="javascript:history.back()" class="btn btn-default text-center">{% trans "Nope, Abort" %}</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -4,9 +4,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, TemplateView
+from django.views.generic import DeleteView, FormView, TemplateView
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.http import HttpResponse, Http404
 from django.utils import timezone
@@ -822,6 +822,15 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
                     form=ParticipantForm,
                     fields=['name', 'vip', 'email', 'phone_number', 'biography', 'notes'] + ParticipantForm.SOCIAL_FIELDS,
         )
+
+
+class ParticipantRemove(StaffRequiredMixin, OnSiteFormMixin, DeleteView):
+    slug_field = 'pk'
+    slug_url_kwarg = 'participant_id'
+    success_url = reverse_lazy('participant-list')
+
+    def get_queryset(self):
+        return Participant.objects.annotate(talk_count=Count('talk')).filter(talk_count=0)
 
 
 @staff_required
