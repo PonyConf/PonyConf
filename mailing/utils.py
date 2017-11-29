@@ -22,11 +22,17 @@ class InvalidKeyException(Exception):
     pass
 
 
-def fetch_imap_box(user, password, host, port=993, inbox='INBOX', trash='Trash'):
+def fetch_imap_box(user, password, host, port=993, ssl=True, inbox='INBOX', trash='Trash'):
     logging.basicConfig(level=logging.DEBUG)
     context = ssl.create_default_context()
     success, failure = 0, 0
-    with imaplib.IMAP4_SSL(host=host, port=port, ssl_context=context) as M:
+    kwargs = {'host': host, 'port': port}
+    if ssl:
+        IMAP4 = imaplib.IMAP4_SSL
+        kwargs.update({'ssl_context': ssl.create_default_context()})
+    else:
+        IMAP4 = imaplib.IMAP4
+    with IMAP4(**kwargs) as M:
         typ, data = M.login(user, password)
         if typ != 'OK':
             raise Exception(data[0].decode('utf-8'))
