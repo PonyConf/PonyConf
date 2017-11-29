@@ -99,7 +99,7 @@ class TalkStaffForm(forms.ModelForm):
             self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
     class Meta(TalkForm.Meta):
-        fields = ('category', 'track', 'title', 'description', 'notes', 'tags', 'start_date', 'duration', 'room', 'materials', 'video',)
+        fields = ('category', 'track', 'title', 'description', 'notes', 'tags', 'start_date', 'duration', 'room', 'materials', 'video', 'speakers')
         widgets = {
             'tags': forms.CheckboxSelectMultiple,
         }
@@ -368,4 +368,4 @@ def get_talk_speaker_form_class(site):
     fields = ['name', 'email', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon', 'phone_number']
     widget = ModelSelect2MultipleWidget(model=Participant, queryset=Participant.objects.filter(site=site),
                                         search_fields=['%s__icontains' % field for field in fields])
-    return modelform_factory(Talk, fields=['speakers'], widgets={'speakers': widget})
+    return modelform_factory(Talk, form=TalkStaffForm, widgets={'speakers': widget})

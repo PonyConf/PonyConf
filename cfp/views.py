@@ -706,30 +706,6 @@ def talk_decide(request, talk_id, accept):
 
 
 @staff_required
-def talk_speaker_add(request, talk_id):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
-    form = get_talk_speaker_form_class(site=talk.site)(request.POST or None, instance=talk)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, _('Decision taken in account'))
-        return redirect(talk.get_absolute_url())
-    return render(request, 'cfp/staff/talk_speaker_add.html', {
-        'talk': talk,
-        'form': form,
-    })
-
-
-
-@staff_required
-def talk_speaker_remove(request, talk_id, participant_id):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
-    participant = get_object_or_404(Participant, pk=participant_id, site=request.conference.site)
-    talk.speakers.remove(participant)
-    messages.success(request, _('Speaker removed from this talk'))
-    return redirect(talk.get_absolute_url())
-
-
-@staff_required
 def participant_list(request):
     participants = Participant.objects.filter(site=request.conference.site) \
                                       .extra(select={'lower_name': 'lower(name)'}) \
@@ -904,10 +880,11 @@ def homepage_edit(request):
 
 class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
     model = Talk
-    form_class = TalkStaffForm
     template_name = 'cfp/staff/talk_form.html'
-    slug_field = 'pk'
-    slug_url_kwarg = 'talk_id'
+    pk_url_kwarg = 'talk_id'
+
+    def get_form_class(self):
+        return get_talk_speaker_form_class(self.object.site)
 
 
 class TrackMixin(OnSiteMixin):

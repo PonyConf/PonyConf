@@ -518,20 +518,6 @@ class StaffTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, talk.title)
 
-    def test_talk_speaker_remove(self):
-        talk = Talk.objects.get(title='Talk 1')
-        count = talk.speakers.count()
-        to_remove = talk.speakers.first()
-        self.assertTrue(to_remove in talk.speakers.all())
-        url = reverse('talk-speaker-remove', kwargs={'talk_id': talk.pk, 'participant_id': to_remove.pk})
-        self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
-        self.client.login(username='admin', password='admin')
-        response = self.client.get(url)
-        self.assertRedirects(response, reverse('talk-details', kwargs={'talk_id': talk.pk}))
-        talk = Talk.objects.get(title='Talk 1')
-        self.assertEquals(talk.speakers.count() + 1, count)
-        self.assertFalse(to_remove in talk.speakers.all())
-
     def test_conference(self):
         conf = Conference.objects.get(name='PonyConf')
         url = reverse('conference-edit')

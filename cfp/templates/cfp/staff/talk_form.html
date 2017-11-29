@@ -18,3 +18,13 @@
 {% include '_form.html' with multipart=True %}
 
 {% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}
