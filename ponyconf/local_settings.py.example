@@ -2,13 +2,71 @@ from ponyconf.settings import *
 
 SECRET_KEY = 'CHANGE ME'
 
-DEFAULT_FROM_EMAIL = 'noreply@example.com'
-REPLY_EMAIL = 'reply@example.com'
-REPLY_KEY = 'CHANGE ME'
+DEBUG = False
 
-SERVER_EMAIL = 'ponyconf@example.com'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/srv/www/ponyconf/log/debug.log',
+        },
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'level': 'ERROR',
+             # But the emails are plain text by default - HTML is nicer
+            'include_html': True,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
+STATIC_ROOT = '/srv/www/ponyconf/webdir/static'
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = '/srv/www/ponyconf/webdir/media'
+MEDIA_URL = '/media/'
+
+DEFAULT_FROM_EMAIL = 'noreply@example.org'
+SERVER_EMAIL = 'ponyconf@example.org'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp'
+EMAIL_SUBJECT_PREFIX = "[PROD] "
+EMAIL_PORT = 25
+
+ADMINS = (
+    ('PonyConf Admins', 'admin@example.org'),
+)
 
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'fr-FR'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+USE_X_FORWARDED_HOST = True
+
+del SITE_ID
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'KEY_PREFIX': 'ponyconf.prod.',
+    }
+}
+
+SELECT2_CACHE_BACKEND = 'default'
+
+# Use CDN:
+del SELECT2_CSS
+del SELECT2_JS
+del SELECT2_I18N_PATH
+del BOOTSTRAP3
