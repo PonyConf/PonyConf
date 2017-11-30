@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -89,7 +90,7 @@ class Conference(models.Model):
         return str(self.site)
 
 
-class ParticipantManager(models.Manager):
+class ParticipantManager(CurrentSiteManager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.annotate(
@@ -162,6 +163,7 @@ class Track(PonyConfModel):
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
 
+    objects = CurrentSiteManager()
     #managers = models.ManyToManyField(User, blank=True, verbose_name=_('Managers'))
 
     class Meta:
@@ -184,6 +186,8 @@ class Room(models.Model):
     slug = AutoSlugField(populate_from='name')
     label = models.CharField(max_length=256, blank=True, default='', verbose_name=_('Label'))
     capacity = models.IntegerField(default=0, verbose_name=_('Capacity'))
+
+    objects = CurrentSiteManager()
 
     class Meta:
         unique_together = ['site', 'name']
@@ -216,6 +220,8 @@ class Tag(models.Model):
     inverted = models.BooleanField(default=False)
     public = models.BooleanField(default=False, verbose_name=_('Show the tag on the public program'))
     staff = models.BooleanField(default=False, verbose_name=_('Show the tag on the staff program'))
+
+    objects = CurrentSiteManager()
 
     def get_absolute_url(self):
         return reverse('tag-list')
@@ -256,6 +262,8 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
     label = models.CharField(max_length=64, verbose_name=_("Label on program"), blank=True, default="")
     opening_date = models.DateTimeField(null=True, blank=True, default=None)
     closing_date = models.DateTimeField(null=True, blank=True, default=None)
+
+    objects = CurrentSiteManager()
 
     def is_open(self):
         now = timezone.now()
@@ -305,7 +313,7 @@ class TalkCategory(models.Model): # type of talk (conf 30min, 1h, stand, …)
 #        return self.get_name()
 
 
-class TalkManager(models.Manager):
+class TalkManager(CurrentSiteManager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.annotate(score=Coalesce(Avg('vote__vote'), 0))
@@ -471,6 +479,8 @@ class Volunteer(PonyConfModel):
                              help_text=_('If you have some constraints, you can indicate them here.'))
     conversation = models.OneToOneField(MessageThread)
 
+    objects = CurrentSiteManager()
+
     def get_absolute_url(self):
         return reverse('volunteer-details', kwargs={'volunteer_id': self.pk})
 
@@ -504,6 +514,8 @@ class Activity(models.Model):
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
     volunteers = models.ManyToManyField(Volunteer, blank=True, related_name='activities', verbose_name=_('Volunteer'))
+
+    objects = CurrentSiteManager()
 
     class Meta:
         unique_together = ('site', 'name')

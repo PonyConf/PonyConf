@@ -3,6 +3,7 @@ from django.forms.models import modelform_factory
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UsernameField
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from django.template.defaultfilters import slugify
 from django.utils.crypto import get_random_string
@@ -37,21 +38,17 @@ CONFIRMATION_VALUES = [
 
 
 class OnSiteNamedModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.conference = kwargs.pop('conference')
-        super().__init__(*args, **kwargs)
-
     # we should manually check (site, name) uniqueness as the site is not part of the form
     def clean_name(self):
         name = self.cleaned_data['name']
         if (not self.instance or self.instance.name != name) \
-                and self._meta.model.objects.filter(site=self.conference.site, name=name).exists():
+                and self._meta.model.objects.filter(name=name).exists():
             raise self.instance.unique_error_message(self._meta.model, ['name'])
         return name
 
     def save(self, commit=True):
         obj = super().save(commit=False)
-        obj.site = self.conference.site
+        obj.site = Site.objects.get_current()
         if commit:
             obj.save()
         return obj
@@ -66,9 +63,8 @@ class VolunteerFilterForm(forms.Form):
    )
 
     def __init__(self, *args, **kwargs):
-        site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
-        activities = Activity.objects.filter(site=site)
+        activities = Activity.objects.all()
         self.fields['activity'].choices = [('none', pgettext_lazy('activity', 'None'))] + list(activities.values_list('slug', 'name'))
 
 
@@ -90,28 +86,33 @@ class TalkForm(forms.ModelForm):
 
 class TalkStaffForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        conference = kwargs.pop('conference')
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = TalkCategory.objects.filter(site=conference.site)
-        self.fields['track'].queryset = Track.objects.filter(site=conference.site)
-        self.fields['room'].queryset = Room.objects.filter(site=conference.site)
         if self.instance and self.instance.category and self.instance.category.duration:
             self.fields['duration'].help_text = _('Default duration: %(duration)d min') % {'duration': self.instance.duration}
 
-    class Meta(TalkForm.Meta):
-        fields = ('category', 'track', 'title', 'description', 'notes', 'tags', 'start_date', 'duration', 'room', 'materials', 'video', 'speakers')
-        widgets = {
-            'tags': forms.CheckboxSelectMultiple,
-        }
+
+def get_talk_speaker_form_class():
+    return modelform_factory(
+        Talk, form=TalkStaffForm,
+        fields = (
+            'category', 'track', 'title', 'description', 'notes', 'tags', 'start_date', 'duration', 'room',
+            'materials', 'video', 'speakers',
+        ),
         labels = {
             'category': _('Category'),
             'title': _('Title'),
             'description': _('Description'),
             'notes': _('Notes'),
-        }
-        help_texts = {
-            'notes': _('Visible by speakers'),
-        }
+        },
+        help_texts={'notes': _('Visible by speakers')},
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple,
+            'speakers': ModelSelect2MultipleWidget(model=Participant, search_fields=[
+                '%s__icontains' % f for f in (
+                    'name', 'email', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon', 'phone_number'
+                )]),
+        },
+    )
 
 
 class TalkFilterForm(forms.Form):
@@ -167,13 +168,12 @@ class TalkFilterForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
-        categories = TalkCategory.objects.filter(site=site)
+        categories = TalkCategory.objects.all()
         self.fields['category'].choices = categories.values_list('pk', 'name')
-        tracks = Track.objects.filter(site=site)
+        tracks = Track.objects.all()
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
-        self.fields['tag'].choices = Tag.objects.filter(site=site).values_list('slug', 'name')
+        self.fields['tag'].choices = Tag.objects.values_list('slug', 'name')
 
 
 class TalkActionForm(forms.Form):
@@ -184,15 +184,14 @@ class TalkActionForm(forms.Form):
     room = forms.ChoiceField(required=False, choices=[], label=_('Put in a room'))
 
     def __init__(self, *args, **kwargs):
-        site = kwargs.pop('site')
         talks = kwargs.pop('talks')
         super().__init__(*args, **kwargs)
         self.fields['talks'].choices = [(talk.pk, None) for talk in talks.all()]
-        tracks = Track.objects.filter(site=site)
+        tracks = Track.objects.all()
         self.fields['track'].choices = [(None, "---------")] + list(tracks.values_list('slug', 'name'))
-        tags = Tag.objects.filter(site=site)
+        tags = Tag.objects.all()
         self.fields['tag'].choices = [(None, "---------")] + list(tags.values_list('slug', 'name'))
-        rooms = Room.objects.filter(site=site)
+        rooms = Room.objects.all()
         self.fields['room'].choices = [(None, "---------")] + list(rooms.values_list('slug', 'name'))
 
 
@@ -206,7 +205,7 @@ class ParticipantForm(OnSiteNamedModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if (not self.instance or self.instance.email != email) \
-                and self._meta.model.objects.filter(site=self.conference.site, email=email).exists():
+                and self._meta.model.objects.filter(email=email).exists():
             raise self.instance.unique_error_message(self._meta.model, ['email'])
         return email
 
@@ -238,11 +237,10 @@ class ParticipantFilterForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        site = kwargs.pop('site')
         super().__init__(*args, **kwargs)
-        categories = TalkCategory.objects.filter(site=site)
+        categories = TalkCategory.objects.all()
         self.fields['category'].choices = categories.values_list('pk', 'name')
-        tracks = Track.objects.filter(site=site)
+        tracks = Track.objects.all()
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
 
 
@@ -340,21 +338,17 @@ class ActivityForm(OnSiteNamedModelForm):
 
 
 class VolunteerForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.conference = kwargs.pop('conference')
-        super().__init__(*args, **kwargs)
-
     # we should manually check (site, email) uniqueness as the site is not part of the form
     def clean_email(self):
         email = self.cleaned_data['email']
         if (not self.instance or self.instance.email != email) \
-                and self._meta.model.objects.filter(site=self.conference.site, email=email).exists():
+                and self._meta.model.objects.filter(email=email).exists():
             raise self.instance.unique_error_message(self._meta.model, ['email'])
         return email
 
     def save(self, commit=True):
         obj = super().save(commit=False)
-        obj.site = self.conference.site
+        obj.site = Site.objects.get_current()
         if commit:
             obj.save()
         return obj
@@ -362,10 +356,3 @@ class VolunteerForm(forms.ModelForm):
     class Meta:
         model = Volunteer
         fields = ['name', 'email', 'phone_number', 'sms_prefered', 'notes']
-
-
-def get_talk_speaker_form_class(site):
-    fields = ['name', 'email', 'twitter', 'linkedin', 'github', 'website', 'facebook', 'mastodon', 'phone_number']
-    widget = ModelSelect2MultipleWidget(model=Participant, queryset=Participant.objects.filter(site=site),
-                                        search_fields=['%s__icontains' % field for field in fields])
-    return modelform_factory(Talk, form=TalkStaffForm, widgets={'speakers': widget})

@@ -23,7 +23,7 @@ from mailing.models import Message
 from mailing.forms import MessageForm
 from .planning import Program
 from .decorators import speaker_required, volunteer_required, staff_required
-from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
+from .mixins import StaffRequiredMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, get_talk_speaker_form_class, \
@@ -42,7 +42,7 @@ def home(request):
 
 
 def volunteer_enrole(request):
-    if request.user.is_authenticated() and Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
+    if request.user.is_authenticated() and Volunteer.objects.filter(email=request.user.email).exists():
         return redirect(reverse('volunteer-dashboard'))
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
@@ -53,7 +53,7 @@ def volunteer_enrole(request):
             'phone_number': request.user.profile.phone_number,
             'sms_prefered': request.user.profile.sms_prefered,
         })
-    form = VolunteerForm(request.POST or None, initial=initial, conference=request.conference)
+    form = VolunteerForm(request.POST or None, initial=initial)
     if request.user.is_authenticated():
         form.fields.pop('email')
     if request.method == 'POST' and form.is_valid():
@@ -90,7 +90,7 @@ Thanks!
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
         return redirect(reverse('volunteer-dashboard', kwargs={'volunteer_token': volunteer.token}))
     return render(request, 'cfp/volunteer_enrole.html', {
-        'activities': Activity.objects.filter(site=request.conference.site),
+        'activities': Activity.objects.all(),
         'form': form,
     })
 
@@ -99,12 +99,12 @@ def volunteer_mail_token(request):
     form = MailForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         try:
-            volunteer = Volunteer.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
+            volunteer = Volunteer.objects.get(email=form.cleaned_data['email'])
         except Volunteer.DoesNotExist:
             messages.error(request, _('Sorry, we do not know this email.'))
         else:
 
-            base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+            base_url = ('https' if request.is_secure() else 'http') + '://' + request.site.domain
             url = base_url + reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token))
             body = render_to_string('cfp/mails/volunteer_send_token.txt', {
                 'volunteer': volunteer,
@@ -133,14 +133,14 @@ def volunteer_mail_token(request):
 @volunteer_required
 def volunteer_dashboard(request, volunteer):
     return render(request, 'cfp/volunteer.html', {
-        'activities': Activity.objects.filter(site=request.conference.site),
+        'activities': Activity.objects.all(),
         'volunteer': volunteer,
     })
 
 
 @volunteer_required
 def volunteer_update_activity(request, volunteer, activity, join):
-    activity = get_object_or_404(Activity, slug=activity, site=request.conference.site)
+    activity = get_object_or_404(Activity, slug=activity)
     if join:
         activity.volunteers.add(volunteer)
         activity.save()
@@ -154,11 +154,10 @@ def volunteer_update_activity(request, volunteer, activity, join):
 
 @staff_required
 def volunteer_list(request):
-    site = request.conference.site
-    filter_form = VolunteerFilterForm(request.GET or None, site=site)
+    filter_form = VolunteerFilterForm(request.GET or None)
     # Filtering
     show_filters = False
-    volunteers = Volunteer.objects.filter(site=site).order_by('pk').distinct().prefetch_related('activities')
+    volunteers = Volunteer.objects.order_by('pk').distinct().prefetch_related('activities')
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['activity']):
@@ -193,7 +192,7 @@ def volunteer_list(request):
 
 @staff_required
 def volunteer_details(request, volunteer_id):
-    volunteer = get_object_or_404(Volunteer, site=request.conference.site, pk=volunteer_id)
+    volunteer = get_object_or_404(Volunteer, pk=volunteer_id)
     return render(request, 'cfp/staff/volunteer_details.html', {
         'volunteer': volunteer,
     })
@@ -206,7 +205,7 @@ def proposal_home(request):
     initial = {}
     fields = ['name', 'email', 'biography']
     if request.user.is_authenticated():
-        if Participant.objects.filter(site=request.conference.site, email=request.user.email).exists():
+        if Participant.objects.filter(email=request.user.email).exists():
             return redirect(reverse('proposal-dashboard'))
         elif not request.POST:
             initial.update({
@@ -215,19 +214,19 @@ def proposal_home(request):
             })
         fields.remove('email')
     NewSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=fields)
-    speaker_form = NewSpeakerForm(request.POST or None, initial=initial, conference=request.conference)
+    speaker_form = NewSpeakerForm(request.POST or None, initial=initial)
     talk_form = TalkForm(request.POST or None, categories=categories)
     if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):
         speaker = speaker_form.save(commit=False)
-        speaker.site = request.conference.site
+        speaker.site = request.site
         if request.user.is_authenticated():
             speaker.email = request.user.email
         speaker.save()
         talk = talk_form.save(commit=False)
-        talk.site = request.conference.site
+        talk.site = request.site
         talk.save()
         talk.speakers.add(speaker)
-        base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+        base_url = ('https' if request.is_secure() else 'http') + '://' + request.site.domain
         url_dashboard = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token))
         url_talk_details = base_url + reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk))
         url_speaker_add = base_url + reverse('proposal-speaker-add', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk))
@@ -273,12 +272,12 @@ def proposal_mail_token(request):
     form = MailForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         try:
-            speaker = Participant.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
+            speaker = Participant.objects.get(email=form.cleaned_data['email'])
         except Participant.DoesNotExist:
             messages.error(request, _('Sorry, we do not know this email.'))
         else:
 
-            base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+            base_url = ('https' if request.is_secure() else 'http') + '://' + request.site.domain
             dashboard_url = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token))
             body = _("""Hi {},
 
@@ -317,7 +316,7 @@ def proposal_dashboard(request, speaker):
 
 @speaker_required
 def proposal_talk_details(request, speaker, talk_id):
-    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
     return render(request, 'cfp/proposal_talk_details.html', {
         'speaker': speaker,
         'talk': talk,
@@ -327,14 +326,14 @@ def proposal_talk_details(request, speaker, talk_id):
 @speaker_required
 def proposal_talk_edit(request, speaker, talk_id=None):
     if talk_id:
-        talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+        talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
     else:
         talk = None
     categories = request.conference.opened_categories
     form = TalkForm(request.POST or None, request.FILES or None, categories=categories, instance=talk)
     if request.method == 'POST' and form.is_valid():
         talk = form.save(commit=False)
-        talk.site = request.conference.site
+        talk.site = request.site
         talk.save()
         talk.speakers.add(speaker)
         if talk_id:
@@ -354,7 +353,7 @@ def proposal_talk_edit(request, speaker, talk_id=None):
 @speaker_required
 def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
     # TODO: handle multiple speakers case
-    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
     if not request.conference.disclosed_acceptances or not talk.accepted:
         raise PermissionDenied
     if talk.confirmed == confirm:
@@ -379,8 +378,8 @@ def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
 # FIXME his this view really useful?
 #@speaker_required
 #def proposal_speaker_details(request, speaker, talk_id, co_speaker_id):
-#    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-#    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk_set__pk=talk.pk, pk=co_speaker_id)
+#    talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
+#    co_speaker = get_object_or_404(Participant, talk_set__pk=talk.pk, pk=co_speaker_id)
 #    return render(request, 'cfp/proposal_speaker_details.html', {
 #        'speaker': speaker,
 #        'talk': talk,
@@ -392,14 +391,14 @@ def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
 def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
     talk, co_speaker, co_speaker_candidates = None, None, None
     if talk_id:
-        talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+        talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
         if co_speaker_id:
-            co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
+            co_speaker = get_object_or_404(Participant, talk__pk=talk.pk, pk=co_speaker_id)
         else:
             co_speaker_candidates = speaker.co_speaker_set.exclude(pk__in=talk.speakers.values_list('pk'))
     EditSpeakerForm = modelform_factory(Participant, form=ParticipantForm, fields=['name', 'email', 'biography'] + ParticipantForm.SOCIAL_FIELDS)
     all_forms = []
-    speaker_form = EditSpeakerForm(request.POST or None, conference=request.conference, instance=co_speaker if talk else speaker)
+    speaker_form = EditSpeakerForm(request.POST or None, instance=co_speaker if talk else speaker)
     all_forms.append(speaker_form)
     if talk and not co_speaker_id:
         notify_form = NotifyForm(request.POST or None)
@@ -414,7 +413,7 @@ def proposal_speaker_edit(request, speaker, talk_id=None, co_speaker_id=None):
                 messages.success(request, _('Changes saved.'))
             else:
                 if notify_form.cleaned_data['notify']:
-                    base_url = ('https' if request.is_secure() else 'http') + '://' + request.conference.site.domain
+                    base_url = ('https' if request.is_secure() else 'http') + '://' + request.site.domain
                     url_dashboard = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=edited_speaker.token))
                     url_talk_details = base_url + reverse('proposal-talk-details', kwargs=dict(speaker_token=edited_speaker.token, talk_id=talk.pk))
                     url_speaker_add = base_url + reverse('proposal-speaker-add', kwargs=dict(speaker_token=edited_speaker.token, talk_id=talk.pk))
@@ -466,7 +465,7 @@ Thanks!
 
 @speaker_required
 def proposal_speaker_add(request, speaker, talk_id, speaker_id):
-    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
+    talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
     co_speaker = get_object_or_404(Participant, pk__in=speaker.co_speaker_set.values_list('pk'), pk=speaker_id)
     talk.speakers.add(co_speaker)
     messages.success(request, _('Co-speaker successfully added to the talk.'))
@@ -476,8 +475,8 @@ def proposal_speaker_add(request, speaker, talk_id, speaker_id):
 # TODO: ask for confirmation (with POST request needed)
 @speaker_required
 def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
-    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-    co_speaker = get_object_or_404(Participant, site=request.conference.site, talk__pk=talk.pk, pk=co_speaker_id)
+    talk = get_object_or_404(Talk, speakers__pk=speaker.pk, pk=talk_id)
+    co_speaker = get_object_or_404(Participant, talk__pk=talk.pk, pk=co_speaker_id)
     # prevent speaker from removing his/her self
     if co_speaker.pk == speaker.pk:
         raise PermissionDenied
@@ -488,7 +487,7 @@ def proposal_speaker_remove(request, speaker, talk_id, co_speaker_id):
 
 @staff_required
 def talk_acknowledgment(request, talk_id, confirm):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id)
     if talk.accepted is not True or talk.confirmed == confirm:
         raise PermissionDenied
     # TODO: handle multiple speakers case
@@ -517,10 +516,10 @@ def admin(request):
 
 @staff_required
 def talk_list(request):
-    talks = Talk.objects.filter(site=request.conference.site)
+    talks = Talk.objects.all()
     # Filtering
     show_filters = False
-    filter_form = TalkFilterForm(request.GET or None, site=request.conference.site)
+    filter_form = TalkFilterForm(request.GET or None)
     if filter_form.is_valid():
         data = filter_form.cleaned_data
         if len(data['category']):
@@ -581,11 +580,11 @@ def talk_list(request):
         return response
 
     # Action
-    action_form = TalkActionForm(request.POST or None, talks=talks, site=request.conference.site)
+    action_form = TalkActionForm(request.POST or None, talks=talks)
     if request.method == 'POST' and action_form.is_valid():
         data = action_form.cleaned_data
         for talk_id in data['talks']:
-            talk = Talk.objects.get(site=request.conference.site, pk=talk_id)
+            talk = Talk.objects.get(pk=talk_id)
             if data['decision'] != None and data['decision'] != talk.accepted:
                 if data['decision']:
                     note = _("The talk has been accepted.")
@@ -594,11 +593,11 @@ def talk_list(request):
                 Message.objects.create(thread=talk.conversation, author=request.user, content=note)
                 talk.accepted = data['decision']
             if data['track']:
-                talk.track = Track.objects.get(site=request.conference.site, slug=data['track'])
+                talk.track = Track.objects.get(slug=data['track'])
             if data['tag']:
-                talk.tags.add(Tag.objects.get(site=request.conference.site, slug=data['tag']))
+                talk.tags.add(Tag.objects.get(slug=data['tag']))
             if data['room']:
-                talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
+                talk.room = Room.objects.get(slug=data['room'])
             talk.save()
         return redirect(request.get_full_path())
     # Sorting
@@ -650,7 +649,7 @@ def talk_list(request):
 
 @staff_required
 def talk_details(request, talk_id):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id)
     try:
         vote = talk.vote_set.get(user=request.user).vote
     except Vote.DoesNotExist:
@@ -672,7 +671,7 @@ def talk_details(request, talk_id):
 
 @staff_required
 def talk_vote(request, talk_id, score):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id)
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
     vote.vote = int(score)
     vote.save()
@@ -682,7 +681,7 @@ def talk_vote(request, talk_id, score):
 
 @staff_required
 def talk_decide(request, talk_id, accept):
-    talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
+    talk = get_object_or_404(Talk, pk=talk_id)
     if request.method == 'POST':
         talk.accepted = accept
         talk.save()
@@ -707,15 +706,14 @@ def talk_decide(request, talk_id, accept):
 
 @staff_required
 def participant_list(request):
-    participants = Participant.objects.filter(site=request.conference.site) \
-                                      .extra(select={'lower_name': 'lower(name)'}) \
+    participants = Participant.objects.extra(select={'lower_name': 'lower(name)'}) \
                                       .order_by('lower_name')
     # Filtering
     show_filters = False
-    filter_form = ParticipantFilterForm(request.GET or None, site=request.conference.site)
+    filter_form = ParticipantFilterForm(request.GET or None)
     if filter_form.is_valid():
         data = filter_form.cleaned_data
-        talks = Talk.objects.filter(site=request.conference.site)
+        talks = Talk.objects.all()
         if len(data['category']):
             show_filters = True
             talks = talks.filter(reduce(lambda x, y: x | y, [Q(category__pk=pk) for pk in data['category']]))
@@ -759,7 +757,7 @@ def participant_list(request):
 
 @staff_required
 def participant_details(request, participant_id):
-    participant = get_object_or_404(Participant, pk=participant_id, site=request.conference.site)
+    participant = get_object_or_404(Participant, pk=participant_id)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
         message = message_form.save(commit=False)
@@ -774,7 +772,7 @@ def participant_details(request, participant_id):
     })
 
 
-class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
+class ParticipantCreate(StaffRequiredMixin, CreateView):
     model = Participant
     template_name = 'cfp/staff/participant_form.html'
 
@@ -786,7 +784,7 @@ class ParticipantCreate(StaffRequiredMixin, OnSiteFormMixin, CreateView):
         )
 
 
-class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
+class ParticipantUpdate(StaffRequiredMixin, UpdateView):
     model = Participant
     template_name = 'cfp/staff/participant_form.html'
     slug_field = 'pk'
@@ -800,7 +798,7 @@ class ParticipantUpdate(StaffRequiredMixin, OnSiteFormMixin, UpdateView):
         )
 
 
-class ParticipantRemove(StaffRequiredMixin, OnSiteFormMixin, DeleteView):
+class ParticipantRemove(StaffRequiredMixin, DeleteView):
     slug_field = 'pk'
     slug_url_kwarg = 'participant_id'
     success_url = reverse_lazy('participant-list')
@@ -811,11 +809,11 @@ class ParticipantRemove(StaffRequiredMixin, OnSiteFormMixin, DeleteView):
 
 @staff_required
 def participant_add_talk(request, participant_id):
-    participant = get_object_or_404(Participant, site=request.conference.site, pk=participant_id)
-    form = TalkForm(request.POST or None, categories=TalkCategory.objects.filter(site=request.conference.site))
+    participant = get_object_or_404(Participant, pk=participant_id)
+    form = TalkForm(request.POST or None, categories=TalkCategory.objects.all())
     if request.method == 'POST' and form.is_valid():
         talk = form.save(commit=False)
-        talk.site = request.conference.site
+        talk.site = request.site
         talk.save()
         talk.speakers.add(participant)
         return redirect(reverse('talk-details', kwargs={'talk_id': talk.pk}))
@@ -834,7 +832,7 @@ def conference_edit(request):
         new_staff = set(new_conference.staff.all())
         added_staff = new_staff - old_staff
         protocol = 'https' if request.is_secure() else 'http'
-        base_url = protocol+'://'+request.conference.site.domain
+        base_url = protocol + '://' + request.site.domain
         url_login = base_url + reverse('login')
         url_password_reset = base_url + reverse('password_reset')
         msg_title = _('[{}] You have been added to the staff team').format(request.conference.name)
@@ -878,7 +876,7 @@ def homepage_edit(request):
     })
 
 
-class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
+class TalkUpdate(StaffRequiredMixin, UpdateView):
     model = Talk
     template_name = 'cfp/staff/talk_form.html'
     pk_url_kwarg = 'talk_id'
@@ -887,7 +885,7 @@ class TalkUpdate(StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin, UpdateView):
         return get_talk_speaker_form_class(self.object.site)
 
 
-class TrackMixin(OnSiteMixin):
+class TrackMixin(object):
     model = Track
 
 
@@ -895,7 +893,7 @@ class TrackList(StaffRequiredMixin, TrackMixin, ListView):
     template_name = 'cfp/staff/track_list.html'
 
 
-class TrackFormMixin(OnSiteFormMixin, TrackMixin):
+class TrackFormMixin(TrackMixin):
     template_name = 'cfp/staff/track_form.html'
     form_class = TrackForm
     success_url = reverse_lazy('track-list')
@@ -909,7 +907,7 @@ class TrackUpdate(StaffRequiredMixin, TrackFormMixin, UpdateView):
     pass
 
 
-class RoomMixin(OnSiteMixin):
+class RoomMixin(object):
     model = Room
 
 
@@ -926,13 +924,6 @@ class RoomFormMixin(RoomMixin):
     form_class = RoomForm
     success_url = reverse_lazy('room-list')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'conference': self.request.conference,
-        })
-        return kwargs
-
 
 class RoomCreate(StaffRequiredMixin, RoomFormMixin, CreateView):
     pass
@@ -942,7 +933,7 @@ class RoomUpdate(StaffRequiredMixin, RoomFormMixin, UpdateView):
     pass
 
 
-class TalkCategoryMixin(OnSiteMixin):
+class TalkCategoryMixin(object):
     model = TalkCategory
 
 
@@ -955,13 +946,6 @@ class TalkCategoryFormMixin(TalkCategoryMixin):
     form_class = TalkCategoryForm
     success_url = reverse_lazy('category-list')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'conference': self.request.conference,
-        })
-        return kwargs
-
 
 class TalkCategoryCreate(StaffRequiredMixin, TalkCategoryFormMixin, CreateView):
     pass
@@ -971,7 +955,7 @@ class TalkCategoryUpdate(StaffRequiredMixin, TalkCategoryFormMixin, UpdateView):
     pass
 
 
-class TagMixin(OnSiteMixin):
+class TagMixin(object):
     model = Tag
 
 
@@ -984,13 +968,6 @@ class TagFormMixin(TagMixin):
     form_class = TagForm
     success_url = reverse_lazy('tag-list')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'conference': self.request.conference,
-        })
-        return kwargs
-
 
 class TagCreate(StaffRequiredMixin, TagFormMixin, CreateView):
     pass
@@ -1000,7 +977,7 @@ class TagUpdate(StaffRequiredMixin, TagFormMixin, UpdateView):
     pass
 
 
-class ActivityMixin(OnSiteMixin):
+class ActivityMixin(object):
     model = Activity
 
 
@@ -1012,13 +989,6 @@ class ActivityFormMixin(ActivityMixin):
     template_name = 'cfp/admin/activity_form.html'
     form_class = ActivityForm
     success_url = reverse_lazy('activity-list')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'conference': self.request.conference,
-        })
-        return kwargs
 
 
 class ActivityCreate(StaffRequiredMixin, ActivityFormMixin, CreateView):
@@ -1044,7 +1014,7 @@ def create_user(request):
 
 
 def schedule(request, program_format, pending, template, cache=None):
-    program = Program(site=request.conference.site, pending=pending, cache=cache)
+    program = Program(site=request.site, pending=pending, cache=cache)
     if program_format is None:
         return render(request, template, {'program': program.render('html')})
     elif program_format == 'html':
