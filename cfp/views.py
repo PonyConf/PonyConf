@@ -19,8 +19,8 @@ from django_select2.views import AutoResponseView
 from functools import reduce
 import csv
 
-from mailing.models import Message
 from mailing.forms import MessageForm
+from mailing.utils import send_message
 from .planning import Program
 from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
@@ -75,17 +75,11 @@ Thanks!
 {}
 
 """).format(volunteer.name, request.conference.name, volunteer.get_secret_url(full=True), request.conference.name)
-        #Message.objects.create(
-        #    thread=volunteer.conversation,
-        #    author=request.conference,
-        #    from_email=request.conference.contact_email,
-        #    content=body,
-        #)
-        send_mail(
-            subject=_('Thank you for your help!'),
-            message=body,
-            from_email='%s <%s>' % (request.conference.name, request.conference.contact_email),
-            recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
+        send_message(
+            thread=volunteer.conversation,
+            author=request.conference,
+            subject=_('[%(conference)s] Thank you for your help!') % {'conference': request.conference},
+            content=body,
         )
         messages.success(request, _('Thank you for your participation! You can now subscribe to some activities.'))
         return redirect(reverse('volunteer-dashboard', kwargs={'volunteer_token': volunteer.token}))
@@ -111,17 +105,11 @@ def volunteer_mail_token(request):
                 'url': url,
                 'conf': request.conference
             })
-            #Message.objects.create(
-            #    thread=volunteer.conversation,
-            #    author=request.conference,
-            #    from_email=request.conference.contact_email,
-            #    content=body,
-            #)
-            send_mail(
-                subject=_('Thank you for your help!'),
-                message=body,
-                from_email='%s <%s>' % (request.conference.name, request.conference.contact_email),
-                recipient_list=['%s <%s>' % (volunteer.name, volunteer.email)],
+            send_message(
+                thread=volunteer.conversation,
+                author=request.conference,
+                subject=_("[%(conference)s] Someone asked to access your profil") % {'conference': request.conference},
+                content=body,
             )
             messages.success(request, _('A email have been sent with a link to access to your profil.'))
             return redirect(reverse('volunteer-mail-token'))
@@ -251,14 +239,17 @@ Thanks!
 {}
 
 """).format(
-            speaker.name, request.conference.name,talk.title, talk.description,
+            speaker.name, request.conference.name, talk.title, talk.description,
             url_dashboard, url_talk_details, url_speaker_add,
             request.conference.name,
         )
-        Message.objects.create(
+        send_message(
             thread=speaker.conversation,
             author=request.conference,
-            from_email=request.conference.contact_email,
+            subject=_("[%(conference)s] Thank you for your proposition '%(talk)s'") % {
+                'conference': request.conference.name,
+                'talk': talk,
+            },
             content=body,
         )
         messages.success(request, _('You proposition have been successfully submitted!'))
@@ -282,7 +273,7 @@ def proposal_mail_token(request):
             dashboard_url = base_url + reverse('proposal-dashboard', kwargs=dict(speaker_token=speaker.token))
             body = _("""Hi {},
 
-Someone, probably you, ask to access your profile.
+Someone, probably you, asked to access your profile.
 You can edit your talks or add new ones following this url:
 
   {}
@@ -294,10 +285,12 @@ Sincerely,
 {}
 
 """).format(speaker.name, dashboard_url, request.conference.name)
-            Message.objects.create(
+            send_message(
                 thread=speaker.conversation,
                 author=request.conference,
-                from_email=request.conference.contact_email,
+                subject=_("[%(conference)s] Someone asked to access your profil") % {
+                    'conference': request.conference.name,
+                },
                 content=body,
             )
             messages.success(request, _('A email have been sent with a link to access to your profil.'))
@@ -367,11 +360,25 @@ def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
         talk.save()
         if confirm:
             confirmation_message= _('Your participation has been taken into account, thank you!')
-            thread_note = _('Speaker %(speaker)s confirmed his/her participation.' % {'speaker': speaker})
+            action = _('confirmed')
         else:
             confirmation_message = _('We have noted your unavailability.')
-            thread_note = _('Speaker %(speaker)s CANCELLED his/her participation.' % {'speaker': speaker})
-        Message.objects.create(thread=talk.conversation, author=speaker, content=thread_note)
+            action = _('cancelled')
+        content = _('Speaker %(speaker)s %(action)s his/her participation for %(talk)s.') % {
+            'speaker': speaker,
+            'action': action,
+            'talk': talk,
+        }
+        send_message(
+            thread=talk.conversation,
+            author=speaker,
+            subject=_('[%(conference)s] %(speaker)s %(action)s his/her participation') % {
+                'conference': request.conference,
+                'speaker': speaker,
+                'action': action,
+            },
+            content=content,
+        )
         messages.success(request, confirmation_message)
     return redirect(reverse('proposal-talk-details', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}))
 
@@ -443,10 +450,13 @@ Thanks!
                         url_dashboard, url_talk_details, url_speaker_add,
                         request.conference.name,
                     )
-                    Message.objects.create(
+                    send_message(
                         thread=edited_speaker.conversation,
                         author=request.conference,
-                        from_email=request.conference.contact_email,
+                        subject=_("[%(conference)s] You have been added as co-speaker to '%(talk)s'") % {
+                            'conference': request.conference,
+                            'talk': talk,
+                        },
                         content=body,
                     )
                 messages.success(request, _('Co-speaker successfully added to the talk.'))
@@ -496,11 +506,22 @@ def talk_acknowledgment(request, talk_id, confirm):
     talk.save()
     if confirm:
         confirmation_message= _('The speaker confirmation have been noted.')
+        action = _('confirmed')
         thread_note = _('The talk have been confirmed.')
     else:
         confirmation_message = _('The speaker unavailability have been noted.')
-        thread_note = _('The talk have been cancelled.')
-    Message.objects.create(thread=talk.conversation, author=request.user, content=thread_note)
+        action = _('cancelled')
+    thread_note = _('The talk have been %(action)s.') % {'action': action}
+    send_message(
+        thread=talk.conversation,
+        author=request.user,
+        subject=_("[%(conference)s] The talk '%(talk)s' have been %(action)s.") % {
+            'conference': request.conference,
+            'talk': talk,
+            'action': action,
+        },
+        content=thread_note,
+    )
     messages.success(request, confirmation_message)
     return redirect(reverse('talk-details', kwargs=dict(talk_id=talk_id)))
 
@@ -588,10 +609,20 @@ def talk_list(request):
             talk = Talk.objects.get(site=request.conference.site, pk=talk_id)
             if data['decision'] != None and data['decision'] != talk.accepted:
                 if data['decision']:
-                    note = _("The talk has been accepted.")
+                    action = _('accepted')
                 else:
-                    note = _("The talk has been declined.")
-                Message.objects.create(thread=talk.conversation, author=request.user, content=note)
+                    action = _('declined')
+                note = _('The talk has been %(action)s.') % {'action': action}
+                send_message(
+                    thread=talk.conversation,
+                    author=request.user,
+                    subject=_("[%(conference)s] The talk '%(talk)s' have been %(action)s") % {
+                        'conference': conference,
+                        'talk': talk,
+                        'action': action,
+                    },
+                    content=note,
+                )
                 talk.accepted = data['decision']
             if data['track']:
                 talk.track = Track.objects.get(site=request.conference.site, slug=data['track'])
@@ -657,11 +688,21 @@ def talk_details(request, talk_id):
         vote = None
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
-        message = message_form.save(commit=False)
-        message.author = request.user
-        message.from_email = request.user.email
-        message.thread = talk.conversation
-        message.save()
+        in_reply_to = talk.conversation.message_set.last()
+        subject=_("[%(conference)s] New comment about '%(talk)s'") % {
+            'conference': request.conference,
+            'talk': talk,
+        }
+        if in_reply_to:
+            # Maybe use in_reply_to.subject?
+            subject = 'Re: ' + subject
+        send_message(
+            thread=talk.conversation,
+            author=request.user,
+            subject=subject,
+            content=message_form.cleaned_data['content'],
+            in_reply_to=in_reply_to,
+        )
         messages.success(request, _('Message sent!'))
         return redirect(reverse('talk-details', args=[talk.pk]))
     return render(request, 'cfp/staff/talk_details.html', {
@@ -686,17 +727,35 @@ def talk_decide(request, talk_id, accept):
     if request.method == 'POST':
         talk.accepted = accept
         talk.save()
+        if accept:
+            action = _('accepted')
+        else:
+            action = _('declined')
         # Does we need to send a notification to the proposer?
         m = request.POST.get('message', '').strip()
         if m:
             for participant in talk.speakers.all():
-                Message.objects.create(thread=talk.conversation, author=request.user, content=m)
+                send_message(
+                    thread=talk.conversation,
+                    author=request.conference,
+                    subject=_("[%(conference)s] Your talk '%(talk)s' have been %(action)s") % {
+                        'conference': request.conference,
+                        'talk': talk,
+                        'action': action,
+                    },
+                    content=m,
+                )
         # Save the decision in the talk's conversation
-        if accept:
-            note = _("The talk has been accepted.")
-        else:
-            note = _("The talk has been declined.")
-        Message.objects.create(thread=talk.conversation, author=request.user, content=note)
+        send_message(
+            thread=talk.conversation,
+            author=request.user,
+            subject=_("[%(conference)s] The talk '%(talk)s' have been %(action)s") % {
+                'conference': request.conference,
+                'talk': talk,
+                'action': action,
+            },
+            content=_('The talk has been %(action)s.') % {'action': action},
+        )
         messages.success(request, _('Decision taken in account'))
         return redirect(talk.get_absolute_url())
     return render(request, 'cfp/staff/talk_decide.html', {

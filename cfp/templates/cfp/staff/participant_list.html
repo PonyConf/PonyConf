@@ -69,11 +69,6 @@
                 —
                 <span class="text-danger">{% blocktrans count refused=participant.refused_talk_count %}refused: {{ refused }}{% plural %}refused: {{ refused }}{% endblocktrans %}</span>
             </td>
-            {% comment %}
-            <td>
-                <a class="btn btn-{% if speaker.conversation.messages.last.author == speaker.user %}primary{% else %}default{% endif %}" href="{% url 'user-conversation' speaker.user.username %}">{% trans "Contact" %}</a>
-            </td>
-            {% endcomment %}
         </tr>
     {% if forloop.last %}
     </tbody>

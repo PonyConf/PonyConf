@@ -1,9 +1,9 @@
 {% load i18n %}
 
 {% for message in messages %}
-<div class="panel panel-{% if message.from_email == participant.email %}info{% else %}default{% endif %}">
+<div class="panel panel-default">
   <div class="panel-heading">
-    {{ message.created }} | {{ message.author_display }}
+    {{ message.created }} | {{ message.author }} | {{ message.subject }}
   </div>
   <div class="panel-body">
     {{ message.content|linebreaksbr }}

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 
 import imaplib
 import ssl
@@ -9,7 +10,7 @@ from email.parser import BytesParser
 import chardet
 import re
 
-from .models import MessageThread, MessageCorrespondent, Message, hexdigest_sha256
+from .models import MessageThread, MessageAuthor, Message, hexdigest_sha256
 
 
 class NoTokenFoundException(Exception):
@@ -22,12 +23,24 @@ class InvalidKeyException(Exception):
     pass
 
 
-def fetch_imap_box(user, password, host, port=993, ssl=True, inbox='INBOX', trash='Trash'):
+def send_message(thread, author, subject, content, in_reply_to=None):
+    author_type = ContentType.objects.get_for_model(author)
+    author, _ = MessageAuthor.objects.get_or_create(author_type=author_type, author_id=author.pk)
+    Message.objects.create(
+        thread=thread,
+        author=author,
+        subject=subject,
+        content=content,
+        in_reply_to=in_reply_to,
+    )
+
+
+def fetch_imap_box(user, password, host, port=993, use_ssl=True, inbox='INBOX', trash='Trash'):
     logging.basicConfig(level=logging.DEBUG)
     context = ssl.create_default_context()
     success, failure = 0, 0
     kwargs = {'host': host, 'port': port}
-    if ssl:
+    if use_ssl:
         IMAP4 = imaplib.IMAP4_SSL
         kwargs.update({'ssl_context': ssl.create_default_context()})
     else:
@@ -116,7 +129,32 @@ def process_email(raw_email):
         raise NoTokenFoundException
 
     token = m.group('token')
+
+    try:
+        in_reply_to, author = process_new_token(token)
+    except InvalidTokenException:
+        in_reply_to, author = process_old_token(token)
+
+    subject = msg.get('Subject', '')
+
+    Message.objects.create(thread=in_reply_to.thread, in_reply_to=in_reply_to, author=author, subject=subject, content=content)
+
+
+def process_new_token(token):
     key = token[64:]
+    try:
+        in_reply_to = Message.objects.get(token__iexact=token[:32])
+        author = MessageAuthor.objects.get(token__iexact=token[32:64])
+    except models.ObjectDoesNotExist:
+        raise InvalidTokenException
+
+    if key.lower() != hexdigest_sha256(settings.SECRET_KEY, in_reply_to.token, author.token)[:16]:
+        raise InvalidKeyException
+
+    return in_reply_to, author
+
+
+def process_old_token(token):
     try:
         thread = MessageThread.objects.get(token__iexact=token[:32])
         sender = MessageCorrespondent.objects.get(token__iexact=token[32:64])
@@ -126,4 +164,25 @@ def process_email(raw_email):
     if key.lower() != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
         raise InvalidKeyException
 
-    Message.objects.create(thread=thread, from_email=sender.email, content=content)
+    in_reply_to = thread.message_set.last()
+    author = None
+
+    if author is None:
+        try:
+            author = User.objects.get(email=sender.email)
+        except User.DoesNotExist:
+            pass
+    if author is None:
+        try:
+            author = Participant.objects.get(email=message.from_email)
+        except Participant.DoesNotExist:
+            pass
+    if author is None:
+        try:
+            author = Conference.objects.get(contact_email=message.from_email)
+        except Conference.DoesNotExist:
+            raise # this was last hope...
+
+    author = MessageAuthor.objects.get_or_create(author=author)
+
+    return in_reply_to, author

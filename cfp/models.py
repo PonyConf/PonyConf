@@ -86,7 +86,7 @@ class Conference(models.Model):
                 })
 
     def __str__(self):
-        return str(self.site)
+        return self.name
 
 
 class ParticipantManager(models.Manager):
