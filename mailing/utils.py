@@ -10,7 +10,8 @@ from email.parser import BytesParser
 import chardet
 import re
 
-from .models import MessageThread, MessageAuthor, Message, hexdigest_sha256
+from cfp.models import User, Conference, Participant
+from .models import MessageThread, MessageCorrespondent, MessageAuthor, Message, hexdigest_sha256
 
 
 class NoTokenFoundException(Exception):
@@ -82,6 +83,7 @@ def fetch_imap_box(user, password, host, port=993, use_ssl=True, inbox='INBOX', 
                 if type(e) == InvalidKeyException:
                     tag = 'InvalidKey'
                 else:
+                    print('Unexpected error:', e)
                     tag = 'UnknowError'
                 typ, data = M.uid('store', num, '+FLAGS', tag)
                 if typ != 'OK':
@@ -141,14 +143,13 @@ def process_email(raw_email):
 
 
 def process_new_token(token):
-    key = token[64:]
     try:
         in_reply_to = Message.objects.get(token__iexact=token[:32])
         author = MessageAuthor.objects.get(token__iexact=token[32:64])
     except models.ObjectDoesNotExist:
         raise InvalidTokenException
 
-    if key.lower() != hexdigest_sha256(settings.SECRET_KEY, in_reply_to.token, author.token)[:16]:
+    if token[64:].lower() != hexdigest_sha256(settings.SECRET_KEY, in_reply_to.token, author.token)[:16]:
         raise InvalidKeyException
 
     return in_reply_to, author
@@ -161,7 +162,7 @@ def process_old_token(token):
     except models.ObjectDoesNotExist:
         raise InvalidTokenException
 
-    if key.lower() != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
+    if token[64:].lower() != hexdigest_sha256(settings.SECRET_KEY, thread.token, sender.token)[:16]:
         raise InvalidKeyException
 
     in_reply_to = thread.message_set.last()
@@ -174,15 +175,16 @@ def process_old_token(token):
             pass
     if author is None:
         try:
-            author = Participant.objects.get(email=message.from_email)
+            author = Participant.objects.get(email=sender.email)
         except Participant.DoesNotExist:
             pass
     if author is None:
         try:
-            author = Conference.objects.get(contact_email=message.from_email)
+            author = Conference.objects.get(contact_email=sender.email)
         except Conference.DoesNotExist:
             raise # this was last hope...
 
-    author = MessageAuthor.objects.get_or_create(author=author)
+    author_type = ContentType.objects.get_for_model(author)
+    author, _ = MessageAuthor.objects.get_or_create(author_type=author_type, author_id=author.pk)
 
     return in_reply_to, author
