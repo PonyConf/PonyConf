@@ -7,3 +7,4 @@
 *.sqlite3
 /media/avatars/
 ponyconf/*_settings.py
+/doc/_build
