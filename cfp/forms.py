@@ -361,7 +361,10 @@ class VolunteerForm(forms.ModelForm):
 
     class Meta:
         model = Volunteer
-        fields = ['name', 'email', 'phone_number', 'sms_prefered', 'notes']
+        fields = ['name', 'email', 'phone_number', 'sms_prefered', 'activities', 'notes']
+        widgets = {
+            'activities': forms.CheckboxSelectMultiple,
+        }
 
 
 def get_talk_speaker_form_class(site):

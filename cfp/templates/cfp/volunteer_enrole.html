@@ -11,7 +11,7 @@
   <h1>
     {% trans "Become a volunteers!" %}
   </h1>
-  {% blocktrans %}We need you! To participate, please enter your name and e-mail.{% endblocktrans %}
+  {% blocktrans %}We need you! To participate, please enter your name and e-mail and select the activities you are interested in.{% endblocktrans %}
 </div>
 
 <div class="row">
@@ -32,23 +32,5 @@
     </form>
   </div>
 </div>
-
-{% for activity in activities %}
-{% if forloop.first %}
-<div class="panel panel-default">
-<div class="panel-heading">
-{% blocktrans %}We are looking for help with the following activities:{% endblocktrans %}
-</div>
-<ul class="list-group">
-{% endif %}
-    <li class="list-group-item">
-        <b>{{ activity.name }}</b>
-        {{ activity.description }}
-    </li>
-{% if forloop.last %}
-</ul>
-</div>
-{% endif %}
-{% endfor %}
 
 {% endblock %}
