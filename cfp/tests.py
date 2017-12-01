@@ -11,6 +11,7 @@ from icalendar import Calendar
 import pytz
 
 from .models import *
+from .forms import VolunteerForm
 
 
 class VolunteersTests(TestCase):
@@ -80,9 +81,20 @@ class VolunteersTests(TestCase):
                              status_code=302, target_status_code=200)
         self.assertRedirects(self.client.get(reverse('volunteer-enrole')), reverse('volunteer-dashboard'))
 
-    def test_home(self):
+    def test_dashboard(self):
         v = Volunteer.objects.get(name='A')
         self.assertEqual(self.client.get(reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token})).status_code, 200)
+
+    def test_profile(self):
+        v = Volunteer.objects.get(name='A')
+        dashboard_url = reverse('volunteer-dashboard', kwargs={'volunteer_token': v.token})
+        profile_url = reverse('volunteer-profile-edit', kwargs={'volunteer_token': v.token})
+        self.assertEqual(self.client.get(profile_url).status_code, 200)
+        form = VolunteerForm(instance=v, conference=v.site.conference)
+        form.initial.update({'name': 'Abis'})
+        self.assertRedirects(self.client.post(profile_url, form.initial), dashboard_url)
+        v = Volunteer.objects.get(pk=v.pk)
+        self.assertEqual(v.name, 'Abis')
 
     def test_update_activity(self):
         v = Volunteer.objects.get(name='A')
