@@ -11,9 +11,9 @@ Welcome to PonyConf's documentation!
    :caption: Contents:
 
    Installation guide <installation-guide>
+   Add a new conference <add-conference>
    Upgrade guide <upgrade-guide>
    User guide <user-guide>
-
 
 
 Indices and tables
