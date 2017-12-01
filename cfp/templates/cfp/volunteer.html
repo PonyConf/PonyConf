@@ -6,7 +6,41 @@
 
 {% block content %}
 
-<h1>{% trans "Become a volunteers!" %}</h1>
+
+<div class="page-header">
+  <h1>
+    {% blocktrans with name=volunteer.name %}Welcome <b>{{ name }}</b>!{% endblocktrans %}
+    <a href="{% url 'volunteer-profile-edit' volunteer_token=volunteer.token %}" class="btn btn-success pull-right">
+      <span class="glyphicon glyphicon-pencil"></span>&nbsp;{% trans "Edit your profile" %}
+    </a>
+  </h1>
+</div>
+
+
+<h2>{% trans "Your informations" %}</h2>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>{% trans "Email:" %}</dt>
+        <dd><a href="mailto:{{ volunteer.email }}">{{ volunteer.email }}</a></dd>
+      <dt>{% trans "Phone number:" %}</dt>
+        <dd>
+          {% if volunteer.phone_number %}
+          <a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a>{% if volunteer.sms_prefered %} (SMS){% endif %}
+          {% else %}
+          <i>not provided</i>
+          {% endif %}
+        </dd>
+      {% if volunteer.notes %}
+      <dt>{% trans "Notes:" %}</dt>
+        <dd>{{ volunteer.notes|linebreaksbr }}</dd>
+      {% endif %}
+    </dl>
+  </div>
+</div>
+
+<h2>{% trans "Activities" %}</h2>
 
 {% for activity in activities %}
 {% if forloop.first %}<div class="list-group">{% endif %}

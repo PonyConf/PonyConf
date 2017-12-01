@@ -128,6 +128,19 @@ def volunteer_dashboard(request, volunteer):
 
 
 @volunteer_required
+def volunteer_profile(request, volunteer):
+    form = VolunteerForm(request.POST or None, instance=volunteer, conference=request.conference)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, _('Changes saved.'))
+        return redirect(reverse('volunteer-dashboard', kwargs={'volunteer_token': volunteer.token}))
+    return render(request, 'cfp/volunteer_profile.html', {
+        'volunteer': volunteer,
+        'form': form,
+    })
+
+
+@volunteer_required
 def volunteer_update_activity(request, volunteer, activity, join):
     activity = get_object_or_404(Activity, slug=activity, site=request.conference.site)
     if join:
