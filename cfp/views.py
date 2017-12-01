@@ -62,6 +62,7 @@ def volunteer_enrole(request):
         if request.user.is_authenticated():
             volunteer.email = request.user.email
         volunteer.save()
+        form.save_m2m()
         body = _("""Hi {},
 
 Thank your for your help in the organization of the conference {}!
@@ -130,12 +131,10 @@ def volunteer_dashboard(request, volunteer):
 def volunteer_update_activity(request, volunteer, activity, join):
     activity = get_object_or_404(Activity, slug=activity, site=request.conference.site)
     if join:
-        activity.volunteers.add(volunteer)
-        activity.save()
+        volunteer.activities.add(activity)
         messages.success(request, _('Thank you for your participation!'))
     else:
-        activity.volunteers.remove(volunteer)
-        activity.save()
+        volunteer.activities.remove(activity)
         messages.success(request, _('Okay, no problem!'))
     return redirect(reverse('volunteer-dashboard', kwargs=dict(volunteer_token=volunteer.token)))
 

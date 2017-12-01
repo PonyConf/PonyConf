@@ -459,6 +459,27 @@ class Vote(PonyConfModel):
         return self.talk.get_absolute_url()
 
 
+class Activity(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, verbose_name=_('Name'))
+    slug = AutoSlugField(populate_from='name')
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+
+    class Meta:
+        unique_together = ('site', 'name')
+        verbose_name = _('Activity')
+        verbose_name_plural = _('Activities')
+
+    def get_absolute_url(self):
+        return reverse('activity-list')
+
+    def get_filter_url(self):
+        return reverse('volunteer-list') + '?activity=' + self.slug
+
+    def __str__(self):
+        return self.name
+
+
 class Volunteer(PonyConfModel):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     name = models.CharField(max_length=128, verbose_name=_('Your Name'))
@@ -469,6 +490,7 @@ class Volunteer(PonyConfModel):
     language = models.CharField(max_length=10, blank=True)
     notes = models.TextField(default='', blank=True, verbose_name=_('Notes'),
                              help_text=_('If you have some constraints, you can indicate them here.'))
+    activities = models.ManyToManyField(Activity, blank=True, related_name='volunteers', verbose_name=_('Activities'))
     conversation = models.OneToOneField(MessageThread)
 
     def get_absolute_url(self):
@@ -496,25 +518,3 @@ class Volunteer(PonyConfModel):
 
     def __str__(self):
         return str(self.name)
-
-
-class Activity(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, verbose_name=_('Name'))
-    slug = AutoSlugField(populate_from='name')
-    description = models.TextField(blank=True, verbose_name=_('Description'))
-    volunteers = models.ManyToManyField(Volunteer, blank=True, related_name='activities', verbose_name=_('Volunteer'))
-
-    class Meta:
-        unique_together = ('site', 'name')
-        verbose_name = _('Activity')
-        verbose_name_plural = _('Activities')
-
-    def get_absolute_url(self):
-        return reverse('activity-list')
-
-    def get_filter_url(self):
-        return reverse('volunteer-list') + '?activity=' + self.slug
-
-    def __str__(self):
-        return self.name
