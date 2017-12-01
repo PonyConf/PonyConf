@@ -121,7 +121,7 @@ def volunteer_mail_token(request):
 
 @volunteer_required
 def volunteer_dashboard(request, volunteer):
-    return render(request, 'cfp/volunteer.html', {
+    return render(request, 'cfp/volunteer_dashboard.html', {
         'activities': Activity.objects.filter(site=request.conference.site),
         'volunteer': volunteer,
     })
