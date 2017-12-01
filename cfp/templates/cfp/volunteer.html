@@ -29,7 +29,7 @@
           {% if volunteer.phone_number %}
           <a href="tel:{{ volunteer.phone_number }}">{{ volunteer.phone_number }}</a>{% if volunteer.sms_prefered %} (SMS){% endif %}
           {% else %}
-          <i>not provided</i>
+          <i>{% trans "not provided" context "phone number" %}</i>
           {% endif %}
         </dd>
       {% if volunteer.notes %}

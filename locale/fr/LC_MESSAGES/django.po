@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-01 20:35+0000\n"
-"PO-Revision-Date: 2017-12-01 21:37+0100\n"
+"POT-Creation-Date: 2017-12-01 20:44+0000\n"
+"PO-Revision-Date: 2017-12-01 21:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -1202,6 +1202,11 @@ msgstr "bénévole"
 msgid "Phone"
 msgstr "Téléphone"
 
+#: cfp/templates/cfp/volunteer.html:32
+msgctxt "phone number"
+msgid "not provided"
+msgstr "non fourni"
+
 #: cfp/templates/cfp/volunteer.html:36
 msgid "Notes:"
 msgstr "Notes :"
@@ -1965,9 +1970,6 @@ msgstr "Changement de mot de passe"
 
 #~ msgid "Need sound?"
 #~ msgstr "Son ?"
-
-#~ msgid "No abstract provided."
-#~ msgstr "Aucun résumé fourni."
 
 #~ msgid "Format"
 #~ msgstr "Format"
