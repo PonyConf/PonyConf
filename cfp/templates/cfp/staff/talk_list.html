@@ -5,6 +5,14 @@
 
 {% block content %}
 
+{% if pending_email %}
+   <div class="alert alert-warning">
+      <span class="glyphicon glyphicon-exclamation-sign"></span>
+      {% url 'talk-email' as email_url %}
+      {% blocktrans %}You have a pending e-mail. To continue its edition, click <a href="{{ email_url }}">here</a>.{% endblocktrans %}
+    </div>
+{% endif %}
+
 <h1>{% trans "Talks" %}</h1>
 
 <p><a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a></p>

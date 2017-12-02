@@ -1,0 +1,114 @@
+{% extends 'cfp/staff/base.html' %}
+{% load i18n bootstrap3 staticfiles %}
+
+{% block talkstab %} class="active"{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>{% trans "Send an email to each speaker of each talk" %}</h1>
+</div>
+
+<form method="POST">
+{% csrf_token %}
+
+<h4>{% trans "Please write your email bellow:" %}</h4>
+
+<p>
+  {% blocktrans %}You can use <a href="http://jinja.pocoo.org/docs/2.10/">Jinja2</a> templating language.{% endblocktrans %}
+  {% blocktrans %}To see available environment variables, please click on a talk and speaker combination.{% endblocktrans %}
+</p>
+
+<div class="row">
+  <div class="col-md-12">
+    {% bootstrap_form form exclude='confirm' %}
+  </div>
+</div>
+
+<h4>{% trans "To preview your email, click on a speaker and talk combination:" %}</h4>
+
+<div class="row">
+  <div class="col-md-12">
+    <a href="preview"></a>
+    <pre id="preview" class="hidden"></pre>
+  </div>
+  <div class="col-md-12">
+    <ul class="list-group">
+      {% for talk in talks %}
+      {% for speaker in talk.speakers.all %}
+      <a class="list-group-item" onclick="preview({{ speaker.pk }}, {{ talk.pk }});">
+        <b>{{ speaker }}</b> {{ talk }}
+      </a>
+      {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {% if form.confirm %}
+    {% bootstrap_field form.confirm %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">{% trans "Send!" %}</button>
+    {% endbuttons %}
+    {% else %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">{% trans "Check template validity" %}</button>
+    {% endbuttons %}
+    {% endif %}
+  </div>
+</div>
+
+</form>
+
+{% endblock %}
+
+{% block js_end %}
+{{ block.super }}
+{{ form.media.js }}
+<script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
+<script type="text/javascript">
+var csrftoken = $.cookie('csrftoken');
+var preview_url = "{% url 'talk-email-preview' %}";
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+  }
+});
+
+function preview(speaker, talk) {
+    $('#preview').removeClass('hidden');
+    $('#preview').html('Loading preview...');
+    var body = $('#body').val();
+    $.post(preview_url, {
+            'speaker': speaker,
+            'talk': talk,
+            'subject': $('#id_subject').val(),
+            'body': $('#id_body').val(),
+        })
+        .done(function(data, textStatus) {
+            $('#preview').html(data);
+        })
+        .fail(function () {
+            $('#preview').html('Sorry, an error occured.');
+        })
+        .always(function () {
+            $(document).scrollTop($('#preview').offset().top);
+        });
+}
+</script>
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media.css }}
+{% endblock %}

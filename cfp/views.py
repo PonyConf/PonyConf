@@ -5,13 +5,15 @@ from django.urls import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, FormView, TemplateView
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Count, Sum
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseServerError
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.forms import modelform_factory
+from django import forms
+from django.views.decorators.http import require_http_methods
 
 from django_select2.views import AutoResponseView
 
@@ -25,10 +27,11 @@ from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
+from .emails import talk_email_send, talk_email_render_preview
 from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, get_talk_speaker_form_class, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, HomepageForm, CreateUserForm, TrackForm, RoomForm, \
-                   VolunteerForm, VolunteerFilterForm, MailForm, \
+                   VolunteerForm, VolunteerFilterForm, EmailForm, PreviewMailForm, SendMailForm, \
                    TagForm, TalkCategoryForm, ActivityForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
@@ -90,7 +93,7 @@ Thanks!
 
 
 def volunteer_mail_token(request):
-    form = MailForm(request.POST or None)
+    form = EmailForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         try:
             volunteer = Volunteer.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
@@ -272,7 +275,7 @@ Thanks!
 
 
 def proposal_mail_token(request):
-    form = MailForm(request.POST or None)
+    form = EmailForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         try:
             speaker = Participant.objects.get(site=request.conference.site, email=form.cleaned_data['email'])
@@ -642,6 +645,9 @@ def talk_list(request):
             if data['room']:
                 talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
             talk.save()
+        if data['email']:
+            request.session['talk-email-list'] = data['talks']
+            return redirect(reverse('talk-email'))
         return redirect(request.get_full_path())
     # Sorting
     if request.GET.get('order') == 'desc':
@@ -687,6 +693,7 @@ def talk_list(request):
         'sort_urls': sort_urls,
         'sort_glyphicons': sort_glyphicons,
         'csv_link': csv_link,
+        'pending_email': bool(request.session.get('talk-email-list', None)),
     })
 
 
@@ -775,6 +782,45 @@ def talk_decide(request, talk_id, accept):
         'talk': talk,
         'accept': accept,
     })
+
+
+@staff_required
+def talk_email(request):
+    talks = Talk.objects.filter(pk__in=request.session.get('talk-email-list', []))
+    count = talks.annotate(speakers_count=Count('speakers', distinct=True)).aggregate(Sum('speakers_count'))['speakers_count__sum']
+    if not talks.exists():
+        messages.error(request, _('Please select some talks.'))
+        return redirect('talk-list')
+    form = SendMailForm(request.POST or None, initial=request.session.get('talk-email-stored'), talks=talks)
+    if request.method == 'POST' and form.is_valid():
+        subject = form.cleaned_data['subject']
+        body = form.cleaned_data['body']
+        request.session['talk-email-stored'] = {'subject': subject, 'body': body}
+        if form.cleaned_data['confirm']:
+            sent = talk_email_send(talks, subject, body)
+            messages.success(request, _('%(count)d mails have been sent.') % {'count': sent})
+            del request.session['talk-email-list']
+            return redirect('talk-list')
+        else:
+            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': count})
+    else:
+        form.fields.pop('confirm')
+    return render(request, 'cfp/staff/talk_email.html', {
+        'talks': talks,
+        'form': form,
+    })
+
+
+@require_http_methods(['POST'])
+@staff_required
+def talk_email_preview(request):
+    form = PreviewMailForm(request.POST or None)
+    if not form.is_valid():
+        return HttpResponseServerError()
+    speaker = get_object_or_404(Participant, site=request.conference.site, pk=form.cleaned_data['speaker'])
+    talk = get_object_or_404(Talk, site=request.conference.site, pk=form.cleaned_data['talk'])
+    preview = talk_email_render_preview(talk, speaker, form.cleaned_data['subject'], form.cleaned_data['body'])
+    return HttpResponse(preview)
 
 
 @staff_required

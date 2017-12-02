@@ -11,6 +11,7 @@ from django_select2.forms import ModelSelect2MultipleWidget
 
 from .models import Participant, Talk, TalkCategory, Track, Tag, \
                     Conference, Room, Volunteer, Activity
+from .environment import TalkEnvironment
 
 
 ACCEPTATION_CHOICES = [
@@ -182,6 +183,7 @@ class TalkActionForm(forms.Form):
     track = forms.ChoiceField(required=False, choices=[], label=_('Assign to a track'))
     tag = forms.ChoiceField(required=False, choices=[], label=_('Add a tag'))
     room = forms.ChoiceField(required=False, choices=[], label=_('Put in a room'))
+    email = forms.BooleanField(label=_('Send a email'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
@@ -246,8 +248,43 @@ class ParticipantFilterForm(forms.Form):
         self.fields['track'].choices = [('none', _('Not assigned'))] + list(tracks.values_list('slug', 'name'))
 
 
-class MailForm(forms.Form):
+class EmailForm(forms.Form):
     email = forms.EmailField(required=True, label=_('Email'))
+
+
+class PreviewMailForm(forms.Form):
+    speaker = forms.IntegerField()
+    talk = forms.IntegerField()
+    subject = forms.CharField(required=False)
+    body = forms.CharField(required=False)
+
+
+class SendMailForm(forms.Form):
+    subject = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea)
+    confirm = forms.BooleanField(required=False, label=_('I read my self twice, confirm sending'))
+
+    def __init__(self, *args, **kwargs):
+        self._talks = kwargs.pop('talks')
+        super().__init__(*args, **kwargs)
+        self._env = dict()
+
+    def clean_subject(self):
+        return self.clean_template('subject')
+
+    def clean_body(self):
+        return self.clean_template('body')
+
+    def clean_template(self, template):
+        try:
+            for talk in self._talks.all():
+                for speaker in talk.speakers.all():
+                    env = self._env.get((talk, speaker), TalkEnvironment(talk, speaker))
+                    env.from_string(self.cleaned_data.get(template)).render()
+        except Exception as e:
+            raise forms.ValidationError(_("Your template does not compile (at least) with talk '%(talk)s' and speaker '%(speaker)s'.") %
+                        {'talk': talk, 'speaker': speaker})
+        return self.cleaned_data.get(template)
 
 
 class UsersWidget(ModelSelect2MultipleWidget):

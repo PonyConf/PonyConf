@@ -11,3 +11,4 @@ markdown
 bleach
 chardet
 icalendar
+jinja2
