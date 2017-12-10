@@ -4,19 +4,19 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-bleach==2.1.1
+-e git+git://github.com/nim65s/django-autoslug.git#egg=django-autoslug
+bleach==2.1.2
 chardet==3.0.4
 django-appconf==1.0.2     # via django-select2
-django-autoslug==1.9.3
 django-bootstrap3==9.1.0
 django-bower==5.2.0
 django-colorful==1.2
 django-crispy-forms==1.7.0
 django-select2==5.11.1
-django==1.11.7
-html5lib==1.0b10          # via bleach
+django==2.0
+html5lib==1.0.1           # via bleach
 icalendar==4.0.0
-markdown==2.6.9
+markdown==2.6.10
 python-dateutil==2.6.1    # via icalendar
 pytz==2017.3              # via django, icalendar
 six==1.11.0               # via bleach, django-bower, html5lib, python-dateutil

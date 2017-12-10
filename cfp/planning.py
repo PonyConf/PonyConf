@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.utils.timezone import localtime, now
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.loader import get_template
 from django.conf import settings
 
@@ -298,9 +298,9 @@ class Program:
             if not result:
                 result = getattr(self, '_as_%s' % output)(**kwargs)
                 cache.set(cache_entry, result, 3 * 60 * 60) # 3H
-            return mark_safe(result)
+            return result
         else:
-            return mark_safe(getattr(self, '_as_%s' % output)(**kwargs))
+            return getattr(self, '_as_%s' % output)(**kwargs)
 
     def __str__(self):
         return self.render()

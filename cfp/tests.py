@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.utils import timezone
 from django.contrib import messages
@@ -148,11 +148,12 @@ class ProposalTest(TestCase):
         conf.home = '**Welcome!**'
         conf.save()
         response = self.client.get(reverse('home'))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<strong>Welcome!</strong>')
 
     def test_proposal_closed(self):
         conf = Conference.objects.get(name='PonyConf')
+        Talk.objects.filter(site=conf.site).all().delete()
         TalkCategory.objects.filter(site=conf.site).all().delete()
         response = self.client.get(reverse('proposal-home'))
         self.assertEqual(response.status_code, 200)
@@ -190,7 +191,7 @@ class ProposalTest(TestCase):
             'description': 'PonyConf is cool.',
         })
         speaker = Participant.objects.get(site=site, name='Jean-Mi')
-        self.assertEquals(speaker.email, 'jean-mi@example.org')
+        self.assertEqual(speaker.email, 'jean-mi@example.org')
         talk = Talk.objects.get(site=site, title='PonyConf')
         self.assertRedirects(response, reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)), 302)
         self.assertTrue(speaker in talk.speakers.all())
@@ -211,9 +212,9 @@ class ProposalTest(TestCase):
             'biography': 'New bio',
         }), reverse('proposal-dashboard', kwargs={'speaker_token': speaker.token}))
         speaker = Participant.objects.get(pk=speaker.pk)
-        self.assertEquals(speaker.name, 'New name')
-        self.assertEquals(speaker.email, 'new-mail@example.org')
-        self.assertEquals(speaker.biography, 'New bio')
+        self.assertEqual(speaker.name, 'New name')
+        self.assertEqual(speaker.email, 'new-mail@example.org')
+        self.assertEqual(speaker.biography, 'New bio')
 
     def test_proposal_talk_details(self):
         speaker1 = Participant.objects.get(name='Speaker 1')
@@ -235,7 +236,7 @@ class ProposalTest(TestCase):
             'description': 'Talk description',
         })
         talk = Talk.objects.get(title='New talk')
-        self.assertEquals(talk.description, 'Talk description')
+        self.assertEqual(talk.description, 'Talk description')
         self.assertRedirects(response, reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
 
     def test_proposal_talk_edit(self):
@@ -243,14 +244,14 @@ class ProposalTest(TestCase):
         talk = Talk.objects.get(title='Talk 1')
         url = reverse('proposal-talk-edit', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk})
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(self.client.post(url, {
             'title': 'New title',
             'description': 'New description',
         }), reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
         talk = Talk.objects.get(pk=talk.pk)
-        self.assertEquals(talk.title, 'New title')
-        self.assertEquals(talk.description, 'New description')
+        self.assertEqual(talk.title, 'New title')
+        self.assertEqual(talk.description, 'New description')
 
     def test_proposal_speaker_add(self):
         speaker1 = Participant.objects.get(name='Speaker 1')
@@ -271,13 +272,13 @@ class ProposalTest(TestCase):
             'notify': 1,
         })
         self.assertRedirects(response, url_talk)
-        self.assertEquals(talk.speakers.count(), speaker_count+1)
+        self.assertEqual(talk.speakers.count(), speaker_count+1)
         speaker5 = Participant.objects.get(name='Speaker 5')
         self.assertTrue(speaker5 in talk.speakers.all())
         self.assertFalse(speaker4 in talk.speakers.all())
         response = self.client.get(url_add_existing)
         self.assertRedirects(response, url_talk)
-        self.assertEquals(talk.speakers.count(), speaker_count+2)
+        self.assertEqual(talk.speakers.count(), speaker_count+2)
         self.assertTrue(speaker4 in talk.speakers.all())
 
 
@@ -334,11 +335,11 @@ class ProposalTest(TestCase):
         talk.accepted = None
         talk.save()
         for url in [confirm_url, desist_url]:
-            self.assertEquals(self.client.get(url).status_code, 403)
+            self.assertEqual(self.client.get(url).status_code, 403)
         talk.accepted = False
         talk.save()
         for url in [confirm_url, desist_url]:
-            self.assertEquals(self.client.get(url).status_code, 403)
+            self.assertEqual(self.client.get(url).status_code, 403)
         talk.accepted = True
         talk.save()
         conf.save()
@@ -393,13 +394,13 @@ class StaffTest(TestCase):
         url = reverse('staff')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(url).status_code, 200)
+        self.assertEqual(self.client.get(url).status_code, 200)
 
     def test_admin(self):
         url = reverse('admin')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(url).status_code, 200)
+        self.assertEqual(self.client.get(url).status_code, 200)
 
     def test_volunteer_list(self):
         url = reverse('volunteer-list')
@@ -431,14 +432,14 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_activity_add(self):
         url = reverse('activity-list')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_activity_edit(self):
         conf = Conference.objects.get(name='PonyConf')
@@ -446,13 +447,13 @@ class StaffTest(TestCase):
         url = reverse('activity-edit', kwargs={'slug': activity.slug})
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(url).status_code, 200)
+        self.assertEqual(self.client.get(url).status_code, 200)
         response = self.client.post(url, {
             'name': 'New activity name',
         })
         self.assertRedirects(response, reverse('activity-list'))
         activity = Activity.objects.get(pk=activity.pk)
-        self.assertEquals(activity.name, 'New activity name')
+        self.assertEqual(activity.name, 'New activity name')
 
     def test_activity_remove(self):
         pass
@@ -462,7 +463,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Speaker 1')
         self.assertContains(response, 'Speaker 2')
         response = self.client.get(url + '?format=csv')
@@ -478,7 +479,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Speaker 1')
         self.assertContains(response, 'Speaker 2')
         self.assertNotContains(response, 'Speaker 3')
@@ -491,16 +492,16 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(self.client.post(url, {
             'name': 'New name',
             'email': 'new-mail@example.org',
             'biography': 'New bio',
         }), reverse('participant-details', kwargs={'participant_id': speaker.pk}))
         speaker = Participant.objects.get(pk=speaker.pk)
-        self.assertEquals(speaker.name, 'New name')
-        self.assertEquals(speaker.email, 'new-mail@example.org')
-        self.assertEquals(speaker.biography, 'New bio')
+        self.assertEqual(speaker.name, 'New name')
+        self.assertEqual(speaker.email, 'new-mail@example.org')
+        self.assertEqual(speaker.biography, 'New bio')
 
     def test_speaker_add_talk(self):
         speaker = Participant.objects.get(name='Speaker 1')
@@ -508,14 +509,14 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_talk_list(self):
         url = reverse('talk-list')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Talk 1')
         response = self.client.get(url + '?format=csv')
         self.assertEqual(response.status_code, 200)
@@ -527,7 +528,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, talk.title)
 
     def test_conference(self):
@@ -536,7 +537,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_conference_opened_categories(self):
         # TODO cover all cases
@@ -618,7 +619,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(accept_url), reverse('login') + '?next=' + accept_url)
         self.assertRedirects(self.client.get(decline_url), reverse('login') + '?next=' + decline_url)
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(accept_url).status_code, 200)
+        self.assertEqual(self.client.get(accept_url).status_code, 200)
         self.assertRedirects(self.client.post(accept_url), details_url)
         talk = Talk.objects.get(pk=talk.pk)
         self.assertTrue(talk.accepted)
@@ -627,7 +628,7 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.post(accept_url, {'message': 'Ok'}), details_url)
         talk = Talk.objects.get(pk=talk.pk)
         self.assertTrue(talk.accepted)
-        self.assertEquals(self.client.get(decline_url).status_code, 200)
+        self.assertEqual(self.client.get(decline_url).status_code, 200)
         self.assertRedirects(self.client.post(decline_url), details_url)
         talk = Talk.objects.get(pk=talk.pk)
         self.assertFalse(talk.accepted)
@@ -648,50 +649,50 @@ class StaffTest(TestCase):
         self.assertRedirects(self.client.get(confirm_url), reverse('login') + '?next=' + confirm_url)
         self.assertRedirects(self.client.get(desist_url), reverse('login') + '?next=' + desist_url)
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(confirm_url).status_code, 403)
-        self.assertEquals(self.client.get(desist_url).status_code, 403)
+        self.assertEqual(self.client.get(confirm_url).status_code, 403)
+        self.assertEqual(self.client.get(desist_url).status_code, 403)
         talk.accepted = False
         talk.save()
-        self.assertEquals(self.client.get(confirm_url).status_code, 403)
-        self.assertEquals(self.client.get(desist_url).status_code, 403)
+        self.assertEqual(self.client.get(confirm_url).status_code, 403)
+        self.assertEqual(self.client.get(desist_url).status_code, 403)
         talk.accepted = True
         talk.save()
         self.assertRedirects(self.client.get(confirm_url), details_url)
         talk = Talk.objects.get(pk=talk.pk)
         self.assertTrue(talk.confirmed)
-        self.assertEquals(self.client.get(confirm_url).status_code, 403)
+        self.assertEqual(self.client.get(confirm_url).status_code, 403)
         self.assertRedirects(self.client.get(desist_url), details_url)
         talk = Talk.objects.get(pk=talk.pk)
         self.assertFalse(talk.confirmed)
-        self.assertEquals(self.client.get(desist_url).status_code, 403)
+        self.assertEqual(self.client.get(desist_url).status_code, 403)
 
     def test_category_list(self):
         url = reverse('category-list')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_category_add(self):
         url = reverse('category-add')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_tag_list(self):
         url = reverse('tag-list')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_tag_add(self):
         url = reverse('tag-add')
         self.assertRedirects(self.client.get(url), reverse('login') + '?next=' + url)
         self.client.login(username='admin', password='admin')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
 
 class ScheduleTest(TestCase):
@@ -719,10 +720,10 @@ class ScheduleTest(TestCase):
     def test_public_schedule(self):
         site = Site.objects.first()
         conf = Conference.objects.get(site=site)
-        self.assertEquals(self.client.get(reverse('public-schedule')).status_code, 403)
+        self.assertEqual(self.client.get(reverse('public-schedule')).status_code, 403)
         conf.schedule_publishing_date = timezone.now() - timedelta(hours=1)
         conf.save()
-        self.assertEquals(self.client.get(reverse('public-schedule')).status_code, 200)
+        self.assertEqual(self.client.get(reverse('public-schedule')).status_code, 200)
         conf.schedule_redirection_url ='http://example.net/schedule.html'
         conf.save()
         self.assertRedirects(self.client.get(reverse('public-schedule')), conf.schedule_redirection_url, status_code=302, fetch_redirect_response=False)
@@ -735,7 +736,7 @@ class ScheduleTest(TestCase):
     def test_xml(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('staff-schedule') + 'xml/')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Public tag')
         self.assertNotContains(response, 'Private tag')
         ET.fromstring(response.content)
@@ -743,7 +744,7 @@ class ScheduleTest(TestCase):
     def test_ics(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('staff-schedule') + 'ics/')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         Calendar.from_ical(response.content)
 
     def test_html(self):
@@ -751,8 +752,8 @@ class ScheduleTest(TestCase):
         response = self.client.get(reverse('staff-schedule') + 'html/')
         self.assertContains(response, 'Staff tag')
         self.assertNotContains(response, 'Not staff tag')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_inexistent_format(self):
         self.client.login(username='admin', password='admin')
-        self.assertEquals(self.client.get(reverse('staff-schedule') + 'inexistent/').status_code, 404)
+        self.assertEqual(self.client.get(reverse('staff-schedule') + 'inexistent/').status_code, 404)

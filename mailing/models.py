@@ -56,9 +56,9 @@ class MessageManager(models.Manager):
 
 class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    thread = models.ForeignKey(MessageThread)
-    author = models.ForeignKey(MessageAuthor)
-    in_reply_to = models.ForeignKey('self', null=True, blank=True)
+    thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE)
+    author = models.ForeignKey(MessageAuthor, on_delete=models.PROTECT)
+    in_reply_to = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     subject = models.CharField(max_length=1000, blank=True)
     content = models.TextField(blank=True)
     token = models.CharField(max_length=64, default=generate_message_token, unique=True)

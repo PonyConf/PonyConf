@@ -19,7 +19,7 @@ def speaker_required(view_func):
             except ValueError:
                 raise Http404
             speaker = get_object_or_404(Participant, site=request.conference.site, token=speaker_token)
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             speaker = get_object_or_404(Participant, site=request.conference.site, email=request.user.email)
         else:
             raise PermissionDenied
@@ -37,7 +37,7 @@ def volunteer_required(view_func):
             except ValueError:
                 raise Http404
             volunteer = get_object_or_404(Volunteer, site=request.conference.site, token=volunteer_token)
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             volunteer = get_object_or_404(Volunteer, site=request.conference.site, email=request.user.email)
         else:
             raise PermissionDenied
@@ -48,7 +48,7 @@ def volunteer_required(view_func):
 
 def staff_required(view_func):
     def _is_staff(request, *args, **kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return login_required(view_func)(request, *args, **kwargs)
         elif is_staff(request, request.user):
             return view_func(request, *args, **kwargs)

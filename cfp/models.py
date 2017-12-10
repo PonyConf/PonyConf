@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -117,7 +117,7 @@ class Participant(PonyConfModel):
     notes = models.TextField(default='', blank=True, verbose_name=_("Notes"),
                              help_text=_('This field is only visible by organizers.'))
     vip = models.BooleanField(default=False, verbose_name=_('Invited speaker'))
-    conversation = models.OneToOneField(MessageThread)
+    conversation = models.OneToOneField(MessageThread, on_delete=models.PROTECT)
 
     objects = ParticipantManager()
 
@@ -332,14 +332,14 @@ class Talk(PonyConfModel):
     slug = AutoSlugField(populate_from='title', unique=True)
     description = models.TextField(verbose_name=_('Description of your talk'),
                                    help_text=_('This description will be visible on the program.'))
-    track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'))
+    track = models.ForeignKey(Track, blank=True, null=True, verbose_name=_('Track'), on_delete=models.SET_NULL)
     tags = models.ManyToManyField(Tag, blank=True)
     notes = models.TextField(blank=True, verbose_name=_('Message to organizers'),
                                    help_text=_('If you have any constraint or if you have anything that may '
                                                'help you to select your talk, like a video or slides of your'
                                                ' talk, please write it down here. This field will only be '
                                                'visible by organizers.'))
-    category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'))
+    category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'), on_delete=models.PROTECT)
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA',
                                      max_length=10, verbose_name=_("Video licence"))
@@ -348,13 +348,13 @@ class Talk(PonyConfModel):
     confirmed = models.NullBooleanField(default=None)
     start_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Beginning date and time'))
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
-    room = models.ForeignKey(Room, blank=True, null=True, default=None)
+    room = models.ForeignKey(Room, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     plenary = models.BooleanField(default=False)
     materials = models.FileField(null=True, blank=True, upload_to=talks_materials_destination, verbose_name=_('Materials'),
                                      help_text=_('You can use this field to share some materials related to your intervention.'))
     video = models.URLField(max_length=1000, blank=True, default='', verbose_name='Video URL')
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    conversation = models.OneToOneField(MessageThread)
+    conversation = models.OneToOneField(MessageThread, on_delete=models.PROTECT)
 
     objects = TalkManager()
 
@@ -445,8 +445,8 @@ class Talk(PonyConfModel):
 
 
 class Vote(PonyConfModel):
-    talk = models.ForeignKey(Talk)
-    user = models.ForeignKey(User)
+    talk = models.ForeignKey(Talk, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.IntegerField(validators=[MinValueValidator(-2), MaxValueValidator(2)], default=0)
 
     class Meta:
@@ -491,7 +491,7 @@ class Volunteer(PonyConfModel):
     notes = models.TextField(default='', blank=True, verbose_name=_('Notes'),
                              help_text=_('If you have some constraints, you can indicate them here.'))
     activities = models.ManyToManyField(Activity, blank=True, related_name='volunteers', verbose_name=_('Activities'))
-    conversation = models.OneToOneField(MessageThread)
+    conversation = models.OneToOneField(MessageThread, on_delete=models.PROTECT)
 
     def get_absolute_url(self):
         return reverse('volunteer-details', kwargs={'volunteer_id': self.pk})

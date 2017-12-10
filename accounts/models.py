@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
 class Profile(models.Model):
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=16, blank=True, default='', verbose_name=_('Phone number'))
     sms_prefered = models.BooleanField(default=False, verbose_name=_('SMS prefered'))
     biography = models.TextField(blank=True, verbose_name=_('Biography'))

@@ -1,8 +1,7 @@
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, FormView, TemplateView
 from django.contrib import messages
@@ -42,24 +41,24 @@ def home(request):
 
 
 def volunteer_enrole(request):
-    if request.user.is_authenticated() and Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
+    if request.user.is_authenticated and Volunteer.objects.filter(site=request.conference.site, email=request.user.email).exists():
         return redirect(reverse('volunteer-dashboard'))
     if not request.conference.volunteers_enrollment_is_open():
         raise PermissionDenied
     initial = {}
-    if request.user.is_authenticated() and not request.POST:
+    if request.user.is_authenticated and not request.POST:
         initial.update({
             'name': request.user.get_full_name(),
             'phone_number': request.user.profile.phone_number,
             'sms_prefered': request.user.profile.sms_prefered,
         })
     form = VolunteerForm(request.POST or None, initial=initial, conference=request.conference)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         form.fields.pop('email')
     if request.method == 'POST' and form.is_valid():
         volunteer = form.save(commit=False)
         volunteer.language = request.LANGUAGE_CODE
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             volunteer.email = request.user.email
         volunteer.save()
         form.save_m2m()
@@ -205,7 +204,7 @@ def proposal_home(request):
         return render(request, 'cfp/closed.html')
     initial = {}
     fields = ['name', 'email', 'biography']
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if Participant.objects.filter(site=request.conference.site, email=request.user.email).exists():
             return redirect(reverse('proposal-dashboard'))
         elif not request.POST:
@@ -220,7 +219,7 @@ def proposal_home(request):
     if request.method == 'POST' and all(map(lambda f: f.is_valid(), [speaker_form, talk_form])):
         speaker = speaker_form.save(commit=False)
         speaker.site = request.conference.site
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             speaker.email = request.user.email
         speaker.save()
         talk = talk_form.save(commit=False)
@@ -725,9 +724,11 @@ def talk_details(request, talk_id):
 
 @staff_required
 def talk_vote(request, talk_id, score):
+    if score not in [-2, -1, 0, 1, 2]:
+        raise Http404
     talk = get_object_or_404(Talk, pk=talk_id, site=request.conference.site)
     vote, created = Vote.objects.get_or_create(talk=talk, user=request.user)
-    vote.vote = int(score)
+    vote.vote = score
     vote.save()
     messages.success(request, _('Vote successfully created') if created else _('Vote successfully updated'))
     return redirect(talk.get_absolute_url())
