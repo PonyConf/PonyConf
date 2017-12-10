@@ -16,7 +16,9 @@ django-select2==5.11.1
 django==2.0
 html5lib==1.0.1           # via bleach
 icalendar==4.0.0
+jinja2==2.10
 markdown==2.6.10
+markupsafe==1.0           # via jinja2
 python-dateutil==2.6.1    # via icalendar
 pytz==2017.3              # via django, icalendar
 six==1.11.0               # via bleach, django-bower, html5lib, python-dateutil
