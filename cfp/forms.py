@@ -255,8 +255,8 @@ class EmailForm(forms.Form):
 class PreviewMailForm(forms.Form):
     speaker = forms.IntegerField()
     talk = forms.IntegerField()
-    subject = forms.CharField(required=False)
-    body = forms.CharField(required=False)
+    subject = forms.CharField(required=False, label=_('Subject'))
+    body = forms.CharField(required=False, label=_('Body'))
 
 
 class SendMailForm(forms.Form):

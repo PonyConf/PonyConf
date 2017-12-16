@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-10 15:23+0000\n"
-"PO-Revision-Date: 2017-12-10 16:25+0100\n"
+"POT-Creation-Date: 2017-12-10 16:36+0000\n"
+"PO-Revision-Date: 2017-12-10 17:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -100,23 +100,23 @@ msgstr "Profil modifié avec succès !"
 msgid "Please correct those errors."
 msgstr "Merci de corriger ces erreurs."
 
-#: cfp/emails.py:28
+#: cfp/emails.py:16
 msgid "There is an error in your subject template."
 msgstr "Il y a une erreur dans le gabarit du sujet."
 
-#: cfp/emails.py:32
+#: cfp/emails.py:20
 msgid "There is an error in your body template."
 msgstr "Il y a une erreur dans le gabarit du corps."
 
-#: cfp/emails.py:34
+#: cfp/emails.py:22
 msgid "Environment:"
 msgstr "Environnement :"
 
-#: cfp/emails.py:35
+#: cfp/emails.py:23
 msgid "Subject:"
 msgstr "Sujet :"
 
-#: cfp/emails.py:35
+#: cfp/emails.py:23
 msgid "Body:"
 msgstr "Corps :"
 
@@ -275,10 +275,18 @@ msgid "Email"
 msgstr "E-mail"
 
 #: cfp/forms.py:258
+msgid "Subject"
+msgstr "Sujet"
+
+#: cfp/forms.py:259
+msgid "Body"
+msgstr "Corps"
+
+#: cfp/forms.py:265
 msgid "I read my self twice, confirm sending"
 msgstr "Je me suis relu 2 fois, confirmer l’envoi"
 
-#: cfp/forms.py:278
+#: cfp/forms.py:285
 #, python-format
 msgid ""
 "Your template does not compile (at least) with talk '%(talk)s' and speaker "
@@ -287,17 +295,17 @@ msgstr ""
 "Vos gabarits ne compile pas avec (au moins) l’exposé « %(talk)s » et "
 "l’intervenant « %(speaker)s »."
 
-#: cfp/forms.py:299
+#: cfp/forms.py:306
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:325
+#: cfp/forms.py:332
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:330
+#: cfp/forms.py:337
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -1241,11 +1249,11 @@ msgstr ""
 "Pour voir un aperçu de votre e-mail, cliquez sur une combinaison "
 "d'intervenant et exposé."
 
-#: cfp/templates/cfp/staff/talk_email.html:52
+#: cfp/templates/cfp/staff/talk_email.html:53
 msgid "Send!"
 msgstr "Envoyer !"
 
-#: cfp/templates/cfp/staff/talk_email.html:56
+#: cfp/templates/cfp/staff/talk_email.html:57
 msgid "Check template validity"
 msgstr "Vérifier la validité des gabarits"
 
@@ -1624,7 +1632,7 @@ msgstr "[%(conference)s] L’exposé « %(talk)s » a été %(action)s"
 msgid "[%(conference)s] New comment about '%(talk)s'"
 msgstr "[%(conference)s] Nouveau commentaire sur « %(talk)s »"
 
-#: cfp/views.py:724 cfp/views.py:893
+#: cfp/views.py:724 cfp/views.py:888
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
@@ -1659,11 +1667,11 @@ msgstr "%(count)d e-mails ont été envoyés."
 msgid "Your ready to send %(count)d emails."
 msgstr "Vous êtes prêt pour envoyer %(count)d e-mails."
 
-#: cfp/views.py:963
+#: cfp/views.py:958
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:964
+#: cfp/views.py:959
 msgid ""
 "Hi {},\n"
 "\n"
@@ -1687,15 +1695,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:985 cfp/views.py:997
+#: cfp/views.py:980 cfp/views.py:992
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:1161
+#: cfp/views.py:1156
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:1182
+#: cfp/views.py:1177
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
