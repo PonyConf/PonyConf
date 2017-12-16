@@ -178,12 +178,20 @@ class TalkFilterForm(forms.Form):
 
 
 class TalkActionForm(forms.Form):
+    EMAIL_TALKS = 1
+    EMAIL_SPEAKERS = 2
+    EMAIL_CHOICES = (
+        (None, "---------"),
+        (EMAIL_TALKS, _('one per speaker and talk combination')),
+        (EMAIL_SPEAKERS, _('only one per speaker')),
+    )
+
     talks = forms.MultipleChoiceField(choices=[])
     decision = forms.NullBooleanField(label=_('Accept talk?'))
     track = forms.ChoiceField(required=False, choices=[], label=_('Assign to a track'))
     tag = forms.ChoiceField(required=False, choices=[], label=_('Add a tag'))
     room = forms.ChoiceField(required=False, choices=[], label=_('Put in a room'))
-    email = forms.BooleanField(required=False, label=_('Send a email'))
+    email = forms.ChoiceField(required=False, choices=EMAIL_CHOICES, label=_('Send an email'))
 
     def __init__(self, *args, **kwargs):
         site = kwargs.pop('site')
@@ -200,7 +208,7 @@ class TalkActionForm(forms.Form):
 
 class SpeakerActionForm(forms.Form):
     speakers = forms.MultipleChoiceField(choices=[])
-    email = forms.BooleanField(required=False, label=_('Send a email'))
+    email = forms.BooleanField(required=False, label=_('Send an email'))
 
     def __init__(self, *args, **kwargs):
         speakers = kwargs.pop('speakers')

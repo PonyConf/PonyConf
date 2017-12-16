@@ -645,9 +645,16 @@ def talk_list(request):
             if data['room']:
                 talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
             talk.save()
-        if data['email']:
-            request.session['talk-email-list'] = data['talks']
-            return redirect(reverse('talk-email'))
+        email = int(data['email'])
+        if email:
+            if email == TalkActionForm.EMAIL_TALKS:
+                request.session['talk-email-list'] = data['talks']
+                return redirect(reverse('talk-email'))
+            elif email == TalkActionForm.EMAIL_SPEAKERS:
+                selected_talks = Talk.objects.filter(pk__in=data['talks'])
+                speakers = Participant.objects.filter(pk__in=selected_talks.values('speakers__pk')).distinct()
+                request.session['speaker-email-list'] = list(speakers.values_list('pk', flat=True))
+                return redirect(reverse('speaker-email'))
         return redirect(request.get_full_path())
     # Sorting
     if request.GET.get('order') == 'desc':

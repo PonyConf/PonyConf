@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 12:20+0000\n"
-"PO-Revision-Date: 2017-12-16 13:22+0100\n"
+"POT-Creation-Date: 2017-12-16 15:41+0000\n"
+"PO-Revision-Date: 2017-12-16 16:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: accounts/forms.py:20
 msgid "Email address"
@@ -124,7 +124,7 @@ msgstr "Corps :"
 msgid "Pending decision"
 msgstr "Décision en attente"
 
-#: cfp/forms.py:19 cfp/forms.py:126 cfp/forms.py:234
+#: cfp/forms.py:19 cfp/forms.py:126 cfp/forms.py:242
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -136,7 +136,7 @@ msgstr "Décliné"
 msgid "Waiting"
 msgstr "En attente"
 
-#: cfp/forms.py:30 cfp/forms.py:132 cfp/forms.py:240 cfp/models.py:379
+#: cfp/forms.py:30 cfp/forms.py:132 cfp/forms.py:248 cfp/models.py:379
 msgid "Confirmed"
 msgstr "Confirmé"
 
@@ -158,7 +158,7 @@ msgstr "Aucune"
 msgid "Default duration: %(duration)d min"
 msgstr "Durée par défaut : %(duration)d min"
 
-#: cfp/forms.py:108 cfp/forms.py:120 cfp/forms.py:228
+#: cfp/forms.py:108 cfp/forms.py:120 cfp/forms.py:236
 #: cfp/templates/cfp/staff/talk_details.html:15
 msgid "Category"
 msgstr "Catégorie"
@@ -184,7 +184,7 @@ msgstr "Notes"
 msgid "Visible by speakers"
 msgstr "Visible par les orateurs"
 
-#: cfp/forms.py:138 cfp/forms.py:246 cfp/models.py:335
+#: cfp/forms.py:138 cfp/forms.py:254 cfp/models.py:335
 #: cfp/templates/cfp/staff/talk_details.html:21
 #: cfp/templates/cfp/staff/talk_list.html:58
 #: cfp/templates/cfp/staff/track_form.html:14
@@ -241,52 +241,60 @@ msgstr "Vidéo"
 msgid "Filter talks with / without video"
 msgstr "Filtrer les exposés avec / sans vidéo"
 
-#: cfp/forms.py:176 cfp/forms.py:258
+#: cfp/forms.py:176 cfp/forms.py:266
 msgid "Not assigned"
 msgstr "Pas encore assignée"
 
-#: cfp/forms.py:182
+#: cfp/forms.py:185
+msgid "one per speaker and talk combination"
+msgstr "un pour chaque couple intervenant / exposé"
+
+#: cfp/forms.py:186
+msgid "only one per speaker"
+msgstr "uniquement un par intervenant"
+
+#: cfp/forms.py:190
 msgid "Accept talk?"
 msgstr "Accepter la proposition ?"
 
-#: cfp/forms.py:183
+#: cfp/forms.py:191
 msgid "Assign to a track"
 msgstr "Assigner à une session"
 
-#: cfp/forms.py:184 cfp/templates/cfp/admin/tag_list.html:11
+#: cfp/forms.py:192 cfp/templates/cfp/admin/tag_list.html:11
 msgid "Add a tag"
 msgstr "Ajouter une étiquette"
 
-#: cfp/forms.py:185
+#: cfp/forms.py:193
 msgid "Put in a room"
 msgstr "Assigner à une salle"
 
-#: cfp/forms.py:186 cfp/forms.py:203
-msgid "Send a email"
+#: cfp/forms.py:194 cfp/forms.py:211
+msgid "Send an email"
 msgstr "Envoyer un e-mail"
 
-#: cfp/forms.py:212
+#: cfp/forms.py:220
 msgid "Notify by mail?"
 msgstr "Notifier par e-mail ?"
 
-#: cfp/forms.py:262 cfp/models.py:486
+#: cfp/forms.py:270 cfp/models.py:486
 #: cfp/templates/cfp/staff/volunteer_list.html:30
 msgid "Email"
 msgstr "E-mail"
 
-#: cfp/forms.py:268 cfp/forms.py:274
+#: cfp/forms.py:276 cfp/forms.py:282
 msgid "Subject"
 msgstr "Sujet"
 
-#: cfp/forms.py:269 cfp/forms.py:275
+#: cfp/forms.py:277 cfp/forms.py:283
 msgid "Body"
 msgstr "Corps"
 
-#: cfp/forms.py:281 cfp/forms.py:309
+#: cfp/forms.py:289 cfp/forms.py:317
 msgid "I read my self twice, confirm sending"
 msgstr "Je me suis relu 2 fois, confirmer l’envoi"
 
-#: cfp/forms.py:301
+#: cfp/forms.py:309
 #, python-format
 msgid ""
 "Your template does not compile (at least) with talk '%(talk)s' and speaker "
@@ -295,23 +303,23 @@ msgstr ""
 "Vos gabarits ne compile pas avec (au moins) l’exposé « %(talk)s » et "
 "l’intervenant « %(speaker)s »."
 
-#: cfp/forms.py:328
+#: cfp/forms.py:336
 #, python-format
 msgid "Your template does not compile (at least) with speaker '%(speaker)s'."
 msgstr ""
 "Vos gabarits ne compile pas avec (au moins) l’intervenant « %(speaker)s »."
 
-#: cfp/forms.py:349
+#: cfp/forms.py:357
 msgid "New staff members will be informed of their new position by e-mail."
 msgstr ""
 "Les nouveaux membres du staff seront informés de leur nouveau rôle par "
 "courrier électronique."
 
-#: cfp/forms.py:375
+#: cfp/forms.py:383
 msgid "An user with that firstname and that lastname already exists."
 msgstr "Un utilisateur avec ce prénom et ce nom existe déjà."
 
-#: cfp/forms.py:380
+#: cfp/forms.py:388
 msgid "A user with that email already exists."
 msgstr "Un utilisateur avec cet email existe déjà."
 
@@ -648,35 +656,6 @@ msgstr ""
 "Si vous avez déjà soumis une proposition et que vous souhaitez l’éditer, "
 "cliquez <a href=\"%(mail_token_url)s\">ici</a>."
 
-#: cfp/templates/cfp/mails/speaker_send_token.txt:1
-msgid ""
-"Hi {},\n"
-"\n"
-"Someone, probably you, ask to access your profile.\n"
-"You can edit your talks or add new ones following this url:\n"
-"\n"
-"  {}\n"
-"\n"
-"If you have any question, your can answer to this email.\n"
-"\n"
-"Sincerely,\n"
-"\n"
-"{}\n"
-msgstr ""
-"Bonjour {},\n"
-"\n"
-"Quelqu’un, sans doute vous, a demandé à accéder à votre profil.\n"
-"Vous pouvez modifier vos propositions ou en soumettre de nouvelles à l’url "
-"suivante :\n"
-"\n"
-"  {}\n"
-"\n"
-"Si vous avez une question, vous pouvez répondre à ce mail.\n"
-"\n"
-"Sincèrement,\n"
-"\n"
-"{}\n"
-
 #: cfp/templates/cfp/mails/volunteer_send_token.txt:1
 #, python-format
 msgid ""
@@ -804,7 +783,7 @@ msgid "you must confirm you participation"
 msgstr "vous devez confirmer votre participation"
 
 #: cfp/templates/cfp/proposal_dashboard.html:61 cfp/views.py:626
-#: cfp/views.py:751
+#: cfp/views.py:758
 msgid "accepted"
 msgstr "accepté"
 
@@ -1638,69 +1617,69 @@ msgstr "L’exposé a été %(action)s."
 msgid "[%(conference)s] The talk '%(talk)s' have been %(action)s."
 msgstr "[%(conference)s] L’exposé « %(talk)s » a été %(action)s."
 
-#: cfp/views.py:628 cfp/views.py:753
+#: cfp/views.py:628 cfp/views.py:760
 msgid "declined"
 msgstr "décliné"
 
-#: cfp/views.py:629 cfp/views.py:777
+#: cfp/views.py:629 cfp/views.py:784
 #, python-format
 msgid "The talk has been %(action)s."
 msgstr "L’exposé a été %(action)s."
 
-#: cfp/views.py:633 cfp/views.py:772
+#: cfp/views.py:633 cfp/views.py:779
 #, python-format
 msgid "[%(conference)s] The talk '%(talk)s' have been %(action)s"
 msgstr "[%(conference)s] L’exposé « %(talk)s » a été %(action)s"
 
-#: cfp/views.py:710
+#: cfp/views.py:717
 #, python-format
 msgid "[%(conference)s] New comment about '%(talk)s'"
 msgstr "[%(conference)s] Nouveau commentaire sur « %(talk)s »"
 
-#: cfp/views.py:724 cfp/views.py:898
+#: cfp/views.py:731 cfp/views.py:905
 msgid "Message sent!"
 msgstr "Message envoyé !"
 
-#: cfp/views.py:740
+#: cfp/views.py:747
 msgid "Vote successfully created"
 msgstr "A voté !"
 
-#: cfp/views.py:740
+#: cfp/views.py:747
 msgid "Vote successfully updated"
 msgstr "Vote mis à jour"
 
-#: cfp/views.py:761
+#: cfp/views.py:768
 #, python-format
 msgid "[%(conference)s] Your talk '%(talk)s' have been %(action)s"
 msgstr "[%(conference)s] Votre exposé « %(talk)s » a été %(action)s"
 
-#: cfp/views.py:779
+#: cfp/views.py:786
 msgid "Decision taken in account"
 msgstr "Décision enregistrée"
 
-#: cfp/views.py:792
+#: cfp/views.py:799
 msgid "Please select some talks."
 msgstr "Veuillez sélectionner un ou plusieurs exposés."
 
-#: cfp/views.py:801 cfp/views.py:969
+#: cfp/views.py:808 cfp/views.py:976
 #, python-format
 msgid "%(count)d mails have been sent."
 msgstr "%(count)d e-mails ont été envoyés."
 
-#: cfp/views.py:805 cfp/views.py:973
+#: cfp/views.py:812 cfp/views.py:980
 #, python-format
 msgid "Your ready to send %(count)d emails."
 msgstr "Vous êtes prêt pour envoyer %(count)d e-mails."
 
-#: cfp/views.py:960
+#: cfp/views.py:967
 msgid "Please select some speakers."
 msgstr "Veuillez sélectionner un ou plusieurs intervenants."
 
-#: cfp/views.py:1005
+#: cfp/views.py:1012
 msgid "[{}] You have been added to the staff team"
 msgstr "[{}] Vous avez été ajouté aux membres du staff"
 
-#: cfp/views.py:1006
+#: cfp/views.py:1013
 msgid ""
 "Hi {},\n"
 "\n"
@@ -1724,15 +1703,15 @@ msgstr ""
 "{}\n"
 "\n"
 
-#: cfp/views.py:1027 cfp/views.py:1039
+#: cfp/views.py:1034 cfp/views.py:1046
 msgid "Modifications successfully saved."
 msgstr "Modification enregistrée avec succès."
 
-#: cfp/views.py:1203
+#: cfp/views.py:1210
 msgid "User created successfully."
 msgstr "Utilisateur créé avec succès."
 
-#: cfp/views.py:1224
+#: cfp/views.py:1231
 #, python-format
 msgid "Format '%s' not available"
 msgstr "Format '%s' non disponible"
@@ -1805,6 +1784,34 @@ msgstr "Mot de passe oublié ?"
 #: ponyconf/templates/registration/password_change_form.html:9
 msgid "Password Change"
 msgstr "Changement de mot de passe"
+
+#~ msgid ""
+#~ "Hi {},\n"
+#~ "\n"
+#~ "Someone, probably you, ask to access your profile.\n"
+#~ "You can edit your talks or add new ones following this url:\n"
+#~ "\n"
+#~ "  {}\n"
+#~ "\n"
+#~ "If you have any question, your can answer to this email.\n"
+#~ "\n"
+#~ "Sincerely,\n"
+#~ "\n"
+#~ "{}\n"
+#~ msgstr ""
+#~ "Bonjour {},\n"
+#~ "\n"
+#~ "Quelqu’un, sans doute vous, a demandé à accéder à votre profil.\n"
+#~ "Vous pouvez modifier vos propositions ou en soumettre de nouvelles à "
+#~ "l’url suivante :\n"
+#~ "\n"
+#~ "  {}\n"
+#~ "\n"
+#~ "Si vous avez une question, vous pouvez répondre à ce mail.\n"
+#~ "\n"
+#~ "Sincèrement,\n"
+#~ "\n"
+#~ "{}\n"
 
 #~ msgid "There is an error in your content template."
 #~ msgstr "Il y a une erreur dans le gabarit du corps."
