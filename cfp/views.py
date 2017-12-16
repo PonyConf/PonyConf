@@ -27,11 +27,11 @@ from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
-from .emails import talk_email_send, talk_email_render_preview
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, get_talk_speaker_form_class, \
+from .emails import talk_email_send, talk_email_render_preview, speaker_email_send, speaker_email_render_preview
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, SpeakerActionForm, get_talk_speaker_form_class, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, HomepageForm, CreateUserForm, TrackForm, RoomForm, \
-                   VolunteerForm, VolunteerFilterForm, EmailForm, PreviewMailForm, SendMailForm, \
+                   VolunteerForm, VolunteerFilterForm, EmailForm, PreviewTalkMailForm, PreviewSpeakerMailForm, SendTalkMailForm, SendSpeakerMailForm, \
                    TagForm, TalkCategoryForm, ActivityForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
@@ -791,7 +791,7 @@ def talk_email(request):
     if not talks.exists():
         messages.error(request, _('Please select some talks.'))
         return redirect('talk-list')
-    form = SendMailForm(request.POST or None, initial=request.session.get('talk-email-stored'), talks=talks)
+    form = SendTalkMailForm(request.POST or None, initial=request.session.get('talk-email-stored'), talks=talks)
     if request.method == 'POST' and form.is_valid():
         subject = form.cleaned_data['subject']
         body = form.cleaned_data['body']
@@ -814,7 +814,7 @@ def talk_email(request):
 @require_http_methods(['POST'])
 @staff_required
 def talk_email_preview(request):
-    form = PreviewMailForm(request.POST or None)
+    form = PreviewTalkMailForm(request.POST or None)
     if not form.is_valid():
         return HttpResponseServerError()
     speaker = get_object_or_404(Participant, site=request.conference.site, pk=form.cleaned_data['speaker'])
@@ -854,6 +854,14 @@ def participant_list(request):
                 q |= Q(track__slug__in=data['track'])
             talks = talks.filter(q)
         participants = participants.filter(talk__in=talks)
+    # Action
+    action_form = SpeakerActionForm(request.POST or None, speakers=participants)
+    if request.method == 'POST' and action_form.is_valid():
+        data = action_form.cleaned_data
+        if data['email']:
+            request.session['speaker-email-list'] = data['speakers']
+            return redirect(reverse('speaker-email'))
+        return redirect(request.get_full_path())
     if request.GET.get('format') == 'csv':
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="participants.csv"'
@@ -868,10 +876,12 @@ def participant_list(request):
         csv_link = '?' + csv_query_dict.urlencode()
         return render(request, 'cfp/staff/participant_list.html', {
             'filter_form': filter_form,
+            'action_form': action_form,
             'participant_list': participants,
             'show_filters': show_filters,
             'contact_link': contact_link,
             'csv_link': csv_link,
+            'pending_email': bool(request.session.get('speaker-email-list', None)),
         })
 
 
@@ -941,6 +951,43 @@ def participant_add_talk(request, participant_id):
         'form': form,
         'participant': participant,
     })
+
+
+@staff_required
+def speaker_email(request):
+    speakers = Participant.objects.filter(pk__in=request.session.get('speaker-email-list', []))
+    if not speakers.exists():
+        messages.error(request, _('Please select some speakers.'))
+        return redirect('participant-list')
+    form = SendSpeakerMailForm(request.POST or None, initial=request.session.get('speaker-email-stored'), speakers=speakers)
+    if request.method == 'POST' and form.is_valid():
+        subject = form.cleaned_data['subject']
+        body = form.cleaned_data['body']
+        request.session['speaker-email-stored'] = {'subject': subject, 'body': body}
+        if form.cleaned_data['confirm']:
+            sent = speaker_email_send(speakers, subject, body)
+            messages.success(request, _('%(count)d mails have been sent.') % {'count': sent})
+            del request.session['speaker-email-list']
+            return redirect('participant-list')
+        else:
+            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': speakers.count()})
+    else:
+        form.fields.pop('confirm')
+    return render(request, 'cfp/staff/speaker_email.html', {
+        'speakers': speakers,
+        'form': form,
+    })
+
+
+@require_http_methods(['POST'])
+@staff_required
+def speaker_email_preview(request):
+    form = PreviewSpeakerMailForm(request.POST or None)
+    if not form.is_valid():
+        return HttpResponseServerError()
+    speaker = get_object_or_404(Participant, site=request.conference.site, pk=form.cleaned_data['speaker'])
+    preview = speaker_email_render_preview(speaker, form.cleaned_data['subject'], form.cleaned_data['body'])
+    return HttpResponse(preview)
 
 
 @staff_required

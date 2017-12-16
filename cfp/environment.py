@@ -20,11 +20,16 @@ def talk_to_dict(talk):
     }
 
 
-def speaker_to_dict(speaker):
-    return {
+def speaker_to_dict(speaker, include_talks=False):
+    d = {
         'name': speaker.name,
         'email': speaker.email,
     }
+    if include_talks:
+        d.update({
+            'talks': list(map(talk_to_dict, speaker.talk_set.all())),
+        })
+    return d
 
 
 class TalkEnvironment(SandboxedEnvironment):
@@ -33,4 +38,12 @@ class TalkEnvironment(SandboxedEnvironment):
         self.globals.update({
             'talk': talk_to_dict(talk),
             'speaker': speaker_to_dict(speaker),
+        })
+
+
+class SpeakerEnvironment(SandboxedEnvironment):
+    def __init__(self, speaker, **options):
+        super().__init__(**options)
+        self.globals.update({
+            'speaker': speaker_to_dict(speaker, include_talks=True),
         })

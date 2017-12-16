@@ -15,7 +15,11 @@
 
 <h1>{% trans "Talks" %}</h1>
 
-<p><a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a></p>
+<p>
+  <a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">
+    {% trans "Show filtering options…" %}
+  </a>
+</p>
 
 <div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
     <div class="well">

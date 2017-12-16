@@ -5,6 +5,14 @@
 
 {% block content %}
 
+{% if pending_email %}
+   <div class="alert alert-warning">
+      <span class="glyphicon glyphicon-exclamation-sign"></span>
+      {% url 'speaker-email' as email_url %}
+      {% blocktrans %}You have a pending e-mail. To continue its edition, click <a href="{{ email_url }}">here</a>.{% endblocktrans %}
+    </div>
+{% endif %}
+
 <h1>{% trans "Speakers" %}</h1>
 
 <p>
@@ -34,11 +42,15 @@
     </div>
 </div>
 
+<form method="post">
+
 <table class="table table-bordered table-hover">
-    <caption>{% trans "Total:" %} {{ participant_list|length }} {% trans "speaker" %}{{ participant_list|length|pluralize }}
+    <caption>
+      {% trans "Total:" %} {{ participant_list|length }} {% trans "speaker" %}{{ participant_list|length|pluralize }}
     </caption>
     <thead>
         <tr>
+            <th></th>
             <th class="text-center">{% trans "Name" %}</th>
             <th class="text-center">{% trans "Talk count" %}</th>
             {% comment %}<th class="text-center"></th>{% endcomment %}
@@ -58,6 +70,7 @@
     <tbody>
     {% endif %}
         <tr>
+            <td><input type="checkbox" name="speakers" value="{{ participant.pk }}"></td>
             <td>
                 <a href="{% url 'participant-details' participant.pk %}">{{ participant }}</a>
                 {% if participant.vip %}<span class="badge pull-right">VIP</span>{% endif %}
@@ -75,5 +88,19 @@
     {% endif %}
     {% endfor %}
 </table>
+
+<div id="filter">
+    <div class="well">
+        <h4>{% trans "For selected speakers:" %}</h4>
+        {% csrf_token %}
+        {% bootstrap_form_errors action_form %}
+        {% bootstrap_form action_form exclude="speakers" %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+        {% endbuttons %}
+    </div>
+</div>
+
+</form>
 
 {% endblock %}
