@@ -211,6 +211,15 @@ def volunteer_list(request):
 @staff_required
 def volunteer_details(request, volunteer_id):
     volunteer = get_object_or_404(Volunteer, site=request.conference.site, pk=volunteer_id)
+    message_form = MessageForm(request.POST or None)
+    if request.method == 'POST' and message_form.is_valid():
+        message = message_form.save(commit=False)
+        message.author = request.user
+        message.from_email = request.user.email
+        message.thread = volunteer.conversation
+        message.save()
+        messages.success(request, _('Message sent!'))
+        return redirect(reverse('volunteer-details', args=[volunteer.pk]))
     return render(request, 'cfp/staff/volunteer_details.html', {
         'volunteer': volunteer,
     })
