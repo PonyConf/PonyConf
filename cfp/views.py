@@ -213,11 +213,14 @@ def volunteer_details(request, volunteer_id):
     volunteer = get_object_or_404(Volunteer, site=request.conference.site, pk=volunteer_id)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
-        message = message_form.save(commit=False)
-        message.author = request.user
-        message.from_email = request.user.email
-        message.thread = volunteer.conversation
-        message.save()
+        in_reply_to = volunteer.conversation.message_set.last()
+        send_message(
+            thread=volunteer.conversation,
+            author=request.user,
+            subject='',
+            content=message_form.cleaned_data['content'],
+            in_reply_to=in_reply_to,
+        )
         messages.success(request, _('Message sent!'))
         return redirect(reverse('volunteer-details', args=[volunteer.pk]))
     return render(request, 'cfp/staff/volunteer_details.html', {
@@ -958,11 +961,14 @@ def participant_details(request, participant_id):
     participant = get_object_or_404(Participant, pk=participant_id, site=request.conference.site)
     message_form = MessageForm(request.POST or None)
     if request.method == 'POST' and message_form.is_valid():
-        message = message_form.save(commit=False)
-        message.author = request.user
-        message.from_email = request.user.email
-        message.thread = participant.conversation
-        message.save()
+        in_reply_to = participant.conversation.message_set.last()
+        send_message(
+            thread=participant.conversation,
+            author=request.user,
+            subject='',
+            content=message_form.cleaned_data['content'],
+            in_reply_to=in_reply_to,
+        )
         messages.success(request, _('Message sent!'))
         return redirect(reverse('participant-details', args=[participant.pk]))
     return render(request, 'cfp/staff/participant_details.html', {

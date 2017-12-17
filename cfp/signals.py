@@ -59,12 +59,18 @@ def send_message_notifications(sender, instance, **kwargs):
         else:
             user = thread.volunteer
         dests = [ (user, user.name, user.email) ]
+        if message.subject:
+            user_subject = None
+            staff_subject = None
+        else:
+            user_subject = _('[%(conference)s] Message from the staff') % {'conference': str(conf)}
+            staff_subject = _('[%(conference)s] Conversation with %(user)s') % {'conference': str(conf), 'user': str(user)}
         if author == user: # message from the user, notify the staff
-            message.send_notification(sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference)
+            message.send_notification(sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference, subject=staff_subject)
         else: # message to the user, notify the user, and the staff if the message is not a conference notification
-            message.send_notification(sender=sender, dests=dests, reply_to=reply_to, message_id=message_id, reference=reference)
+            message.send_notification(sender=sender, dests=dests, reply_to=reply_to, message_id=message_id, reference=reference, subject=user_subject)
             if author != conf:
-                message.send_notification(sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference)
+                message.send_notification(sender=sender, dests=staff_dests, reply_to=reply_to, message_id=message_id, reference=reference, subject=staff_subject)
     elif hasattr(thread, 'talk'):
         message.send_notification(sender=sender, dests=staff_dests,
                                   reply_to=reply_to, message_id=message_id, reference=reference)

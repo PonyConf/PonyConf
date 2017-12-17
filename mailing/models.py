@@ -68,7 +68,7 @@ class Message(models.Model):
     class Meta:
         ordering = ['created']
 
-    def send_notification(self, sender, dests, reply_to=None, message_id=None, reference=None, footer=None):
+    def send_notification(self, sender, dests, reply_to=None, message_id=None, reference=None, footer=None, subject=None):
         messages = []
         for dest, dest_name, dest_email in dests:
             dest_type = ContentType.objects.get_for_model(dest)
@@ -92,7 +92,7 @@ class Message(models.Model):
             if footer is not None:
                 body += footer
             messages.append(EmailMessage(
-                subject=self.subject,
+                subject=subject or self.subject,
                 body=body,
                 from_email='%s <%s>' % sender,
                 to=['%s <%s>' % (dest_name, dest_email)],
