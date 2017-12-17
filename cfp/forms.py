@@ -11,7 +11,7 @@ from django_select2.forms import ModelSelect2MultipleWidget
 
 from .models import Participant, Talk, TalkCategory, Track, Tag, \
                     Conference, Room, Volunteer, Activity
-from .environment import TalkEnvironment, SpeakerEnvironment
+from .environment import TalkEnvironment, SpeakerEnvironment, VolunteerEnvironment
 
 
 ACCEPTATION_CHOICES = [
@@ -216,6 +216,16 @@ class SpeakerActionForm(forms.Form):
         self.fields['speakers'].choices = [(speaker.pk, None) for speaker in speakers.all()]
 
 
+class VolunteerActionForm(forms.Form):
+    volunteers = forms.MultipleChoiceField(choices=[])
+    email = forms.BooleanField(required=False, label=_('Send an email'))
+
+    def __init__(self, *args, **kwargs):
+        volunteers = kwargs.pop('volunteers')
+        super().__init__(*args, **kwargs)
+        self.fields['volunteers'].choices = [(volunteer.pk, None) for volunteer in volunteers.all()]
+
+
 class NotifyForm(forms.Form):
     notify = forms.BooleanField(initial=True, required=False, label=_('Notify by mail?'))
 
@@ -283,21 +293,30 @@ class PreviewSpeakerMailForm(forms.Form):
     body = forms.CharField(required=False, label=_('Body'))
 
 
-class SendTalkMailForm(forms.Form):
+class PreviewVolunteerMailForm(forms.Form):
+    volunteer = forms.IntegerField()
+    subject = forms.CharField(required=False, label=_('Subject'))
+    body = forms.CharField(required=False, label=_('Body'))
+
+
+class SendMailForm(forms.Form):
     subject = forms.CharField()
     body = forms.CharField(widget=forms.Textarea)
     confirm = forms.BooleanField(required=False, label=_('I read my self twice, confirm sending'))
-
-    def __init__(self, *args, **kwargs):
-        self._talks = kwargs.pop('talks')
-        super().__init__(*args, **kwargs)
-        self._env = dict()
 
     def clean_subject(self):
         return self.clean_template('subject')
 
     def clean_body(self):
         return self.clean_template('body')
+
+
+
+class SendTalkMailForm(SendMailForm):
+    def __init__(self, *args, **kwargs):
+        self._talks = kwargs.pop('talks')
+        super().__init__(*args, **kwargs)
+        self._env = dict()
 
     def clean_template(self, template):
         try:
@@ -311,21 +330,11 @@ class SendTalkMailForm(forms.Form):
         return self.cleaned_data.get(template)
 
 
-class SendSpeakerMailForm(forms.Form):
-    subject = forms.CharField()
-    body = forms.CharField(widget=forms.Textarea)
-    confirm = forms.BooleanField(required=False, label=_('I read my self twice, confirm sending'))
-
+class SendSpeakerMailForm(SendMailForm):
     def __init__(self, *args, **kwargs):
         self._speakers = kwargs.pop('speakers')
         super().__init__(*args, **kwargs)
         self._env = dict()
-
-    def clean_subject(self):
-        return self.clean_template('subject')
-
-    def clean_body(self):
-        return self.clean_template('body')
 
     def clean_template(self, template):
         try:
@@ -335,6 +344,23 @@ class SendSpeakerMailForm(forms.Form):
         except Exception as e:
             raise forms.ValidationError(_("Your template does not compile (at least) with speaker '%(speaker)s'.") %
                         {'speaker': speaker})
+        return self.cleaned_data.get(template)
+
+
+class SendVolunteerMailForm(SendMailForm):
+    def __init__(self, *args, **kwargs):
+        self._volunteers = kwargs.pop('volunteers')
+        super().__init__(*args, **kwargs)
+        self._env = dict()
+
+    def clean_template(self, template):
+        try:
+            for volunteer in self._volunteers.all():
+                env = self._env.get(volunteer, VolunteerEnvironment(volunteer))
+                env.from_string(self.cleaned_data.get(template)).render()
+        except Exception as e:
+            raise forms.ValidationError(_("Your template does not compile (at least) with volunteer '%(volunteer)s'.") %
+                        {'volunteer': volunteer})
         return self.cleaned_data.get(template)
 
 

@@ -6,11 +6,21 @@
 
 {% block content %}
 
+{% if pending_email %}
+   <div class="alert alert-warning">
+      <span class="glyphicon glyphicon-exclamation-sign"></span>
+      {% url 'volunteer-email' as email_url %}
+      {% blocktrans %}You have a pending e-mail. To continue its edition, click <a href="{{ email_url }}">here</a>.{% endblocktrans %}
+    </div>
+{% endif %}
+
 <h1>{% trans "Volunteers" %}</h1>
 
-<a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">{% trans "Show filtering options…" %}</a>
-
-<br /><br />
+<p>
+  <a class="btn btn-primary" role="button" data-toggle="collapse" href="#filter" aria-expanded="{{ show_filters|yesno:"true,false" }}" aria-controles="filter">
+    {% trans "Show filtering options…" %}
+  </a>
+</p>
 
 <div class="collapse{{ show_filters|yesno:" in," }}" id="filter">
     <div class="well">
@@ -21,11 +31,14 @@
     </div>
 </div>
 
+<form method="post">
+
 <table class="table table-bordered table-hover">
     <caption>{% trans "Total:" %} {{ volunteer_list|length }} {% trans "volunteer" %}{{ volunteer_list|length|pluralize }}
     </caption>
     <thead>
         <tr>
+            <th></th>
             <th class="text-center">{% trans "Name" %}</th>
             <th class="text-center">{% trans "Email" %}</th>
             <th class="text-center">{% trans "Phone" %}</th>
@@ -46,6 +59,7 @@
     <tbody>
     {% endif %}
         <tr>
+            <td><input type="checkbox" name="volunteers" value="{{ volunteer.pk }}"></td>
             <td>
                 <a href="{% url 'volunteer-details' volunteer.pk %}">{{ volunteer.name }}</a>
                 {% if volunteer.notes %}<span class="glyphicon glyphicon-envelope pull-right" data-toggle="tooltip" data-placement="bottom" data-html="true" title="{{ volunteer.notes|linebreaksbr }}"></span>{% endif %}
@@ -63,6 +77,20 @@
     {% endif %}
     {% endfor %}
 </table>
+
+<div id="filter">
+    <div class="well">
+        <h4>{% trans "For selected speakers:" %}</h4>
+        {% csrf_token %}
+        {% bootstrap_form_errors action_form %}
+        {% bootstrap_form action_form exclude="volunteers" %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+        {% endbuttons %}
+    </div>
+</div>
+
+</form>
 
 {% endblock %}
 

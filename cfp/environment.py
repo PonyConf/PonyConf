@@ -32,6 +32,16 @@ def speaker_to_dict(speaker, include_talks=False):
     return d
 
 
+def volunteer_to_dict(volunteer):
+    return {
+        'name': volunteer.name,
+        'email': volunteer.email,
+        'phone_number': volunteer.phone_number,
+        'sms_prefered': volunteer.sms_prefered,
+        'activities': list(map(lambda activity: activity.name, volunteer.activities.all())),
+    }
+
+
 class TalkEnvironment(SandboxedEnvironment):
     def __init__(self, talk, speaker, **options):
         super().__init__(**options)
@@ -46,4 +56,12 @@ class SpeakerEnvironment(SandboxedEnvironment):
         super().__init__(**options)
         self.globals.update({
             'speaker': speaker_to_dict(speaker, include_talks=True),
+        })
+
+
+class VolunteerEnvironment(SandboxedEnvironment):
+    def __init__(self, volunteer, **options):
+        super().__init__(**options)
+        self.globals.update({
+            'volunteer': volunteer_to_dict(volunteer),
         })

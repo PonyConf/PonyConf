@@ -27,11 +27,16 @@ from .decorators import speaker_required, volunteer_required, staff_required
 from .mixins import StaffRequiredMixin, OnSiteMixin, OnSiteFormMixin
 from .utils import is_staff
 from .models import Participant, Talk, TalkCategory, Vote, Track, Tag, Room, Volunteer, Activity
-from .emails import talk_email_send, talk_email_render_preview, speaker_email_send, speaker_email_render_preview
-from .forms import TalkForm, TalkStaffForm, TalkFilterForm, TalkActionForm, SpeakerActionForm, get_talk_speaker_form_class, \
+from .emails import talk_email_send, talk_email_render_preview, \
+                    speaker_email_send, speaker_email_render_preview, \
+                    volunteer_email_send, volunteer_email_render_preview
+from .forms import TalkForm, TalkStaffForm, TalkFilterForm, get_talk_speaker_form_class, \
+                   TalkActionForm, SpeakerActionForm, VolunteerActionForm, \
                    ParticipantForm, ParticipantFilterForm, NotifyForm, \
                    ConferenceForm, HomepageForm, CreateUserForm, TrackForm, RoomForm, \
-                   VolunteerForm, VolunteerFilterForm, EmailForm, PreviewTalkMailForm, PreviewSpeakerMailForm, SendTalkMailForm, SendSpeakerMailForm, \
+                   VolunteerForm, VolunteerFilterForm, EmailForm, \
+                   PreviewTalkMailForm, PreviewSpeakerMailForm, PreviewVolunteerMailForm, \
+                   SendTalkMailForm, SendSpeakerMailForm, SendVolunteerMailForm, \
                    TagForm, TalkCategoryForm, ActivityForm, \
                    ACCEPTATION_VALUES, CONFIRMATION_VALUES
 
@@ -172,6 +177,14 @@ def volunteer_list(request):
             if len(data['activity']):
                 q |= Q(activities__slug__in=data['activity'])
             volunteers = volunteers.filter(q)
+    # Action
+    action_form = VolunteerActionForm(request.POST or None, volunteers=volunteers)
+    if request.method == 'POST' and action_form.is_valid():
+        data = action_form.cleaned_data
+        if data['email']:
+            request.session['volunteer-email-list'] = data['volunteers']
+            return redirect(reverse('volunteer-email'))
+        return redirect(request.get_full_path())
     if request.GET.get('format') == 'csv':
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="volunteers.csv"'
@@ -187,9 +200,11 @@ def volunteer_list(request):
         return render(request, 'cfp/staff/volunteer_list.html', {
             'volunteer_list': volunteers,
             'filter_form': filter_form,
+            'action_form': action_form,
             'show_filters': show_filters,
             'contact_link': contact_link,
             'csv_link': csv_link,
+            'pending_email': bool(request.session.get('volunteer-email-list', None)),
         })
 
 
@@ -199,6 +214,43 @@ def volunteer_details(request, volunteer_id):
     return render(request, 'cfp/staff/volunteer_details.html', {
         'volunteer': volunteer,
     })
+
+
+@staff_required
+def volunteer_email(request):
+    volunteers = Volunteer.objects.filter(pk__in=request.session.get('volunteer-email-list', []))
+    if not volunteers.exists():
+        messages.error(request, _('Please select some volunteers.'))
+        return redirect('volunteer-list')
+    form = SendVolunteerMailForm(request.POST or None, initial=request.session.get('volunteer-email-stored'), volunteers=volunteers)
+    if request.method == 'POST' and form.is_valid():
+        subject = form.cleaned_data['subject']
+        body = form.cleaned_data['body']
+        request.session['volunteer-email-stored'] = {'subject': subject, 'body': body}
+        if form.cleaned_data['confirm']:
+            sent = volunteer_email_send(volunteers, subject, body)
+            messages.success(request, _('%(count)d mails have been sent.') % {'count': sent})
+            del request.session['volunteer-email-list']
+            return redirect('volunteer-list')
+        else:
+            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': volunteers.count()})
+    else:
+        form.fields.pop('confirm')
+    return render(request, 'cfp/staff/volunteer_email.html', {
+        'volunteers': volunteers,
+        'form': form,
+    })
+
+
+@require_http_methods(['POST'])
+@staff_required
+def volunteer_email_preview(request):
+    form = PreviewVolunteerMailForm(request.POST or None)
+    if not form.is_valid():
+        return HttpResponseServerError()
+    volunteer = get_object_or_404(Volunteer, site=request.conference.site, pk=form.cleaned_data['volunteer'])
+    preview = volunteer_email_render_preview(volunteer, form.cleaned_data['subject'], form.cleaned_data['body'])
+    return HttpResponse(preview)
 
 
 def proposal_home(request):

@@ -1,12 +1,12 @@
 {% extends 'cfp/staff/base.html' %}
 {% load i18n bootstrap3 staticfiles %}
 
-{% block speakerstab %} class="active"{% endblock %}
+{% block volunteerstab %} class="active"{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
-  <h1>{% trans "Send an email to each speaker" %}</h1>
+  <h1>{% trans "Send an email to each volunteer" %}</h1>
 </div>
 
 <form method="POST">
@@ -16,7 +16,7 @@
 
 <p>
   {% blocktrans %}You can use <a href="http://jinja.pocoo.org/docs/2.10/">Jinja2</a> templating language.{% endblocktrans %}
-  {% blocktrans %}To see available environment variables, please click on a speaker.{% endblocktrans %}
+  {% blocktrans %}To see available environment variables, please click on a volunteer.{% endblocktrans %}
 </p>
 
 <div class="row">
@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<h4>{% trans "To preview your email, click on a speaker:" %}</h4>
+<h4>{% trans "To preview your email, click on a volunteer:" %}</h4>
 
 <div class="row">
   <div class="col-md-12">
@@ -34,9 +34,9 @@
   </div>
   <div class="col-md-12">
     <ul class="list-group">
-      {% for speaker in speakers.all %}
-      <a class="list-group-item" onclick="preview({{ speaker.pk }});">
-        <b>{{ speaker }}</b>
+      {% for volunteer in volunteers.all %}
+      <a class="list-group-item" onclick="preview({{ volunteer.pk }});">
+        <b>{{ volunteer}}</b>
       </a>
       {% endfor %}
     </ul>
@@ -68,7 +68,7 @@
 <script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
 <script type="text/javascript">
 var csrftoken = $.cookie('csrftoken');
-var preview_url = "{% url 'speaker-email-preview' %}";
+var preview_url = "{% url 'volunteer-email-preview' %}";
 
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
@@ -83,12 +83,12 @@ $.ajaxSetup({
   }
 });
 
-function preview(speaker) {
+function preview(volunteer) {
     $('#preview').removeClass('hidden');
     $('#preview').html('Loading preview...');
     var body = $('#body').val();
     $.post(preview_url, {
-            'speaker': speaker,
+            'volunteer': volunteer,
             'subject': $('#id_subject').val(),
             'body': $('#id_body').val(),
         })
