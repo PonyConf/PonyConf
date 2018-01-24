@@ -827,7 +827,7 @@ def talk_decide(request, talk_id, accept):
         if m:
             for participant in talk.speakers.all():
                 send_message(
-                    thread=talk.conversation,
+                    thread=participant.conversation,
                     author=request.conference,
                     subject=_("[%(conference)s] Your talk '%(talk)s' have been %(action)s") % {
                         'conference': request.conference,
