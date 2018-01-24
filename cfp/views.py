@@ -695,7 +695,7 @@ def talk_list(request):
                     thread=talk.conversation,
                     author=request.user,
                     subject=_("[%(conference)s] The talk '%(talk)s' have been %(action)s") % {
-                        'conference': conference,
+                        'conference': request.conference,
                         'talk': talk,
                         'action': action,
                     },
