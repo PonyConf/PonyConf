@@ -709,8 +709,8 @@ def talk_list(request):
             if data['room']:
                 talk.room = Room.objects.get(site=request.conference.site, slug=data['room'])
             talk.save()
-        email = int(data['email'])
-        if email:
+        if data['email']:
+            email = int(data['email'])
             if email == TalkActionForm.EMAIL_TALKS:
                 request.session['talk-email-list'] = data['talks']
                 return redirect(reverse('talk-email'))
