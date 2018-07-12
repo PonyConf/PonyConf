@@ -1,11 +1,13 @@
 from django.conf import settings
+from django.urls import reverse
 
 from jinja2.sandbox import SandboxedEnvironment
 
 import pytz
 
 
-def talk_to_dict(talk):
+def talk_to_dict(talk, speaker):
+    base_url = ('https' if talk.site.conference.secure_domain else 'http') + '://' + talk.site.domain
     return {
         'title': talk.title,
         'description': talk.description,
@@ -17,6 +19,8 @@ def talk_to_dict(talk):
         'track': str(talk.track) if talk.track else '',
         'video': talk.video,
         'speakers': list(map(speaker_to_dict, talk.speakers.all())),
+        'confirm_link': base_url + reverse('proposal-talk-confirm', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
+        'desist_link': base_url + reverse('proposal-talk-desist', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
     }
 
 
@@ -27,7 +31,7 @@ def speaker_to_dict(speaker, include_talks=False):
     }
     if include_talks:
         d.update({
-            'talks': list(map(talk_to_dict, speaker.talk_set.all())),
+            'talks': [ talk_to_dict(talk, speaker) for talk in speaker.talk_set.all() ],
         })
     return d
 
@@ -46,7 +50,7 @@ class TalkEnvironment(SandboxedEnvironment):
     def __init__(self, talk, speaker, **options):
         super().__init__(**options)
         self.globals.update({
-            'talk': talk_to_dict(talk),
+            'talk': talk_to_dict(talk, speaker),
             'speaker': speaker_to_dict(speaker),
         })
 
