@@ -422,12 +422,14 @@ def proposal_talk_edit(request, speaker, talk_id=None):
     })
 
 
-@speaker_required
-def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
+# NO WAY WE DON'T WANT SPEAKER TO BE AUTHENTICATED HERE!
+#@speaker_required
+def proposal_talk_acknowledgment(request, speaker_token, talk_id, confirm):
     # TODO: handle multiple speakers case
-    talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-    if not request.conference.disclosed_acceptances or not talk.accepted:
-        raise PermissionDenied
+    talk = get_object_or_404(Talk, site=request.conference.site, speakers__token=speaker_token, pk=talk_id)
+    speaker = get_object_or_404(Participant, site=request.conference.site, token=speaker_token)
+    #if not request.conference.disclosed_acceptances or not talk.accepted:
+    #    raise PermissionDenied
     if talk.confirmed == confirm:
         if confirm:
             messages.warning(request, _('You already confirmed your participation to this talk.'))
