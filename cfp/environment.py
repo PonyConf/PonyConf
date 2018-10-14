@@ -8,7 +8,7 @@ import pytz
 
 def talk_to_dict(talk, speaker):
     base_url = ('https' if talk.site.conference.secure_domain else 'http') + '://' + talk.site.domain
-    return {
+    env = {
         'title': talk.title,
         'description': talk.description,
         'category': str(talk.category),
@@ -19,9 +19,13 @@ def talk_to_dict(talk, speaker):
         'track': str(talk.track) if talk.track else '',
         'video': talk.video,
         'speakers': list(map(speaker_to_dict, talk.speakers.all())),
-        'confirm_link': base_url + reverse('proposal-talk-confirm', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
-        'desist_link': base_url + reverse('proposal-talk-desist', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
     }
+    if talk.site.conference.disclosed_acceptances:
+        env.update({
+            'confirm_link': base_url + reverse('proposal-talk-confirm', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
+            'desist_link': base_url + reverse('proposal-talk-desist', kwargs={'speaker_token': speaker.token, 'talk_id': talk.pk}),
+        })
+    return env
 
 
 def speaker_to_dict(speaker, include_talks=False):
