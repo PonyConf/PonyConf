@@ -457,6 +457,11 @@ class VolunteerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.conference = kwargs.pop('conference')
         super().__init__(*args, **kwargs)
+        activities = Activity.objects.filter(site=self.conference.site)
+        if activities.exists():
+            self.fields['activities'].queryset = activities
+        else:
+            del self.fields['activities']
 
     # we should manually check (site, email) uniqueness as the site is not part of the form
     def clean_email(self):
