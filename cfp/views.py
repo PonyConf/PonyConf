@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from django.forms import modelform_factory
 from django import forms
 from django.views.decorators.http import require_http_methods
+from django.core.cache import cache
 
 from django_select2.views import AutoResponseView
 
@@ -426,7 +427,7 @@ def proposal_talk_edit(request, speaker, talk_id=None):
 def proposal_talk_acknowledgment(request, speaker, talk_id, confirm):
     # TODO: handle multiple speakers case
     talk = get_object_or_404(Talk, site=request.conference.site, speakers__pk=speaker.pk, pk=talk_id)
-    if not request.conference.disclosed_acceptances or not talk.accepted:
+    if not request.conference.disclosed_acceptances or not talk.accepted or request.conference.completed:
         raise PermissionDenied
     if talk.confirmed == confirm:
         if confirm:
@@ -1310,6 +1311,13 @@ def public_schedule(request, program_format):
 @staff_required
 def staff_schedule(request, program_format):
     return schedule(request, program_format=program_format, pending=True, template='cfp/staff/schedule.html', cache=False)
+
+
+@staff_required
+def schedule_evict(request):
+    cache.clear()
+    messages.success(request, _('Schedule evicted from cache.'))
+    return redirect('/')
 
 
 class Select2View(StaffRequiredMixin, AutoResponseView):

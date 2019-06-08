@@ -42,6 +42,7 @@ class Conference(models.Model):
     volunteers_opening_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment opening date'))
     volunteers_closing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Volunteers enrollment closing date'))
     video_publishing_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Video publishing date'))
+    end_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('End of the conference date'))
 
     custom_css = models.TextField(blank=True)
     external_css_link = models.URLField(blank=True)
@@ -51,6 +52,10 @@ class Conference(models.Model):
         opening = self.volunteers_opening_date
         closing = self.volunteers_closing_date
         return opening and opening < now and (not closing or closing > now)
+
+    @property
+    def completed(self):
+        return self.end_date and self.end_date <= timezone.now()
 
     @property
     def opened_categories(self):
