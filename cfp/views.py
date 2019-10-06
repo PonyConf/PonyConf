@@ -1283,8 +1283,8 @@ def create_user(request):
     })
 
 
-def schedule(request, program_format, pending, template, cache=None):
-    program = Program(site=request.conference.site, pending=pending, cache=cache)
+def schedule(request, program_format, pending, template, staff, cache=None):
+    program = Program(site=request.conference.site, pending=pending, staff=staff, cache=cache)
     if program_format is None:
         return render(request, template, {'program': program.render('html')})
     elif program_format == 'html':
@@ -1305,12 +1305,12 @@ def public_schedule(request, program_format):
     if request.conference.schedule_redirection_url and program_format is None:
         return redirect(request.conference.schedule_redirection_url)
     else:
-        return schedule(request, program_format=program_format, pending=False, template='cfp/schedule.html')
+        return schedule(request, program_format=program_format, pending=False, template='cfp/schedule.html', staff=False)
 
 
 @staff_required
 def staff_schedule(request, program_format):
-    return schedule(request, program_format=program_format, pending=True, template='cfp/staff/schedule.html', cache=False)
+    return schedule(request, program_format=program_format, pending=True, template='cfp/staff/schedule.html', staff=True, cache=False)
 
 
 @staff_required

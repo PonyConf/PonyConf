@@ -22,13 +22,14 @@ Event = namedtuple('Event', ['talk', 'row', 'rowcount'])
 
 
 class Program:
-    def __init__(self, site, pending=False, cache=None):
+    def __init__(self, site, pending=False, cache=None, staff=False):
         self.site = site
         self.pending = pending
         if cache is None:
             self.cache = not settings.DEBUG
         else:
             self.cache = cache
+        self.staff = staff
         self.initialized = False
 
     def _lazy_init(self):
@@ -40,6 +41,7 @@ class Program:
                             filter(Q(duration__gt=0) | Q(category__duration__gt=0)).\
                             prefetch_related(
                                 Prefetch('tags', queryset=Tag.objects.filter(staff=True), to_attr='staff_tags'),
+                                Prefetch('tags', queryset=Tag.objects.filter(public=True), to_attr='public_tags'),
                                 'category', 'speakers', 'track', 'tags', 'room',
                             )
 
@@ -150,7 +152,11 @@ class Program:
                         continue
                     options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.category.color)
                     cellcontent = escape(str(event.talk)) + '<br><em>' + escape(event.talk.get_speakers_str()) + '</em>'
-                    for tag in event.talk.staff_tags:
+                    if self.staff:
+                        tags = event.talk.staff_tags
+                    else:
+                        tags = event.talk.public_tags
+                    for tag in tags:
                         cellcontent += '<br>' + tag.label
                 elif (i+1 > len(events) or not events[i+1]) and i+1 < self.cols[room]:
                     colspan += 1
