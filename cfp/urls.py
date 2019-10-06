@@ -73,5 +73,6 @@ urlpatterns = [
     path('admin/activities/', views.ActivityList.as_view(), name='activity-list'),
     path('admin/activities/add/', views.ActivityCreate.as_view(), name='activity-add'),
     path('admin/activities/<slug:slug>/edit/', views.ActivityUpdate.as_view(), name='activity-edit'),
+    path('admin/evict/', views.schedule_evict, name='schedule-evict'),
     re_path(r'^schedule/((?P<program_format>[\w]+)/)?$', views.public_schedule, name='public-schedule'),
 ]
