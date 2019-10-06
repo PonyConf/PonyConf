@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-16 15:41+0000\n"
-"PO-Revision-Date: 2017-12-16 16:42+0100\n"
+"PO-Revision-Date: 2019-10-06 09:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -1539,7 +1539,7 @@ msgstr "L’orateur %(speaker)s a %(action) sa participation pour %(talk)s."
 #: cfp/views.py:389
 #, python-format
 msgid "[%(conference)s] %(speaker)s %(action)s his/her participation"
-msgstr "[%(conference)s] %(speaker)s a %(action) sa participation"
+msgstr "[%(conference)s] %(speaker)s a %(action)s sa participation"
 
 #: cfp/views.py:442
 msgid ""
