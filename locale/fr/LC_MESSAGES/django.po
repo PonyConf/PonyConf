@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-16 15:41+0000\n"
-"PO-Revision-Date: 2019-10-06 09:57+0200\n"
+"PO-Revision-Date: 2019-10-07 21:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -1534,7 +1534,7 @@ msgstr "Nous avons enregistré votre indisponibilité."
 #: cfp/views.py:381
 #, python-format
 msgid "Speaker %(speaker)s %(action)s his/her participation for %(talk)s."
-msgstr "L’orateur %(speaker)s a %(action) sa participation pour %(talk)s."
+msgstr "L’orateur %(speaker)s a %(action)s sa participation pour %(talk)s."
 
 #: cfp/views.py:389
 #, python-format
