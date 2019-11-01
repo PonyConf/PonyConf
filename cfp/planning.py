@@ -151,6 +151,7 @@ class Program:
                     if event.row != 0:
                         continue
                     options = ' rowspan="%d" bgcolor="%s"' % (event.rowcount, event.talk.category.color)
+                    options += ' id="%d"' % event.id
                     cellcontent = escape(str(event.talk)) + '<br><em>' + escape(event.talk.get_speakers_str()) + '</em>'
                     if self.staff:
                         tags = event.talk.staff_tags
