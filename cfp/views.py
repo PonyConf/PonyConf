@@ -331,7 +331,7 @@ Thanks!
             },
             content=body,
         )
-        messages.success(request, _('You proposition have been successfully submitted!'))
+        messages.success(request, _('Your proposition have been successfully submitted!'))
         return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
     return render(request, 'cfp/proposal_home.html', {
         'speaker_form': speaker_form,
@@ -414,7 +414,7 @@ def proposal_talk_edit(request, speaker, talk_id=None):
         else:
             # TODO: it could be great to receive the proposition by mail
             # but this is not crucial as the speaker already have a link in its mailbox
-            messages.success(request, _('You proposition have been successfully submitted!'))
+            messages.success(request, _('Your proposition have been successfully submitted!'))
         return redirect(reverse('proposal-talk-details', kwargs=dict(speaker_token=speaker.token, talk_id=talk.pk)))
     return render(request, 'cfp/proposal_talk_form.html', {
         'speaker': speaker,
