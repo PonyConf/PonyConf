@@ -246,7 +246,7 @@ def volunteer_email(request):
             del request.session['volunteer-email-list']
             return redirect('volunteer-list')
         else:
-            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': volunteers.count()})
+            messages.info(request, _('You are ready to send %(count)d emails.') % {'count': volunteers.count()})
     else:
         form.fields.pop('confirm')
     return render(request, 'cfp/staff/volunteer_email.html', {
@@ -874,7 +874,7 @@ def talk_email(request):
             del request.session['talk-email-list']
             return redirect('talk-list')
         else:
-            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': count})
+            messages.info(request, _('You are ready to send %(count)d emails.') % {'count': count})
     else:
         form.fields.pop('confirm')
     return render(request, 'cfp/staff/talk_email.html', {
@@ -1045,7 +1045,7 @@ def speaker_email(request):
             del request.session['speaker-email-list']
             return redirect('participant-list')
         else:
-            messages.info(request, _('Your ready to send %(count)d emails.') % {'count': speakers.count()})
+            messages.info(request, _('You are ready to send %(count)d emails.') % {'count': speakers.count()})
     else:
         form.fields.pop('confirm')
     return render(request, 'cfp/staff/speaker_email.html', {
