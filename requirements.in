@@ -5,7 +5,7 @@ django-bower
 django-crispy-forms
 django-select2<6
 django-colorful
--e git://github.com/nim65s/django-autoslug.git#egg=django-autoslug
+django-autoslug
 
 markdown
 bleach
