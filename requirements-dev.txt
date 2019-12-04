@@ -17,7 +17,7 @@ django-crispy-forms==1.8.0
 django-debug-toolbar==2.0
 django-extensions==2.2.5
 django-select2==5.11.1
-django==2.2.7
+django==2.2.8
 icalendar==4.0.3
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.9.0
@@ -40,4 +40,4 @@ wcwidth==0.1.7            # via prompt-toolkit
 webencodings==0.5.1       # via bleach
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via ipython, markdown
+# setuptools
