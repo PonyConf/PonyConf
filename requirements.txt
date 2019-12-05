@@ -13,7 +13,7 @@ django-bower==5.2.0
 django-colorful==1.3
 django-crispy-forms==1.8.0
 django-select2==5.11.1
-django==2.2.7
+django==2.2.8
 icalendar==4.0.3
 jinja2==2.10.3
 markdown==3.1.1
@@ -25,4 +25,4 @@ sqlparse==0.3.0           # via django
 webencodings==0.5.1       # via bleach
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via markdown
+# setuptools
