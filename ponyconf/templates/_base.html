@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% comment %}<link rel="icon" href="{% static 'favicon.ico' %}">{% endcomment %}
+    <link rel="icon" href="{% static 'ponyconf/ponyconf.png' %}">
 
     <title>{% block title %}{{ conference.name }}{% endblock %}</title>
 
     {% bootstrap_css %}
-    <link href="{% static 'css/ponyconf.css' %}" rel="stylesheet">
+    <link href="{% static 'ponyconf/ponyconf.css' %}" rel="stylesheet">
     {% block css %}{% endblock %}
 
     {% block js %}{% endblock %}
@@ -32,7 +32,7 @@
 
     <script src="{% bootstrap_jquery_url %}"></script>
     {% bootstrap_javascript %}
-    <script src="{% static 'js/ponyconf.js' %}"></script>
+    <script src="{% static 'ponyconf/ponyconf.js' %}"></script>
     {% block js_end %}{% endblock %}
   </body>
 </html>

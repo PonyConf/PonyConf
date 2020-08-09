@@ -12,7 +12,7 @@ from cfp.models import Participant, Volunteer
 
 def speaker_required(view_func):
     def wrapped_view(request, **kwargs):
-        speaker_token = kwargs.pop('speaker_token')
+        speaker_token = kwargs.pop('speaker_token', None)
         if speaker_token:
             try:
                 speaker_token = UUID(speaker_token)
@@ -30,7 +30,7 @@ def speaker_required(view_func):
 
 def volunteer_required(view_func):
     def wrapped_view(request, **kwargs):
-        volunteer_token = kwargs.pop('volunteer_token')
+        volunteer_token = kwargs.pop('volunteer_token', None)
         if volunteer_token:
             try:
                 volunteer_token = UUID(volunteer_token)

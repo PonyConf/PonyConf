@@ -1299,7 +1299,7 @@ def schedule(request, program_format, pending, template, staff, cache=None):
         raise Http404(_("Format '%s' not available" % program_format))
 
 
-def public_schedule(request, program_format):
+def public_schedule(request, program_format=None):
     if not request.conference.schedule_available and not is_staff(request, request.user):
         raise PermissionDenied
     if request.conference.schedule_redirection_url and program_format is None:
@@ -1309,7 +1309,7 @@ def public_schedule(request, program_format):
 
 
 @staff_required
-def staff_schedule(request, program_format):
+def staff_schedule(request, program_format=None):
     return schedule(request, program_format=program_format, pending=True, template='cfp/staff/schedule.html', staff=True, cache=False)
 
 

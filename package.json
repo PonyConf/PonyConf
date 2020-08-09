@@ -1,0 +1,26 @@
+{
+  "name": "ponyconf",
+  "version": "1.0.0",
+  "description": "Organise your conferences",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "jquery": "^3.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PonyConf/PonyConf.git"
+  },
+  "author": "Élie Bouttier and contributors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/PonyConf/PonyConf/issues"
+  },
+  "homepage": "https://github.com/PonyConf/PonyConf#readme"
+}

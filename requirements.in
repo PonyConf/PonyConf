@@ -1,9 +1,8 @@
-django<3
+django
 
 django-bootstrap3
-django-bower
 django-crispy-forms
-django-select2<6
+django-select2
 django-colorful
 django-autoslug
 

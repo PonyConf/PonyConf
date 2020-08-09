@@ -1,4 +1,4 @@
-from django.urls import path, re_path, register_converter
+from django.urls import path, re_path, register_converter, include
 
 from . import views, converters
 
@@ -60,7 +60,7 @@ urlpatterns = [
     path('staff/volunteers/email/preview/', views.volunteer_email_preview, name='volunteer-email-preview'),
     path('staff/add-user/', views.create_user, name='create-user'),
     re_path(r'^staff/schedule/((?P<program_format>[\w]+)/)?$', views.staff_schedule, name='staff-schedule'),
-    path('staff/select2/', views.Select2View.as_view(), name='django_select2-json'),
+    path('staff/select2/', include('django_select2.urls')),
     path('admin/', views.admin, name='admin'),
     path('admin/conference/', views.conference_edit, name='conference-edit'),
     path('admin/homepage/', views.homepage_edit, name='homepage-edit'),

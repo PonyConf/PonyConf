@@ -167,8 +167,6 @@ class Track(PonyConfModel):
     slug = AutoSlugField(populate_from='name')
     description = models.TextField(blank=True, verbose_name=_('Description'))
 
-    #managers = models.ManyToManyField(User, blank=True, verbose_name=_('Managers'))
-
     class Meta:
         unique_together = ('site', 'name')
         ordering = ['name']
@@ -347,10 +345,10 @@ class Talk(PonyConfModel):
     category = models.ForeignKey(TalkCategory, verbose_name=_('Talk Category'), on_delete=models.PROTECT)
     videotaped = models.BooleanField(_("I'm ok to be recorded on video"), default=True)
     video_licence = models.CharField(choices=LICENCES, default='CC-BY-SA',
-                                     max_length=10, verbose_name=_("Video licence"))
+                                     max_length=32, verbose_name=_("Video licence"))
     sound = models.BooleanField(_("I need sound"), default=False)
-    accepted = models.NullBooleanField(default=None)
-    confirmed = models.NullBooleanField(default=None)
+    accepted = models.BooleanField(null=True, default=None)
+    confirmed = models.BooleanField(null=True, default=None)
     start_date = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_('Beginning date and time'))
     duration = models.PositiveIntegerField(default=0, verbose_name=_('Duration (min)'))
     room = models.ForeignKey(Room, blank=True, null=True, default=None, on_delete=models.SET_NULL)
