@@ -4,26 +4,55 @@
 #
 #    pip-compile
 #
-asgiref==3.2.10           # via django
-bleach==3.1.5             # via -r requirements.in
-chardet==3.0.4            # via -r requirements.in
-django-appconf==1.0.4     # via django-select2
-django-autoslug==1.9.8    # via -r requirements.in
-django-bootstrap3==14.1.0  # via -r requirements.in
-django-colorful==1.3      # via -r requirements.in
-django-crispy-forms==1.9.2  # via -r requirements.in
-django-select2==7.4.2     # via -r requirements.in
-django==3.1               # via -r requirements.in, django-appconf, django-bootstrap3, django-colorful, django-select2
-icalendar==4.0.6          # via -r requirements.in
-importlib-metadata==1.7.0  # via django-bootstrap3, markdown
-jinja2==2.11.2            # via -r requirements.in
-markdown==3.2.2           # via -r requirements.in
-markupsafe==1.1.1         # via jinja2
-packaging==20.4           # via bleach
-pyparsing==2.4.7          # via packaging
-python-dateutil==2.8.1    # via icalendar
-pytz==2020.1              # via django, icalendar
-six==1.15.0               # via bleach, packaging, python-dateutil
-sqlparse==0.3.1           # via django
-webencodings==0.5.1       # via bleach
-zipp==3.1.0               # via importlib-metadata
+asgiref==3.2.10
+    # via django
+bleach==3.1.5
+    # via -r requirements.in
+chardet==3.0.4
+    # via -r requirements.in
+django-appconf==1.0.4
+    # via django-select2
+django-autoslug==1.9.8
+    # via -r requirements.in
+django-bootstrap3==14.1.0
+    # via -r requirements.in
+django-colorful==1.3
+    # via -r requirements.in
+django-crispy-forms==1.9.2
+    # via -r requirements.in
+django-select2==7.4.2
+    # via -r requirements.in
+django==3.1.8
+    # via
+    #   -r requirements.in
+    #   django-appconf
+    #   django-bootstrap3
+    #   django-colorful
+    #   django-select2
+icalendar==4.0.6
+    # via -r requirements.in
+jinja2==2.11.2
+    # via -r requirements.in
+markdown==3.2.2
+    # via -r requirements.in
+markupsafe==1.1.1
+    # via jinja2
+packaging==20.4
+    # via bleach
+pyparsing==2.4.7
+    # via packaging
+python-dateutil==2.8.1
+    # via icalendar
+pytz==2020.1
+    # via
+    #   django
+    #   icalendar
+six==1.15.0
+    # via
+    #   bleach
+    #   packaging
+    #   python-dateutil
+sqlparse==0.3.1
+    # via django
+webencodings==0.5.1
+    # via bleach
